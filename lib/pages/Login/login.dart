@@ -198,7 +198,7 @@ class Username extends StatelessWidget {
           ),
           validator: (String? value) {
             if (value!.isEmpty) {
-              return 'Please enter a valid Username';
+              return 'Please enter a valid username';
             }
             return null;
           },
