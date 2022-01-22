@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
-class login_page extends StatefulWidget {
-  const login_page({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _login_pageState createState() => _login_pageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-// ignore: camel_case_types
-class _login_pageState extends State<login_page> {
+class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -24,7 +23,7 @@ class _login_pageState extends State<login_page> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const login_text(),
+                    const _LoginText(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -54,9 +53,9 @@ class _login_pageState extends State<login_page> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Username(),
+                  const _Username(),
                   const SizedBox(height: 20),
-                  Password(),
+                  _Password(),
                 ],
               ),
             ),
@@ -64,7 +63,7 @@ class _login_pageState extends State<login_page> {
           const SizedBox(
             height: 20,
           ),
-          _Submit_button(
+          _SubmitButton(
             formKey: _formKey,
           ),
           const SizedBox(
@@ -75,10 +74,10 @@ class _login_pageState extends State<login_page> {
 }
 
 // ignore: camel_case_types
-class _Submit_button extends StatelessWidget {
+class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
-  const _Submit_button({required this.formKey}) : super();
+  const _SubmitButton({required this.formKey}) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +113,7 @@ class _Submit_button extends StatelessWidget {
 }
 
 // ignore: use_key_in_widget_constructors
-class Password extends StatelessWidget {
+class _Password extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -147,9 +146,8 @@ class Password extends StatelessWidget {
   }
 }
 
-// ignore: camel_case_types
-class login_text extends StatelessWidget {
-  const login_text({
+class _LoginText extends StatelessWidget {
+  const _LoginText({
     Key? key,
   }) : super(key: key);
 
@@ -168,8 +166,8 @@ class login_text extends StatelessWidget {
   }
 }
 
-class Username extends StatelessWidget {
-  const Username({
+class _Username extends StatelessWidget {
+  const _Username({
     Key? key,
   }) : super(key: key);
 
@@ -183,9 +181,9 @@ class Username extends StatelessWidget {
           child: Text("Username"),
         ),
         TextFormField(
-          /*  onChanged: (Username
+          /*  onChanged: (_Username
           ) => context.read<LoginCubitCubit>().setUsername
-          (Username
+          (_Username
           ), */
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),

@@ -14,12 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Onye',
       theme: ThemeData(
-        
         primarySwatch: Colors.blue,
       ),
-      home: const login_page(),
+      home: const LoginPage(),
     );
   }
 }
-
-
