@@ -31,7 +31,7 @@ class _login_pageState extends State<login_page> {
                     Expanded(
                       flex: 1,
                       child: Stack(children: [
-                    SingleChildScrollView(child: form_section()),
+                        SingleChildScrollView(child: form_section()),
                       ]),
                     ),
                   ],
@@ -46,14 +46,15 @@ class _login_pageState extends State<login_page> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
+          Container(
+            constraints: const BoxConstraints(maxWidth: 500),
             padding: const EdgeInsets.all(40.0),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Email(),
+                  const Username(),
                   const SizedBox(height: 20),
                   Password(),
                 ],
@@ -71,8 +72,6 @@ class _login_pageState extends State<login_page> {
           ),
         ]);
   }
-
-  
 }
 
 // ignore: camel_case_types
@@ -86,7 +85,7 @@ class _Submit_button extends StatelessWidget {
     //  return BlocBuilder<LoginCubitCubit, LoginCubitState>(
     // builder: (context, state) {
     return Container(
-      width: 300,
+      width: 200,
       height: 60,
       padding: const EdgeInsets.all(2),
       child: Padding(
@@ -137,7 +136,7 @@ class Password extends StatelessWidget {
           ),
           validator: (String? value) {
             if (value!.isEmpty) {
-              return 'Please enter a validate password';
+              return 'Please enter a valid password';
             } else {
               return null;
             }
@@ -169,8 +168,8 @@ class login_text extends StatelessWidget {
   }
 }
 
-class Email extends StatelessWidget {
-  const Email({
+class Username extends StatelessWidget {
+  const Username({
     Key? key,
   }) : super(key: key);
 
@@ -184,7 +183,10 @@ class Email extends StatelessWidget {
           child: Text("Username"),
         ),
         TextFormField(
-          /*  onChanged: (email) => context.read<LoginCubitCubit>().setEmail(email), */
+          /*  onChanged: (Username
+          ) => context.read<LoginCubitCubit>().setUsername
+          (Username
+          ), */
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
