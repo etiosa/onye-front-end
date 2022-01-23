@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:onye_front_ened/pages/Home/home.dart';
 import 'package:onye_front_ened/pages/Login/login.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

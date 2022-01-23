@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-// ignore: camel_case_types
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -10,6 +11,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +27,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const _LoginText(),
+                    _LoginText(),
                     const SizedBox(
                       height: 20,
                     ),
                     Expanded(
                       flex: 1,
                       child: Stack(children: [
-                        SingleChildScrollView(child: form_section()),
+                        SingleChildScrollView(child: _formSection()),
                       ]),
                     ),
                   ],
@@ -39,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
             )));
   }
 
-  // ignore: non_constant_identifier_names
-  Column form_section() {
+  Column _formSection() {
     return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,9 +56,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const _Username(),
+                  _Username.withController(usernameController),
                   const SizedBox(height: 20),
-                  _Password(),
+                  _Password.withController(passwordController),
                 ],
               ),
             ),
@@ -65,6 +68,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           _SubmitButton(
             formKey: _formKey,
+            usernameController: usernameController,
+            passwordController: passwordController,
           ),
           const SizedBox(
             height: 30,
@@ -73,47 +78,78 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-// ignore: camel_case_types
-class _SubmitButton extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
-
-  const _SubmitButton({required this.formKey}) : super();
-
+class _LoginText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //  return BlocBuilder<LoginCubitCubit, LoginCubitState>(
-    // builder: (context, state) {
-    return Container(
-      width: 200,
-      height: 60,
-      padding: const EdgeInsets.all(2),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: ElevatedButton(
-          autofocus: true,
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(
-                const Color.fromARGB(255, 121, 113, 234)),
-          ),
-          child: const Text('Login'),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              //send a request to backend
-              /*  context.read<LoginCubitCubit>().login(); */
-            }
-          },
-        ),
+    return const Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Text(
+        'Onye ',
+        style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: Color.fromARGB(255, 67, 83, 109)),
       ),
     );
-    //  },
-    //  );
-    // }
   }
 }
 
-// ignore: use_key_in_widget_constructors
+// ignore: must_be_immutable
+class _Username extends StatelessWidget {
+  _Username({
+    Key? key,
+  }) : super(key: key);
+
+  late TextEditingController controller;
+
+  _Username.withController(TextEditingController usernameController) {
+    controller = usernameController;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text("Username"),
+        ),
+        TextFormField(
+          controller: controller,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(borderSide: BorderSide.none),
+            filled: true,
+            fillColor: Color.fromARGB(255, 214, 214, 222),
+            labelStyle: TextStyle(
+                color: Colors.black,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600),
+          ),
+          validator: (String? value) {
+            if (value!.isEmpty) {
+              return 'Please enter a valid username';
+            }
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// ignore: must_be_immutable
 class _Password extends StatelessWidget {
+  _Password({
+    Key? key,
+  }) : super(key: key);
+
+  late TextEditingController controller;
+
+  _Password.withController(TextEditingController passwordController) {
+    controller = passwordController;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -124,8 +160,7 @@ class _Password extends StatelessWidget {
           child: Text("Password"),
         ),
         TextFormField(
-          /*   onChanged: (password) =>
-              context.read<LoginCubitCubit>().setPassword(password), */
+          controller: controller,
           obscureText: true,
           autofocus: true,
           decoration: const InputDecoration(
@@ -146,62 +181,42 @@ class _Password extends StatelessWidget {
   }
 }
 
-class _LoginText extends StatelessWidget {
-  const _LoginText({
-    Key? key,
-  }) : super(key: key);
+class _SubmitButton extends StatelessWidget {
+  final GlobalKey<FormState> formKey;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+
+  const _SubmitButton(
+      {required this.formKey,
+      required this.usernameController,
+      required this.passwordController})
+      : super();
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Text(
-        'Onye ',
-        style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 67, 83, 109)),
-      ),
-    );
-  }
-}
-
-class _Username extends StatelessWidget {
-  const _Username({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text("Username"),
-        ),
-        TextFormField(
-          /*  onChanged: (_Username
-          ) => context.read<LoginCubitCubit>().setUsername
-          (_Username
-          ), */
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
+    return Container(
+      width: 200,
+      height: 60,
+      padding: const EdgeInsets.all(2),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 5),
+        child: ElevatedButton(
+          autofocus: true,
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(
+                const Color.fromARGB(255, 121, 113, 234)),
           ),
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              return 'Please enter a valid username';
+          child: const Text('Login'),
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              // TODO send a request to backend
+              print(usernameController.text);
+              print(passwordController.text);
             }
-            return null;
           },
         ),
-      ],
+      ),
     );
   }
 }
