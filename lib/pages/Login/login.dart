@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -11,9 +14,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +55,10 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Username.withController(usernameController),
-                  const SizedBox(height: 20),
-                  _Password.withController(passwordController),
+                children: const [
+                  _Username(),
+                  SizedBox(height: 20),
+                  _Password(),
                 ],
               ),
             ),
@@ -66,11 +66,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 20,
           ),
-          _SubmitButton(
-            formKey: _formKey,
-            usernameController: usernameController,
-            passwordController: passwordController,
-          ),
+          _SubmitButton(_formKey),
           const SizedBox(
             height: 30,
           ),
@@ -96,15 +92,10 @@ class _LoginText extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _Username extends StatelessWidget {
-  _Username({
+  const _Username({
     Key? key,
   }) : super(key: key);
 
-  late TextEditingController controller;
-
-  _Username.withController(TextEditingController usernameController) {
-    controller = usernameController;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +107,8 @@ class _Username extends StatelessWidget {
           child: Text("Username"),
         ),
         TextFormField(
-          controller: controller,
+          onChanged: (username) =>
+              context.read<LoginCubit>().setUserName(username),
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -140,15 +132,9 @@ class _Username extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _Password extends StatelessWidget {
-  _Password({
+  const _Password({
     Key? key,
   }) : super(key: key);
-
-  late TextEditingController controller;
-
-  _Password.withController(TextEditingController passwordController) {
-    controller = passwordController;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +146,8 @@ class _Password extends StatelessWidget {
           child: Text("Password"),
         ),
         TextFormField(
-          controller: controller,
+          onChanged: (password) =>
+              context.read<LoginCubit>().setPassword(password),
           obscureText: true,
           autofocus: true,
           decoration: const InputDecoration(
@@ -183,40 +170,37 @@ class _Password extends StatelessWidget {
 
 class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final TextEditingController usernameController;
-  final TextEditingController passwordController;
 
-  const _SubmitButton(
-      {required this.formKey,
-      required this.usernameController,
-      required this.passwordController})
-      : super();
+  const _SubmitButton(this.formKey) : super();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 60,
-      padding: const EdgeInsets.all(2),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: ElevatedButton(
-          autofocus: true,
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(
-                const Color.fromARGB(255, 121, 113, 234)),
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return Container(
+          width: 200,
+          height: 60,
+          padding: const EdgeInsets.all(2),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: ElevatedButton(
+              autofocus: true,
+              style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 121, 113, 234)),
+              ),
+              child: const Text('Login'),
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  // TODO send a request to backend
+                  context.read<LoginCubit>().login();
+                }
+              },
+            ),
           ),
-          child: const Text('Login'),
-          onPressed: () async {
-            if (formKey.currentState!.validate()) {
-              // TODO send a request to backend
-              print(usernameController.text);
-              print(passwordController.text);
-            }
-          },
-        ),
-      ),
+        );
+      },
     );
   }
 }
