@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/pages/Home/home.dart';
 import 'package:onye_front_ened/pages/Login/login.dart';
+import 'package:onye_front_ened/pages/Patients/patients.dart';
+import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 import 'package:onye_front_ened/pages/schedule/Schedule.dart';
 import 'package:onye_front_ened/repositories/auth_repositories.dart';
 
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       home: RepositoryProvider.value(value: _authRepository,
           child: BlocProvider(create: (context)=>LoginCubit(_authRepository) , 
-            child: const LoginPage()
+            child: const  Schedule()
           ,),
       ),
     );
