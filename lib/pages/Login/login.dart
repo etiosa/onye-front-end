@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: true,
-            backgroundColor: const Color.fromARGB(255, 239, 241, 243),
+            backgroundColor: const Color.fromARGB(255, 247, 253, 253),
             body: Container(
               margin: const EdgeInsets.only(top: 70),
               child: Center(
@@ -77,14 +77,12 @@ class _LoginPageState extends State<LoginPage> {
 class _LoginText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Text(
-        'Onye ',
-        style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 67, 83, 109)),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Image.asset(
+        'assets/images/onye.png',
+        fit: BoxFit.contain,
+        height: 100,
       ),
     );
   }
@@ -103,8 +101,9 @@ class _Username extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text("Username"),
+          padding: EdgeInsets.all(2.0),
+          child: Text("Username", style: TextStyle(color: Color.fromARGB(255, 56, 155, 152),
+            ),),
         ),
         TextFormField(
           onChanged: (username) =>
@@ -112,7 +111,7 @@ class _Username extends StatelessWidget {
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
+            fillColor: Color.fromARGB(255, 205, 226, 226),
             labelStyle: TextStyle(
                 color: Colors.black,
                 fontFamily: 'Poppins',
@@ -143,7 +142,7 @@ class _Password extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text("Password"),
+          child: Text("Password",style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
         ),
         TextFormField(
           onChanged: (password) =>
@@ -152,7 +151,7 @@ class _Password extends StatelessWidget {
           autofocus: true,
           decoration: const InputDecoration(
             filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
+            fillColor: Color.fromARGB(255, 205, 226, 226),
             border: OutlineInputBorder(borderSide: BorderSide.none),
           ),
           validator: (String? value) {
@@ -178,7 +177,7 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return Container(
-          width: 200,
+          width: 250,
           height: 60,
           padding: const EdgeInsets.all(2),
           child: Padding(
@@ -188,12 +187,11 @@ class _SubmitButton extends StatelessWidget {
               style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 121, 113, 234)),
+                    const Color.fromARGB(255, 56, 155, 152)),
               ),
               child: const Text('Login'),
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  // TODO send a request to backend
                   context.read<LoginCubit>().login();
                 }
               },

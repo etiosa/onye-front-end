@@ -9,20 +9,10 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       body: Container(
          child: Column(
-           children: [
-              Row(children: [
-                Text('Image'),
-                Column(children: [
-                  Text('name'),
-                  Text("address"),
-                  Text("phone number")
-                ],)
-              ],),
-              ElevatedButton(onPressed: (){}, child: const Text("Registration")),
-              ElevatedButton(onPressed: () {}, child: const Text("Patients")),
-              ElevatedButton(onPressed: (){}, child: const Text("Schedule"))
-              
-           ],
+                children: [ 
+                  Text("Good afternoon"),    //TODO: backend login here
+                  Text('Doctor Joe') //TODO: backend as well
+                ],
          ),
       ),
     );

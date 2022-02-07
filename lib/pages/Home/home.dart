@@ -11,30 +11,31 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 239, 241, 243),
+    
+      backgroundColor: const Color.fromARGB(255, 247, 253, 253),
       body: Scaffold(
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Image'),
-                const SizedBox(height: 15),
-              const Text('Build better relationships', style: TextStyle(fontSize: 20),),
-              const SizedBox( height:15),
+            mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 150,),
+              Image.asset('assets/images/onye.png', fit: BoxFit.contain, height: 100,),
+                const SizedBox(height: 100),
+              const Text('Build better relationships', style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 56, 155, 152)),),
+              const SizedBox( height:100),
             Container(
           width: 200,
-          height: 60,
+          height: 70,
+          margin: const EdgeInsets.only(bottom:120),
           padding: const EdgeInsets.all(2),
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
+            padding: const EdgeInsets.only(bottom: 10),
             child: ElevatedButton(
               autofocus: true,
               style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 121, 113, 234)),
+                    const Color.fromARGB(255, 56, 155, 152)),
               ),
                  onPressed: () {  },
                   child: const Text('Login'),
