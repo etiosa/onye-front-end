@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   syncfusion_flutter_calendar: ^19.4.48
+  step_progress_indicator: ^1.0.2
 
 
 

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
-class Appointment extends StatefulWidget {
-  const Appointment({Key? key}) : super(key: key);
+class RegistrationForm extends StatefulWidget {
+  const RegistrationForm({Key? key}) : super(key: key);
 
   @override
-  State<Appointment> createState() => _AppointmentState();
+  State<RegistrationForm> createState() => _RegistrationFormState();
 }
 
-class _AppointmentState extends State<Appointment> {
+class _RegistrationFormState extends State<RegistrationForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -88,7 +88,6 @@ class FirstName extends StatelessWidget {
         TextFormField(
           onChanged: (firstname) =>
               context.read<RegistrationCubit>().setFirstName(firstname),
-          obscureText: true,
           autofocus: true,
           decoration: const InputDecoration(
             filled: true,
@@ -96,8 +95,8 @@ class FirstName extends StatelessWidget {
             border: OutlineInputBorder(borderSide: BorderSide.none),
           ),
           validator: (String? value) {
-            if (value!.isEmpty || value.length <= 7) {
-              return 'Please enter  a validate password';
+            if (value!.isEmpty) {
+              return 'Please enter your name';
             } else {
               return null;
             }
@@ -133,12 +132,11 @@ class LastName extends StatelessWidget {
                 fontWeight: FontWeight.w600),
           ),
           validator: (String? value) {
-            if (value!.isEmpty ||
-                !RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w]{2,4}").hasMatch(value)) {
+            if (value!.isEmpty){
               // print("error");
-              return 'Please enter  a validate email address';
+              return 'Please enter';
             }
-            return null;
+           
           },
         ),
       ],
@@ -161,7 +159,7 @@ class DateOfBirth extends StatelessWidget {
         ),
         TextFormField(
           onChanged: (dateofBirth) =>
-              context.read<RegistrationCubit>().setFirstName(dateofBirth),
+              context.read<RegistrationCubit>().setDateofBirth(dateofBirth),
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -172,8 +170,7 @@ class DateOfBirth extends StatelessWidget {
                 fontWeight: FontWeight.w600),
           ),
           validator: (String? value) {
-            if (value!.isEmpty ||
-                !RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w]{2,4}").hasMatch(value)) {
+            if (value!.isEmpty) {
               // print("error");
               return 'Please enter  your date of birth';
             }
@@ -200,7 +197,7 @@ class Gender extends StatelessWidget {
         ),
         TextFormField(
           onChanged: (gender) =>
-              context.read<RegistrationCubit>().setFirstName(gender),
+              context.read<RegistrationCubit>().setGender(gender),
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -211,12 +208,11 @@ class Gender extends StatelessWidget {
                 fontWeight: FontWeight.w600),
           ),
           validator: (String? value) {
-            if (value!.isEmpty ||
-                !RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w]{2,4}").hasMatch(value)) {
+            if (value!.isEmpty){
               // print("error");
-              return 'Please enter  a validate email address';
+              return "Please enter";
             }
-            return null;
+          
           },
         ),
       ],
@@ -240,7 +236,7 @@ class Religion extends StatelessWidget {
         ),
         TextFormField(
           onChanged: (religion) =>
-              context.read<RegistrationCubit>().setFirstName(religion),
+              context.read<RegistrationCubit>().setReligion(religion),
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -251,10 +247,9 @@ class Religion extends StatelessWidget {
                 fontWeight: FontWeight.w600),
           ),
           validator: (String? value) {
-            if (value!.isEmpty ||
-                !RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w]{2,4}").hasMatch(value)) {
+            if (value!.isEmpty) {
               // print("error");
-              return 'Please enter  a validate email address';
+              return 'Please enter ';
             }
             return null;
           },
@@ -280,7 +275,7 @@ class EducationLevel extends StatelessWidget {
         TextFormField(
           keyboardType: TextInputType.emailAddress,
           onChanged: (educationlevel) =>
-              context.read<RegistrationCubit>().setFirstName(educationlevel),
+              context.read<RegistrationCubit>().setEducationLevel(educationlevel),
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -291,10 +286,9 @@ class EducationLevel extends StatelessWidget {
                 fontWeight: FontWeight.w600),
           ),
           validator: (String? value) {
-            if (value!.isEmpty ||
-                !RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w]{2,4}").hasMatch(value)) {
+            if (value!.isEmpty) {
               // print("error");
-              return 'Please enter  a validate email address';
+              return 'Please enter';
             }
             return null;
           },
@@ -311,32 +305,31 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return BlocBuilder<LoginCubitCubit, LoginCubitState>(
-    // builder: (context, state) {
-    return Container(
-      width: 300,
-      height: 60,
-      padding: const EdgeInsets.all(2),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 5),
-        child: ElevatedButton(
-          autofocus: true,
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(
-                const Color.fromARGB(255, 121, 113, 234)),
+    return BlocBuilder<RegistrationCubit, RegistrationState>(
+        builder: (context, state) {
+      return Container(
+        width: 300,
+        height: 60,
+        padding: const EdgeInsets.all(2),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: ElevatedButton(
+            autofocus: true,
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor: MaterialStateProperty.all(
+                  const Color.fromARGB(255, 121, 113, 234)),
+            ),
+            child: const Text('Conintue'),
+            onPressed: () {
+             // if (formKey.currentState!.validate()) {
+                //send a request to backend
+                context.read<RegistrationCubit>().register();
+              //}
+            },
           ),
-          child: const Text('Conintue'),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              //send a request to backend
-              // context.read<LoginCubitCubit>().login();
-            }
-          },
         ),
-      ),
-    );
-    // },
-    //);
+      );
+    });
   }
 }

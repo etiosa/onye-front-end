@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
+import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -13,6 +14,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    context.read<LoginCubit>().home();
+ 
+    if (context.read<LoginCubit>().state.loginStatus ||
+        context.read<LoginCubit>().state.statusCode > 0) {
+    
+      Navigator.of(context).pushNamed("/dashboard");
+    } else {
+      print("login");
+    }
+
+    print('before run');
+    super.initState();
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -37,6 +54,10 @@ class _LoginPageState extends State<LoginPage> {
                         SingleChildScrollView(child: _formSection()),
                       ]),
                     ),
+                    if (context.read<LoginCubit>().state.statusCode > 0)
+                      const Text('Yes')
+                    else
+                      const ScaffoldMessenger(child: Text('Please Login'))
                   ],
                 ),
               ),
@@ -94,7 +115,6 @@ class _Username extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -102,8 +122,12 @@ class _Username extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.all(2.0),
-          child: Text("Username", style: TextStyle(color: Color.fromARGB(255, 56, 155, 152),
-            ),),
+          child: Text(
+            "Username",
+            style: TextStyle(
+              color: Color.fromARGB(255, 56, 155, 152),
+            ),
+          ),
         ),
         TextFormField(
           onChanged: (username) =>
@@ -142,7 +166,8 @@ class _Password extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text("Password",style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
+          child: Text("Password",
+              style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
         ),
         TextFormField(
           onChanged: (password) =>
@@ -176,6 +201,14 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
+        if (state.loginStatus) {
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+            Navigator.of(context).pushNamed("/dashboard");
+          });
+
+         // Navigator.of(context).pushNamed("/dashboard");
+        } else
+          print(state);
         return Container(
           width: 250,
           height: 60,
@@ -193,6 +226,11 @@ class _SubmitButton extends StatelessWidget {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   context.read<LoginCubit>().login();
+
+                  /*   if (context.read<LoginCubit>().state.loginStatus) {
+                    print("login pressed move");
+                    Navigator.of(context).pushNamed("/dashboard");
+                  } */
                 }
               },
             ),

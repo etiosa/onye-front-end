@@ -22,7 +22,14 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void login() async {
-    await _authRepository.signIn(
+    final bool loginStatus = await _authRepository.signIn(
         username: state.userName, password: state.password);
+          emit(state.copywith(loginStatus: loginStatus));
+  }
+
+  void home() async {
+    final int statusCode = await _authRepository.home();
+    emit(state.copywith(statusCode: statusCode));
+   
   }
 }
