@@ -32,13 +32,12 @@ class AuthRepository {
     final int statusCode;
     try {
       http.Response response = await http
-          .post(uri, headers: {"Content-Type": contentType, "Accept": accept,
-           "Access-Control_Allow_Origin": "*"
+          .get(uri, headers: {"Content-Type": "application/json", "Accept": accept,
           });
       statusCode = response.statusCode;
       return statusCode;
     } catch (e) {
-      print(e);
+     
       return -1;
     }
   }

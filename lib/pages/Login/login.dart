@@ -16,14 +16,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
-    context.read<LoginCubit>().home();
- 
     if (context.read<LoginCubit>().state.loginStatus ||
         context.read<LoginCubit>().state.statusCode > 0) {
-    
+
       Navigator.of(context).pushNamed("/dashboard");
     } else {
-      print("login");
+      context.read<LoginCubit>().home();
     }
 
     print('before run');
@@ -202,11 +200,11 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         if (state.loginStatus) {
-            WidgetsBinding.instance?.addPostFrameCallback((_) {
+          WidgetsBinding.instance?.addPostFrameCallback((_) {
             Navigator.of(context).pushNamed("/dashboard");
           });
 
-         // Navigator.of(context).pushNamed("/dashboard");
+          // Navigator.of(context).pushNamed("/dashboard");
         } else
           print(state);
         return Container(
