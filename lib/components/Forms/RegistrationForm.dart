@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/UI/DropDown.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
 class RegistrationForm extends StatefulWidget {
@@ -11,6 +12,7 @@ class RegistrationForm extends StatefulWidget {
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
 
+//TODO: Refactor
 class _RegistrationFormState extends State<RegistrationForm> {
   DateTime? _dateTime;
     int _index = 0;
@@ -85,6 +87,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+        
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Form(
@@ -92,19 +95,25 @@ class _RegistrationFormState extends State<RegistrationForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  FirstName(),
-                  SizedBox(height: 30),
-                  LastName(),
-                  SizedBox(height: 30),
+                children:  [
+                  const FirstName(),
+                  const SizedBox(height: 25),
+                 const LastName(),
+                  const SizedBox(height: 25),
                   //DateOfBirth(),
-                  SizedBox(height: 30),
-                  Gender(),
-                  SizedBox(height: 30),
-                  Religion(),
-                  SizedBox(height: 30),
-                  EducationLevel(),
-                  SizedBox(height: 30),
+                
+                  DropdownField(
+                    fieldName: 'Gender',
+                  ),
+                 const  SizedBox(height: 25),
+                  DropdownField(
+                    fieldName: 'Reigion',
+                  ),
+                  const SizedBox(height: 25),
+                      DropdownField(
+                    fieldName: 'Education Level',
+                  ),
+                  const SizedBox(height: 25),
                   // Email()
                 ],
               ),
@@ -113,12 +122,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
           const SizedBox(
             height: 20,
           ),
-          _SubmitButton(
+       /*    _SubmitButton(
             formKey: _formKey,
           ),
           const SizedBox(
             height: 30,
-          ),
+          ), */
         ]);
   }
 }
@@ -138,8 +147,8 @@ class FirstName extends StatelessWidget {
           child: Text("First Name"),
         ),
         SizedBox(
-          height: 30,
-          width: 320,
+          height: 45,
+          width: 400,
           child: TextFormField(
             /*   onChanged: (username) =>
                 context.read<LoginCubit>().setUserName(username), */
@@ -178,7 +187,7 @@ class LastName extends StatelessWidget {
           child: Text("Last Name"),
         ),
         SizedBox(
-          height: 35,
+          height: 50,
           width: 320,
           child: TextFormField(
             /*   onChanged: (username) =>
