@@ -28,40 +28,27 @@ class RegistrationRepositories {
       String? addressLine2,
       String? city}) async {
     var uri = Uri.parse(root + "api/rest/v1/patient");
-    final body ={
-      "firstName": firstName,
-      "lastName": lastName,
-      "dateOfBirth": dateOfBirth,
-      "gender": gender,
-      "religion": religion,
-      "phoneNumber": phoneNumber,
-      "email": email,
-      "contactPreference": contactPreferences,
-      "aliveStatus": 1
-    };
+    final body;
 
-    http.Response reponse = await http.post(uri, headers: {
-     
-      "Accept":"application/json",
-       "Content-Type": "application/json",
-       
-     
-    }, 
-       encoding: Encoding.getByName("utf-8"),
-      body: json.encode({
+    http.Response reponse = await http.post(uri,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        encoding: Encoding.getByName("utf-8"),
+        body: json.encode({
           "firstName": "lasr",
           "lastName": "first",
           "dateOfBirth": "1992-04-27",
-          "gender": "gender",
+          "gender": "MALE",
           "religion": "None",
           "phoneNumber": "111-22-1111",
           "email": "test@gmail.com",
-          "contactPreference": "Phone",
-          "aliveStatus": '1'
-        })
-       
-       );
-    //body = jsonDecode(reponse.body);
-    // print(body);
+          "contactPreference": "PHONE",
+          "countryCode": "UNDEFINED",
+          "aliveStatus": {"deceased": false}
+        }));
+    body = jsonDecode(reponse.body);
+    print(body);
   }
 }

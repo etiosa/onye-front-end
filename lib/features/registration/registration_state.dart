@@ -16,6 +16,8 @@ class RegistrationState extends Equatable {
       this.addressLine2 = 'optional',
       this.city='Test',
       this.zipCode = '10245'});
+
+
   final String firstName;
   final String lastName;
   final String dateOfBirth;
@@ -30,6 +32,10 @@ class RegistrationState extends Equatable {
   final String addressLine2;
   final String zipCode;
   final String city;
+
+
+
+  
 
   @override
   List<Object> get props => [

@@ -5,6 +5,7 @@ import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 
 class LoginPage extends StatefulWidget {
+  //TODO: Ccall home
   const LoginPage({
     Key? key,
   }) : super(key: key);
@@ -18,13 +19,12 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     if (context.read<LoginCubit>().state.loginStatus ||
         context.read<LoginCubit>().state.statusCode > 0) {
-
+      context.read<LoginCubit>().home();
       Navigator.of(context).pushNamed("/dashboard");
     } else {
-      context.read<LoginCubit>().home();
+     
     }
 
-    print('before run');
     super.initState();
   }
 
@@ -203,11 +203,8 @@ class _SubmitButton extends StatelessWidget {
           WidgetsBinding.instance?.addPostFrameCallback((_) {
             Navigator.of(context).pushNamed("/dashboard");
           });
-
-          // Navigator.of(context).pushNamed("/dashboard");
-        } else
-          print(state);
-        return Container(
+        } 
+          return Container(
           width: 250,
           height: 60,
           padding: const EdgeInsets.all(2),
@@ -224,11 +221,6 @@ class _SubmitButton extends StatelessWidget {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   context.read<LoginCubit>().login();
-
-                  /*   if (context.read<LoginCubit>().state.loginStatus) {
-                    print("login pressed move");
-                    Navigator.of(context).pushNamed("/dashboard");
-                  } */
                 }
               },
             ),
