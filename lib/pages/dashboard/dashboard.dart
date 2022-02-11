@@ -19,18 +19,33 @@ class Dashboard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width / 6,
-                  bottom: 5.0,
+                  bottom: 1.0,
                   left: MediaQuery.of(context).size.width / 9),
-              child: const Text("Good afternoon"),
-            ), //TODO: backend login here
+              child: const Text("Good afternoon", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+            ),
+             //TODO: backend login here
             Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.width / 35,
+                  top: MediaQuery.of(context).size.width / 55,
                   left: MediaQuery.of(context).size.width / 9),
-              child: const Text('Doctor Joe'),
-            ), //TODO: backend as well
-            const SizedBox(
-              height: 40,
+              child: const Text('Doctor Joe John', style: TextStyle( fontSize: 17, fontFamily: 'poppins'),),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left:40.0),
+              child: Text('Surgery', style: TextStyle(color:Color.fromARGB(255, 115, 109, 109)) ,),
+            ),
+            const SizedBox(height:60),
+                const Padding(
+                  padding: EdgeInsets.only(left:40.0),
+                  child: Text('St. Hopkins Hospital', style: TextStyle(fontFamily: 'poppins',fontSize: 17, fontWeight: FontWeight.w600 ),),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left:40.0,),
+                  child: Text('010-444 444', style: TextStyle(fontFamily: 'poppins', fontSize: 15),),
+                ),
+             //TODO: backend as well
+           SizedBox(
+              height: MediaQuery.of(context).size.height/10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -41,8 +56,8 @@ class Dashboard extends StatelessWidget {
                             .pushNamed("/dashboard/registration")
                       }),
                   child: Container(
-                    height: 100,
-                    width: 120,
+                    height: 120,
+                    width: 150,
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 56, 155, 152),
                       boxShadow: [
@@ -57,7 +72,7 @@ class Dashboard extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.only(top: 40.0, left: 20),
                       child: Text(
-                        'Registration',
+                        'Check-In',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -69,8 +84,8 @@ class Dashboard extends StatelessWidget {
                             .pushNamed("/dashboard/appointment")
                       }),
                   child: Container(
-                    height: 100,
-                    width: 120,
+                    height: 120,
+                    width: 150,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -88,8 +103,36 @@ class Dashboard extends StatelessWidget {
                     ),
                   ),
                 ),
+                   
               ],
-            )
+            ),
+            const SizedBox(height:50),
+               Padding(
+                 padding: const EdgeInsets.all(20.0),
+                 child: InkWell(
+              onTap: (() =>
+                    {Navigator.of(context).pushNamed("/dashboard/appointment")}),
+              child: Container(
+                  height: 120,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 40.0, left: 20),
+                    child: Text('Registeration'),
+                  ),
+              ),
+            ),
+               ),
           ],
         ),
       ),

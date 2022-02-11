@@ -43,13 +43,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Onye',
           routes: {
-            '/': (context) => const HomePage(),
+            '/': (context) => const PatientsPage(),
             '/login': (context) => const LoginPage(),
             '/dashboard': (context) => const Dashboard(),
             '/dashboard/appointment': (context) => const Schedule(),
             '/dashboard/registration': (context) => const Registration(),
-            '/dashboard/registrationForm': (context) =>
-                const RegistrationForm(),
+            '/dashboard/registrationForm': (context) =>const RegistrationForm(),
+            'dashboard/patient': (context)=>const PatientsPage()
           },
         ),
       ),
