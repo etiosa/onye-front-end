@@ -3,51 +3,101 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
 class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({Key? key}) : super(key: key);
+  const RegistrationForm({Key? key, this.restorationId}) : super(key: key);
+
+  final String? restorationId;
 
   @override
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
+  DateTime? _dateTime;
+    int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 239, 241, 243),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 30.0, bottom: 10),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0, left: 20),
+              child: Text(
+                "Registration",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
-              formSection()
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 1.2,
+                width: MediaQuery.of(context).size.width / 1.05,
+                child: Stepper(
+                  elevation: 0,
+                  type: StepperType.horizontal,
+                  currentStep: _index,
+                  onStepCancel: () {
+                    if (_index > 0) {
+                      setState(() {
+                        _index -= 1;
+                      });
+                    }
+                  },
+                  onStepContinue: () {
+                    if (_index <= 0) {
+                      setState(() {
+                        _index += 1;
+                      });
+                    }
+                  },
+                  onStepTapped: (int index) {
+                    setState(() {
+                      _index = index;
+                    });
+                  },
+                  steps: <Step>[
+                    Step(
+                      state: StepState.editing,
+                      title: const Text(''),
+                      content: formSection()
+                    ),
+                    const Step(
+                      state: StepState.complete,
+                      isActive: true,
+                      title: Text(''),
+                      content: Text('Content for Step 2'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-  Column formSection() {
+    Column formSection() {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(20.0),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   FirstName(),
                   SizedBox(height: 30),
                   LastName(),
                   SizedBox(height: 30),
-                  DateOfBirth(),
+                  //DateOfBirth(),
                   SizedBox(height: 30),
                   Gender(),
                   SizedBox(height: 30),
@@ -73,6 +123,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 }
 
+
 class FirstName extends StatelessWidget {
   const FirstName({Key? key}) : super(key: key);
 
@@ -80,27 +131,34 @@ class FirstName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Padding(
-          padding: EdgeInsets.all(1.0),
+          padding: EdgeInsets.only(left: 10.0),
           child: Text("First Name"),
         ),
-        TextFormField(
-          onChanged: (firstname) =>
-              context.read<RegistrationCubit>().setFirstName(firstname),
-          autofocus: true,
-          decoration: const InputDecoration(
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-          ),
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              return 'Please enter your name';
-            } else {
+        SizedBox(
+          height: 30,
+          width: 320,
+          child: TextFormField(
+            /*   onChanged: (username) =>
+                context.read<LoginCubit>().setUserName(username), */
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Color.fromARGB(255, 205, 226, 226),
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600),
+            ),
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return 'Please enter a valid username';
+              }
               return null;
-            }
-          },
+            },
+          ),
         ),
       ],
     );
@@ -119,69 +177,33 @@ class LastName extends StatelessWidget {
           padding: EdgeInsets.all(1.0),
           child: Text("Last Name"),
         ),
-        TextFormField(
-          onChanged: (lastname) =>
-              context.read<RegistrationCubit>().setLastName(lastname),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
+        SizedBox(
+          height: 35,
+          width: 320,
+          child: TextFormField(
+            /*   onChanged: (username) =>
+                context.read<LoginCubit>().setUserName(username), */
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Color.fromARGB(255, 205, 226, 226),
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600),
+            ),
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return 'Please enter a valid username';
+              }
+              return null;
+            },
           ),
-          validator: (String? value) {
-            if (value!.isEmpty){
-              // print("error");
-              return 'Please enter';
-            }
-           
-          },
         ),
       ],
     );
   }
 }
-//TODO:  Date Picker
-
-class DateOfBirth extends StatelessWidget {
-  const DateOfBirth({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Date Of Birth"),
-        ),
-        TextFormField(
-          onChanged: (dateofBirth) =>
-              context.read<RegistrationCubit>().setDateofBirth(dateofBirth),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
-          ),
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              // print("error");
-              return 'Please enter  your date of birth';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-}
-
 //TODO: Drop down
 class Gender extends StatelessWidget {
   const Gender({Key? key}) : super(key: key);
@@ -195,25 +217,28 @@ class Gender extends StatelessWidget {
           padding: EdgeInsets.all(1.0),
           child: Text("Gender"),
         ),
-        TextFormField(
-          onChanged: (gender) =>
-              context.read<RegistrationCubit>().setGender(gender),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
+        SizedBox(
+          height: 35,
+          width: MediaQuery.of(context).size.width / 1.2,
+          child: TextFormField(
+            /*   onChanged: (username) =>
+                context.read<LoginCubit>().setUserName(username), */
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Color.fromARGB(255, 205, 226, 226),
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600),
+            ),
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return 'Please enter a valid username';
+              }
+              return null;
+            },
           ),
-          validator: (String? value) {
-            if (value!.isEmpty){
-              // print("error");
-              return "Please enter";
-            }
-          
-          },
         ),
       ],
     );
@@ -234,25 +259,28 @@ class Religion extends StatelessWidget {
           padding: EdgeInsets.all(1.0),
           child: Text("Religion"),
         ),
-        TextFormField(
-          onChanged: (religion) =>
-              context.read<RegistrationCubit>().setReligion(religion),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
+        SizedBox(
+          height: 35,
+          width: 320,
+          child: TextFormField(
+            /*   onChanged: (username) =>
+                context.read<LoginCubit>().setUserName(username), */
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Color.fromARGB(255, 205, 226, 226),
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600),
+            ),
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return 'Please enter a valid username';
+              }
+              return null;
+            },
           ),
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              // print("error");
-              return 'Please enter ';
-            }
-            return null;
-          },
         ),
       ],
     );
@@ -272,32 +300,33 @@ class EducationLevel extends StatelessWidget {
           padding: EdgeInsets.all(1.0),
           child: Text("Education Level"),
         ),
-        TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (educationlevel) =>
-              context.read<RegistrationCubit>().setEducationLevel(educationlevel),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 214, 214, 222),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
+        SizedBox(
+          height: 35,
+          width: 320,
+          child: TextFormField(
+            /*   onChanged: (username) =>
+                context.read<LoginCubit>().setUserName(username), */
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Color.fromARGB(255, 205, 226, 226),
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600),
+            ),
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return 'Please enter a valid username';
+              }
+              return null;
+            },
           ),
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              // print("error");
-              return 'Please enter';
-            }
-            return null;
-          },
         ),
       ],
     );
   }
 }
-
 class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
@@ -308,7 +337,7 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
         builder: (context, state) {
       return Container(
-        width: 300,
+        width: 250,
         height: 60,
         padding: const EdgeInsets.all(2),
         child: Padding(
@@ -318,14 +347,13 @@ class _SubmitButton extends StatelessWidget {
             style: ButtonStyle(
               elevation: MaterialStateProperty.all(0),
               backgroundColor: MaterialStateProperty.all(
-                  const Color.fromARGB(255, 121, 113, 234)),
+                  const Color.fromARGB(255, 56, 155, 152)),
             ),
-            child: const Text('Conintue'),
-            onPressed: () {
-             // if (formKey.currentState!.validate()) {
-                //send a request to backend
-                context.read<RegistrationCubit>().register();
-              //}
+            child: const Text('Login'),
+            onPressed: () async {
+              /*  if (formKey.currentState!.validate()) {
+                context.read<LoginCubit>().login();
+              } */
             },
           ),
         ),
@@ -333,3 +361,32 @@ class _SubmitButton extends StatelessWidget {
     });
   }
 }
+/* 
+
+
+ Center(
+        child: OutlinedButton(
+          onPressed: () async {
+            _dateTime = (await showDatePicker(
+              
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2025)))!;
+          },
+          child: const Text('Open Date Picker'),
+        ),
+      ),
+
+
+
+
+
+
+
+
+
+ */
+
+
+//    context.read<RegistrationCubit>().register();

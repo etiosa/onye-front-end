@@ -139,8 +139,8 @@ class Schedule extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        height: 80,
-                        width: 20,
+                        height: 10,
+                        width: 40,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         )),

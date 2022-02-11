@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Onye',
           routes: {
-            '/': (context) => const PatientsPage(),
+            '/': (context) => const RegistrationForm(),
             '/login': (context) => const LoginPage(),
             '/dashboard': (context) => const Dashboard(),
             '/dashboard/appointment': (context) => const Schedule(),
