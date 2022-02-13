@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import "package:http/http.dart" as http;
 
 class RegistrationRepositories {
@@ -49,6 +48,40 @@ class RegistrationRepositories {
           "aliveStatus": {"deceased": false}
         }));
     body = jsonDecode(reponse.body);
-    print(body);
+  }
+
+  Future<void> getFormDropDown() async {
+    var uri = Uri.parse(root + "api/rest/v1/patient/formAlternatives");
+    final body;
+    http.Response response = await http.get(
+      uri,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+
+    final mapToOprions = Map.castFrom(json.decode(response.body));
+
+    return;
+  }
+
+  Future<List<dynamic>> getAppointment() async {
+    //1 Uri
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/search');
+
+    //2 http call
+    http.Response reponse = await http.get(
+      uri,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    var body = json.decode(reponse.body);
+    var appointmentList = body['elements'];
+    
+    return appointmentList;
+
   }
 }

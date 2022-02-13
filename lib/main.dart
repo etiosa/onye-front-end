@@ -6,10 +6,8 @@ import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 import 'package:onye_front_ened/pages/Home/home.dart';
 import 'package:onye_front_ened/pages/Login/login.dart';
 import 'package:onye_front_ened/pages/Patients/patients.dart';
-import 'package:onye_front_ened/pages/appointment/Appointment.dart';
 import 'package:onye_front_ened/pages/appointment/registration/Registration.dart';
 import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
-import 'package:onye_front_ened/pages/schedule/Schedule.dart';
 import 'package:onye_front_ened/repositories/auth_repositories.dart';
 import 'package:onye_front_ened/repositories/registration_repositories/registrationRepositories.dart';
 
@@ -43,11 +41,11 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Onye',
           routes: {
-            '/': (context) => const RegistrationForm(),
+            '/': (context) => const HomePage(),
             '/login': (context) => const LoginPage(),
             '/dashboard': (context) => const Dashboard(),
-            '/dashboard/appointment': (context) => const Schedule(),
-            '/dashboard/registration': (context) => const Registration(),
+            '/dashboard/appointment': (context) => const Registration(),
+           /*  '/dashboard/registration': (context) => const Registration(), */
             '/dashboard/registrationForm': (context) =>const RegistrationForm(),
             'dashboard/patient': (context)=>const PatientsPage()
           },

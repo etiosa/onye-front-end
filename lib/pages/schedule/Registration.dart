@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Schedule extends StatelessWidget {
-  const Schedule({Key? key}) : super(key: key);
+class Registration extends StatelessWidget {
+  const Registration({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
-    return (Scaffold(
+    return (
+      Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

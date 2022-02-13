@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
-class Registration extends StatelessWidget {
+class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
+
+  @override
+  State<Registration> createState() => _RegistrationState();
+}
+
+class _RegistrationState extends State<Registration> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<RegistrationCubit>().getAppointments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +35,15 @@ class Registration extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: (() {
-                     Navigator.of(context).pushNamed("/dashboard/registrationForm");
-                   
+                    Navigator.of(context)
+                        .pushNamed("/dashboard/registrationForm");
                   }),
                   child: Container(
                     height: 40,
                     width: 160,
                     color: const Color.fromARGB(255, 56, 155, 152),
                     child: const Padding(
-                      padding: EdgeInsets.only(left:20.0, top:10),
+                      padding: EdgeInsets.only(left: 20.0, top: 10),
                       child: Text(
                         'Register Patient',
                         style: TextStyle(fontSize: 15, color: Colors.white),
@@ -47,7 +61,7 @@ class Registration extends StatelessWidget {
           const SizedBox(height: 30),
 
           //coming form backend
-         registrationBody(),
+          registrationBody(),
         ],
       ),
     ));
@@ -78,7 +92,7 @@ class Registration extends StatelessWidget {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         )),
-                    sheduleContent(),
+                    const Appointment(),
                   ],
                 ),
               ),
@@ -88,103 +102,118 @@ class Registration extends StatelessWidget {
       ),
     );
   }
+}
 
-  Column sheduleContent() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Etiosa Obasuyi', //TODO: backend
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-        ),
-        const Text(
-          'Reasons for visit here', //TODO: backend
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        SizedBox(
-          height: 1,
-          width: 320,
-          child: Container(
-            color: Colors.black12,
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Padding(
-              padding: EdgeInsets.only(right: 50.0),
-              child: Text('12/03/2021'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 50.0),
-              child: Text('10:30 AM'),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 0.0),
-              child: Text("Status"),
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 120,
-                height: 40,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 222, 52, 73)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      )),
-                      elevation: MaterialStateProperty.all(0)),
-                  onPressed: () => {print('cancel')},
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 120,
-                height: 40,
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color.fromARGB(255, 56, 155, 152)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ))),
-                    onPressed: () {
-                      print("reschedule");
-                    },
-                    child: const Text('Reschedule')),
-              ),
-            )
-          ],
-        )
-      ],
-    );
+class Appointment extends StatelessWidget {
+  const Appointment({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegistrationCubit, RegistrationState>(
+      builder: (context, state) {
+
+
+            
+
+      }
   }
 }
+       
+     /*    if(state.appointmentList.length>0){
+          return (
+          ListView.builder(
+            itemCount:state.appointmentList.length,
+            itemBuilder: (context, index){
+              return( Container(child: Text(state.appointmentList[index].id))
+
+              )})}}}
+            
+        
+        */
+      
+      
+      
+      
+  
+
+        
+     
+      //    mainAxisAlignment: MainAxisAlignment.start,
+        //  crossAxisAlignment: CrossAxisAlignment.start,
+        /*   children: [
+            const Text(
+              'Etiosa Obasuyi', //TODO: backend
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const Text(
+              'Reasons for visit here', //TODO: backend
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            SizedBox(
+              height: 1,
+              width: 320,
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.only(right: 50.0),
+                  child: Text('12/03/2021'),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 50.0),
+                  child: Text('10:30 AM'),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 0.0),
+                  child: Text("Status"),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 120,
+                    height: 40,
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0),
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color.fromARGB(255, 56, 155, 152)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ))),
+                        onPressed: () {
+                          print("reschedule");
+                        },
+                        child: const Text('Register')),
+                  ),
+                )
+              ], */
+            
+        //  ],
+      //  );
+     // }
+   // )
+
+    
+ // }
+//}

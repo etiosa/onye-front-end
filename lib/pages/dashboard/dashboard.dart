@@ -7,7 +7,6 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(context.read<LoginCubit>().state);
           context.read<LoginCubit>().home();
 
     return SafeArea(
@@ -53,7 +52,7 @@ class Dashboard extends StatelessWidget {
                 InkWell(
                   onTap: (() => {
                         Navigator.of(context)
-                            .pushNamed("/dashboard/registration")
+                            .pushNamed("/dashboard/appointment")
                       }),
                   child: Container(
                     height: 120,
@@ -72,7 +71,7 @@ class Dashboard extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.only(top: 40.0, left: 20),
                       child: Text(
-                        'Check-In',
+                        'Registration',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -111,7 +110,7 @@ class Dashboard extends StatelessWidget {
                  padding: const EdgeInsets.all(20.0),
                  child: InkWell(
               onTap: (() =>
-                    {Navigator.of(context).pushNamed("/dashboard/appointment")}),
+                    {Navigator.of(context).pushNamed("/dashboard/registrationForm")}),
               child: Container(
                   height: 120,
                   width: 150,
@@ -128,7 +127,7 @@ class Dashboard extends StatelessWidget {
                   ),
                   child: const Padding(
                     padding: EdgeInsets.only(top: 40.0, left: 20),
-                    child: Text('Registeration'),
+                    child: Text('Create a Patient'),
                   ),
               ),
             ),

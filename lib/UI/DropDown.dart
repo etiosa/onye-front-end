@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:onye_front_ened/repositories/dropDown_repositories/dropDownRepositories.dart';
 
 class DropdownField extends StatefulWidget {
-  DropdownField({Key? key, required this.fieldName}) : super(key: key);
-   String fieldName;
-
+  DropdownField({Key? key, required this.fieldName, required this.options})
+      : super(key: key);
+  final String fieldName;
+  final List<String> options;
   @override
   State<DropdownField> createState() => _DropdownFieldtState();
 }
 
 class _DropdownFieldtState extends State<DropdownField> {
+  @override
+  void initState() {
+    super.initState();
+    // context.read<RegistrationCubit>();
+  }
+
   String dropdownValue = 'One';
 
   _DropdownFieldtState();
 
   @override
   Widget build(BuildContext context) {
+    print(widget.options);
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Column(
@@ -41,8 +50,8 @@ class _DropdownFieldtState extends State<DropdownField> {
                   dropdownValue = newValue!;
                 });
               },
-              items: <String>['One', 'Two', 'Free', 'Four']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items:
+                  widget.options.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(

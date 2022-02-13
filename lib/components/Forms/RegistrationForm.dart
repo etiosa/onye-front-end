@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:onye_front_ened/UI/DropDown.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
@@ -15,8 +16,17 @@ class RegistrationForm extends StatefulWidget {
 //TODO: Refactor
 class _RegistrationFormState extends State<RegistrationForm> {
   DateTime? _dateTime;
-    int _index = 0;
+  int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<RegistrationCubit>().setEducationLevel();
+    context.read<RegistrationCubit>().setGender();
+    context.read<RegistrationCubit>().setReligion();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +71,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       _index = index;
                     });
                   },
-                  steps: <Step>[
+                  steps: const <Step>[
                     Step(
-                      state: StepState.editing,
-                      title: const Text(''),
-                      content: formSection()
-                    ),
-                    const Step(
+                        state: StepState.editing,
+                        title: Text(''),
+                        content: FormBody()),
+                    Step(
                       state: StepState.complete,
                       isActive: true,
                       title: Text(''),
@@ -82,56 +91,134 @@ class _RegistrationFormState extends State<RegistrationForm> {
       ),
     );
   }
-    Column formSection() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-        
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:  [
-                  const FirstName(),
-                  const SizedBox(height: 25),
-                 const LastName(),
-                  const SizedBox(height: 25),
-                  //DateOfBirth(),
-                
-                  DropdownField(
-                    fieldName: 'Gender',
-                  ),
-                 const  SizedBox(height: 25),
-                  DropdownField(
-                    fieldName: 'Reigion',
-                  ),
-                  const SizedBox(height: 25),
-                      DropdownField(
-                    fieldName: 'Education Level',
-                  ),
-                  const SizedBox(height: 25),
-                  // Email()
-                ],
+
+  Future datePicker(BuildContext context) async {
+    final initDate = DateTime.now();
+    final newDate = await showDatePicker(
+        context: context,
+        initialDate: initDate,
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year + 5));
+    if (newDate == null) return;
+    context
+        .read<RegistrationCubit>()
+        .setDateofBirth(newDate.toString().split(' ')[0]);
+  }
+
+
+}
+
+class FormBody extends StatefulWidget {
+  const FormBody({
+    Key? key,
+  }) : super();
+
+  @override
+  State<FormBody> createState() => _FormBodyState();
+}
+
+class _FormBodyState extends State<FormBody> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegistrationCubit, RegistrationState>(
+        builder: (context, state) {
+      print(state);
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const FirstName(),
+                    const SizedBox(height: 25),
+                    const LastName(),
+                    const SizedBox(height: 25),
+                    const DatePickerFeild(),
+                    const SizedBox(height: 25),
+                    DropdownField(
+                      fieldName: 'Gender',
+                      options: state.gender,
+                    ),
+                    const SizedBox(height: 25),
+                    DropdownField(
+                      fieldName: 'Reigion',
+                      options: state.religion,
+                    ),
+                    const SizedBox(height: 25),
+                    DropdownField(
+                      fieldName: 'Education Level',
+                      options: state.educationLevel,
+                    ),
+                    const SizedBox(height: 25),
+                    // Email()
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(
+            /*     const SizedBox(
             height: 20,
-          ),
-       /*    _SubmitButton(
+          ), */
+            /*    _SubmitButton(
             formKey: _formKey,
           ),
           const SizedBox(
             height: 30,
           ), */
-        ]);
+          ]);
+    });
   }
 }
 
+class DatePickerFeild extends StatelessWidget {
+  const DatePickerFeild({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocBuilder<RegistrationCubit, RegistrationState>(
+      builder: (context, state) {
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Date of birth',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+                _RegistrationFormState().datePicker(context);
+              },
+              child: Container(
+                height: 45,
+                width: 400,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    state.dateOfBirth,
+                    style: const TextStyle(fontFamily: 'poppins'),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+      },
+    );
+  }
+}
 
 class FirstName extends StatelessWidget {
   const FirstName({Key? key}) : super(key: key);
@@ -213,6 +300,7 @@ class LastName extends StatelessWidget {
     );
   }
 }
+
 //TODO: Drop down
 class Gender extends StatelessWidget {
   const Gender({Key? key}) : super(key: key);
@@ -336,6 +424,7 @@ class EducationLevel extends StatelessWidget {
     );
   }
 }
+
 class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
@@ -370,32 +459,9 @@ class _SubmitButton extends StatelessWidget {
     });
   }
 }
-/* 
-
-
- Center(
-        child: OutlinedButton(
-          onPressed: () async {
-            _dateTime = (await showDatePicker(
-              
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2022),
-                lastDate: DateTime(2025)))!;
-          },
-          child: const Text('Open Date Picker'),
-        ),
-      ),
 
 
 
-
-
-
-
-
-
- */
 
 
 //    context.read<RegistrationCubit>().register();
