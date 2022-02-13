@@ -15,6 +15,7 @@ class DropDownRepositories {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     );
     var body = json.decode(response.body);

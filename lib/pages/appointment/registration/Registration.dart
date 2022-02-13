@@ -112,16 +112,28 @@ class Appointment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
-      builder: (context, state) {
-
-
-            
-
+        builder: (context, state) {
+      print('appointments: ${state.appointmentList}');
+      print('appointment size: ${state.appointmentList.length}');
+      if (state.appointmentList.isNotEmpty) {
+        var appointments = state.appointmentList;
+        print('bulding list');
+        return ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: appointments.length,
+            itemBuilder: (BuildContext context, int index) {
+              print('ID: ${appointments[index]}');
+              return Container(
+                height: 200,
+                child: Text('ID: ${state.appointmentList[index]}'),
+              );
+            });
       }
+      return Text('loading');
+    });
   }
-}
-       
-     /*    if(state.appointmentList.length>0){
+
+  /*    if(state.appointmentList.length>0){
           return (
           ListView.builder(
             itemCount:state.appointmentList.length,
@@ -132,17 +144,10 @@ class Appointment extends StatelessWidget {
             
         
         */
-      
-      
-      
-      
-  
 
-        
-     
-      //    mainAxisAlignment: MainAxisAlignment.start,
-        //  crossAxisAlignment: CrossAxisAlignment.start,
-        /*   children: [
+  //    mainAxisAlignment: MainAxisAlignment.start,
+  //  crossAxisAlignment: CrossAxisAlignment.start,
+  /*   children: [
             const Text(
               'Etiosa Obasuyi', //TODO: backend
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -208,12 +213,9 @@ class Appointment extends StatelessWidget {
                   ),
                 )
               ], */
-            
-        //  ],
-      //  );
-     // }
-   // )
 
-    
- // }
-//}
+  //  ],
+  //  );
+  // }
+  // )
+}
