@@ -4,31 +4,33 @@ enum RegistrationFormState { init, fail, scuessful }
 
 class RegistrationState extends Equatable {
   const RegistrationState(
-      {this.firstName = 'a',
-      this.lastName = 'a',
+      {this.firstName = '',
+      this.middleName = '',
+      this.lastName = '',
       this.dateOfBirth = '',
       required this.gender,
       required this.religion,
       required this.educationLevel,
-      this.phoneNumber = '111-92-2213',
-      this.email = 'test@gmail.com',
-      this.contactPreferences = 'default',
-      this.countryCode = '1',
-      this.addressLine1 = '123 webster ave',
-      this.addressLine2 = 'optional',
-      this.city = 'Test',
-      this.zipCode = '10245',
+      this.phoneNumber = '',
+      this.email = '',
+      this.contactPreferences = '',
+      this.countryCode = '',
+      this.addressLine1 = '',
+      this.addressLine2 = '',
+      this.city = '',
+      this.zipCode = '',
       this.allOptions = const {},
       this.appointmentList = const [],
       this.registrationFormState = RegistrationFormState.init});
 
 //selcted value
   final String firstName;
+  final String middleName;
   final String lastName;
   final String dateOfBirth;
-  final List<String> gender;
-  final List<String> religion;
-  final List<String> educationLevel;
+  final String gender;
+  final String religion;
+  final String educationLevel;
   final String phoneNumber;
   final String email;
   final String contactPreferences;
@@ -63,11 +65,12 @@ class RegistrationState extends Equatable {
 
   RegistrationState copywith(
       {String? firstName,
+      String? middleName,
       String? lastName,
       String? dateOfBirth,
-      List<String>? gender,
-      List<String>? religion,
-      List<String>? educationLevel,
+      String? gender,
+      String? religion,
+      String? educationLevel,
       String? email,
       List<dynamic>? appointmentList,
       String? phoneNumber,
@@ -82,6 +85,7 @@ class RegistrationState extends Equatable {
       String? contactPreferences}) {
     return RegistrationState(
         firstName: firstName ?? this.firstName,
+        middleName: middleName ?? this.middleName,
         lastName: lastName ?? this.lastName,
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         gender: gender ?? this.gender,

@@ -13,6 +13,7 @@ class RegistrationRepositories {
 
   Future<void> createNewPatient(
       {String? firstName,
+      String? middleName,
       String? lastName,
       String? dateOfBirth,
       String? gender,
@@ -49,23 +50,6 @@ class RegistrationRepositories {
           "aliveStatus": {"deceased": false}
         }));
     body = jsonDecode(reponse.body);
-  }
-
-  Future<void> getFormDropDown() async {
-    var uri = Uri.parse(root + "api/rest/v1/patient/formAlternatives");
-    final body;
-    http.Response response = await http.get(
-      uri,
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    );
-
-    final mapToOprions = Map.castFrom(json.decode(response.body));
-
-    return;
   }
 
   Future<List<dynamic>> getAppointment() async {

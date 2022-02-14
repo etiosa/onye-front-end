@@ -9,11 +9,16 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   RegistrationCubit(this._registrationRepositories)
       : super(const RegistrationState(
-            educationLevel: [], gender: [], religion: []));
+            educationLevel: "", gender: "", religion: ""));
 
   void setFirstName(String? argFirstName) {
     final String firstName = argFirstName!;
     emit(state.copywith(firstName: firstName));
+  }
+
+  void setMiddleName(String? argMiddleName) {
+    final String middleName = argMiddleName!;
+    emit(state.copywith(middleName: middleName));
   }
 
   void setLastName(String? argLastName) {
@@ -26,38 +31,15 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copywith(dateOfBirth: dateOfBirth));
   }
 
-  void setEducationLevel() async {
-    /* Stop calling getDropDown
-      Store this in dropwown object in state
-    */
-
-    var dropdown = await _registrationRepositories.getFormDropDown();
-    print('set education level');
-    // List<String> educationLevel = dropdown['educationLevel'];
-    // print(educationLevel.length);
-
-    //emit(state.copywith(educationLevel: dropdown['educationLevel']));
-  }
-
-  void setGender() async {
-    var dropdown = await _registrationRepositories.getFormDropDown();
-    print('setGender');
-    //emit(state.copywith(educationLevel: dropdown['gender']));
-  }
-
-  void setReligion() async {
-    var dropdown = await _registrationRepositories.getFormDropDown();
-    //emit(state.copywith(educationLevel: dropdown['religion']));
-  }
-
   void register() async {
     await _registrationRepositories.createNewPatient(
         firstName: state.firstName,
+        middleName: state.middleName,
         lastName: state.lastName,
         phoneNumber: state.phoneNumber,
-        /*  gender: state.gender,
+        gender: state.gender,
         religion: state.religion,
-        educationLevel: state.educationLevel, */
+        educationLevel: state.educationLevel,
         contactPreferences: state.contactPreferences,
         addressLine1: state.addressLine1,
         zipCode: state.zipCode,
@@ -68,13 +50,8 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         countryCode: state.countryCode);
   }
 
-  void getDropDown() async {
-    await _registrationRepositories.getFormDropDown();
-  }
-
   void getAppointments() async {
     var appointList = await _registrationRepositories.getAppointment();
-   // print(appointList);
 
     emit(state.copywith(appointmentList: appointList));
   }
