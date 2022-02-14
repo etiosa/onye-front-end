@@ -18,8 +18,8 @@ class RegistrationState extends Equatable {
       this.addressLine2 = 'optional',
       this.city = 'Test',
       this.zipCode = '10245',
-      this.allOptions= const {},
-      this.appointmentList= const[],
+      this.allOptions = const {},
+      this.appointmentList = const [],
       this.registrationFormState = RegistrationFormState.init});
 
 //selcted value
@@ -94,9 +94,8 @@ class RegistrationState extends Equatable {
         addressLine1: addressLine1 ?? this.addressLine1,
         addressLine2: addressLine2 ?? this.addressLine2,
         zipCode: zipCode ?? this.zipCode,
-        allOptions: allOptions?? this.allOptions,
-        appointmentList:appointmentList??this.appointmentList,
-        
+        allOptions: allOptions ?? this.allOptions,
+        appointmentList: appointmentList ?? this.appointmentList,
         registrationFormState:
             registrationFormState ?? this.registrationFormState,
         city: city ?? this.city);

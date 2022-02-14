@@ -33,6 +33,7 @@ class RegistrationRepositories {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
         encoding: Encoding.getByName("utf-8"),
         body: json.encode({
@@ -58,6 +59,7 @@ class RegistrationRepositories {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     );
 
@@ -76,12 +78,12 @@ class RegistrationRepositories {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     );
     var body = json.decode(reponse.body);
     print(body);
     var appointmentList = body['elements'];
-    print('getAppointment');
 
     return appointmentList;
   }

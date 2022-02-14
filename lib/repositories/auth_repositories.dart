@@ -14,7 +14,10 @@ class AuthRepository {
     try {
       var uri = Uri.parse(root + "auth/login");
       http.Response reponse = await http.post(uri,
-          headers: {"Content-Type": contentType, "Accept": accept},
+          headers: {
+            "Content-Type": contentType,
+            "Accept": accept,
+          },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
       body = jsonDecode(reponse.body);
@@ -31,13 +34,14 @@ class AuthRepository {
     var uri = Uri.parse(root + "api/rest/v1/home");
     final int statusCode;
     try {
-      http.Response response = await http
-          .get(uri, headers: {"Content-Type": "application/json", "Accept": accept,
-          });
+      http.Response response = await http.get(uri, headers: {
+        "Content-Type": "application/json",
+        "Accept": accept,
+        "Access-Control-Allow-Origin": "*",
+      });
       statusCode = response.statusCode;
       return statusCode;
     } catch (e) {
-     
       return -1;
     }
   }
