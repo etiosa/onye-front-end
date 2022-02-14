@@ -68,7 +68,7 @@ class RegistrationRepositories {
 
   Future<List<dynamic>> getAppointment() async {
     //1 Uri
-    var uri = Uri.parse(root + 'api/rest/v1/appointment/search');
+    var uri = Uri.parse(root + 'api/rest/v1/patient/search');
 
     //2 http call
     http.Response reponse = await http.get(
@@ -79,9 +79,10 @@ class RegistrationRepositories {
       },
     );
     var body = json.decode(reponse.body);
+    print(body);
     var appointmentList = body['elements'];
-    
-    return appointmentList;
+    print('getAppointment');
 
+    return appointmentList;
   }
 }

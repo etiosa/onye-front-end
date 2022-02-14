@@ -71,7 +71,7 @@ class Dashboard extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.only(top: 40.0, left: 20),
                       child: Text(
-                        'Registration',
+                        'Checkin',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
