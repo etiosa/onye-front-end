@@ -7,7 +7,7 @@ class AppointmentRepository {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
-  Future<List<dynamic>> getAppointmentList({String? searchParams}) async {
+  Future<List<dynamic>> getAppointmentList({String? searchParams, String?startDateTime, String?endDateTime}) async {
     //1 Uri
 /*      var uri = Uri.https("http://localhost:8001/" , 'api/rest/v1/appointment/search');
  */
@@ -31,9 +31,9 @@ class AppointmentRepository {
         "Access-Control-Allow-Origin": "*",
       },
     );
-    print(reponse.request);
+  //  print(reponse.request);
     var body = json.decode(reponse.body);
-    print(body);
+   // print(body);
     var appointmentList = body['elements'];
 
     return appointmentList;

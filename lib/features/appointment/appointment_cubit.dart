@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 import 'package:onye_front_ened/repositories/appointment_repositories/appointment_repositories.dart';
 
@@ -12,6 +13,17 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   ) : super(const AppointmentState());
 
   Future<void> searchAppointments() async {
+    final String startDateTime = state.startDate + ' ' + state.startTime;
+    final String endDateTime = state.endDate + ' '+state.endTime;
+    print(startDateTime);
+    print(endDateTime);
+    final DateFormat format = new DateFormat("yyyy-MM-dd hh:mm a");
+
+   print(format.parse(startDateTime));
+    print(format.parse(endDateTime).toIso8601String());
+
+
+    // print(DateTime.parse(startDateTime));
     var appointments = await _appointmentRepository.getAppointmentList(
         searchParams: state.searchParams);
     emit(state.copywith(appointmentList: appointments));
@@ -19,7 +31,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   void setSearchParams(String? argSearchParams) {
     final String searchParams = argSearchParams!;
-    print(searchParams);
+
     emit(state.copywith(searchParams: searchParams));
   }
 
@@ -35,16 +47,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   void setStartDate(String? argStartDate) {
     final String startDate = argStartDate!;
-    print('startdate');
-    print(startDate);
     emit(state.copywith(startDate: startDate));
   }
 
   void setEndDate(String? argEndDate) {
     final String endDate = argEndDate!;
-    print('endDate');
-    print(endDate);
 
     emit(state.copywith(endDate: endDate));
   }
+
+  void setDatTimeDateFormat() {}
 }

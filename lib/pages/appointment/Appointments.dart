@@ -103,7 +103,9 @@ class _AppointmentState extends State<Appointments> {
                           SizedBox(
                             width: 10,
                           ),
-                          DateTimePickerFeild(),
+                          DateTimePickerFeild(
+                            label: 'From',
+                          ),
                         ],
                       ),
                       Row(
@@ -116,7 +118,9 @@ class _AppointmentState extends State<Appointments> {
                           SizedBox(
                             width: 10,
                           ),
-                          DateTimePickerFeild(),
+                          DateTimePickerFeild(
+                            label: 'To',
+                          ),
                         ],
                       ),
                     ],
@@ -182,7 +186,7 @@ Future datePicker(BuildContext context, String label) async {
       context.read<AppointmentCubit>().setStartDate(formattedDate);
       break;
     case 'To':
-          print('from');
+      print('from');
 
       context.read<AppointmentCubit>().setEndDate(formattedDate);
 
@@ -195,22 +199,39 @@ Future datePicker(BuildContext context, String label) async {
   // context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
-Future dateTimePicker(BuildContext context) async {
+Future dateTimePicker(BuildContext context, String label) async {
   final newTime =
       await showTimePicker(context: context, initialTime: TimeOfDay.now());
   if (newTime == null) return;
+  String formatTime = newTime.format(context);
 
+  switch (label) {
+    case 'From':
+      print('from');
+      context.read<AppointmentCubit>().setStartTime(formatTime);
+      break;
+    case 'To':
+      print('from');
+
+      context.read<AppointmentCubit>().setEndTime(formatTime);
+
+      break;
+    default:
+      break;
+  }
   print(newTime.format(context));
 }
 
 class DateTimePickerFeild extends StatelessWidget {
-  const DateTimePickerFeild({Key? key}) : super(key: key);
+  const DateTimePickerFeild({Key? key, required this.label}) : super(key: key);
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
+        print(state);
         return (Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,21 +245,19 @@ class DateTimePickerFeild extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                dateTimePicker(context);
+                dateTimePicker(context, label);
               },
               child: Container(
                 height: 45,
                 width: 80,
                 color: const Color.fromARGB(255, 205, 226, 226),
                 child: Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: Text(
-                    '',
-                    style: const TextStyle(fontFamily: 'poppins'),
-                  ),
-                ),
+                    padding: EdgeInsets.all(1.0),
+                    child: TimeContent(
+                      label: label,
+                    )),
               ),
-            )
+            ),
           ],
         ));
       },
@@ -274,19 +293,63 @@ class DatePickerFeild extends StatelessWidget {
                 height: 45,
                 width: 80,
                 color: const Color.fromARGB(255, 205, 226, 226),
-                child: const Padding(
-                  padding: EdgeInsets.all(1.0),
-                  child: Text(
-                    '',
-                    style: TextStyle(fontFamily: 'poppins'),
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: TextContent(
+                    label: label,
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ));
       },
     );
+  }
+}
+
+class TimeContent extends StatelessWidget {
+  const TimeContent({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    if (label == 'From') {
+      return Padding(
+        padding: const EdgeInsets.only(top:15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.startTime, style: const TextStyle(fontSize: 12),),
+      );
+    }
+    if (label == 'To') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.endTime,
+            style: const TextStyle(fontSize: 12)),
+      );
+    }
+    return const Text('empty');
+  }
+}
+
+class TextContent extends StatelessWidget {
+  const TextContent({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    if (label == 'From') {
+      return Padding(
+        padding: const EdgeInsets.only(top:15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.startDate, style: const TextStyle(fontSize: 12),),
+      );
+    }
+    if (label == 'To') {
+      return Padding(
+        padding: const EdgeInsets.only(top:15.0, left:5.0),
+        child: Text(context.read<AppointmentCubit>().state.endDate,style: const TextStyle(fontSize: 12)),
+      );
+    }
+    return const Text('empty');
   }
 }
 
