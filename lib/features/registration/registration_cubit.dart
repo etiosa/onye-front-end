@@ -31,6 +31,58 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copywith(dateOfBirth: dateOfBirth));
   }
 
+  void setGender(String? argGender) {
+    final String gender = argGender!;
+    emit(state.copywith(gender: gender));
+  }
+
+  void setReligion(String? argReligion) {
+    final String religion = argReligion!;
+    emit(state.copywith(religion: religion));
+  }
+
+    void setEducationLevel(String? argeducationLevel) {
+    final String educationLevel = argeducationLevel!;
+    emit(state.copywith(educationLevel: educationLevel));
+  }
+
+    void setEthnicity(String? argEthnicity) {
+    final String ethnicity = argEthnicity!;
+    emit(state.copywith(ethnicity: ethnicity));
+  }
+
+
+  void setPhoneNumber(String? argPhoneNumber) {
+    final String phoneNumber = argPhoneNumber!;
+    emit(state.copywith(phoneNumber: phoneNumber));
+  }
+
+    void setEmail(String? argEmail) {
+    final String email = argEmail!;
+    emit(state.copywith(email: email));
+  }
+
+  void setAddlressLine1(String? argAddressLine1) {
+    final String addressLine1 = argAddressLine1!;
+    emit(state.copywith(addressLine1: addressLine1));
+  }
+
+  void setAddlressLine2(String? argAddressLine2) {
+    final String addressLine2 = argAddressLine2!;
+    emit(state.copywith(addressLine2: addressLine2));
+  }
+
+  void setAddlressLine3(String? argAddressLine3) {
+    final String addressLine2 = argAddressLine3!;
+    emit(state.copywith(addressLine3: addressLine2));
+  }
+  void setAddlressLine4(String? argAddressLine4) {
+    final String addressLine4 = argAddressLine4!;
+    emit(state.copywith(addressLine4: addressLine4));
+  }
+
+
+
   void register() async {
     await _registrationRepositories.createNewPatient(
         firstName: state.firstName,
