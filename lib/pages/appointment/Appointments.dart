@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
 import '../../features/appointment/appointment_cubit.dart';
@@ -61,7 +62,7 @@ class _AppointmentState extends State<Appointments> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text("Search for patient",
+                    child: Text("Search",
                         style: TextStyle(
                             color: Color.fromARGB(255, 56, 155, 152))),
                   ),
@@ -69,9 +70,10 @@ class _AppointmentState extends State<Appointments> {
                     constraints:
                         const BoxConstraints(maxWidth: 350, maxHeight: 40),
                     child: TextFormField(
-                      /* onChanged: (password) =>
-                  context.read<LoginCubit>().setPassword(password), */
-                      obscureText: true,
+                      onChanged: (searchParams) => context
+                          .read<AppointmentCubit>()
+                          .setSearchParams(searchParams),
+                      obscureText: false,
                       autofocus: true,
                       decoration: const InputDecoration(
                         filled: true,
@@ -145,10 +147,6 @@ class _AppointmentState extends State<Appointments> {
                       ),
                       onPressed: () {
                         context.read<AppointmentCubit>().searchAppointments();
-                        //if (formKey.currentState!.validate()) {
-                        //send a request to backend
-                        // context.read<LoginCubitCubit>().login();
-                        //}
                       },
                     ),
                   ),
@@ -164,23 +162,44 @@ class _AppointmentState extends State<Appointments> {
   }
 }
 
-Future datePicker(BuildContext context) async {
+Future datePicker(BuildContext context, String label) async {
+  var dateFormat = DateFormat('yyyy-MM-dd');
+
   final initDate = DateTime.now();
   final newDate = await showDatePicker(
       context: context,
       initialDate: initDate,
       firstDate: DateTime(1900),
       lastDate: DateTime(DateTime.now().year + 5));
+
+  String formattedDate = dateFormat.format(newDate!);
+
+  // ignore: unnecessary_null_comparison
   if (newDate == null) return;
-  context
-      .read<RegistrationCubit>()
-      .setDateofBirth(newDate.toString().split(' ')[0]);
+  switch (label) {
+    case 'From':
+      print('from');
+      context.read<AppointmentCubit>().setStartDate(formattedDate);
+      break;
+    case 'To':
+          print('from');
+
+      context.read<AppointmentCubit>().setEndDate(formattedDate);
+
+      break;
+    default:
+      break;
+  }
+  // String formattedDate = dateFormat.format(newDate);
+  // String formattedDate = dateFormat.format(newDate);
+  // context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
 Future dateTimePicker(BuildContext context) async {
   final newTime =
       await showTimePicker(context: context, initialTime: TimeOfDay.now());
   if (newTime == null) return;
+
   print(newTime.format(context));
 }
 
@@ -206,7 +225,6 @@ class DateTimePickerFeild extends StatelessWidget {
             InkWell(
               onTap: () {
                 dateTimePicker(context);
-                // _RegistrationFormState().datePicker(context);
               },
               child: Container(
                 height: 45,
@@ -234,7 +252,6 @@ class DatePickerFeild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
@@ -242,7 +259,7 @@ class DatePickerFeild extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text(
+            Text(
               label,
               style: const TextStyle(
                   color: Colors.black,
@@ -251,8 +268,7 @@ class DatePickerFeild extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                datePicker(context);
-                // _RegistrationFormState().datePicker(context);
+                datePicker(context, label);
               },
               child: Container(
                 height: 45,
@@ -262,7 +278,7 @@ class DatePickerFeild extends StatelessWidget {
                   padding: EdgeInsets.all(1.0),
                   child: Text(
                     '',
-                    style:  TextStyle(fontFamily: 'poppins'),
+                    style: TextStyle(fontFamily: 'poppins'),
                   ),
                 ),
               ),

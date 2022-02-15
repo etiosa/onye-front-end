@@ -7,7 +7,7 @@ class AppointmentRepository {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
-  Future<List<dynamic>> getAppointmentList() async {
+  Future<List<dynamic>> getAppointmentList({String? searchParams}) async {
     //1 Uri
 /*      var uri = Uri.https("http://localhost:8001/" , 'api/rest/v1/appointment/search');
  */
@@ -15,7 +15,7 @@ class AppointmentRepository {
         queryParameters: <String, String>{
           'from': '2020-01-01T00:00',
           'to': '2024-01-01T00:00',
-          'query':'karl Jackson'
+          'query':searchParams!
          
         });
     
