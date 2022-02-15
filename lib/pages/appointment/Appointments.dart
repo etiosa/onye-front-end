@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
+import '../../features/appointment/appointment_cubit.dart';
+
 class Appointments extends StatefulWidget {
   const Appointments({Key? key}) : super(key: key);
 
@@ -20,7 +22,6 @@ class _AppointmentState extends State<Appointments> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
-       
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -36,7 +37,10 @@ class _AppointmentState extends State<Appointments> {
                       backgroundColor: MaterialStateProperty.all(
                           const Color.fromARGB(255, 56, 155, 152)),
                     ),
-                    child: const Text('Create New Appointment', style: TextStyle(fontSize: 12),),
+                    child: const Text(
+                      'Create New Appointment',
+                      style: TextStyle(fontSize: 12),
+                    ),
                     onPressed: () {
                       //if (formKey.currentState!.validate()) {
                       //send a request to backend
@@ -48,78 +52,161 @@ class _AppointmentState extends State<Appointments> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left:20.0),
+              padding: const EdgeInsets.only(left: 20.0),
               child: Column(
-         // crossAxisAlignment: CrossAxisAlignment.start,
-         mainAxisAlignment: MainAxisAlignment.start,
-         crossAxisAlignment:  CrossAxisAlignment.start,
-      
-          children: [
-              
-               
-              
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
                   const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text("Search for patient",
-                    style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
-        ),
-           Container(
-                        constraints:
-                            const BoxConstraints(maxWidth: 350, maxHeight: 40),
-                        child: TextFormField(
-                          /* onChanged: (password) =>
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Search for patient",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 56, 155, 152))),
+                  ),
+                  Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 350, maxHeight: 40),
+                    child: TextFormField(
+                      /* onChanged: (password) =>
                   context.read<LoginCubit>().setPassword(password), */
-                          obscureText: true,
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Color.fromARGB(255, 205, 226, 226),
-                            border:
-                                OutlineInputBorder(borderSide: BorderSide.none),
-                          ),
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter a valid password';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
+                      obscureText: true,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 205, 226, 226),
+                        border: OutlineInputBorder(borderSide: BorderSide.none),
                       ),
-         
-          
-        const SizedBox(height:20),
-         Container(
-           height:50,
-           constraints:
-                        const BoxConstraints(maxWidth: 170),
-           child: ElevatedButton(
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a valid password';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                    Text('Date'),
+                  Text('Time'),
+                //  PatientLists(),
+                  Container(
+                    height: 50,
+                    constraints: const BoxConstraints(maxWidth: 170),
+                    child: ElevatedButton(
+                      
                       autofocus: true,
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
                         backgroundColor: MaterialStateProperty.all(
                             const Color.fromARGB(255, 56, 155, 152)),
                       ),
-                      child: const Text('Search', style: TextStyle(fontSize: 12),),
+                      child: const Text(
+                        'Search',
+                        style: TextStyle(fontSize: 12),
+                      ),
                       onPressed: () {
+                        context.read<AppointmentCubit>().searchAppointments();
                         //if (formKey.currentState!.validate()) {
                         //send a request to backend
                         // context.read<LoginCubitCubit>().login();
                         //}
                       },
                     ),
-         ),
-      ],
-    ),
+                  ),
+                
+                
+                
+                ],
+              ),
             )
 
             //formSection()
           ],
-          
-          
         ),
       ),
     );
+  }
+}
+  Future datePicker(BuildContext context) async {
+    final initDate = DateTime.now();
+    final newDate = await showDatePicker(
+        context: context,
+        initialDate: initDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(DateTime.now().year + 5));
+    if (newDate == null) return;
+    context
+        .read<RegistrationCubit>()
+        .setDateofBirth(newDate.toString().split(' ')[0]);
+  }
+class DatePickerFeild extends StatelessWidget {
+  const DatePickerFeild({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Date Of Birth',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+               // _RegistrationFormState().datePicker(context);
+              },
+              child: Container(
+                height: 45,
+                width: 320,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    'state.dateOfBirth',
+                    style: const TextStyle(fontFamily: 'poppins'),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+      },
+    );
+  }
+}
+
+class PatientLists extends StatelessWidget {
+  const PatientLists({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return InkWell(
+          onTap: () async {
+            print(' was click');
+            //context.read<AppointmentCubit>().searchAppointments();
+          },
+          child: (Container(
+            child: Text('test'),
+          )),
+        );
+      },
+    );
+
+    /*  return Container(
+      child: Text('Appointments list'),
+      
+    ); */
   }
 }
 

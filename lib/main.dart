@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/Forms/RegistrationForm.dart';
+import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 import 'package:onye_front_ened/pages/Home/home.dart';
@@ -9,6 +10,7 @@ import 'package:onye_front_ened/pages/Patients/patients.dart';
 import 'package:onye_front_ened/pages/appointment/Appointments.dart';
 import 'package:onye_front_ened/pages/appointment/registration/Checkin.dart';
 import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
+import 'package:onye_front_ened/repositories/appointment_repositories/appointment_repositories.dart';
 import 'package:onye_front_ened/repositories/auth_repositories.dart';
 import 'package:onye_front_ened/repositories/registration_repositories/registrationRepositories.dart';
 
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
     final AuthRepository _authRepository = AuthRepository();
     final RegistrationRepositories _registerRepository =
         RegistrationRepositories();
+    final AppointmentRepository _appointmentRepository =
+        AppointmentRepository();
 
     return RepositoryProvider(
       create: (_) => _authRepository,
@@ -37,6 +41,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) => RegistrationCubit(_registerRepository),
           ),
+          BlocProvider(create: (_) => AppointmentCubit(_appointmentRepository))
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -47,9 +52,10 @@ class MyApp extends StatelessWidget {
             '/dashboard': (context) => const Dashboard(),
             '/dashboard/checkin': (context) => const Checkin(),
             '/dashboard/appointment': (context) => const Appointments(),
-           /*  '/dashboard/registration': (context) => const Registration(), */
-            '/dashboard/registrationForm': (context) =>const RegistrationForm(),
-            'dashboard/patient': (context)=>const PatientsPage()
+            /*  '/dashboard/registration': (context) => const Registration(), */
+            '/dashboard/registrationForm': (context) =>
+                const RegistrationForm(),
+            'dashboard/patient': (context) => const PatientsPage()
           },
         ),
       ),
