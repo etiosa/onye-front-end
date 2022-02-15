@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
-class Appointment extends StatefulWidget {
-  const Appointment({Key? key}) : super(key: key);
+class Appointments extends StatefulWidget {
+  const Appointments({Key? key}) : super(key: key);
 
   @override
-  State<Appointment> createState() => _AppointmentState();
+  State<Appointments> createState() => _AppointmentState();
 }
 
-class _AppointmentState extends State<Appointment> {
+class _AppointmentState extends State<Appointments> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -17,59 +17,109 @@ class _AppointmentState extends State<Appointment> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 239, 241, 243),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 30.0, bottom: 10),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+       
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                width: 170,
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: ElevatedButton(
+                    autofocus: true,
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 56, 155, 152)),
+                    ),
+                    child: const Text('Create New Appointment', style: TextStyle(fontSize: 12),),
+                    onPressed: () {
+                      //if (formKey.currentState!.validate()) {
+                      //send a request to backend
+                      // context.read<LoginCubitCubit>().login();
+                      //}
+                    },
+                  ),
+                ),
               ),
-              formSection()
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left:20.0),
+              child: Column(
+         // crossAxisAlignment: CrossAxisAlignment.start,
+         mainAxisAlignment: MainAxisAlignment.start,
+         crossAxisAlignment:  CrossAxisAlignment.start,
+      
+          children: [
+              
+               
+              
+                  const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text("Search for patient",
+                    style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
+        ),
+           Container(
+                        constraints:
+                            const BoxConstraints(maxWidth: 350, maxHeight: 40),
+                        child: TextFormField(
+                          /* onChanged: (password) =>
+                  context.read<LoginCubit>().setPassword(password), */
+                          obscureText: true,
+                          autofocus: true,
+                          decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 205, 226, 226),
+                            border:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                          ),
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a valid password';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+         
+          
+        const SizedBox(height:20),
+         Container(
+           height:50,
+           constraints:
+                        const BoxConstraints(maxWidth: 170),
+           child: ElevatedButton(
+                      autofocus: true,
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 56, 155, 152)),
+                      ),
+                      child: const Text('Search', style: TextStyle(fontSize: 12),),
+                      onPressed: () {
+                        //if (formKey.currentState!.validate()) {
+                        //send a request to backend
+                        // context.read<LoginCubitCubit>().login();
+                        //}
+                      },
+                    ),
+         ),
+      ],
+    ),
+            )
+
+            //formSection()
+          ],
+          
+          
         ),
       ),
     );
-  }
-
-  Column formSection() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  FirstName(),
-                  SizedBox(height: 30),
-                  LastName(),
-                  SizedBox(height: 30),
-                  DateOfBirth(),
-                  SizedBox(height: 30),
-                  Gender(),
-                  SizedBox(height: 30),
-                  Religion(),
-                  SizedBox(height: 30),
-                  EducationLevel(),
-                  SizedBox(height: 30),
-                  // Email()
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          _SubmitButton(
-            formKey: _formKey,
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-        ]);
   }
 }
 
@@ -340,3 +390,44 @@ class _SubmitButton extends StatelessWidget {
     //);
   }
 }
+
+/*   Column formSection() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  FirstName(),
+                  SizedBox(height: 30),
+                  LastName(),
+                  SizedBox(height: 30),
+                  DateOfBirth(),
+                  SizedBox(height: 30),
+                  Gender(),
+                  SizedBox(height: 30),
+                  Religion(),
+                  SizedBox(height: 30),
+                  EducationLevel(),
+                  SizedBox(height: 30),
+                  // Email()
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          _SubmitButton(
+            formKey: _formKey,
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+        ]);
+  } */

@@ -1,10 +1,9 @@
 part of 'appointment_cubit.dart';
 
-abstract class AppointmentState extends Equatable {
-  const AppointmentState();
+class AppointmentState extends Equatable {
+  const AppointmentState({this.appointmentList=const[]});
+  final List<dynamic> appointmentList;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [appointmentList];
 }
-
-class AppointmentInitial extends AppointmentState {}

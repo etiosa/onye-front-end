@@ -37,27 +37,27 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }
 
   void setReligion(String? argReligion) {
+    print(argReligion);
     final String religion = argReligion!;
     emit(state.copywith(religion: religion));
   }
 
-    void setEducationLevel(String? argeducationLevel) {
+  void setEducationLevel(String? argeducationLevel) {
     final String educationLevel = argeducationLevel!;
     emit(state.copywith(educationLevel: educationLevel));
   }
 
-    void setEthnicity(String? argEthnicity) {
+  void setEthnicity(String? argEthnicity) {
     final String ethnicity = argEthnicity!;
     emit(state.copywith(ethnicity: ethnicity));
   }
-
 
   void setPhoneNumber(String? argPhoneNumber) {
     final String phoneNumber = argPhoneNumber!;
     emit(state.copywith(phoneNumber: phoneNumber));
   }
 
-    void setEmail(String? argEmail) {
+  void setEmail(String? argEmail) {
     final String email = argEmail!;
     emit(state.copywith(email: email));
   }
@@ -76,12 +76,47 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     final String addressLine2 = argAddressLine3!;
     emit(state.copywith(addressLine3: addressLine2));
   }
+
   void setAddlressLine4(String? argAddressLine4) {
     final String addressLine4 = argAddressLine4!;
     emit(state.copywith(addressLine4: addressLine4));
   }
 
+  void setCountryCode(String? argCountryCode) {
+    final String? countryCode = argCountryCode!;
+    print(argCountryCode);
+    emit(state.copywith(countryCode: countryCode));
+  }
 
+  void setCity(String? argCity) {
+    final String? city = argCity!;
+    emit(state.copywith(city: city));
+  }
+
+  void setEmergencyContactName(String? argContactName) {
+    final String? contactName = argContactName!;
+    emit(state.copywith(emergencyContactName: contactName));
+  }
+
+  void setEmergencyContactPhoneNumber(String? argPhoneNumber) {
+    final String? contactPhoneNumber = argPhoneNumber!;
+    emit(state.copywith(emergencyContactPhoneNumber: contactPhoneNumber));
+  }
+
+  void setEmergencyContactRelationship(String? argRelationship) {
+    final String? contactRelationship = argRelationship!;
+    emit(state.copywith(emergencyContactRelationship: contactRelationship));
+  }
+
+  void setContactPrefernce(String? argContactPreference) {
+    final String contactPrefence = argContactPreference!;
+    emit(state.copywith(contactPreferences: contactPrefence));
+  }
+
+  void setZipCode(String? argZipcode) {
+    final String zipcode = argZipcode!;
+    emit(state.copywith(zipCode: zipcode));
+  }
 
   void register() async {
     await _registrationRepositories.createNewPatient(
@@ -92,11 +127,15 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         gender: state.gender,
         religion: state.religion,
         educationLevel: state.educationLevel,
-        contactPreferences: state.contactPreferences,
+        contactPreference: state.contactPreferences,
         addressLine1: state.addressLine1,
         zipCode: state.zipCode,
         city: state.city,
         email: state.email,
+        ethnicity: state.ethnicity,
+        emergencyContactName: state.emergencyContactName,
+        emergencyContactPhoneNumber: state.emergencyContactPhoneNumber,
+        emergencyContactRelationship: state.emergencyContactRelationship,
         addressLine2: state.addressLine2,
         dateOfBirth: state.dateOfBirth,
         countryCode: state.countryCode);

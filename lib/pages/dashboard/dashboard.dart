@@ -52,7 +52,7 @@ class Dashboard extends StatelessWidget {
                 InkWell(
                   onTap: (() => {
                         Navigator.of(context)
-                            .pushNamed("/dashboard/appointment")
+                            .pushNamed("/dashboard/checkin")
                       }),
                   child: Container(
                     height: 120,

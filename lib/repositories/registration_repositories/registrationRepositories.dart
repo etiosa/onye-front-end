@@ -21,12 +21,18 @@ class RegistrationRepositories {
       String? educationLevel,
       String? phoneNumber,
       String? email,
-      String? contactPreferences,
       String? countryCode,
       String? zipCode,
       String? addressLine1,
       String? addressLine2,
-      String? city}) async {
+      String? addressLine3,
+      String? addressLine4,
+      String? city,
+      String? ethnicity,
+      String? contactPreference,
+      String? emergencyContactPhoneNumber,
+      String? emergencyContactRelationship,
+      String? emergencyContactName}) async {
     var uri = Uri.parse(root + "api/rest/v1/patient");
     final body;
 
@@ -38,18 +44,33 @@ class RegistrationRepositories {
         },
         encoding: Encoding.getByName("utf-8"),
         body: json.encode({
-          "firstName": "lasr",
-          "lastName": "first",
-          "dateOfBirth": "1992-04-27",
-          "gender": "MALE",
-          "religion": "None",
-          "phoneNumber": "111-22-1111",
-          "email": "test@gmail.com",
-          "contactPreference": "PHONE",
-          "countryCode": "UNDEFINED",
+          "firstName": firstName,
+          "lastName": lastName,
+          "dateOfBirth": dateOfBirth,
+          "middleName": middleName,
+          "gender": gender,
+          "religion": religion,
+          "phoneNumber": phoneNumber,
+          "email": email,
+          "contactPreference": contactPreference,
+          "ethnicity": ethnicity,
+          "educationLevel": educationLevel,
+           "countryCode": countryCode,
+          "address": {
+            "line1": addressLine1,
+            "zipCode": zipCode,
+            "city": city,
+            "countryCode": countryCode
+          },
+          "emergencyContact": {
+            "name": emergencyContactName,
+            "phoneNumber": emergencyContactPhoneNumber,
+            "relationship": emergencyContactRelationship
+          },
           "aliveStatus": {"deceased": false}
         }));
     body = jsonDecode(reponse.body);
+    print(body);
   }
 
   Future<List<dynamic>> getAppointment() async {

@@ -2,6 +2,7 @@ part of 'registration_cubit.dart';
 
 enum RegistrationFormState { init, fail, scuessful }
 
+//TODO: Refactor
 class RegistrationState extends Equatable {
   const RegistrationState(
       {this.firstName = '',
@@ -19,11 +20,15 @@ class RegistrationState extends Equatable {
       this.addressLine2 = '',
       this.city = '',
       this.zipCode = '',
-      this.ethnicity='',
-      this.addressLine3='',
-      this.addressLine4='',
+      this.ethnicity = '',
+      this.addressLine3 = '',
+      this.addressLine4 = '',
       this.allOptions = const {},
       this.appointmentList = const [],
+      this.emergencyContactName = '',
+      this.emergencyContactPhoneNumber = '',
+      this.emergencyContactRelationship = '',
+      this.contactPrefernce='',
       this.registrationFormState = RegistrationFormState.init});
 
 //selcted value
@@ -45,9 +50,13 @@ class RegistrationState extends Equatable {
   final String zipCode;
   final String city;
   final String ethnicity;
+  final String contactPrefernce;
+  final String emergencyContactRelationship;
+  final String emergencyContactName;
   final List<dynamic> appointmentList;
   final Map<String, dynamic> allOptions;
   final RegistrationFormState registrationFormState;
+  final String emergencyContactPhoneNumber;
 
   @override
   List<Object> get props => [
@@ -69,7 +78,11 @@ class RegistrationState extends Equatable {
         appointmentList,
         ethnicity,
         addressLine3,
-        addressLine4
+        addressLine4,
+        emergencyContactName,
+        emergencyContactPhoneNumber,
+        emergencyContactRelationship,
+        contactPrefernce
       ];
 
   RegistrationState copywith(
@@ -83,13 +96,17 @@ class RegistrationState extends Equatable {
       String? email,
       String? ethnicity,
       String? addressLine3,
+      String? emergencyContactName,
+      String? emergencyContactPhoneNumber,
       List<dynamic>? appointmentList,
       String? phoneNumber,
       String? countryCode,
       String? zipcode,
+      String? contactPrefernce,
       String? addressLine1,
       String? addressLine2,
       String? zipCode,
+      String? emergencyContactRelationship,
       String? city,
       String? addressLine4,
       Map<String, dynamic>? allOptions,
@@ -97,9 +114,10 @@ class RegistrationState extends Equatable {
       String? contactPreferences}) {
     return RegistrationState(
         firstName: firstName ?? this.firstName,
-        ethnicity:ethnicity ?? this.ethnicity,
+        emergencyContactName: emergencyContactName ?? this.emergencyContactName,
+        ethnicity: ethnicity ?? this.ethnicity,
         middleName: middleName ?? this.middleName,
-        addressLine4:addressLine4??this.addressLine4,
+        addressLine4: addressLine4 ?? this.addressLine4,
         lastName: lastName ?? this.lastName,
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         gender: gender ?? this.gender,
@@ -112,8 +130,13 @@ class RegistrationState extends Equatable {
         addressLine1: addressLine1 ?? this.addressLine1,
         addressLine2: addressLine2 ?? this.addressLine2,
         zipCode: zipCode ?? this.zipCode,
-        addressLine3:addressLine3?? this.addressLine3,
+        addressLine3: addressLine3 ?? this.addressLine3,
         allOptions: allOptions ?? this.allOptions,
+        contactPrefernce:contactPreferences??this.contactPreferences,
+        emergencyContactRelationship:
+            emergencyContactRelationship ?? this.emergencyContactRelationship,
+        emergencyContactPhoneNumber:
+            emergencyContactPhoneNumber ?? this.emergencyContactPhoneNumber,
         appointmentList: appointmentList ?? this.appointmentList,
         registrationFormState:
             registrationFormState ?? this.registrationFormState,
