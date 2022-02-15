@@ -70,7 +70,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     Step(
                         state: StepState.editing,
                         isActive: _index == 0,
-                        title: const Text('Badic info'),
+                        title: const Text('Basic info'),
                         content: const BasicInfoFormBody()),
                     Step(
                         state: StepState.editing,
@@ -232,7 +232,7 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
+                  children: [
                     const EmergencyContact(),
                     const SizedBox(height: 10),
                     _SubmitButton(formKey: _formKey)
@@ -991,9 +991,8 @@ class EmergencyContact extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-         onChanged: (name) => context
-                .read<RegistrationCubit>()
-                .setEmergencyContactName(name), 
+            onChanged: (name) =>
+                context.read<RegistrationCubit>().setEmergencyContactName(name),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -1017,9 +1016,9 @@ class EmergencyContact extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-          onChanged: (phoneNumber) => context
+            onChanged: (phoneNumber) => context
                 .read<RegistrationCubit>()
-                .setEmergencyContactPhoneNumber(phoneNumber), 
+                .setEmergencyContactPhoneNumber(phoneNumber),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -1043,9 +1042,9 @@ class EmergencyContact extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-        onChanged: (relationship) => context
+            onChanged: (relationship) => context
                 .read<RegistrationCubit>()
-                .setEmergencyContactRelationship(relationship), 
+                .setEmergencyContactRelationship(relationship),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -1093,9 +1092,9 @@ class _SubmitButton extends StatelessWidget {
             ),
             child: const Text('Submit'),
             onPressed: () async {
-                if (formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 context.read<RegistrationCubit>().register();
-              } 
+              }
             },
           ),
         ),

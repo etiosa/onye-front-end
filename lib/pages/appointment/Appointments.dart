@@ -43,10 +43,8 @@ class _AppointmentState extends State<Appointments> {
                       style: TextStyle(fontSize: 12),
                     ),
                     onPressed: () {
-                      //if (formKey.currentState!.validate()) {
-                      //send a request to backend
-                      // context.read<LoginCubitCubit>().login();
-                      //}
+                      Navigator.of(context).pushNamed(
+                          '/dashboard/appointment/createAppointment');
                     },
                   ),
                 ),
@@ -316,8 +314,11 @@ class TimeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     if (label == 'From') {
       return Padding(
-        padding: const EdgeInsets.only(top:15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.startTime, style: const TextStyle(fontSize: 12),),
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(
+          context.read<AppointmentCubit>().state.startTime,
+          style: const TextStyle(fontSize: 12),
+        ),
       );
     }
     if (label == 'To') {
@@ -339,14 +340,18 @@ class TextContent extends StatelessWidget {
   Widget build(BuildContext context) {
     if (label == 'From') {
       return Padding(
-        padding: const EdgeInsets.only(top:15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.startDate, style: const TextStyle(fontSize: 12),),
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(
+          context.read<AppointmentCubit>().state.startDate,
+          style: const TextStyle(fontSize: 12),
+        ),
       );
     }
     if (label == 'To') {
       return Padding(
-        padding: const EdgeInsets.only(top:15.0, left:5.0),
-        child: Text(context.read<AppointmentCubit>().state.endDate,style: const TextStyle(fontSize: 12)),
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.endDate,
+            style: const TextStyle(fontSize: 12)),
       );
     }
     return const Text('empty');
