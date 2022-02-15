@@ -88,14 +88,51 @@ class _AppointmentState extends State<Appointments> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                    Text('Date'),
-                  Text('Time'),
-                //  PatientLists(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          DatePickerFeild(
+                            label: 'From',
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          DateTimePickerFeild(),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          DatePickerFeild(
+                            label: 'To',
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          DateTimePickerFeild(),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(
+                    height: 30,
+                  ),
+
+                  /*   const DatePickerFeild(),
+                  const DateTimePickerFeild(), */
+                  //  PatientLists(),
                   Container(
                     height: 50,
+                    width: 100,
+                    margin: const EdgeInsets.only(left: 15),
                     constraints: const BoxConstraints(maxWidth: 170),
                     child: ElevatedButton(
-                      
                       autofocus: true,
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
@@ -115,9 +152,6 @@ class _AppointmentState extends State<Appointments> {
                       },
                     ),
                   ),
-                
-                
-                
                 ],
               ),
             )
@@ -129,20 +163,29 @@ class _AppointmentState extends State<Appointments> {
     );
   }
 }
-  Future datePicker(BuildContext context) async {
-    final initDate = DateTime.now();
-    final newDate = await showDatePicker(
-        context: context,
-        initialDate: initDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(DateTime.now().year + 5));
-    if (newDate == null) return;
-    context
-        .read<RegistrationCubit>()
-        .setDateofBirth(newDate.toString().split(' ')[0]);
-  }
-class DatePickerFeild extends StatelessWidget {
-  const DatePickerFeild({Key? key}) : super(key: key);
+
+Future datePicker(BuildContext context) async {
+  final initDate = DateTime.now();
+  final newDate = await showDatePicker(
+      context: context,
+      initialDate: initDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(DateTime.now().year + 5));
+  if (newDate == null) return;
+  context
+      .read<RegistrationCubit>()
+      .setDateofBirth(newDate.toString().split(' ')[0]);
+}
+
+Future dateTimePicker(BuildContext context) async {
+  final newTime =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (newTime == null) return;
+  print(newTime.format(context));
+}
+
+class DateTimePickerFeild extends StatelessWidget {
+  const DateTimePickerFeild({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +197,7 @@ class DatePickerFeild extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Date Of Birth',
+              'Time',
               style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'Poppins',
@@ -162,17 +205,64 @@ class DatePickerFeild extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-               // _RegistrationFormState().datePicker(context);
+                dateTimePicker(context);
+                // _RegistrationFormState().datePicker(context);
               },
               child: Container(
                 height: 45,
-                width: 320,
+                width: 80,
                 color: const Color.fromARGB(255, 205, 226, 226),
                 child: Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(1.0),
                   child: Text(
-                    'state.dateOfBirth',
+                    '',
                     style: const TextStyle(fontFamily: 'poppins'),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+      },
+    );
+  }
+}
+
+class DatePickerFeild extends StatelessWidget {
+  const DatePickerFeild({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+
+    // TODO: implement build
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+             Text(
+              label,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+                datePicker(context);
+                // _RegistrationFormState().datePicker(context);
+              },
+              child: Container(
+                height: 45,
+                width: 80,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: const Padding(
+                  padding: EdgeInsets.all(1.0),
+                  child: Text(
+                    '',
+                    style:  TextStyle(fontFamily: 'poppins'),
                   ),
                 ),
               ),
