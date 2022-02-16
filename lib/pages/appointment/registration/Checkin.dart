@@ -27,9 +27,43 @@ class _CheckinState extends State<Checkin> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(top:20.0, left:20, bottom: 20),
-            child: Text('CheckIn', style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top:20.0, left:20, bottom: 20),
+                  child: Text('CheckIn', style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                ),
+                 Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: 170,
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: ElevatedButton(
+                        autofocus: true,
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color.fromARGB(255, 56, 155, 152)),
+                        ),
+                        child: const Text(
+                          'Create Registration',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              '/dashboard/appointment/createRegistration');
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
              const Padding(
             padding: EdgeInsets.only(left:20.0, top:10),
@@ -41,9 +75,9 @@ class _CheckinState extends State<Checkin> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
-                /*   onChanged: (searchParams) => context
-                          .read<AppointmentCubit>()
-                          .setSearchParams(searchParams), */
+               /*   onChanged: (searchParams) => context
+                          .read<RegistrationCubit>()
+                          .set(searchParams),  */
                 obscureText: false,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -257,75 +291,3 @@ class _AppointmentState extends State<Appointment> {
 
 
 
-/* 
-   var date = dateFormat
-           .format(DateTime.parse(state.appointmentList[0]['latestRegistration'])); 
-   ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              itemCount: state.appointmentList.length,
-              itemBuilder: (BuildContext context, int index) {
-                var date= dateFormat.format(DateTime.parse(
-                    state.appointmentList[index]['appointmentDateTime']));
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 140,
-                    width: 300,
-                    color: Colors.accents[5],
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0, left: 10),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(state.appointmentList[index]
-                                    ['patient']['firstName']),
-                              ),
-                              Text(state.appointmentList[index]['patient']
-                                  ['lastName']),
-                            ],
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
-                          child: Text(
-                              state.appointmentList[index]['reasonForVisit']),
-                        ),
-                        Text(state.appointmentList[index]['typeOfVisit']),
-                        //appointmentDateTime
-                        Text(date),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: SizedBox(
-                            width: 120,
-                            height: 30,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    elevation: MaterialStateProperty.all(0),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        const Color.fromARGB(255, 56, 155, 152)),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ))),
-                                onPressed: () {
-                                  print("reschedule");
-                                },
-                                child: const Text('Checkin')),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }) 
-              ;
-
-*/

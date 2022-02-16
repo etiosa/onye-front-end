@@ -19,11 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     if (context.read<LoginCubit>().state.loginStatus ||
         context.read<LoginCubit>().state.statusCode > 0) {
-      context.read<LoginCubit>().home();
+      print("truth go now");
       Navigator.of(context).pushNamed("/dashboard");
-    } else {
-     
-    }
+    } else {}
 
     super.initState();
   }
@@ -201,10 +199,10 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         if (state.loginStatus) {
           WidgetsBinding.instance?.addPostFrameCallback((_) {
-            Navigator.of(context).pushNamed("/dashboard");
+           Navigator.of(context).pushNamed("/dashboard");
           });
-        } 
-          return Container(
+        }
+        return Container(
           width: 250,
           height: 60,
           padding: const EdgeInsets.all(2),
