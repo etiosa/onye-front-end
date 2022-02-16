@@ -1,13 +1,6 @@
 part of 'appointment_cubit.dart';
 
-enum SEARCHSTATE{
-  inital,
-  sucessful,
-  error,
-  notFound,
-  startsearch
-}
-
+enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 
 class AppointmentState extends Equatable {
   const AppointmentState(
@@ -19,8 +12,12 @@ class AppointmentState extends Equatable {
       this.endDate = '',
       this.startTime = '',
       this.endTime = '',
-      this.searchState=SEARCHSTATE.inital,
-      this.doctorsList=const[],
+      this.searchState = SEARCHSTATE.inital,
+      this.doctorsList = const [],
+      this.selectedMedicalPeronnelId = '',
+      this.selectedPatientId = '',
+      this.resonsForVist='',
+      this.typeOfVist='',
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
   final List<dynamic> patientsList;
@@ -31,8 +28,12 @@ class AppointmentState extends Equatable {
   final String endDate;
   final String startTime;
   final String endTime;
+  final String selectedPatientId;
+  final String selectedMedicalPeronnelId;
   final List<dynamic> doctorsList;
   final SEARCHSTATE searchState;
+  final String typeOfVist;
+  final String resonsForVist;
 
   @override
   List<Object> get props => [
@@ -46,7 +47,11 @@ class AppointmentState extends Equatable {
         endTime,
         startTime,
         doctorsList,
-        searchState
+        searchState,
+        selectedMedicalPeronnelId,
+        selectedPatientId,
+        typeOfVist,
+        resonsForVist
       ];
 
   AppointmentState copywith(
@@ -54,17 +59,27 @@ class AppointmentState extends Equatable {
       List<dynamic>? appointmentList,
       List<dynamic>? patientsList,
       List<dynamic>? doctorsList,
-    String? startDateTime,
+      String? startDateTime,
       String? startTime,
       String? endTime,
       String? startDate,
+      String? selectedPatientId,
+      String? selectedMedicalPersonnel,
       SEARCHSTATE? searchstate,
       String? endDate,
+      String? typeOfVisit,
+      String? reasonForVisit,
       String? endDateTime}) {
     return AppointmentState(
-      searchState: searchstate ?? searchState,
+      typeOfVist: typeOfVisit ?? typeOfVist,
+      resonsForVist: reasonForVisit ?? resonsForVist,
+        // ignore: unnecessary_this
+        selectedMedicalPeronnelId:
+            selectedMedicalPersonnel ?? selectedMedicalPeronnelId,
+        selectedPatientId: selectedPatientId ?? this.selectedPatientId,
+        searchState: searchstate ?? searchState,
         searchParams: searchParams ?? this.searchParams,
-        doctorsList: doctorsList??this.doctorsList,
+        doctorsList: doctorsList ?? this.doctorsList,
         endDate: endDate ?? this.endDate,
         startDate: startDate ?? this.startDate,
         startTime: startTime ?? this.startTime,

@@ -374,6 +374,7 @@ class _DoctorListState extends State<DoctorList> {
                   setState(() {
                     selectedIndex = index;
                     selectedDctorId = state.doctorsList[index]['id'];
+                    context.read();
                   });
                   print(index);
                   print(selectedIndex);
@@ -417,7 +418,7 @@ class _LanguagePreferenceState extends State<LanguagePreference> {
                 isExpanded: true,
                 value: _selectedText,
                 hint: const Text("Select contact preference"),
-                items: <String>['PHONE', 'SMS', 'EMAIL'].map((String value) {
+                items: <String>['en'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

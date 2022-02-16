@@ -38,16 +38,34 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     var doctors =
         await _appointmentRepository.getDoctorList(searchParams: query);
     print(doctors);
-    if(doctors.isNotEmpty){
-          emit(state.copywith(
+    if (doctors.isNotEmpty) {
+      emit(state.copywith(
           doctorsList: doctors, searchstate: SEARCHSTATE.sucessful));
     }
-  if(doctors.isEmpty){
-        emit(state.copywith(
+    if (doctors.isEmpty) {
+      emit(state.copywith(
           doctorsList: doctors, searchstate: SEARCHSTATE.notFound));
+    }
   }
 
-   
+  void setSelectedMedicalPersonnelId(String? argSelectedId) {
+    final String selectedId = argSelectedId!;
+    emit(state.copywith(selectedMedicalPersonnel: selectedId));
+  }
+
+  void setPatientId(String? argrSelectedId) {
+    final String selectedId = argrSelectedId!;
+    emit(state.copywith(selectedPatientId: selectedId));
+  }
+
+  void setTypeOfVisit(String? argtypeOfVisit) {
+    final String typeofVisit = argtypeOfVisit!;
+    emit(state.copywith(typeOfVisit: typeofVisit));
+  }
+
+  void setReasonForVisit(String? argresonsforvist) {
+    final String resonsForVisiit = argresonsforvist!;
+    emit(state.copywith(reasonForVisit: resonsForVisiit));
   }
 
   void setSearchParams(String? argSearchParams) {
