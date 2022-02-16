@@ -112,6 +112,7 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
                   children: const [
                     SearchBar(),
                     SizedBox(height: 10),
+                    PatientList(),
                   ],
                 ),
               ),
@@ -159,5 +160,51 @@ class SearchBar extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class PatientList extends StatefulWidget {
+  const PatientList({
+    Key? key,
+  }) : super();
+
+  @override
+  State<PatientList> createState() => _PatientListState();
+}
+
+class _PatientListState extends State<PatientList> {
+  @override
+  Widget build(BuildContext context) {
+    String? selectedPatientId = '';
+    int selectedIndex = -1;
+
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+        builder: (context, state) {
+      return ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          itemCount: state.patientsList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              key: ValueKey(state.patientsList[index]['name']),
+              margin: const EdgeInsets.all(10),
+              child: ListTile(
+                title: Text(
+                    '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']} ${state.patientsList[index]['lastName']}'),
+                selected: (selectedIndex == index),
+                selectedColor: Colors.amber,
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                    selectedPatientId = state.patientsList[index]['id'];
+                  });
+                  print(index);
+                  print(selectedIndex);
+                  print(selectedPatientId);
+                },
+              ),
+            );
+          });
+    });
   }
 }

@@ -27,7 +27,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copywith(appointmentList: appointments));
   }
 
-  Future<void> searchPatients(String query) async {
+  Future<void> searchPatients(String? query) async {
     var patients =
         await _appointmentRepository.getPatientsList(searchParams: query);
     emit(state.copywith(patientsList: patients));

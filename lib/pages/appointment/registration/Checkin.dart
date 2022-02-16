@@ -104,10 +104,7 @@ class _AppointmentState extends State<Appointment> {
                         )))
               ]));
         } else {
-
-          return 
-
-                ListView.builder(
+          return ListView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               itemCount: state.appointmentList.length,
@@ -118,13 +115,14 @@ class _AppointmentState extends State<Appointment> {
                     height: 140,
                     width: 200,
                     decoration: BoxDecoration(
-                       color: const Color.fromARGB(255, 248, 254, 254),
+                      color: const Color.fromARGB(255, 248, 254, 254),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 1,
                           blurRadius: 2,
-                          offset: const Offset(0, 3), // changes position of shadow
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
                         ),
                       ],
                     ),
@@ -138,25 +136,31 @@ class _AppointmentState extends State<Appointment> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(state.appointmentList[index]
-                                    ['firstName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, ),),
+                                child: Text(
+                                  state.appointmentList[index]['firstName'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
                               ),
-                              Text(state.appointmentList[index]
-                                  ['lastName'],
+                              Text(
+                                state.appointmentList[index]['lastName'],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                 ),
                               ),
                             ],
-                            
                           ),
-                         ),
-                      const Padding(
-                        padding: EdgeInsets.only(left:15.0, top:10),
-                        child: Text('Registration date', style: TextStyle(fontSize: 12),),
-                      ),
-                      
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15.0, top: 10),
+                          child: Text(
+                            'Registration date',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: SizedBox(
@@ -166,7 +170,8 @@ class _AppointmentState extends State<Appointment> {
                                 style: ButtonStyle(
                                     elevation: MaterialStateProperty.all(0),
                                     backgroundColor: MaterialStateProperty.all(
-                                        const Color.fromARGB(255, 56, 155, 152)),
+                                        const Color.fromARGB(
+                                            255, 56, 155, 152)),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
@@ -182,8 +187,7 @@ class _AppointmentState extends State<Appointment> {
                     ),
                   ),
                 );
-              }) 
-              ;
+              });
         }
       },
     );
