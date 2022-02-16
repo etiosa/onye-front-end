@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/components/Forms/AppointmentForm.dart';
 import 'package:onye_front_ened/components/Forms/RegistrationForm.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
@@ -52,7 +53,8 @@ class MyApp extends StatelessWidget {
             '/dashboard': (context) => const Dashboard(),
             '/dashboard/checkin': (context) => const Checkin(),
             '/dashboard/appointment': (context) => const Appointments(),
-            /*  '/dashboard/registration': (context) => const Registration(), */
+            '/dashboard/appointment/createAppointment': (context) =>
+                const AppointmentForm(),
             '/dashboard/registrationForm': (context) =>
                 const RegistrationForm(),
             'dashboard/patient': (context) => const PatientsPage()

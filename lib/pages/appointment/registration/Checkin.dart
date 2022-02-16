@@ -28,16 +28,19 @@ class _CheckinState extends State<Checkin> {
         mainAxisSize: MainAxisSize.max,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top:20.0, left:20, bottom: 20),
-            child: Text('CheckIn', style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
+            child: Text(
+              'CheckIn',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
-             const Padding(
-            padding: EdgeInsets.only(left:20.0, top:10),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0, top: 10),
             child: Text("Search",
                 style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:20.0, right:10, bottom: 20),
+            padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
@@ -119,7 +122,6 @@ class _AppointmentState extends State<Appointment> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
               child: Column(mainAxisSize: MainAxisSize.max, children: [
-                 
                 Expanded(
                     child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
@@ -152,7 +154,7 @@ class _AppointmentState extends State<Appointment> {
                                       height: 10.0,
                                       color: Colors.white,
                                     ),
-                                       Container(
+                                    Container(
                                       width: double.infinity,
                                       height: 10.0,
                                       color: Colors.white,
@@ -165,30 +167,27 @@ class _AppointmentState extends State<Appointment> {
                         )))
               ]));
         } else {
-
-          return 
-
-                Expanded(
-                  flex: 1,
-                  child: ListView.builder(
-                              shrinkWrap: true,
-                              
-                              padding: const EdgeInsets.only(top: 10, bottom: 10),
-                              itemCount: state.appointmentList.length,
-                              itemBuilder: (BuildContext context, int index) {
+          return Expanded(
+            flex: 1,
+            child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                itemCount: state.appointmentList.length,
+                itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       height: 140,
                       width: 200,
                       decoration: BoxDecoration(
-                         color: const Color.fromARGB(255, 248, 254, 254),
+                        color: const Color.fromARGB(255, 248, 254, 254),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 1,
                             blurRadius: 2,
-                            offset: const Offset(0, 3), // changes position of shadow
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
                         ],
                       ),
@@ -202,25 +201,31 @@ class _AppointmentState extends State<Appointment> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(state.appointmentList[index]
-                                      ['firstName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, ),),
+                                  child: Text(
+                                    state.appointmentList[index]['firstName'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
-                                Text(state.appointmentList[index]
-                                    ['lastName'],
+                                Text(
+                                  state.appointmentList[index]['lastName'],
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                   ),
                                 ),
                               ],
-                              
                             ),
-                           ),
-                        const Padding(
-                          padding: EdgeInsets.only(left:15.0, top:10),
-                          child: Text('Registration date', style: TextStyle(fontSize: 12),),
-                        ),
-                        
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 15.0, top: 10),
+                            child: Text(
+                              'Registration date',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: SizedBox(
@@ -229,12 +234,15 @@ class _AppointmentState extends State<Appointment> {
                               child: ElevatedButton(
                                   style: ButtonStyle(
                                       elevation: MaterialStateProperty.all(0),
-                                      backgroundColor: MaterialStateProperty.all(
-                                          const Color.fromARGB(255, 56, 155, 152)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color.fromARGB(
+                                                  255, 56, 155, 152)),
                                       shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
                                       ))),
                                   onPressed: () {
                                     print("reschedule");
@@ -246,9 +254,8 @@ class _AppointmentState extends State<Appointment> {
                       ),
                     ),
                   );
-                              }),
-                ) 
-              ;
+                }),
+          );
         }
       },
     );
