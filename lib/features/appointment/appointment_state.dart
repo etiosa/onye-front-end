@@ -1,5 +1,12 @@
 part of 'appointment_cubit.dart';
 
+enum SEARCHSTATE{
+  inital,
+  sucessful,
+  error,
+  notFound,
+  startsearch
+}
 
 
 class AppointmentState extends Equatable {
@@ -12,6 +19,7 @@ class AppointmentState extends Equatable {
       this.endDate = '',
       this.startTime = '',
       this.endTime = '',
+      this.searchState=SEARCHSTATE.inital,
       this.doctorsList=const[],
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
@@ -24,6 +32,7 @@ class AppointmentState extends Equatable {
   final String startTime;
   final String endTime;
   final List<dynamic> doctorsList;
+  final SEARCHSTATE searchState;
 
   @override
   List<Object> get props => [
@@ -36,7 +45,8 @@ class AppointmentState extends Equatable {
         startDate,
         endTime,
         startTime,
-        doctorsList
+        doctorsList,
+        searchState
       ];
 
   AppointmentState copywith(
@@ -48,9 +58,11 @@ class AppointmentState extends Equatable {
       String? startTime,
       String? endTime,
       String? startDate,
+      SEARCHSTATE? searchstate,
       String? endDate,
       String? endDateTime}) {
     return AppointmentState(
+      searchState: searchstate ?? searchState,
         searchParams: searchParams ?? this.searchParams,
         doctorsList: doctorsList??this.doctorsList,
         endDate: endDate ?? this.endDate,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CreateRegistration extends StatefulWidget {
   const CreateRegistration({Key? key, this.restorationId}) : super(key: key);
@@ -245,15 +246,11 @@ class SearchBar extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onFieldSubmitted: (query) =>{
-              if(field == 'Search patient'){
-                context.read<AppointmentCubit>().searchPatients(query)
-                },
-                if(field == 'Search doctor'){
-                  context.read<AppointmentCubit>().searchDoctors(query)
-
-
-                },
+            onFieldSubmitted: (query) => {
+              if (field == 'Search patient')
+                {context.read<AppointmentCubit>().searchPatients(query)},
+              if (field == 'Search doctor')
+                {context.read<AppointmentCubit>().searchDoctors(query)},
             },
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -287,12 +284,65 @@ class DoctorList extends StatefulWidget {
 class _DoctorListState extends State<DoctorList> {
   @override
   Widget build(BuildContext context) {
-    String? selectedPatientId = '';
+    String? selectedDctorId = '';
     int selectedIndex = -1;
 
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
-            if (state.patientsList.isEmpty) {
+      if (SEARCHSTATE.startsearch == state.searchState &&
+          state.patientsList.isEmpty) {
+        return Container(
+            width: MediaQuery.of(context).size.width / 1.2,
+            height: MediaQuery.of(context).size.height / 1.5,
+            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
+            child: Column(mainAxisSize: MainAxisSize.max, children: [
+              Expanded(
+                  child: Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      enabled: true,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (_, __) => Padding(
+                          padding: const EdgeInsets.only(bottom: 1.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 48,
+                                height: 48,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 1.0),
+                              ),
+                              Expanded(
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ))
+                            ],
+                          ),
+                        ),
+                      )))
+            ]));
+      }
+
+      if (SEARCHSTATE.notFound == state.searchState) {
         return (const Center(
           child: SizedBox(
             height: 70,
@@ -301,7 +351,7 @@ class _DoctorListState extends State<DoctorList> {
               margin: EdgeInsets.only(top: 10),
               child: Padding(
                 padding: EdgeInsets.all(15.0),
-                child: Text('No patient was found'),
+                child: Text('No result'),
               ),
             ),
           ),
@@ -310,29 +360,81 @@ class _DoctorListState extends State<DoctorList> {
       return ListView.builder(
           shrinkWrap: true,
           padding: const EdgeInsets.only(top: 10, bottom: 10),
-          itemCount: state.patientsList.length,
+          itemCount: state.doctorsList.length,
           itemBuilder: (BuildContext context, int index) {
             return Card(
-              key: ValueKey(state.patientsList[index]['name']),
+              key: ValueKey(state.doctorsList[index]['name']),
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(
-                    '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']} ${state.patientsList[index]['lastName']}'),
+                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName']} ${state.doctorsList[index]['lastName']}'),
                 selected: (selectedIndex == index),
                 selectedColor: Colors.amber,
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    selectedPatientId = state.patientsList[index]['id'];
+                    selectedDctorId = state.doctorsList[index]['id'];
                   });
                   print(index);
                   print(selectedIndex);
-                  print(selectedPatientId);
+                  print(selectedDctorId);
                 },
               ),
             );
           });
     });
+  }
+}
+
+class LanguagePreference extends StatefulWidget {
+  const LanguagePreference({Key? key}) : super(key: key);
+
+  @override
+  State<LanguagePreference> createState() => _LanguagePreferenceState();
+}
+
+class _LanguagePreferenceState extends State<LanguagePreference> {
+  String? _selectedText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(1.0),
+          child: Text("Contact Preference"),
+        ),
+        SizedBox(
+          height: 45,
+          width: 320,
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            color: const Color.fromARGB(255, 205, 226, 226),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
+                isExpanded: true,
+                value: _selectedText,
+                hint: const Text("Select contact preference"),
+                items: <String>['PHONE', 'SMS', 'EMAIL'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  /*   context.read<RegistrationCubit>().setContactPrefernce(val); */
+                  setState(() {
+                    _selectedText = val.toString();
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -354,19 +456,18 @@ class _PatientListState extends State<PatientList> {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
       if (state.patientsList.isEmpty) {
-        return (
-          const Center(
-            child: SizedBox(
-              height: 70,
-              width: 180,
-              child: Card(
-                  margin: EdgeInsets.only(top: 10),
-                child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text('No patient was found'),
-                ),),
+        return (const Center(
+          child: SizedBox(
+            height: 70,
+            width: 180,
+            child: Card(
+              margin: EdgeInsets.only(top: 10),
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text('No patient was found'),
+              ),
             ),
-         
+          ),
         ));
       }
       return ListView.builder(

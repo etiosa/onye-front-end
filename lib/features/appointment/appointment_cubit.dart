@@ -34,10 +34,20 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   void searchDoctors(String? query) async {
+    emit(state.copywith(searchstate: SEARCHSTATE.startsearch));
     var doctors =
         await _appointmentRepository.getDoctorList(searchParams: query);
     print(doctors);
-    emit(state.copywith(doctorsList: doctors));
+    if(doctors.isNotEmpty){
+          emit(state.copywith(
+          doctorsList: doctors, searchstate: SEARCHSTATE.sucessful));
+    }
+  if(doctors.isEmpty){
+        emit(state.copywith(
+          doctorsList: doctors, searchstate: SEARCHSTATE.notFound));
+  }
+
+   
   }
 
   void setSearchParams(String? argSearchParams) {
