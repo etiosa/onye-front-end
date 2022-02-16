@@ -65,13 +65,13 @@ class _CheckinState extends State<Checkin> {
               ],
             ),
           ),
-             const Padding(
-            padding: EdgeInsets.only(left:20.0, top:10),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0, top: 10),
             child: Text("Search",
                 style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:20.0, right:10, bottom: 20),
+            padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
@@ -153,7 +153,6 @@ class _AppointmentState extends State<Appointment> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
               child: Column(mainAxisSize: MainAxisSize.max, children: [
-                 
                 Expanded(
                     child: Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
@@ -186,7 +185,7 @@ class _AppointmentState extends State<Appointment> {
                                       height: 10.0,
                                       color: Colors.white,
                                     ),
-                                       Container(
+                                    Container(
                                       width: double.infinity,
                                       height: 10.0,
                                       color: Colors.white,
@@ -216,13 +215,14 @@ class _AppointmentState extends State<Appointment> {
                       height: 140,
                       width: 200,
                       decoration: BoxDecoration(
-                         color: const Color.fromARGB(255, 248, 254, 254),
+                        color: const Color.fromARGB(255, 248, 254, 254),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 1,
                             blurRadius: 2,
-                            offset: const Offset(0, 3), // changes position of shadow
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
                         ],
                       ),
@@ -236,18 +236,22 @@ class _AppointmentState extends State<Appointment> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(state.appointmentList[index]
-                                      ['firstName'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, ),),
+                                  child: Text(
+                                    state.appointmentList[index]['firstName'],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
-                                Text(state.appointmentList[index]
-                                    ['lastName'],
+                                Text(
+                                  state.appointmentList[index]['lastName'],
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                   ),
                                 ),
                               ],
-                              
                             ),
                            ),
                         const Padding(
@@ -263,12 +267,15 @@ class _AppointmentState extends State<Appointment> {
                               child: ElevatedButton(
                                   style: ButtonStyle(
                                       elevation: MaterialStateProperty.all(0),
-                                      backgroundColor: MaterialStateProperty.all(
-                                          const Color.fromARGB(255, 56, 155, 152)),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color.fromARGB(
+                                                  255, 56, 155, 152)),
                                       shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
                                       ))),
                                   onPressed: () {
                                     print("reschedule");

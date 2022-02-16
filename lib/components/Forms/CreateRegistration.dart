@@ -292,6 +292,21 @@ class _DoctorListState extends State<DoctorList> {
 
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
+            if (state.patientsList.isEmpty) {
+        return (const Center(
+          child: SizedBox(
+            height: 70,
+            width: 180,
+            child: Card(
+              margin: EdgeInsets.only(top: 10),
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text('No patient was found'),
+              ),
+            ),
+          ),
+        ));
+      }
       return ListView.builder(
           shrinkWrap: true,
           padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -338,7 +353,6 @@ class _PatientListState extends State<PatientList> {
 
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
-      print(state);
       if (state.patientsList.isEmpty) {
         return (
           const Center(
