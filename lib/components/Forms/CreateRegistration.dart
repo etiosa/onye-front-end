@@ -290,7 +290,7 @@ class _DoctorListState extends State<DoctorList> {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
       if (SEARCHSTATE.startsearch == state.searchState &&
-          state.patientsList.isEmpty) {
+          state.doctorsList.isEmpty) {
         return Container(
             width: MediaQuery.of(context).size.width / 1.2,
             height: MediaQuery.of(context).size.height / 1.5,
@@ -342,7 +342,7 @@ class _DoctorListState extends State<DoctorList> {
             ]));
       }
 
-      if (SEARCHSTATE.notFound == state.searchState) {
+      if (SEARCHSTATE.notFound == state.searchState  || state.doctorsList.isEmpty) {
         return (const Center(
           child: SizedBox(
             height: 70,

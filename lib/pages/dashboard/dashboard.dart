@@ -7,7 +7,7 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-          context.read<LoginCubit>().home();
+          context.read<LoginCubit>().home(token: context.read<LoginCubit>().state.token);
 
     return SafeArea(
       child: Scaffold(
