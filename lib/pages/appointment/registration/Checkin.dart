@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
@@ -12,10 +13,16 @@ class Checkin extends StatefulWidget {
 }
 
 class _CheckinState extends State<Checkin> {
+  LoginCubit? loginCubit;
+  var loginState;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    loginCubit = BlocProvider.of<LoginCubit>(context);
+    loginState = loginCubit?.state;
+    print(loginState);
+
     context.read<RegistrationCubit>().getAppointments();
   }
 
@@ -33,10 +40,13 @@ class _CheckinState extends State<Checkin> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(top:20.0, left:20, bottom: 20),
-                  child: Text('CheckIn', style:  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
+                  child: Text(
+                    'CheckIn',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                 Padding(
+                Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SizedBox(
                     width: 170,
@@ -75,7 +85,7 @@ class _CheckinState extends State<Checkin> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
-               /*   onChanged: (searchParams) => context
+                /*   onChanged: (searchParams) => context
                           .read<RegistrationCubit>()
                           .set(searchParams),  */
                 obscureText: false,
@@ -198,17 +208,13 @@ class _AppointmentState extends State<Appointment> {
                         )))
               ]));
         } else {
-
-          return 
-
-                Expanded(
-                  flex: 1,
-                  child: ListView.builder(
-                              shrinkWrap: true,
-                              
-                              padding: const EdgeInsets.only(top: 10, bottom: 10),
-                              itemCount: state.appointmentList.length,
-                              itemBuilder: (BuildContext context, int index) {
+          return Expanded(
+            flex: 1,
+            child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                itemCount: state.appointmentList.length,
+                itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -253,12 +259,14 @@ class _AppointmentState extends State<Appointment> {
                                 ),
                               ],
                             ),
-                           ),
-                        const Padding(
-                          padding: EdgeInsets.only(left:15.0, top:10),
-                          child: Text('Registration date', style: TextStyle(fontSize: 12),),
-                        ),
-                        
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 15.0, top: 10),
+                            child: Text(
+                              'Registration date',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: SizedBox(
@@ -287,14 +295,10 @@ class _AppointmentState extends State<Appointment> {
                       ),
                     ),
                   );
-                              }),
-                ) 
-              ;
+                }),
+          );
         }
       },
     );
   }
 }
-
-
-
