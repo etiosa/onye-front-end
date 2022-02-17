@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
+import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CreateRegistration extends StatefulWidget {
@@ -156,30 +157,79 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SearchBar(
-                      formIndex: widget.formIndex,
-                      field: '',
+      return RegisterField(formKey: _formKey, widget: widget);
+    });
+  }
+}
+
+class RegisterField extends StatelessWidget {
+  const RegisterField({
+    Key? key,
+    required GlobalKey<FormState> formKey,
+    required this.widget,
+  })  : _formKey = formKey,
+        super(key: key);
+
+  final GlobalKey<FormState> _formKey;
+  final Register widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    onChanged: (password) =>
+                        context.read<LoginCubit>().setPassword(password),
+                    obscureText: false,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 205, 226, 226),
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
                     ),
-                    const SizedBox(height: 10),
-                    const PatientList(),
-                  ],
-                ),
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a valid password';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  TextFormField(
+                    onChanged: (password) =>
+                        context.read<LoginCubit>().setPassword(password),
+                    obscureText: false,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 205, 226, 226),
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
+                    ),
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a valid password';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                 const  LanguagePreference(),
+                ],
               ),
             ),
-          ]);
-    });
+          ),
+        ]);
   }
 }
 
@@ -248,9 +298,17 @@ class SearchBar extends StatelessWidget {
           child: TextFormField(
             onFieldSubmitted: (query) => {
               if (field == 'Search patient')
-                {context.read<AppointmentCubit>().searchPatients(query)},
+                {
+                  context.read<AppointmentCubit>().searchPatients(
+                      query: query,
+                      token: context.read<LoginCubit>().state.homeToken)
+                },
               if (field == 'Search doctor')
-                {context.read<AppointmentCubit>().searchDoctors(query)},
+                {
+                  context.read<AppointmentCubit>().searchDoctors(
+                      query: query,
+                      token: context.read<LoginCubit>().state.homeToken)
+                },
             },
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -342,7 +400,8 @@ class _DoctorListState extends State<DoctorList> {
             ]));
       }
 
-      if (SEARCHSTATE.notFound == state.searchState  || state.doctorsList.isEmpty) {
+      if (SEARCHSTATE.notFound == state.searchState ||
+          state.doctorsList.isEmpty) {
         return (const Center(
           child: SizedBox(
             height: 70,
@@ -374,7 +433,9 @@ class _DoctorListState extends State<DoctorList> {
                   setState(() {
                     selectedIndex = index;
                     selectedDctorId = state.doctorsList[index]['id'];
-                    context.read();
+                    context
+                        .read<AppointmentCubit>()
+                        .setSelectedMedicalPersonnelId(selectedDctorId);
                   });
                   print(index);
                   print(selectedIndex);
@@ -404,7 +465,7 @@ class _LanguagePreferenceState extends State<LanguagePreference> {
       children: [
         const Padding(
           padding: EdgeInsets.all(1.0),
-          child: Text("Contact Preference"),
+          child: Text("Language Preference"),
         ),
         SizedBox(
           height: 45,
@@ -488,10 +549,10 @@ class _PatientListState extends State<PatientList> {
                   setState(() {
                     selectedIndex = index;
                     selectedPatientId = state.patientsList[index]['id'];
+                    context
+                        .read<AppointmentCubit>()
+                        .setPatientId(selectedPatientId);
                   });
-                  print(index);
-                  print(selectedIndex);
-                  print(selectedPatientId);
                 },
               ),
             );

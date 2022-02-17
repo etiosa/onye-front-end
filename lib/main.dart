@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
+             lazy: false,
             create: (_) => LoginCubit(_authRepository),
           ),
           BlocProvider(

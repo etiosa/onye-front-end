@@ -55,7 +55,7 @@ class RegistrationRepositories {
           "contactPreference": contactPreference,
           "ethnicity": ethnicity,
           "educationLevel": educationLevel,
-           "countryCode": countryCode,
+          "countryCode": countryCode,
           "address": {
             "line1": addressLine1,
             "zipCode": zipCode,
@@ -73,7 +73,9 @@ class RegistrationRepositories {
     print(body);
   }
 
-  Future<List<dynamic>> getAppointment() async {
+  Future<List<dynamic>> getAppointment({String? token}) async {
+    print('get Appointment token');
+    print(token);
     //1 Uri
     var uri = Uri.parse(root + 'api/rest/v1/patient/search');
 
@@ -83,7 +85,7 @@ class RegistrationRepositories {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        "Authorization": "Bearer $token",
       },
     );
     var body = json.decode(reponse.body);
@@ -92,4 +94,21 @@ class RegistrationRepositories {
 
     return appointmentList;
   }
+
+  Future<String> home({String? token}) async {
+    var uri = Uri.parse(root + "api/rest/v1/home");
+    var body;
+    try {
+      http.Response response = await http.get(uri, headers: {
+        "Content-Type": "application/json",
+        "Accept": accept,
+        "Authorization": "Bearer $token",
+      });
+      body = jsonDecode(response.body);
+      return body['token'];
+    } catch (e) {
+      return body['token'];
+    }
+  }
+
 }

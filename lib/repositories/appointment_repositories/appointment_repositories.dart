@@ -35,7 +35,7 @@ class AppointmentRepository {
     return appointmentList;
   }
 
-  Future<List<dynamic>> getPatientsList({String? searchParams}) async {
+  Future<List<dynamic>> getPatientsList({String? searchParams,String? token}) async {
     var uri = Uri.parse(root + 'api/rest/v1/patient/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
@@ -47,7 +47,7 @@ class AppointmentRepository {
       headers: {
         "Accept": accept,
         "Content-Type": contentType,
-        "Access-Control-Allow-Origin": "*",
+         "Authorization": "Bearer $token",
       },
     );
 
@@ -57,7 +57,7 @@ class AppointmentRepository {
     return patientsList;
   }
 
-  Future<List<dynamic>> getDoctorList({String? searchParams}) async {
+  Future<List<dynamic>> getDoctorList({String? searchParams, String? token}) async {
     print(searchParams);
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
@@ -70,7 +70,7 @@ class AppointmentRepository {
       headers: {
         "Accept": accept,
         "Content-Type": contentType,
-        "Access-Control-Allow-Origin": "*",
+         "Authorization": "Bearer $token",
       },
     );
    

@@ -26,19 +26,19 @@ class AuthRepository {
     }
   }
 
-  Future<int> home({String? token}) async {
+  Future<String> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
-    final int statusCode;
+   var body;
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
         "Accept": accept,
         "Authorization": "Bearer $token",
       });
-      statusCode = response.statusCode;
-      return statusCode;
+    body = jsonDecode(response.body);
+       return body['token'];
     } catch (e) {
-      return -1;
+       return body['token'];
     }
   }
 

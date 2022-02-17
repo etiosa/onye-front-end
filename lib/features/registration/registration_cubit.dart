@@ -141,8 +141,8 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         countryCode: state.countryCode);
   }
 
-  void getAppointments() async {
-    var appointList = await _registrationRepositories.getAppointment();
+  void getAppointments({String? token}) async {
+    var appointList = await _registrationRepositories.getAppointment(token:token);
 
     emit(state.copywith(appointmentList: appointList));
   }

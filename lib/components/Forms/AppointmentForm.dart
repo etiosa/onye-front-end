@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 
+import '../../features/login_cubit/login_cubit.dart';
+
 class AppointmentForm extends StatefulWidget {
   const AppointmentForm({Key? key, this.restorationId}) : super(key: key);
 
@@ -140,7 +142,9 @@ class SearchBar extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onFieldSubmitted: (query) =>
-                context.read<AppointmentCubit>().searchPatients(query),
+                context.read<AppointmentCubit>().searchPatients(
+                    query: query,
+                    token: context.read<LoginCubit>().state.homeToken),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,

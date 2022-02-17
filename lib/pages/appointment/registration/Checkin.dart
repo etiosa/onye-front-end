@@ -13,17 +13,12 @@ class Checkin extends StatefulWidget {
 }
 
 class _CheckinState extends State<Checkin> {
-  LoginCubit? loginCubit;
-  var loginState;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loginCubit = BlocProvider.of<LoginCubit>(context);
-    loginState = loginCubit?.state;
-    print(loginState);
 
-    context.read<RegistrationCubit>().getAppointments();
+    context.read<RegistrationCubit>().getAppointments(token: context.read<LoginCubit>().state.homeToken);
   }
 
   @override

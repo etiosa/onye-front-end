@@ -28,7 +28,8 @@ class RegistrationState extends Equatable {
       this.emergencyContactName = '',
       this.emergencyContactPhoneNumber = '',
       this.emergencyContactRelationship = '',
-      this.contactPrefernce='',
+      this.contactPrefernce = '',
+      this.token='',
       this.registrationFormState = RegistrationFormState.init});
 
 //selcted value
@@ -41,6 +42,7 @@ class RegistrationState extends Equatable {
   final String educationLevel;
   final String phoneNumber;
   final String email;
+  final String token;
   final String contactPreferences;
   final String countryCode;
   final String addressLine1;
@@ -96,6 +98,7 @@ class RegistrationState extends Equatable {
       String? email,
       String? ethnicity,
       String? addressLine3,
+      String? toke,
       String? emergencyContactName,
       String? emergencyContactPhoneNumber,
       List<dynamic>? appointmentList,
@@ -113,6 +116,7 @@ class RegistrationState extends Equatable {
       RegistrationFormState? registrationFormState,
       String? contactPreferences}) {
     return RegistrationState(
+      token: toke?? token,
         firstName: firstName ?? this.firstName,
         emergencyContactName: emergencyContactName ?? this.emergencyContactName,
         ethnicity: ethnicity ?? this.ethnicity,
@@ -132,7 +136,7 @@ class RegistrationState extends Equatable {
         zipCode: zipCode ?? this.zipCode,
         addressLine3: addressLine3 ?? this.addressLine3,
         allOptions: allOptions ?? this.allOptions,
-        contactPrefernce:contactPreferences??this.contactPreferences,
+        contactPrefernce: contactPreferences ?? this.contactPreferences,
         emergencyContactRelationship:
             emergencyContactRelationship ?? this.emergencyContactRelationship,
         emergencyContactPhoneNumber:

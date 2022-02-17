@@ -27,17 +27,16 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copywith(appointmentList: appointments));
   }
 
-  void searchPatients(String? query) async {
+  void searchPatients({String? query,String? token}) async {
     var patients =
-        await _appointmentRepository.getPatientsList(searchParams: query);
+        await _appointmentRepository.getPatientsList(searchParams: query, token: token);
     emit(state.copywith(patientsList: patients));
   }
 
-  void searchDoctors(String? query) async {
+  void searchDoctors({String? query, String? token}) async {
     emit(state.copywith(searchstate: SEARCHSTATE.startsearch));
     var doctors =
-        await _appointmentRepository.getDoctorList(searchParams: query);
-    print(doctors);
+        await _appointmentRepository.getDoctorList(searchParams: query, token: token);
     if (doctors.isNotEmpty) {
       emit(state.copywith(
           doctorsList: doctors, searchstate: SEARCHSTATE.sucessful));
@@ -96,4 +95,10 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   void setDatTimeDateFormat() {}
+
+  /* void home({String? tokens}) async {
+    final String token = await _authRepository.home(token: tokens);
+    emit(state.copywith(token: token));
+  } */
+
 }

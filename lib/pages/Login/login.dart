@@ -17,9 +17,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
-    if (context.read<LoginCubit>().state.token.isNotEmpty) {
+ /*    if (context.read<LoginCubit>().state.loginToken.isNotEmpty) {
       Navigator.of(context).pushNamed("/dashboard");
-    }
+    } */
 
     super.initState();
   }
@@ -194,9 +194,13 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
+      
       builder: (context, state) {
-        if (state.token.isNotEmpty) {
+        if (state.homeToken.isNotEmpty) {
+          
           WidgetsBinding.instance?.addPostFrameCallback((_) {
+            //context.read<LoginCubit>().home(tokens: state.loginToken);
+            print("Login builder");
             Navigator.of(context).pushNamed("/dashboard");
           });
         }

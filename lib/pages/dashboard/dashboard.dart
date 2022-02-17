@@ -2,12 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
 
   @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+            /*   context
+        .read<LoginCubit>()
+        .home(tokens: context.read<LoginCubit>().state.loginToken); */
+
+  }
+  @override
   Widget build(BuildContext context) {
-          context.read<LoginCubit>().home(token: context.read<LoginCubit>().state.token);
 
     return SafeArea(
       child: Scaffold(
