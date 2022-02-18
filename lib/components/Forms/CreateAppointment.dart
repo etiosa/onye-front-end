@@ -24,7 +24,7 @@ class _CreateAppointmentState extends State<CreateAppointment> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  /*   if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    /*   if (context.read<LoginCubit>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
@@ -155,7 +155,8 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     Step(
                         state: StepState.editing,
                         isActive: _index == 0,
-                        title: const Text('Select patient',
+                        title: const Text(
+                          'Select patient',
                           style: TextStyle(fontSize: 13),
                         ),
                         content: SearchPatientBody(
@@ -164,24 +165,24 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     Step(
                         state: StepState.editing,
                         isActive: _index == 1,
-                        title: const Text('Select doctor',
+                        title: const Text(
+                          'Select doctor',
                           style: TextStyle(fontSize: 13),
                         ),
                         content: SearchDoctorBody(
                           formIndex: 1,
                         )),
                     Step(
-                        state: StepState.editing,
-                        isActive: _index == 2,
-                        title: const Text('Appointment', style: TextStyle(fontSize: 13),),
-                        content: Register(
-                          formIndex: 2,
-                        ),
-                        
-                        
-                        ),
-                        
-                        
+                      state: StepState.editing,
+                      isActive: _index == 2,
+                      title: const Text(
+                        'Appointment',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      content: Register(
+                        formIndex: 2,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -357,15 +358,49 @@ class RegisterField extends StatelessWidget {
                     'Check Up',
                     'Consultation'
                   ]),
-                    DatePickerFeild(
-                    label: 'From',
+                 
+                   
+                  const SizedBox(
+                    height: 30,
                   ),
-                  SizedBox(
-                    width: 10,
+                      Row(
+                       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          DatePickerFeild(
+                            label: 'From',
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          DateTimePickerFeild(
+                            label: 'From',
+                          ),
+                        ],
+                      ),
+                         const  SizedBox(
+                        width: 5,
+                      ),
+                    
+                      const SizedBox(
+                    height: 30,
+                        ),
+                
+                    Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      DatePickerFeild(
+                        label: 'To',
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      DateTimePickerFeild(
+                        label: 'To',
+                      ),
+                    ],
                   ),
-                 /*  DateTimePickerFeild(
-                    label: 'From',
-                  ), */
                   const SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -407,7 +442,7 @@ class RegisterField extends StatelessWidget {
                                   .read<AppointmentCubit>()
                                   .state
                                   .resonsForVist);
-
+/* 
                               context
                                   .read<AppointmentCubit>()
                                   .createRegsitration(
@@ -430,7 +465,7 @@ class RegisterField extends StatelessWidget {
                                       reasons: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .resonsForVist);
+                                          .resonsForVist); */
                             }
                           },
                           child: const Text('Submit')),
@@ -441,6 +476,72 @@ class RegisterField extends StatelessWidget {
             ),
           ),
         ]);
+  }
+}
+
+Future dateTimePicker(BuildContext context, String label) async {
+  final newTime =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (newTime == null) return;
+  String formatTime = newTime.format(context);
+
+  switch (label) {
+    case 'From':
+      print('from');
+      context.read<AppointmentCubit>().setStartTime(formatTime);
+      break;
+    case 'To':
+      print('from');
+
+      context.read<AppointmentCubit>().setEndTime(formatTime);
+
+      break;
+    default:
+      break;
+  }
+  print(newTime.format(context));
+}
+
+class DateTimePickerFeild extends StatelessWidget {
+  const DateTimePickerFeild({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        print(state);
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Time',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+                dateTimePicker(context, label);
+              },
+              child: Container(
+                height: 45,
+                width: 80,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: Padding(
+                    padding: EdgeInsets.all(1.0),
+                    child: TimeContent(
+                      label: label,
+                    )),
+              ),
+            ),
+          ],
+        ));
+      },
+    );
   }
 }
 
@@ -503,7 +604,6 @@ Future datePicker(BuildContext context, String label) async {
   // context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
-
 class DatePickerFeild extends StatelessWidget {
   const DatePickerFeild({Key? key, required this.label}) : super(key: key);
   final String label;
@@ -546,6 +646,7 @@ class DatePickerFeild extends StatelessWidget {
     );
   }
 }
+
 class TextContent extends StatelessWidget {
   const TextContent({Key? key, required this.label}) : super(key: key);
   final String label;
