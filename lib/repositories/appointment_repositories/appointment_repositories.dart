@@ -13,13 +13,13 @@ class AppointmentRepository {
       String? endDateTime,
       String? token,
       String? zoneId}) async {
-    var uri =
-        Uri.parse(root + 'api/rest/v1/appointment/search')
-            .replace(queryParameters: <String, String>{
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
+        .replace(queryParameters: <String, String>{
       'from': '2020-01-01T00:00',
       'to': '2024-01-01T00:00',
       'query': searchParams!,
-      'zoneId': 'Africa/Lagos',});
+      'zoneId': 'Africa/Lagos',
+    });
 
     // http call
     http.Response reponse = await http.get(
@@ -27,8 +27,7 @@ class AppointmentRepository {
       headers: {
         "Accept": accept,
         "Content-Type": contentType,
-          "Authorization": "Bearer $token",
-
+        "Authorization": "Bearer $token",
       },
     );
     var body = json.decode(reponse.body);
@@ -89,6 +88,7 @@ class AppointmentRepository {
       {String? token,
       String? patientID,
       String? medicalId,
+      String? appointmentId,
       String? reasons,
       String? typofVisit}) async {
     var uri = Uri.parse(root + 'api/rest/v1/registration?zoneId=Africa/Lagos');
@@ -109,7 +109,7 @@ class AppointmentRepository {
           },
           body: json.encode({
             "patientId": patientID,
-            "appointmentId": null,
+            "appointmentId": appointmentId,
             "medicalPersonnelId": medicalId,
             "typeOfVisit": typofVisit,
             "reasonForVisit": reasons,

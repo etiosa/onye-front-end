@@ -22,8 +22,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     //print(format.parse(startDateTime));
     //print(format.parse(endDateTime).toIso8601String());
 
-    var appointments = await _appointmentRepository.getAppointmentList(token: token,
-        searchParams: state.searchParams);
+    var appointments = await _appointmentRepository.getAppointmentList(
+        token: token, searchParams: state.searchParams);
     emit(state.copywith(appointmentList: appointments));
   }
 
@@ -52,9 +52,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copywith(selectedMedicalPersonnel: selectedId));
   }
 
-  void setPatientId(String? argrSelectedId) {
-    final String selectedId = argrSelectedId!;
+  void setPatientId(String? argSelectedId) {
+    final String selectedId = argSelectedId!;
     emit(state.copywith(selectedPatientId: selectedId));
+  }
+
+  void setAppointmentId(String? argSelectedId) {
+    final String selectedId = argSelectedId!;
+    emit(state.copywith(selectedAppointmentId: selectedId));
   }
 
   void setTypeOfVisit(String? argtypeOfVisit) {
@@ -111,6 +116,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       {String? token,
       String? patientID,
       String? medicalId,
+      String? appointmentId,
       String? reasons,
       String? typofVisit}) async {
     print(reasons);
@@ -120,7 +126,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         token: token,
         patientID: patientID,
         medicalId: medicalId,
+        appointmentId: appointmentId,
         reasons: reasons,
-        typofVisit: typofVisit); 
+        typofVisit: typofVisit);
   }
 }
