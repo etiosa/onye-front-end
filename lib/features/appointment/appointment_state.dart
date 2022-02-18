@@ -22,6 +22,7 @@ class AppointmentState extends Equatable {
       this.selectedMedicalIndexs = 0,
       this.selectedPatientIndexs = 2,
       this.regState = REGISTRATIONsTATE.inita,
+      this.selectedAppointmentId = '',
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
   final List<dynamic> patientsList;
@@ -41,6 +42,7 @@ class AppointmentState extends Equatable {
   final int selectedPatientIndexs;
   final int selectedMedicalIndexs;
   final REGISTRATIONsTATE regState;
+  final String selectedAppointmentId;
 
   @override
   List<Object> get props => [
@@ -61,31 +63,34 @@ class AppointmentState extends Equatable {
         resonsForVist,
         selectedMedicalIndexs,
         selectedMedicalIndexs,
-        regState
+        regState,
+        selectedAppointmentId,
       ];
 
-  AppointmentState copywith(
-      {String? searchParams,
-      List<dynamic>? appointmentList,
-      List<dynamic>? patientsList,
-      List<dynamic>? doctorsList,
-      String? startDateTime,
-      String? startTime,
-      String? endTime,
-      String? startDate,
-      String? selectedPatientId,
-      String? selectedMedicalPersonnel,
-      SEARCHSTATE? searchstate,
-      REGISTRATIONsTATE? regstate,
-      String? endDate,
-      String? typeOfVisit,
-      String? reasonForVisit,
-      int? selctedPatientIndex,
-      int? seletedMedicalIndex,
-      String? endDateTime}) {
+  AppointmentState copywith({
+    String? searchParams,
+    List<dynamic>? appointmentList,
+    List<dynamic>? patientsList,
+    List<dynamic>? doctorsList,
+    String? startDateTime,
+    String? startTime,
+    String? endTime,
+    String? startDate,
+    String? selectedPatientId,
+    String? selectedMedicalPersonnel,
+    SEARCHSTATE? searchstate,
+    REGISTRATIONsTATE? regstate,
+    String? endDate,
+    String? typeOfVisit,
+    String? reasonForVisit,
+    int? selctedPatientIndex,
+    int? seletedMedicalIndex,
+    String? endDateTime,
+    String? selectedAppointmentId,
+  }) {
     return AppointmentState(
         typeOfVist: typeOfVisit ?? typeOfVist,
-        regState: regstate?? regState,
+        regState: regstate ?? regState,
         resonsForVist: reasonForVisit ?? resonsForVist,
         selectedMedicalIndexs:
             seletedMedicalIndex ?? this.selectedMedicalIndexs,
@@ -95,6 +100,8 @@ class AppointmentState extends Equatable {
         selectedMedicalPeronnelId:
             selectedMedicalPersonnel ?? selectedMedicalPeronnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,
+        selectedAppointmentId:
+            selectedAppointmentId ?? this.selectedAppointmentId,
         searchState: searchstate ?? searchState,
         searchParams: searchParams ?? this.searchParams,
         doctorsList: doctorsList ?? this.doctorsList,

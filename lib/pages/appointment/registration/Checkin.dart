@@ -402,7 +402,25 @@ class CheckInPatient extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              print("New registration");
+              context.read<AppointmentCubit>().createRegsitration(
+                    token: context.read<LoginCubit>().state.homeToken,
+                    patientID: context
+                        .read<AppointmentCubit>()
+                        .state
+                        .selectedPatientId,
+                    medicalId: context
+                        .read<AppointmentCubit>()
+                        .state
+                        .selectedMedicalPeronnelId,
+                    appointmentId: context
+                        .read<AppointmentCubit>()
+                        .state
+                        .selectedAppointmentId,
+                    reasons:
+                        context.read<AppointmentCubit>().state.resonsForVist,
+                    typofVisit:
+                        context.read<AppointmentCubit>().state.typeOfVist,
+                  );
             },
             child: const Text('Create new New registeration')),
       ),

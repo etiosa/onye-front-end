@@ -682,12 +682,16 @@ class _DropDownState extends State<DropDown> {
                 onChanged: (val) {
                   setState(() {
                     _selectedText = val.toString();
-                       if (widget.label == 'Type of Visit') {
-                      context.read<AppointmentCubit>().setTypeOfVisit(_selectedText);
+                    if (widget.label == 'Type of Visit') {
+                      context
+                          .read<AppointmentCubit>()
+                          .setTypeOfVisit(_selectedText);
                     }
 
                     if (widget.label == 'Reason for Visit') {
-                      context.read<AppointmentCubit>().setReasonForVisit(_selectedText);
+                      context
+                          .read<AppointmentCubit>()
+                          .setReasonForVisit(_selectedText);
                     }
                   });
                 },
@@ -713,6 +717,7 @@ class _PatientListState extends State<PatientList> {
   @override
   Widget build(BuildContext context) {
     String? selectedPatientId = '';
+    String? selectedAppointmentId = '';
     int selectedIndex = -1;
 
     return BlocBuilder<AppointmentCubit, AppointmentState>(
@@ -752,8 +757,12 @@ class _PatientListState extends State<PatientList> {
                   selectedColor: Colors.amber,
                   onTap: () {
                     setState(() {
+                      print(
+                          'appoitment id: ${state.appointmentList[index]['id']}');
                       selectedIndex = index;
                       selectedPatientId = state.patientsList[index]['id'];
+                      selectedAppointmentId =
+                          state.appointmentList[index]['id'];
 
                       context
                           .read<AppointmentCubit>()
@@ -762,6 +771,10 @@ class _PatientListState extends State<PatientList> {
                       context
                           .read<AppointmentCubit>()
                           .setPatientId(selectedPatientId);
+
+                      context
+                          .read<AppointmentCubit>()
+                          .setAppointmentId(selectedAppointmentId);
                     });
                   },
                 ),
