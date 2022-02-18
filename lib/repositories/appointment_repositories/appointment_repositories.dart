@@ -122,4 +122,46 @@ class AppointmentRepository {
       return false;
     }
   }
+
+  Future<bool> createAppointment (
+      {String? token,
+      String? patientID,
+      String? medicalId,
+      String? reasons,
+      String? from,
+      String? to,
+      String? typofVisit}) async{
+
+    var uri = Uri.parse(root + '/api/rest/v1/appointment?zoneId=Europe/Stockholm');
+    var body;
+    print('token');
+    print(token);
+    print(reasons);
+    print(typofVisit);
+    print(patientID);
+    print(medicalId);
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "patientId": patientID,
+            "appointmentId": null,
+            "medicalPersonnelId": medicalId,
+            "typeOfVisit": typofVisit,
+            "reasonForVisit": reasons,
+            "languagePreference": "en"
+          }));
+
+      print(response.body);
+      return true;
+    } catch (e) {
+      return false;
+    }
+
+  }
 }
