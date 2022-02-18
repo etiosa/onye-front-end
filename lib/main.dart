@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-             lazy: false,
+            lazy: false,
             create: (_) => LoginCubit(_authRepository),
           ),
           BlocProvider(
@@ -51,16 +51,17 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Onye',
           routes: {
-            '/': (context) => const CreateAppointment(),
+            '/': (context) => const HomePage(),
             '/login': (context) => const LoginPage(),
             '/dashboard': (context) => const Dashboard(),
             '/dashboard/checkin': (context) => const Checkin(),
             '/dashboard/appointment': (context) => const Appointments(),
             '/dashboard/appointment/createAppointment': (context) =>
                 const AppointmentForm(),
-                 '/dashboard/appointment/createRegistration':(context)=>const CreateRegistration(),
-                    '/dashboard/appointment/createApppointment': (context) =>const CreateAppointment(),
-
+            '/dashboard/appointment/createRegistration': (context) =>
+                const CreateRegistration(),
+            '/dashboard/appointment/createApppointment': (context) =>
+                const CreateAppointment(),
             '/dashboard/registrationForm': (context) =>
                 const RegistrationForm(),
             'dashboard/patient': (context) => const PatientsPage()
