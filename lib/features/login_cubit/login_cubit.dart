@@ -26,8 +26,6 @@ class LoginCubit extends Cubit<LoginState> {
         username: state.userName, password: state.password);
     emit(state.copywith(loginToken: token));
     home(tokens: state.loginToken);
-
-    print(state);
   }
 
   void home({String? tokens}) async {

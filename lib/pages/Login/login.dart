@@ -200,7 +200,6 @@ class _SubmitButton extends StatelessWidget {
           
           WidgetsBinding.instance?.addPostFrameCallback((_) {
             //context.read<LoginCubit>().home(tokens: state.loginToken);
-            print("Login builder");
             Navigator.of(context).pushNamed("/dashboard");
           });
         }

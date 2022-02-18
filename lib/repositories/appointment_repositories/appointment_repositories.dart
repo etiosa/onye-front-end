@@ -11,14 +11,15 @@ class AppointmentRepository {
       {String? searchParams,
       String? startDateTime,
       String? endDateTime,
+      String? token,
       String? zoneId}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
-        .replace(queryParameters: <String, String>{
+    var uri =
+        Uri.parse(root + 'api/rest/v1/appointment/search')
+            .replace(queryParameters: <String, String>{
       'from': '2020-01-01T00:00',
       'to': '2024-01-01T00:00',
       'query': searchParams!,
-      'zoneId': 'Africa/Lagos',
-    });
+      'zoneId': 'Africa/Lagos',});
 
     // http call
     http.Response reponse = await http.get(
@@ -26,16 +27,19 @@ class AppointmentRepository {
       headers: {
         "Accept": accept,
         "Content-Type": contentType,
-        "Access-Control-Allow-Origin": "*",
+          "Authorization": "Bearer $token",
+
       },
     );
     var body = json.decode(reponse.body);
     var appointmentList = body['elements'];
+    print(appointmentList);
 
     return appointmentList;
   }
 
-  Future<List<dynamic>> getPatientsList({String? searchParams,String? token}) async {
+  Future<List<dynamic>> getPatientsList(
+      {String? searchParams, String? token}) async {
     var uri = Uri.parse(root + 'api/rest/v1/patient/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
@@ -47,7 +51,7 @@ class AppointmentRepository {
       headers: {
         "Accept": accept,
         "Content-Type": contentType,
-         "Authorization": "Bearer $token",
+        "Authorization": "Bearer $token",
       },
     );
 
@@ -57,7 +61,8 @@ class AppointmentRepository {
     return patientsList;
   }
 
-  Future<List<dynamic>> getDoctorList({String? searchParams, String? token}) async {
+  Future<List<dynamic>> getDoctorList(
+      {String? searchParams, String? token}) async {
     print(searchParams);
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
@@ -70,14 +75,51 @@ class AppointmentRepository {
       headers: {
         "Accept": accept,
         "Content-Type": contentType,
-         "Authorization": "Bearer $token",
+        "Authorization": "Bearer $token",
       },
     );
-   
+
     var body = json.decode(reponse.body);
-     print(body);
     var doctorsList = body['elements'];
 
     return doctorsList;
+  }
+
+  Future<bool> createRegisteration(
+      {String? token,
+      String? patientID,
+      String? medicalId,
+      String? reasons,
+      String? typofVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/registration?zoneId=Africa/Lagos');
+    var body;
+    print('token');
+    print(token);
+    print(reasons);
+    print(typofVisit);
+    print(patientID);
+    print(medicalId);
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "patientId": patientID,
+            "appointmentId": null,
+            "medicalPersonnelId": medicalId,
+            "typeOfVisit": typofVisit,
+            "reasonForVisit": reasons,
+            "languagePreference": "en"
+          }));
+
+      print(response.body);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

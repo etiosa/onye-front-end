@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
@@ -17,8 +18,17 @@ class _CheckinState extends State<Checkin> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    context.read<RegistrationCubit>().getAppointments(token: context.read<LoginCubit>().state.homeToken);
+    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+      //redirect to home
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Navigator.of(context).pushNamed("/login");
+      });
+    }
+    if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
+      context
+          .read<RegistrationCubit>()
+          .getAppointments(token: context.read<LoginCubit>().state.homeToken);
+    }
   }
 
   @override
@@ -119,7 +129,7 @@ class _CheckinState extends State<Checkin> {
                   style: TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  //context.read<AppointmentCubit>().searchAppointments();
+                  context.read<AppointmentCubit>().searchAppointments();
                 },
               ),
             ),
@@ -227,73 +237,173 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ],
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0, left: 10),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    state.appointmentList[index]['firstName'],
+                      child: Stack(alignment: Alignment.topRight, children: [
+                        AppointmentConfirmed(
+                          appointmentList: state.appointmentList,
+                          selectedIndex: index,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, left: 10),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      state.appointmentList[index]['patient']
+                                          ['firstName'],
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    state.appointmentList[index]['patient']
+                                        ['lastName'],
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  state.appointmentList[index]['lastName'],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 15.0, top: 10),
-                            child: Text(
-                              'Registration date',
-                              style: TextStyle(fontSize: 12),
+                            CheckInPatient(
+                              appointmentList: state.appointmentList,
+                              selectedIndex: index,
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: SizedBox(
-                              width: 120,
-                              height: 30,
-                              child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      elevation: MaterialStateProperty.all(0),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                  255, 56, 155, 152)),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                      ))),
-                                  onPressed: () {
-                                    print("reschedule");
-                                  },
-                                  child: const Text('Checkin')),
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ]),
                     ),
                   );
                 }),
           );
         }
       },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class AppointmentConfirmed extends StatelessWidget {
+  AppointmentConfirmed({
+    required this.appointmentList,
+    required this.selectedIndex,
+    Key? key,
+  }) : super(key: key);
+  List<dynamic> appointmentList;
+  int selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    if (appointmentList[selectedIndex]['registrationDateTime'].isNotEmpty) {
+      return const Icon(
+        Icons.check_circle,
+        color: Colors.green,
+      );
+    } else {
+      return const Icon(
+        Icons.check_circle,
+        color: Colors.transparent,
+      );
+    }
+  }
+}
+
+class Confirmation extends StatelessWidget {
+  Confirmation(
+      {Key? key, required this.appointmentList, required this.selectedIndex})
+      : super(key: key);
+  List<dynamic> appointmentList;
+  int selectedIndex;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      height: 30,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(
+              appointmentList[selectedIndex]['registrationDateTime'].isEmpty?  
+              const Color.fromARGB(255, 56, 155, 152): Colors.grey),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ))),
+        onPressed: () => {
+                appointmentList[selectedIndex]['registrationDateTime'].isEmpty?
+                     showDialogConfirmation(context) :null},
+                     
+          
+        child: const Text('Checkin'),
+      ),
+    );
+  }
+
+  Future<String?> showDialogConfirmation(BuildContext context) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: const Text('Do you want to check this patient in'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CheckInPatient extends StatelessWidget {
+  CheckInPatient(
+      {Key? key, required this.appointmentList, required this.selectedIndex})
+      : super(key: key);
+  List<dynamic> appointmentList;
+  int selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    if (appointmentList[selectedIndex]['registrationDateTime'].isNotEmpty) {
+      return Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Confirmation(
+            appointmentList: appointmentList,
+            selectedIndex: selectedIndex,
+          ));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 120,
+        height: 30,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 56, 155, 152)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () {
+              print("New registration");
+            },
+            child: const Text('Create new New registeration')),
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 part of 'appointment_cubit.dart';
 
 enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
+enum REGISTRATIONsTATE { inita, sucessful, inprogress, failed }
 
 class AppointmentState extends Equatable {
   const AppointmentState(
@@ -16,8 +17,11 @@ class AppointmentState extends Equatable {
       this.doctorsList = const [],
       this.selectedMedicalPeronnelId = '',
       this.selectedPatientId = '',
-      this.resonsForVist='',
-      this.typeOfVist='',
+      this.resonsForVist = '',
+      this.typeOfVist = '',
+      this.selectedMedicalIndexs = 0,
+      this.selectedPatientIndexs = 2,
+      this.regState = REGISTRATIONsTATE.inita,
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
   final List<dynamic> patientsList;
@@ -34,6 +38,9 @@ class AppointmentState extends Equatable {
   final SEARCHSTATE searchState;
   final String typeOfVist;
   final String resonsForVist;
+  final int selectedPatientIndexs;
+  final int selectedMedicalIndexs;
+  final REGISTRATIONsTATE regState;
 
   @override
   List<Object> get props => [
@@ -51,7 +58,10 @@ class AppointmentState extends Equatable {
         selectedMedicalPeronnelId,
         selectedPatientId,
         typeOfVist,
-        resonsForVist
+        resonsForVist,
+        selectedMedicalIndexs,
+        selectedMedicalIndexs,
+        regState
       ];
 
   AppointmentState copywith(
@@ -66,13 +76,21 @@ class AppointmentState extends Equatable {
       String? selectedPatientId,
       String? selectedMedicalPersonnel,
       SEARCHSTATE? searchstate,
+      REGISTRATIONsTATE? regstate,
       String? endDate,
       String? typeOfVisit,
       String? reasonForVisit,
+      int? selctedPatientIndex,
+      int? seletedMedicalIndex,
       String? endDateTime}) {
     return AppointmentState(
-      typeOfVist: typeOfVisit ?? typeOfVist,
-      resonsForVist: reasonForVisit ?? resonsForVist,
+        typeOfVist: typeOfVisit ?? typeOfVist,
+        regState: regstate?? regState,
+        resonsForVist: reasonForVisit ?? resonsForVist,
+        selectedMedicalIndexs:
+            seletedMedicalIndex ?? this.selectedMedicalIndexs,
+        selectedPatientIndexs:
+            selctedPatientIndex ?? this.selectedPatientIndexs,
         // ignore: unnecessary_this
         selectedMedicalPeronnelId:
             selectedMedicalPersonnel ?? selectedMedicalPeronnelId,

@@ -12,31 +12,31 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     this._appointmentRepository,
   ) : super(const AppointmentState());
 
-  Future<void> searchAppointments() async {
+  Future<void> searchAppointments({String? token}) async {
     final String startDateTime = state.startDate + ' ' + state.startTime;
     final String endDateTime = state.endDate + ' ' + state.endTime;
-    print(startDateTime);
-    print(endDateTime);
+    //print(startDateTime);
+    //print(endDateTime);
     final DateFormat format = new DateFormat("yyyy-MM-dd hh:mm a");
 
-    print(format.parse(startDateTime));
-    print(format.parse(endDateTime).toIso8601String());
+    //print(format.parse(startDateTime));
+    //print(format.parse(endDateTime).toIso8601String());
 
-    var appointments = await _appointmentRepository.getAppointmentList(
+    var appointments = await _appointmentRepository.getAppointmentList(token: token,
         searchParams: state.searchParams);
     emit(state.copywith(appointmentList: appointments));
   }
 
-  void searchPatients({String? query,String? token}) async {
-    var patients =
-        await _appointmentRepository.getPatientsList(searchParams: query, token: token);
+  void searchPatients({String? query, String? token}) async {
+    var patients = await _appointmentRepository.getPatientsList(
+        searchParams: query, token: token);
     emit(state.copywith(patientsList: patients));
   }
 
   void searchDoctors({String? query, String? token}) async {
     emit(state.copywith(searchstate: SEARCHSTATE.startsearch));
-    var doctors =
-        await _appointmentRepository.getDoctorList(searchParams: query, token: token);
+    var doctors = await _appointmentRepository.getDoctorList(
+        searchParams: query, token: token);
     if (doctors.isNotEmpty) {
       emit(state.copywith(
           doctorsList: doctors, searchstate: SEARCHSTATE.sucessful));
@@ -96,9 +96,31 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   void setDatTimeDateFormat() {}
 
-  /* void home({String? tokens}) async {
-    final String token = await _authRepository.home(token: tokens);
-    emit(state.copywith(token: token));
-  } */
+  void setSelectedMedicalIndex(int? argSelectedIndex) {
+    final int selectedIndex = argSelectedIndex!;
+    emit(state.copywith(seletedMedicalIndex: selectedIndex));
+  }
 
+  void setSelectedPatientIndex(int? argSelectedIndex) {
+    final int selectedIndex = argSelectedIndex!;
+
+    emit(state.copywith(selctedPatientIndex: selectedIndex));
+  }
+
+  void createRegsitration(
+      {String? token,
+      String? patientID,
+      String? medicalId,
+      String? reasons,
+      String? typofVisit}) async {
+    print(reasons);
+    print(typofVisit);
+
+    final bool reg = await _appointmentRepository.createRegisteration(
+        token: token,
+        patientID: patientID,
+        medicalId: medicalId,
+        reasons: reasons,
+        typofVisit: typofVisit); 
+  }
 }

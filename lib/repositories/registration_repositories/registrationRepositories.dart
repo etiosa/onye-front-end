@@ -74,10 +74,8 @@ class RegistrationRepositories {
   }
 
   Future<List<dynamic>> getAppointment({String? token}) async {
-    print('get Appointment token');
-    print(token);
     //1 Uri
-    var uri = Uri.parse(root + 'api/rest/v1/patient/search');
+    var uri = Uri.parse(root + 'api/rest/v1/registration/withAppointment/search');
 
     //2 http call
     http.Response reponse = await http.get(
@@ -89,7 +87,6 @@ class RegistrationRepositories {
       },
     );
     var body = json.decode(reponse.body);
-    print(body);
     var appointmentList = body['elements'];
 
     return appointmentList;
@@ -97,6 +94,7 @@ class RegistrationRepositories {
 
   Future<String> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
+    // ignore: prefer_typing_uninitialized_variables
     var body;
     try {
       http.Response response = await http.get(uri, headers: {

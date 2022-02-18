@@ -4,18 +4,19 @@ import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:intl/intl.dart';
 
-class CreateRegistration extends StatefulWidget {
-  const CreateRegistration({Key? key, this.restorationId}) : super(key: key);
+class CreateAppointment extends StatefulWidget {
+  const CreateAppointment({Key? key, this.restorationId}) : super(key: key);
 
   final String? restorationId;
 
   @override
-  State<CreateRegistration> createState() => _CreateRegistrationState();
+  State<CreateAppointment> createState() => _CreateAppointmentState();
 }
 
 //TODO: Refactor
-class _CreateRegistrationState extends State<CreateRegistration> {
+class _CreateAppointmentState extends State<CreateAppointment> {
   int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -23,12 +24,12 @@ class _CreateRegistrationState extends State<CreateRegistration> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+  /*   if (context.read<LoginCubit>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
-    }
+    } */
   }
 
   @override
@@ -42,7 +43,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
             const Padding(
               padding: EdgeInsets.only(top: 20.0, left: 20),
               child: Text(
-                "Create Registration",
+                "Create Appointment",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
@@ -154,24 +155,33 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                     Step(
                         state: StepState.editing,
                         isActive: _index == 0,
-                        title: const Text('Select patient'),
+                        title: const Text('Select patient',
+                          style: TextStyle(fontSize: 13),
+                        ),
                         content: SearchPatientBody(
                           formIndex: 0,
                         )),
                     Step(
                         state: StepState.editing,
                         isActive: _index == 1,
-                        title: const Text('Select doctor'),
+                        title: const Text('Select doctor',
+                          style: TextStyle(fontSize: 13),
+                        ),
                         content: SearchDoctorBody(
                           formIndex: 1,
                         )),
                     Step(
                         state: StepState.editing,
                         isActive: _index == 2,
-                        title: const Text('Register'),
+                        title: const Text('Appointment', style: TextStyle(fontSize: 13),),
                         content: Register(
                           formIndex: 2,
-                        )),
+                        ),
+                        
+                        
+                        ),
+                        
+                        
                   ],
                 ),
               ),
@@ -347,6 +357,15 @@ class RegisterField extends StatelessWidget {
                     'Check Up',
                     'Consultation'
                   ]),
+                    DatePickerFeild(
+                    label: 'From',
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                 /*  DateTimePickerFeild(
+                    label: 'From',
+                  ), */
                   const SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -422,6 +441,134 @@ class RegisterField extends StatelessWidget {
             ),
           ),
         ]);
+  }
+}
+
+class TimeContent extends StatelessWidget {
+  const TimeContent({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    if (label == 'From') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(
+          context.read<AppointmentCubit>().state.startTime,
+          style: const TextStyle(fontSize: 12),
+        ),
+      );
+    }
+    if (label == 'To') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.endTime,
+            style: const TextStyle(fontSize: 12)),
+      );
+    }
+    return const Text('empty');
+  }
+}
+
+Future datePicker(BuildContext context, String label) async {
+  var dateFormat = DateFormat('yyyy-MM-dd');
+
+  final initDate = DateTime.now();
+  final newDate = await showDatePicker(
+      context: context,
+      initialDate: initDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(DateTime.now().year + 5));
+
+  String formattedDate = dateFormat.format(newDate!);
+
+  // ignore: unnecessary_null_comparison
+  if (newDate == null) return;
+  switch (label) {
+    case 'From':
+      print('from');
+      context.read<AppointmentCubit>().setStartDate(formattedDate);
+      break;
+    case 'To':
+      print('from');
+
+      context.read<AppointmentCubit>().setEndDate(formattedDate);
+
+      break;
+    default:
+      break;
+  }
+  // String formattedDate = dateFormat.format(newDate);
+  // String formattedDate = dateFormat.format(newDate);
+  // context.read<AppointmentCubit>().setStartDate(formattedDate);
+}
+
+
+class DatePickerFeild extends StatelessWidget {
+  const DatePickerFeild({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+                datePicker(context, label);
+              },
+              child: Container(
+                height: 45,
+                width: 80,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: TextContent(
+                    label: label,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ));
+      },
+    );
+  }
+}
+class TextContent extends StatelessWidget {
+  const TextContent({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    if (label == 'From') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(
+          context.read<AppointmentCubit>().state.startDate,
+          style: const TextStyle(fontSize: 12),
+        ),
+      );
+    }
+    if (label == 'To') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.endDate,
+            style: const TextStyle(fontSize: 12)),
+      );
+    }
+    return const Text('empty');
   }
 }
 
@@ -682,12 +829,16 @@ class _DropDownState extends State<DropDown> {
                 onChanged: (val) {
                   setState(() {
                     _selectedText = val.toString();
-                       if (widget.label == 'Type of Visit') {
-                      context.read<AppointmentCubit>().setTypeOfVisit(_selectedText);
+                    if (widget.label == 'Type of Visit') {
+                      context
+                          .read<AppointmentCubit>()
+                          .setTypeOfVisit(_selectedText);
                     }
 
                     if (widget.label == 'Reason for Visit') {
-                      context.read<AppointmentCubit>().setReasonForVisit(_selectedText);
+                      context
+                          .read<AppointmentCubit>()
+                          .setReasonForVisit(_selectedText);
                     }
                   });
                 },

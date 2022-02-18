@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/Forms/AppointmentForm.dart';
+import 'package:onye_front_ened/components/Forms/CreateAppointment.dart';
 import 'package:onye_front_ened/components/Forms/CreateRegistration.dart';
 import 'package:onye_front_ened/components/Forms/RegistrationForm.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Onye',
           routes: {
-            '/': (context) => const HomePage(),
+            '/': (context) => const CreateAppointment(),
             '/login': (context) => const LoginPage(),
             '/dashboard': (context) => const Dashboard(),
             '/dashboard/checkin': (context) => const Checkin(),
@@ -58,6 +59,8 @@ class MyApp extends StatelessWidget {
             '/dashboard/appointment/createAppointment': (context) =>
                 const AppointmentForm(),
                  '/dashboard/appointment/createRegistration':(context)=>const CreateRegistration(),
+                    '/dashboard/appointment/createApppointment': (context) =>const CreateAppointment(),
+
             '/dashboard/registrationForm': (context) =>
                 const RegistrationForm(),
             'dashboard/patient': (context) => const PatientsPage()
