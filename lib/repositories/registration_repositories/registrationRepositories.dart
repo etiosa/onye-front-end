@@ -40,7 +40,6 @@ class RegistrationRepositories {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
         encoding: Encoding.getByName("utf-8"),
         body: json.encode({
@@ -75,7 +74,8 @@ class RegistrationRepositories {
 
   Future<List<dynamic>> getAppointment({String? token}) async {
     //1 Uri
-    var uri = Uri.parse(root + 'api/rest/v1/registration/withAppointment/search');
+    var uri =
+        Uri.parse(root + 'api/rest/v1/registration/withAppointment/search');
 
     //2 http call
     http.Response reponse = await http.get(
@@ -108,5 +108,4 @@ class RegistrationRepositories {
       return body['token'];
     }
   }
-
 }

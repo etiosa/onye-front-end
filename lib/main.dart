@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-             lazy: false,
+            lazy: false,
             create: (_) => LoginCubit(_authRepository),
           ),
           BlocProvider(
@@ -58,9 +58,10 @@ class MyApp extends StatelessWidget {
             '/dashboard/appointment': (context) => const Appointments(),
             '/dashboard/appointment/createAppointment': (context) =>
                 const AppointmentForm(),
-                 '/dashboard/appointment/createRegistration':(context)=>const CreateRegistration(),
-                    '/dashboard/appointment/createApppointment': (context) =>const CreateAppointment(),
-
+            '/dashboard/appointment/createRegistration': (context) =>
+                const CreateRegistration(),
+            '/dashboard/appointment/createApppointment': (context) =>
+                const CreateAppointment(),
             '/dashboard/registrationForm': (context) =>
                 const RegistrationForm(),
             'dashboard/patient': (context) => const PatientsPage()

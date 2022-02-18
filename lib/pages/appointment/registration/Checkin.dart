@@ -302,7 +302,7 @@ class AppointmentConfirmed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appointmentList[selectedIndex]['registrationDateTime'].isNotEmpty) {
+    if (appointmentList[selectedIndex].containsKey('registrationDateTime')) {
       return const Icon(
         Icons.check_circle,
         color: Colors.green,
@@ -331,17 +331,19 @@ class Confirmation extends StatelessWidget {
         style: ButtonStyle(
             elevation: MaterialStateProperty.all(0),
             backgroundColor: MaterialStateProperty.all(
-              appointmentList[selectedIndex]['registrationDateTime'].isEmpty?  
-              const Color.fromARGB(255, 56, 155, 152): Colors.grey),
+                (!appointmentList[selectedIndex]
+                        .containsKey('registrationDateTime'))
+                    ? const Color.fromARGB(255, 56, 155, 152)
+                    : Colors.grey),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
             ))),
         onPressed: () => {
-                appointmentList[selectedIndex]['registrationDateTime'].isEmpty?
-                     showDialogConfirmation(context) :null},
-                     
-          
+          (!appointmentList[selectedIndex].containsKey('registrationDateTime'))
+              ? showDialogConfirmation(context)
+              : null
+        },
         child: const Text('Checkin'),
       ),
     );
@@ -376,7 +378,7 @@ class CheckInPatient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appointmentList[selectedIndex]['registrationDateTime'].isNotEmpty) {
+    if (appointmentList[selectedIndex].containsKey('registrationDateTime')) {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Confirmation(
