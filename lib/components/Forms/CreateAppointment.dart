@@ -508,7 +508,7 @@ class TimeContent extends StatelessWidget {
             style: const TextStyle(fontSize: 12)),
       );
     }
-    return const Text('');
+    return Text(context.read<AppointmentCubit>().state.startTime);
   }
 }
 
@@ -604,7 +604,7 @@ class TextContent extends StatelessWidget {
             style: const TextStyle(fontSize: 12)),
       );
     }
-    return const Text('');
+    return Text(context.read<AppointmentCubit>().state.startDate);
   }
 }
 
