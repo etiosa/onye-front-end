@@ -6,11 +6,6 @@ class RegistrationRepositories {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
-  Future<List> getRegistrations() async {
-    var uri = Uri.parse(root + "api/rest/registration/search");
-    return [];
-  }
-
   Future<void> createNewPatient(
       {String? firstName,
       String? middleName,
@@ -74,8 +69,8 @@ class RegistrationRepositories {
 
   Future<List<dynamic>> getAppointment({String? token}) async {
     //1 Uri
-    var uri =
-        Uri.parse(root + 'api/rest/v1/registration/withAppointment/search');
+    var uri = Uri.parse(root +
+        'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
 
     //2 http call
     http.Response reponse = await http.get(

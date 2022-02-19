@@ -22,7 +22,6 @@ class AppointmentState extends Equatable {
       this.selectedMedicalIndexs = 0,
       this.selectedPatientIndexs = 2,
       this.regState = REGISTRATIONsTATE.inita,
-      this.selectedAppointmentId = '',
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
   final List<dynamic> patientsList;
@@ -42,7 +41,6 @@ class AppointmentState extends Equatable {
   final int selectedPatientIndexs;
   final int selectedMedicalIndexs;
   final REGISTRATIONsTATE regState;
-  final String selectedAppointmentId;
 
   @override
   List<Object> get props => [
@@ -64,7 +62,6 @@ class AppointmentState extends Equatable {
         selectedMedicalIndexs,
         selectedMedicalIndexs,
         regState,
-        selectedAppointmentId,
       ];
 
   AppointmentState copywith({
@@ -100,8 +97,6 @@ class AppointmentState extends Equatable {
         selectedMedicalPeronnelId:
             selectedMedicalPersonnel ?? selectedMedicalPeronnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,
-        selectedAppointmentId:
-            selectedAppointmentId ?? this.selectedAppointmentId,
         searchState: searchstate ?? searchState,
         searchParams: searchParams ?? this.searchParams,
         doctorsList: doctorsList ?? this.doctorsList,

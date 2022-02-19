@@ -47,7 +47,7 @@ class _CheckinState extends State<Checkin> {
                 const Padding(
                   padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
                   child: Text(
-                    'CheckIn',
+                    'Registrations',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -102,7 +102,7 @@ class _CheckinState extends State<Checkin> {
                 ),
                 validator: (String? value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a valid password';
+                    return 'Please enter a valid query';
                   } else {
                     return null;
                   }
@@ -270,6 +270,51 @@ class _AppointmentState extends State<Appointment> {
                                       fontSize: 20,
                                     ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      (state.appointmentList[index].containsKey(
+                                              'appointmentDateTime'))
+                                          ? dateFormat.format(DateTime.parse(
+                                              state.appointmentList[index]
+                                                  ['appointmentDateTime']))
+                                          : dateFormat.format(DateTime.parse(
+                                              state.appointmentList[index]
+                                                  ['registrationDateTime'])),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  20.0, 2.0, 8.0, 2.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Number: ${state.appointmentList[index]['patient']['patientNumber']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Phone: ${state.appointmentList[index]['patient']['phoneNumber']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -344,7 +389,7 @@ class Confirmation extends StatelessWidget {
               ? showDialogConfirmation(context)
               : null
         },
-        child: const Text('Checkin'),
+        child: const Text('Register'),
       ),
     );
   }
@@ -404,25 +449,15 @@ class CheckInPatient extends StatelessWidget {
             onPressed: () {
               context.read<AppointmentCubit>().createRegsitration(
                     token: context.read<LoginCubit>().state.homeToken,
-                    patientID: context
-                        .read<AppointmentCubit>()
-                        .state
-                        .selectedPatientId,
-                    medicalId: context
-                        .read<AppointmentCubit>()
-                        .state
-                        .selectedMedicalPeronnelId,
-                    appointmentId: context
-                        .read<AppointmentCubit>()
-                        .state
-                        .selectedAppointmentId,
-                    reasons:
-                        context.read<AppointmentCubit>().state.resonsForVist,
-                    typofVisit:
-                        context.read<AppointmentCubit>().state.typeOfVist,
+                    patientID: appointmentList[selectedIndex]['patient']['id'],
+                    medicalId: appointmentList[selectedIndex]
+                        ['medicalPersonnel']['id'],
+                    appointmentId: appointmentList[selectedIndex]['id'],
+                    reasons: appointmentList[selectedIndex]['reasonForVisit'],
+                    typofVisit: appointmentList[selectedIndex]['typeOfVisit'],
                   );
             },
-            child: const Text('Create new New registeration')),
+            child: const Text('Register')),
       ),
     );
   }
