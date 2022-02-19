@@ -84,7 +84,7 @@ class AppointmentRepository {
     return doctorsList;
   }
 
-  Future<bool> createRegisteration(
+  Future<http.Response?> createRegisteration(
       {String? token,
       String? patientID,
       String? medicalId,
@@ -93,12 +93,6 @@ class AppointmentRepository {
       String? typofVisit}) async {
     var uri = Uri.parse(root + 'api/rest/v1/registration?zoneId=Africa/Lagos');
     var body;
-    print('token');
-    print(token);
-    print(reasons);
-    print(typofVisit);
-    print(patientID);
-    print(medicalId);
 
     try {
       http.Response response = await http.post(uri,
@@ -116,10 +110,9 @@ class AppointmentRepository {
             "languagePreference": "en"
           }));
 
-      print(response.body);
-      return true;
+      return response;
     } catch (e) {
-      return false;
+      return null;
     }
   }
 }

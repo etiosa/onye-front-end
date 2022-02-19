@@ -1,7 +1,7 @@
 part of 'appointment_cubit.dart';
 
 enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
-enum REGISTRATIONsTATE { inita, sucessful, inprogress, failed }
+enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
 
 class AppointmentState extends Equatable {
   const AppointmentState(
@@ -21,7 +21,8 @@ class AppointmentState extends Equatable {
       this.typeOfVist = '',
       this.selectedMedicalIndexs = 0,
       this.selectedPatientIndexs = 2,
-      this.regState = REGISTRATIONsTATE.inita,
+      this.regState = REGISTRATIONSTATE.inita,
+      this.selectedAppointmentId = '',
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
   final List<dynamic> patientsList;
@@ -40,7 +41,8 @@ class AppointmentState extends Equatable {
   final String resonsForVist;
   final int selectedPatientIndexs;
   final int selectedMedicalIndexs;
-  final REGISTRATIONsTATE regState;
+  final REGISTRATIONSTATE regState;
+  final selectedAppointmentId;
 
   @override
   List<Object> get props => [
@@ -62,6 +64,7 @@ class AppointmentState extends Equatable {
         selectedMedicalIndexs,
         selectedMedicalIndexs,
         regState,
+        selectedAppointmentId,
       ];
 
   AppointmentState copywith({
@@ -76,7 +79,7 @@ class AppointmentState extends Equatable {
     String? selectedPatientId,
     String? selectedMedicalPersonnel,
     SEARCHSTATE? searchstate,
-    REGISTRATIONsTATE? regstate,
+    REGISTRATIONSTATE? regstate,
     String? endDate,
     String? typeOfVisit,
     String? reasonForVisit,
@@ -97,6 +100,8 @@ class AppointmentState extends Equatable {
         selectedMedicalPeronnelId:
             selectedMedicalPersonnel ?? selectedMedicalPeronnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,
+        selectedAppointmentId:
+            selectedAppointmentId ?? this.selectedAppointmentId,
         searchState: searchstate ?? searchState,
         searchParams: searchParams ?? this.searchParams,
         doctorsList: doctorsList ?? this.doctorsList,
