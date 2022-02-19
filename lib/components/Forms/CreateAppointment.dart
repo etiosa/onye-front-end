@@ -358,48 +358,29 @@ class RegisterField extends StatelessWidget {
                     'Check Up',
                     'Consultation'
                   ]),
-                 
-                   
                   const SizedBox(
                     height: 30,
                   ),
-                      Row(
-                       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          DatePickerFeild(
-                            label: 'From',
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          DateTimePickerFeild(
-                            label: 'From',
-                          ),
-                        ],
-                      ),
-                         const  SizedBox(
-                        width: 5,
-                      ),
-                    
-                      const SizedBox(
-                    height: 30,
-                        ),
-                
-                    Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
                       DatePickerFeild(
-                        label: 'To',
+                        label: 'Date',
                       ),
                       SizedBox(
                         width: 5,
                       ),
                       DateTimePickerFeild(
-                        label: 'To',
+                        label: 'Time',
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  const SizedBox(
+                    height: 30,
                   ),
                   const SizedBox(height: 25),
                   Padding(
@@ -414,15 +395,6 @@ class RegisterField extends StatelessWidget {
                                 const Color.fromARGB(255, 56, 155, 152)),
                           ),
                           onPressed: () {
-                            print(context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedMedicalPeronnelId);
-
-                            print(context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedPatientId);
                             if (context
                                     .read<AppointmentCubit>()
                                     .state
@@ -433,16 +405,6 @@ class RegisterField extends StatelessWidget {
                                     .state
                                     .selectedPatientId
                                     .isNotEmpty) {
-                              print("inside submit if");
-                              print(context
-                                  .read<AppointmentCubit>()
-                                  .state
-                                  .typeOfVist);
-                              print(context
-                                  .read<AppointmentCubit>()
-                                  .state
-                                  .resonsForVist);
-/* 
                               context
                                   .read<AppointmentCubit>()
                                   .createRegsitration(
@@ -465,7 +427,7 @@ class RegisterField extends StatelessWidget {
                                       reasons: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .resonsForVist); */
+                                          .resonsForVist);
                             }
                           },
                           child: const Text('Submit')),
@@ -485,21 +447,7 @@ Future dateTimePicker(BuildContext context, String label) async {
   if (newTime == null) return;
   String formatTime = newTime.format(context);
 
-  switch (label) {
-    case 'From':
-      print('from');
-      context.read<AppointmentCubit>().setStartTime(formatTime);
-      break;
-    case 'To':
-      print('from');
-
-      context.read<AppointmentCubit>().setEndTime(formatTime);
-
-      break;
-    default:
-      break;
-  }
-  print(newTime.format(context));
+  context.read<AppointmentCubit>().setStartTime(formatTime);
 }
 
 class DateTimePickerFeild extends StatelessWidget {
@@ -529,7 +477,7 @@ class DateTimePickerFeild extends StatelessWidget {
               },
               child: Container(
                 height: 45,
-                width: 80,
+                width: 100,
                 color: const Color.fromARGB(255, 205, 226, 226),
                 child: Padding(
                     padding: EdgeInsets.all(1.0),
@@ -567,7 +515,7 @@ class TimeContent extends StatelessWidget {
             style: const TextStyle(fontSize: 12)),
       );
     }
-    return const Text('empty');
+    return const Text('');
   }
 }
 
@@ -587,21 +535,15 @@ Future datePicker(BuildContext context, String label) async {
   if (newDate == null) return;
   switch (label) {
     case 'From':
-      print('from');
       context.read<AppointmentCubit>().setStartDate(formattedDate);
       break;
     case 'To':
-      print('from');
-
       context.read<AppointmentCubit>().setEndDate(formattedDate);
 
       break;
     default:
       break;
   }
-  // String formattedDate = dateFormat.format(newDate);
-  // String formattedDate = dateFormat.format(newDate);
-  // context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
 class DatePickerFeild extends StatelessWidget {
@@ -630,7 +572,7 @@ class DatePickerFeild extends StatelessWidget {
               },
               child: Container(
                 height: 45,
-                width: 80,
+                width: 100,
                 color: const Color.fromARGB(255, 205, 226, 226),
                 child: Padding(
                   padding: const EdgeInsets.all(1.0),
@@ -669,7 +611,7 @@ class TextContent extends StatelessWidget {
             style: const TextStyle(fontSize: 12)),
       );
     }
-    return const Text('empty');
+    return const Text('');
   }
 }
 

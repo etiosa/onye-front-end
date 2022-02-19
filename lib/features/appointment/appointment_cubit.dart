@@ -119,9 +119,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? appointmentId,
       String? reasons,
       String? typofVisit}) async {
-    print(reasons);
-    print(typofVisit);
-
     final bool reg = await _appointmentRepository.createRegisteration(
         token: token,
         patientID: patientID,

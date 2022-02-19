@@ -84,6 +84,40 @@ class AppointmentRepository {
     return doctorsList;
   }
 
+  Future<bool> createAppointmeent(
+      {String? token,
+      String? patientID,
+      String? medicalId,
+      String? appointmentId,
+      String? dateTime,
+      String? reasons,
+      String? typofVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment?zoneId=Africa/Lagos ');
+
+    var body;
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "appointmentDateTime": "2022-02-20T11:30:00.000Z",
+            "minDuration": 30,
+            "typeOfVisit": reasons,
+            "reasonForVisit": typofVisit,
+            "languagePreference": "en"
+          }));
+
+      print(response.body);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> createRegisteration(
       {String? token,
       String? patientID,
@@ -93,12 +127,6 @@ class AppointmentRepository {
       String? typofVisit}) async {
     var uri = Uri.parse(root + 'api/rest/v1/registration?zoneId=Africa/Lagos');
     var body;
-    print('token');
-    print(token);
-    print(reasons);
-    print(typofVisit);
-    print(patientID);
-    print(medicalId);
 
     try {
       http.Response response = await http.post(uri,

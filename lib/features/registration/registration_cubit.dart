@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
+import 'package:onye_front_ened/features/schedule/cubit/shcedule_cubit.dart';
 import 'package:onye_front_ened/repositories/registration_repositories/registrationRepositories.dart';
 
 part 'registration_state.dart';
@@ -118,8 +120,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copywith(zipCode: zipcode));
   }
 
-  void register() async {
-    await _registrationRepositories.createNewPatient(
+  void register({String? token}) async {
+    emit(state.copywith(
+        registrationFormState: RegistrationFormState.inprogress));
+    var createdPatientData = await _registrationRepositories.createNewPatient(
+        token: token,
         firstName: state.firstName,
         middleName: state.middleName,
         lastName: state.lastName,
@@ -139,12 +144,19 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         addressLine2: state.addressLine2,
         dateOfBirth: state.dateOfBirth,
         countryCode: state.countryCode);
+
+    setCreatedPatientData(createdPatientData);
+  }
+
+  void setCreatedPatientData(dynamic data) {
+    emit(state.copywith(
+        createdPatientData: data,
+        registrationFormState: RegistrationFormState.scuessful));
   }
 
   void getAppointments({String? token}) async {
     var appointList =
         await _registrationRepositories.getAppointment(token: token);
-    print(appointList);
     emit(state.copywith(appointmentList: appointList));
   }
 }

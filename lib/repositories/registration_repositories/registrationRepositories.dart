@@ -6,7 +6,7 @@ class RegistrationRepositories {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
-  Future<void> createNewPatient(
+  Future<dynamic> createNewPatient(
       {String? firstName,
       String? middleName,
       String? lastName,
@@ -27,7 +27,8 @@ class RegistrationRepositories {
       String? contactPreference,
       String? emergencyContactPhoneNumber,
       String? emergencyContactRelationship,
-      String? emergencyContactName}) async {
+      String? emergencyContactName,
+      String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/patient");
     final body;
 
@@ -35,6 +36,7 @@ class RegistrationRepositories {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
         },
         encoding: Encoding.getByName("utf-8"),
         body: json.encode({
@@ -64,6 +66,7 @@ class RegistrationRepositories {
           "aliveStatus": {"deceased": false}
         }));
     body = jsonDecode(reponse.body);
+    return body;
     print(body);
   }
 

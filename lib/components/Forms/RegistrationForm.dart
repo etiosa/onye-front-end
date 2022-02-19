@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
 class RegistrationForm extends StatefulWidget {
@@ -21,6 +22,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+      //redirect to home
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Navigator.of(context).pushNamed("/dashboard");
+      });
+    }
   }
 
   @override
@@ -1077,6 +1084,18 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
         builder: (context, state) {
+      //redirect  after patient is created
+      if (state.registrationFormState == RegistrationFormState.scuessful) {
+        print('Sucessful created');
+      }
+
+      if (state.registrationFormState == RegistrationFormState.inprogress) {
+        print('inprogress');
+      }
+
+      if (state.registrationFormState == RegistrationFormState.fail) {
+        print('failed');
+      }
       return Container(
         width: 320,
         height: 45,
@@ -1093,7 +1112,8 @@ class _SubmitButton extends StatelessWidget {
             child: const Text('Submit'),
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                context.read<RegistrationCubit>().register();
+                context.read<RegistrationCubit>().register(
+                    token: context.read<LoginCubit>().state.homeToken);
               }
             },
           ),

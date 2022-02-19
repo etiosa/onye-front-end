@@ -1,6 +1,6 @@
 part of 'registration_cubit.dart';
 
-enum RegistrationFormState { init, fail, scuessful }
+enum RegistrationFormState { init, fail, scuessful, inprogress }
 
 //TODO: Refactor
 class RegistrationState extends Equatable {
@@ -29,7 +29,8 @@ class RegistrationState extends Equatable {
       this.emergencyContactPhoneNumber = '',
       this.emergencyContactRelationship = '',
       this.contactPrefernce = '',
-      this.token='',
+      this.token = '',
+      this.createdPatientData = const {},
       this.registrationFormState = RegistrationFormState.init});
 
 //selcted value
@@ -57,6 +58,7 @@ class RegistrationState extends Equatable {
   final String emergencyContactName;
   final List<dynamic> appointmentList;
   final Map<String, dynamic> allOptions;
+  final dynamic createdPatientData;
   final RegistrationFormState registrationFormState;
   final String emergencyContactPhoneNumber;
 
@@ -84,7 +86,8 @@ class RegistrationState extends Equatable {
         emergencyContactName,
         emergencyContactPhoneNumber,
         emergencyContactRelationship,
-        contactPrefernce
+        contactPrefernce,
+        createdPatientData
       ];
 
   RegistrationState copywith(
@@ -109,6 +112,7 @@ class RegistrationState extends Equatable {
       String? addressLine1,
       String? addressLine2,
       String? zipCode,
+      dynamic? createdPatientData,
       String? emergencyContactRelationship,
       String? city,
       String? addressLine4,
@@ -116,7 +120,8 @@ class RegistrationState extends Equatable {
       RegistrationFormState? registrationFormState,
       String? contactPreferences}) {
     return RegistrationState(
-      token: toke?? token,
+        token: toke ?? token,
+        createdPatientData: createdPatientData ?? this.createdPatientData,
         firstName: firstName ?? this.firstName,
         emergencyContactName: emergencyContactName ?? this.emergencyContactName,
         ethnicity: ethnicity ?? this.ethnicity,
