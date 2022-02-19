@@ -109,7 +109,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   void setSelectedPatientIndex(int? argSelectedIndex) {
     final int selectedIndex = argSelectedIndex!;
-    print('emit patient: $argSelectedIndex');
 
     emit(state.copywith(selctedPatientIndex: selectedIndex));
   }
@@ -142,6 +141,10 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? reasonForVisit,
       String? languagePreference}) async {
     await _appointmentRepository.CreateAppointment(
-        token: token, typofVisit: typeOfVisit, reasons: reasonForVisit);
+        patientID: patientID,
+        medicalId: medicalId,
+        token: token,
+        typofVisit: typeOfVisit,
+        reasons: reasonForVisit);
   }
 }

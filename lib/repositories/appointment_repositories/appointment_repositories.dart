@@ -62,7 +62,6 @@ class AppointmentRepository {
 
   Future<List<dynamic>> getDoctorList(
       {String? searchParams, String? token}) async {
-    print(searchParams);
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
@@ -140,8 +139,8 @@ class AppointmentRepository {
             "typeOfVisit": typofVisit,
             "reasonForVisit": reasons,
             "languagePreference": "en",
-            medicalId: medicalId,
-            patientID: patientID
+            'patientId': patientID,
+            'medicalPersonnelId': medicalId
           }));
 
       return true;

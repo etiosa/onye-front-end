@@ -429,10 +429,6 @@ class RegisterField extends StatelessWidget {
                                           .state
                                           .typeOfVist);
                             }
-                            print(context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedPatientId);
                           },
                           child: const Text('Submit')),
                     ),
