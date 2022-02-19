@@ -138,5 +138,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       int? minDuration,
       String? typeOfVisit,
       String? reasonForVisit,
-      String? languagePreference}) async {}
+      String? languagePreference}) async {
+    await _appointmentRepository.CreateAppointment(
+        typofVisit: typeOfVisit, reasons: reasonForVisit);
+  }
 }
