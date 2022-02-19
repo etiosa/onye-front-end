@@ -408,6 +408,14 @@ class RegisterField extends StatelessWidget {
                               context
                                   .read<AppointmentCubit>()
                                   .createAppointmenmt(
+                                      patientID: context
+                                          .read<AppointmentCubit>()
+                                          .state
+                                          .selectedPatientId,
+                                      medicalId: context
+                                          .read<AppointmentCubit>()
+                                          .state
+                                          .selectedMedicalPeronnelId,
                                       token: context
                                           .read<LoginCubit>()
                                           .state
@@ -421,6 +429,10 @@ class RegisterField extends StatelessWidget {
                                           .state
                                           .typeOfVist);
                             }
+                            print(context
+                                .read<AppointmentCubit>()
+                                .state
+                                .selectedPatientId);
                           },
                           child: const Text('Submit')),
                     ),

@@ -134,6 +134,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   Future<void> createAppointmenmt(
       {String? appointmentDateTime,
+      String? patientID,
+      String? medicalId,
       String? token,
       int? minDuration,
       String? typeOfVisit,

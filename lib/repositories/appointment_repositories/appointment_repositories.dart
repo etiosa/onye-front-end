@@ -139,7 +139,9 @@ class AppointmentRepository {
             "minDuration": 30,
             "typeOfVisit": typofVisit,
             "reasonForVisit": reasons,
-            "languagePreference": "en"
+            "languagePreference": "en",
+            medicalId: medicalId,
+            patientID: patientID
           }));
 
       return true;
