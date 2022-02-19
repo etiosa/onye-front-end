@@ -115,4 +115,36 @@ class AppointmentRepository {
       return null;
     }
   }
+
+  // ignore: non_constant_identifier_names
+  Future<bool> CreateAppointment(
+      {String? token,
+      String? patientID,
+      String? medicalId,
+      String? appointmentId,
+      String? reasons,
+      String? typofVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment?zoneId=Africa/Lagos');
+    var body;
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "appointmentDateTime": "2022-02-20T11:30:00.000Z",
+            "minDuration": 30,
+            "typeOfVisit": typofVisit,
+            "reasonForVisit": reasons,
+            "languagePreference": "en"
+          }));
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

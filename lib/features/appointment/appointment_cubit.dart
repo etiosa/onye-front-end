@@ -131,4 +131,12 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
     return req;
   }
+
+  Future<void> createAppointmenmt(
+      {String? appointmentDateTime,
+      String? token,
+      int? minDuration,
+      String? typeOfVisit,
+      String? reasonForVisit,
+      String? languagePreference}) async {}
 }

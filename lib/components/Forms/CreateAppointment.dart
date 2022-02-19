@@ -407,27 +407,19 @@ class RegisterField extends StatelessWidget {
                                     .isNotEmpty) {
                               context
                                   .read<AppointmentCubit>()
-                                  .createRegsitration(
+                                  .createAppointmenmt(
                                       token: context
                                           .read<LoginCubit>()
                                           .state
                                           .homeToken,
-                                      medicalId: context
+                                      reasonForVisit: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .selectedMedicalPeronnelId,
-                                      patientID: context
+                                          .resonsForVist,
+                                      typeOfVisit: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .selectedPatientId,
-                                      typofVisit: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .typeOfVist,
-                                      reasons: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .resonsForVist);
+                                          .typeOfVist);
                             }
                           },
                           child: const Text('Submit')),
@@ -448,6 +440,7 @@ Future dateTimePicker(BuildContext context, String label) async {
   String formatTime = newTime.format(context);
 
   context.read<AppointmentCubit>().setStartTime(formatTime);
+  print(context.read<AppointmentCubit>().state.startTime);
 }
 
 class DateTimePickerFeild extends StatelessWidget {
