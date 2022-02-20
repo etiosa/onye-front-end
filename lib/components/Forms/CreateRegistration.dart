@@ -4,6 +4,8 @@ import 'package:http/http.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/pages/Home/home.dart';
+import 'package:onye_front_ened/pages/appointment/registration/Checkin.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CreateRegistration extends StatefulWidget {
@@ -400,7 +402,12 @@ class RegisterField extends StatelessWidget {
                                         value.statusCode == 201)
                                       {
                                         Navigator.of(context)
-                                            .pushNamed('/dashboard/checkin')
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        const Checkin())),
+                                                ModalRoute.withName(
+                                                    '/dashboard'))
                                       }
                                   });
                             }
