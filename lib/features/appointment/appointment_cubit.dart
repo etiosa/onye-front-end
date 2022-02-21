@@ -131,7 +131,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     return req;
   }
 
-  Future<void> createAppointmenmt(
+  Future<Response?> createAppointmenmt(
       {String? appointmentDateTime,
       String? patientID,
       String? medicalId,
@@ -140,11 +140,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? typeOfVisit,
       String? reasonForVisit,
       String? languagePreference}) async {
-    await _appointmentRepository.CreateAppointment(
+    Response? req = await _appointmentRepository.CreateAppointment(
         patientID: patientID,
         medicalId: medicalId,
         token: token,
         typofVisit: typeOfVisit,
         reasons: reasonForVisit);
+
+    return req;
   }
 }

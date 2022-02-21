@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/pages/appointment/Appointments.dart';
+import 'package:onye_front_ened/pages/appointment/registration/Checkin.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
 
@@ -405,7 +407,7 @@ class RegisterField extends StatelessWidget {
                                     .state
                                     .selectedPatientId
                                     .isNotEmpty) {
-                              context
+                              var response = context
                                   .read<AppointmentCubit>()
                                   .createAppointmenmt(
                                       patientID: context
@@ -428,6 +430,20 @@ class RegisterField extends StatelessWidget {
                                           .read<AppointmentCubit>()
                                           .state
                                           .typeOfVist);
+
+                              response.then((value) => {
+                                    if (value != null &&
+                                        value.statusCode == 201)
+                                      {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        const Appointments())),
+                                                ModalRoute.withName(
+                                                    '/dashboard'))
+                                      }
+                                  });
                             }
                           },
                           child: const Text('Submit')),

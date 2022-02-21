@@ -116,7 +116,7 @@ class AppointmentRepository {
   }
 
   // ignore: non_constant_identifier_names
-  Future<bool> CreateAppointment(
+  Future<http.Response?> CreateAppointment(
       {String? token,
       String? patientID,
       String? medicalId,
@@ -143,9 +143,9 @@ class AppointmentRepository {
             'medicalPersonnelId': medicalId
           }));
 
-      return true;
+      return response;
     } catch (e) {
-      return false;
+      return null;
     }
   }
 }
