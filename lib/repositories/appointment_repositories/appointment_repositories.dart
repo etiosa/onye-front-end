@@ -124,7 +124,6 @@ class AppointmentRepository {
       String? reasons,
       String? typofVisit}) async {
     var uri = Uri.parse(root + 'api/rest/v1/appointment?zoneId=Africa/Lagos');
-    var body;
 
     try {
       http.Response response = await http.post(uri,

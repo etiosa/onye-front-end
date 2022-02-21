@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/pages/Home/home.dart';
+import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({Key? key, this.restorationId}) : super(key: key);
@@ -282,7 +284,7 @@ class DatePickerFeild extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    state.dateOfBirth,
+                    state.dateOfBirth!,
                     style: const TextStyle(fontFamily: 'poppins'),
                   ),
                 ),
@@ -1010,12 +1012,6 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a valid name';
-              }
-              return null;
-            },
           ),
         ),
         const SizedBox(height: 10),
@@ -1036,12 +1032,6 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a phone number';
-              }
-              return null;
-            },
           ),
         ),
         const SizedBox(height: 10),
@@ -1062,12 +1052,6 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a valid relationship';
-              }
-              return null;
-            },
           ),
         ),
       ],
@@ -1084,18 +1068,6 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
         builder: (context, state) {
-      //redirect  after patient is created
-      if (state.registrationFormState == RegistrationFormState.scuessful) {
-        print('Sucessful created');
-      }
-
-      if (state.registrationFormState == RegistrationFormState.inprogress) {
-        print('inprogress');
-      }
-
-      if (state.registrationFormState == RegistrationFormState.fail) {
-        print('failed');
-      }
       return Container(
         width: 320,
         height: 45,
@@ -1112,8 +1084,18 @@ class _SubmitButton extends StatelessWidget {
             child: const Text('Submit'),
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                context.read<RegistrationCubit>().register(
+                var response = context.read<RegistrationCubit>().register(
                     token: context.read<LoginCubit>().state.homeToken);
+
+                response.then((value) => {
+                      if (value != null && value.statusCode == 201)
+                        {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: ((context) => const Dashboard())),
+                              ModalRoute.withName('/dashboard'))
+                        }
+                    });
               }
             },
           ),

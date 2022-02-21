@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
+import 'package:http/http.dart';
 import 'package:onye_front_ened/features/schedule/cubit/shcedule_cubit.dart';
 import 'package:onye_front_ened/repositories/registration_repositories/registrationRepositories.dart';
 
@@ -11,7 +11,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   RegistrationCubit(this._registrationRepositories)
       : super(const RegistrationState(
-            educationLevel: "", gender: "", religion: ""));
+            dateOfBirth: "",
+            educationLevel: "",
+            gender: "",
+            religion: "",
+            ethnicity: ""));
 
   void setFirstName(String? argFirstName) {
     final String firstName = argFirstName!;
@@ -39,7 +43,6 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }
 
   void setReligion(String? argReligion) {
-    print(argReligion);
     final String religion = argReligion!;
     emit(state.copywith(religion: religion));
   }
@@ -86,7 +89,6 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   void setCountryCode(String? argCountryCode) {
     final String? countryCode = argCountryCode!;
-    print(argCountryCode);
     emit(state.copywith(countryCode: countryCode));
   }
 
@@ -120,10 +122,8 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copywith(zipCode: zipcode));
   }
 
-  void register({String? token}) async {
-    emit(state.copywith(
-        registrationFormState: RegistrationFormState.inprogress));
-    var createdPatientData = await _registrationRepositories.createNewPatient(
+  Future<Response?> register({String? token}) async {
+    Response? response = await _registrationRepositories.createNewPatient(
         token: token,
         firstName: state.firstName,
         middleName: state.middleName,
@@ -145,13 +145,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         dateOfBirth: state.dateOfBirth,
         countryCode: state.countryCode);
 
-    setCreatedPatientData(createdPatientData);
-  }
-
-  void setCreatedPatientData(dynamic data) {
-    emit(state.copywith(
-        createdPatientData: data,
-        registrationFormState: RegistrationFormState.scuessful));
+    return response;
   }
 
   void getAppointments({String? token}) async {

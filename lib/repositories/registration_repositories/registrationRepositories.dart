@@ -6,7 +6,7 @@ class RegistrationRepositories {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
-  Future<dynamic> createNewPatient(
+  Future<http.Response?> createNewPatient(
       {String? firstName,
       String? middleName,
       String? lastName,
@@ -31,43 +31,57 @@ class RegistrationRepositories {
       String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/patient");
     final body;
+    var address = null;
+    if (addressLine1 != null) {
+      address = json.encode({
+        "line1": addressLine1,
+        "line2": addressLine2,
+        "line3": addressLine3,
+        "line4": addressLine4,
+        "zipCode": zipCode,
+        "city": city,
+        "countryCode": countryCode
+      });
+    }
 
-    http.Response reponse = await http.post(uri,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        encoding: Encoding.getByName("utf-8"),
-        body: json.encode({
-          "firstName": firstName,
-          "lastName": lastName,
-          "dateOfBirth": dateOfBirth,
-          "middleName": middleName,
-          "gender": gender,
-          "religion": religion,
-          "phoneNumber": phoneNumber,
-          "email": email,
-          "contactPreference": contactPreference,
-          "ethnicity": ethnicity,
-          "educationLevel": educationLevel,
-          "countryCode": countryCode,
-          "address": {
-            "line1": addressLine1,
-            "zipCode": zipCode,
-            "city": city,
-            "countryCode": countryCode
+    var emergencyContact = null;
+    if (emergencyContactName != null) {
+      emergencyContact = json.encode({
+        "name": emergencyContactName,
+        "phoneNumber": emergencyContactPhoneNumber,
+        "relationship": emergencyContactRelationship
+      });
+    }
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
           },
-          "emergencyContact": {
-            "name": emergencyContactName,
-            "phoneNumber": emergencyContactPhoneNumber,
-            "relationship": emergencyContactRelationship
-          },
-          "aliveStatus": {"deceased": false}
-        }));
-    body = jsonDecode(reponse.body);
-    return body;
-    print(body);
+          encoding: Encoding.getByName("utf-8"),
+          body: json.encode({
+            "firstName": firstName,
+            "lastName": lastName,
+            "dateOfBirth": dateOfBirth,
+            "middleName": middleName,
+            "gender": gender,
+            "religion": religion,
+            "phoneNumber": phoneNumber,
+            "email": email,
+            "contactPreference": contactPreference,
+            "ethnicity": ethnicity,
+            "educationLevel": educationLevel,
+            "countryCode": countryCode,
+            "address": address,
+            "emergencyContact": emergencyContact,
+            "aliveStatus": {"deceased": false}
+          }));
+      return response;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<List<dynamic>> getAppointment({String? token}) async {
