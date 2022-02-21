@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
-import 'package:onye_front_ened/pages/Home/home.dart';
+import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 
 class RegistrationForm extends StatefulWidget {
@@ -1090,10 +1090,25 @@ class _SubmitButton extends StatelessWidget {
                 response.then((value) => {
                       if (value != null && value.statusCode == 201)
                         {
+                          Messages.showMessage(
+                              const Icon(
+                                IconData(0xf635, fontFamily: 'MaterialIcons'),
+                                color: Colors.green,
+                              ),
+                              'Patient created'),
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: ((context) => const Dashboard())),
                               ModalRoute.withName('/dashboard'))
+                        }
+                      else if (value != null && value.statusCode == 400)
+                        {
+                          Messages.showMessage(
+                              const Icon(
+                                IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                color: Colors.red,
+                              ),
+                              'Could not create patient'),
                         }
                     });
               }

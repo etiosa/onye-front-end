@@ -32,7 +32,10 @@ class RegistrationRepositories {
     var uri = Uri.parse(root + "api/rest/v1/patient");
     final body;
     var address;
-    if (addressLine1 != null) {
+    if (addressLine1 != null &&
+        zipCode != null &&
+        city != null &&
+        countryCode != null) {
       address = json.encode({
         "line1": addressLine1,
         "line2": addressLine2,
@@ -45,7 +48,9 @@ class RegistrationRepositories {
     }
 
     var emergencyContact;
-    if (emergencyContactName != null) {
+    if (emergencyContactName != null &&
+        emergencyContactPhoneNumber != null &&
+        emergencyContactRelationship != null) {
       emergencyContact = json.encode({
         "name": emergencyContactName,
         "phoneNumber": emergencyContactPhoneNumber,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
@@ -459,7 +458,7 @@ class RegisterField extends StatelessWidget {
                                                   fontFamily: 'MaterialIcons'),
                                               color: Colors.red,
                                             ),
-                                            'Appointment could not be created'),
+                                            'Could not create appointment'),
                                       }
                                   });
                             }

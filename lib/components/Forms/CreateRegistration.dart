@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
-import 'package:onye_front_ened/features/registration/registration_cubit.dart';
-import 'package:onye_front_ened/pages/Home/home.dart';
+import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/appointment/registration/Checkin.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -401,6 +399,13 @@ class RegisterField extends StatelessWidget {
                                     if (value != null &&
                                         value.statusCode == 201)
                                       {
+                                        Messages.showMessage(
+                                            const Icon(
+                                              IconData(0xf635,
+                                                  fontFamily: 'MaterialIcons'),
+                                              color: Colors.green,
+                                            ),
+                                            'Registration created'),
                                         Navigator.of(context)
                                             .pushAndRemoveUntil(
                                                 MaterialPageRoute(
@@ -408,6 +413,17 @@ class RegisterField extends StatelessWidget {
                                                         const Checkin())),
                                                 ModalRoute.withName(
                                                     '/dashboard'))
+                                      }
+                                    else if (value != null &&
+                                        value.statusCode == 400)
+                                      {
+                                        Messages.showMessage(
+                                            const Icon(
+                                              IconData(0xe237,
+                                                  fontFamily: 'MaterialIcons'),
+                                              color: Colors.red,
+                                            ),
+                                            'Could not create registration'),
                                       }
                                   });
                             }
