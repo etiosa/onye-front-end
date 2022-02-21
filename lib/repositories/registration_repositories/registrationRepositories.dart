@@ -31,7 +31,7 @@ class RegistrationRepositories {
       String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/patient");
     final body;
-    var address = null;
+    var address;
     if (addressLine1 != null) {
       address = json.encode({
         "line1": addressLine1,
@@ -44,7 +44,7 @@ class RegistrationRepositories {
       });
     }
 
-    var emergencyContact = null;
+    var emergencyContact;
     if (emergencyContactName != null) {
       emergencyContact = json.encode({
         "name": emergencyContactName,
@@ -63,9 +63,9 @@ class RegistrationRepositories {
           encoding: Encoding.getByName("utf-8"),
           body: json.encode({
             "firstName": firstName,
+            "middleName": middleName,
             "lastName": lastName,
             "dateOfBirth": dateOfBirth,
-            "middleName": middleName,
             "gender": gender,
             "religion": religion,
             "phoneNumber": phoneNumber,

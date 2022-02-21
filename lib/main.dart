@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/Forms/AppointmentForm.dart';
 import 'package:onye_front_ened/components/Forms/CreateAppointment.dart';
 import 'package:onye_front_ened/components/Forms/CreateRegistration.dart';
@@ -35,39 +36,41 @@ class MyApp extends StatelessWidget {
         AppointmentRepository();
 
     return RepositoryProvider(
-      create: (_) => _authRepository,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            lazy: false,
-            create: (_) => LoginCubit(_authRepository),
+        create: (_) => _authRepository,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              lazy: false,
+              create: (_) => LoginCubit(_authRepository),
+            ),
+            BlocProvider(
+              create: (_) => RegistrationCubit(_registerRepository),
+            ),
+            BlocProvider(
+                create: (_) => AppointmentCubit(_appointmentRepository))
+          ],
+          child: OKToast(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Onye',
+              routes: {
+                '/': (context) => const HomePage(),
+                '/login': (context) => const LoginPage(),
+                '/dashboard': (context) => const Dashboard(),
+                '/dashboard/checkin': (context) => const Checkin(),
+                '/dashboard/appointment': (context) => const Appointments(),
+                '/dashboard/appointment/createAppointment': (context) =>
+                    const AppointmentForm(),
+                '/dashboard/appointment/createRegistration': (context) =>
+                    const CreateRegistration(),
+                '/dashboard/appointment/createApppointment': (context) =>
+                    const CreateAppointment(),
+                '/dashboard/registrationForm': (context) =>
+                    const RegistrationForm(),
+                'dashboard/patient': (context) => const PatientsPage()
+              },
+            ),
           ),
-          BlocProvider(
-            create: (_) => RegistrationCubit(_registerRepository),
-          ),
-          BlocProvider(create: (_) => AppointmentCubit(_appointmentRepository))
-        ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Onye',
-          routes: {
-            '/': (context) => const HomePage(),
-            '/login': (context) => const LoginPage(),
-            '/dashboard': (context) => const Dashboard(),
-            '/dashboard/checkin': (context) => const Checkin(),
-            '/dashboard/appointment': (context) => const Appointments(),
-            '/dashboard/appointment/createAppointment': (context) =>
-                const AppointmentForm(),
-            '/dashboard/appointment/createRegistration': (context) =>
-                const CreateRegistration(),
-            '/dashboard/appointment/createApppointment': (context) =>
-                const CreateAppointment(),
-            '/dashboard/registrationForm': (context) =>
-                const RegistrationForm(),
-            'dashboard/patient': (context) => const PatientsPage()
-          },
-        ),
-      ),
-    );
+        ));
   }
 }
