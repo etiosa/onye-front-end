@@ -19,13 +19,10 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     var appointments = await _appointmentRepository.getAppointmentList(
         token: token, searchParams: state.searchParams);
     emit(state.copywith(appointmentList: appointments));
-    if(state.appointmentList.isEmpty){
-          emit(state.copywith(searchstate: SEARCHSTATE.notFound));
-
-    }
-    else{
-                emit(state.copywith(searchstate: SEARCHSTATE.sucessful));
-
+    if (state.appointmentList.isEmpty) {
+      emit(state.copywith(searchstate: SEARCHSTATE.notFound));
+    } else {
+      emit(state.copywith(searchstate: SEARCHSTATE.sucessful));
     }
   }
 
@@ -138,11 +135,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     var registerationList = await _appointmentRepository.getRegisterations(
         token: token, searchParams: searchParams);
     emit(state.copywith(registerationList: registerationList));
+    print(registerationList);
 
     if (state.registerationList.isEmpty) {
       emit(state.copywith(searchstate: SEARCHSTATE.notFound));
     } else {
       emit(state.copywith(searchstate: SEARCHSTATE.sucessful));
+      //emit(state.copywith(registerationList: registerationList));
+
     }
   }
 
@@ -162,8 +162,17 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       int? minDuration,
       String? typeOfVisit,
       String? reasonForVisit,
+      String? date,
+      String? time,
       String? languagePreference}) async {
+    String Date = date!;
+    String Time = time!;
+    var inputFormat = DateFormat('yyyy-dd-MM hh:mm a');
+    var timedate = inputFormat.parse(Date + ' ' + Time, true);
+    print(timedate.toIso8601String());
+
     Response? req = await _appointmentRepository.CreateAppointment(
+        date: timedate.toIso8601String(),
         patientID: patientID,
         medicalId: medicalId,
         token: token,

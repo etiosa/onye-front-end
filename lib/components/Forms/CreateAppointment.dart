@@ -25,12 +25,12 @@ class _CreateAppointmentState extends State<CreateAppointment> {
   void initState() {
     // TODO: implement initState
     super.initState();
-       if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
-    } 
+    }
   }
 
   @override
@@ -409,6 +409,14 @@ class RegisterField extends StatelessWidget {
                               var response = context
                                   .read<AppointmentCubit>()
                                   .createAppointmenmt(
+                                      date: context
+                                          .read<AppointmentCubit>()
+                                          .state
+                                          .startDate,
+                                      time: context
+                                          .read<AppointmentCubit>()
+                                          .state
+                                          .startTime,
                                       patientID: context
                                           .read<AppointmentCubit>()
                                           .state
@@ -479,9 +487,9 @@ Future dateTimePicker(BuildContext context, String label) async {
       await showTimePicker(context: context, initialTime: TimeOfDay.now());
   if (newTime == null) return;
   String formatTime = newTime.format(context);
+  print(newTime);
 
   context.read<AppointmentCubit>().setStartTime(formatTime);
-  print(context.read<AppointmentCubit>().state.startTime);
 }
 
 class DateTimePickerFeild extends StatelessWidget {
@@ -567,17 +575,7 @@ Future datePicker(BuildContext context, String label) async {
 
   // ignore: unnecessary_null_comparison
   if (newDate == null) return;
-  switch (label) {
-    case 'From':
-      context.read<AppointmentCubit>().setStartDate(formattedDate);
-      break;
-    case 'To':
-      context.read<AppointmentCubit>().setEndDate(formattedDate);
-
-      break;
-    default:
-      break;
-  }
+  context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
 class DatePickerFeild extends StatelessWidget {
@@ -638,14 +636,12 @@ class TextContent extends StatelessWidget {
         ),
       );
     }
-    if (label == 'To') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.endDate,
-            style: const TextStyle(fontSize: 12)),
-      );
-    }
-    return Text(context.read<AppointmentCubit>().state.startDate);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+      child: Text(context.read<AppointmentCubit>().state.startDate,
+          style: const TextStyle(fontSize: 12)),
+    );
   }
 }
 
@@ -975,7 +971,7 @@ class _PatientListState extends State<PatientList> {
                 ), */
                 ListTile(
                   title: Text(
-                      '${state.patientsList[index]['firstName']}${state.patientsList[index]['middleName']??''} ${state.patientsList[index]['lastName']}'),
+                      '${state.patientsList[index]['firstName']}${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}'),
                   selected: (selectedIndex == index),
                   selectedColor: Colors.amber,
                   onTap: () {
