@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "http://localhost:8001/";
+  static const String root = "https://api.onyedap.com/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -189,7 +189,7 @@ class AppointmentRepository {
             .replace(queryParameters: <String, String>{
       'from': '2020-01-01T00:00',
       'to': '2024-01-01T00:00',
-      'query': '',
+      'query': searchParams!,
       'zoneId': 'Africa/Lagos',
     });
 
