@@ -100,9 +100,9 @@ class _AppointmentsState extends State<Appointments> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
-                /*   onChanged: (searchParams) => context
-                          .read<RegistrationCubit>()
-                          .set(searchParams),  */
+                onChanged: (searchParams) => context
+                    .read<AppointmentCubit>()
+                    .setSearchParams(searchParams),
                 obscureText: false,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -139,7 +139,10 @@ class _AppointmentsState extends State<Appointments> {
                   style: TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  context.read<AppointmentCubit>().searchAppointments();
+                  context.read<AppointmentCubit>().searchAppointments(
+                      token: context.read<LoginCubit>().state.homeToken,
+                      searchParams:
+                          context.read<AppointmentCubit>().state.searchParams);
                 },
               ),
             ),
@@ -172,6 +175,16 @@ class _AppointmentState extends State<Appointment> {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
         print(state);
+        if (state.searchState == SEARCHSTATE.notFound) {
+          return (const Center(
+            child: SizedBox(
+                height: 50, width: 200, child: Card(child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text('NOT FOUND'),
+                ))),
+          ));
+        }
+
         if (state.appointmentList.isEmpty) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.2,
@@ -420,5 +433,3 @@ class CheckInPatient extends StatelessWidget {
     );
   }
 }
-
-

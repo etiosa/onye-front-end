@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "https://api.onyedap.com//";
+  static const String root = "https://api.onyedap.com/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -148,11 +148,21 @@ class AppointmentRepository {
     }
   }
 
-    Future<List<dynamic>> getAppointments({String? token}) async {
-    //1 Uri
-    var uri = Uri.parse(root +
-        'api/rest/v1/appointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
+    Future<List<dynamic>> getAppointments({String? token, }) async {
 
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
+        .replace(queryParameters: <String, String>{
+      'from': '2020-01-01T00:00',
+      'to': '2024-01-01T00:00',
+      'query': '',
+      'zoneId': 'Africa/Lagos',
+    });
+
+
+    //1 Uri
+ /*    var uri = Uri.parse(root +
+        'api/rest/v1/appointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
+ */
     //2 http call
     http.Response reponse = await http.get(
       uri,
@@ -170,9 +180,19 @@ class AppointmentRepository {
 
 
 
-  Future<List<dynamic>> getRegisterations({String? token}) async {
+  Future<List<dynamic>> getRegisterations({String? token, String?searchParams}) async {
+    
     //1 Uri
-    var uri = Uri.parse(root +'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
+
+    var uri = Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
+        .replace(queryParameters: <String, String>{
+      'from': '2020-01-01T00:00',
+      'to': '2024-01-01T00:00',
+      'query': searchParams!,
+      'zoneId': 'Africa/Lagos',
+    });
+
+   // var uri = Uri.parse(root +'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
 
     //2 http call
     http.Response reponse = await http.get(

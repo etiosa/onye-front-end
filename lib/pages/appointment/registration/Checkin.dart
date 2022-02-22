@@ -26,7 +26,7 @@ class _CheckinState extends State<Checkin> {
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
       context
           .read<AppointmentCubit>()
-          .getRegisterations(token: context.read<LoginCubit>().state.homeToken);
+          .getRegisterations(token: context.read<LoginCubit>().state.homeToken, searchParams: context.read<AppointmentCubit>().state.searchParams);
     }
   }
 
@@ -89,6 +89,7 @@ class _CheckinState extends State<Checkin> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
+                onChanged: (search)=>context.read<AppointmentCubit>().setSearchParams(search),
                 obscureText: false,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -121,11 +122,16 @@ class _CheckinState extends State<Checkin> {
                       const Color.fromARGB(255, 56, 155, 152)),
                 ),
                 child: const Text(
+                
                   'Search',
                   style: TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  context.read<AppointmentCubit>().searchAppointments();
+                  context.read<AppointmentCubit>().getRegisterations(token: context.read<LoginCubit>().state.homeToken, 
+                    searchParams:  context.read<AppointmentCubit>().state.searchParams
+                                          
+                  
+                  );
                 },
               ),
             ),
@@ -157,7 +163,13 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        print(state);
+         if (state.searchState == SEARCHSTATE.notFound) {
+          return (const Center(
+              child: Card(
+            child: Text('Not found'),
+          )));
+        }
+
         if (state.registerationList.isEmpty) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.2,
@@ -209,9 +221,10 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         )))
               ]));
-        } else {
-          print('was click');
-          print(state);
+        } 
+         
+        
+        else {
           return Expanded(
             flex: 1,
             child: ListView.builder(

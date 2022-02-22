@@ -13,19 +13,20 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     this._appointmentRepository,
   ) : super(const AppointmentState());
 
-  Future<void> searchAppointments({String? token}) async {
-    final String startDateTime = state.startDate + ' ' + state.startTime;
-    final String endDateTime = state.endDate + ' ' + state.endTime;
-    //print(startDateTime);
-    //print(endDateTime);
-    final DateFormat format = new DateFormat("yyyy-MM-dd hh:mm a");
-
-    //print(format.parse(startDateTime));
-    //print(format.parse(endDateTime).toIso8601String());
+  Future<void> searchAppointments({String? token, String? searchParams}) async {
+    emit(state.copywith(searchstate: SEARCHSTATE.inital));
 
     var appointments = await _appointmentRepository.getAppointmentList(
         token: token, searchParams: state.searchParams);
     emit(state.copywith(appointmentList: appointments));
+    if(state.appointmentList.isEmpty){
+          emit(state.copywith(searchstate: SEARCHSTATE.notFound));
+
+    }
+    else{
+                emit(state.copywith(searchstate: SEARCHSTATE.sucessful));
+
+    }
   }
 
   void searchPatients({String? query, String? token}) async {
@@ -127,20 +128,26 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         appointmentId: appointmentId,
         reasons: reasons,
         typofVisit: typofVisit);
-
-    emit(state.copywith(patientRegistered: true));
+    getRegisterations(token: token);
 
     return req;
   }
 
-  void getRegisterations({String? token}) async {
-    var registerationList =
-        await _appointmentRepository.getRegisterations(token: token);
-        emit(state.copywith(registerationList: registerationList));
+  void getRegisterations({String? token, String? searchParams}) async {
+    emit(state.copywith(searchstate: SEARCHSTATE.inital));
+    var registerationList = await _appointmentRepository.getRegisterations(
+        token: token, searchParams: searchParams);
+    emit(state.copywith(registerationList: registerationList));
+
+    if (state.registerationList.isEmpty) {
+      emit(state.copywith(searchstate: SEARCHSTATE.notFound));
+    } else {
+      emit(state.copywith(searchstate: SEARCHSTATE.sucessful));
+    }
   }
 
   void getAppointments({String? token}) async {
-    var  appointList =
+    var appointList =
         await _appointmentRepository.getRegisterations(token: token);
     emit(state.copywith(appointmentList: appointList));
 

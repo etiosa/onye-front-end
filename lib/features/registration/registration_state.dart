@@ -1,5 +1,7 @@
 part of 'registration_cubit.dart';
 
+enum REGISTERATIONSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
+
 //TODO: Refactor
 class RegistrationState extends Equatable {
   const RegistrationState(
@@ -28,6 +30,7 @@ class RegistrationState extends Equatable {
       this.emergencyContactRelationship,
       this.contactPrefernce,
       this.token = '',
+      this.searchState= REGISTERATIONSEARCHSTATE.inital,
       this.createdPatientData = const {},
       this.registrationFormState = RegistrationFormState.init});
 
@@ -41,6 +44,7 @@ class RegistrationState extends Equatable {
   final String? educationLevel;
   final String? phoneNumber;
   final String? email;
+  final REGISTERATIONSEARCHSTATE searchState;
   final String? token;
   final String? contactPreferences;
   final String? countryCode;
@@ -85,7 +89,8 @@ class RegistrationState extends Equatable {
         emergencyContactPhoneNumber,
         emergencyContactRelationship,
         contactPrefernce,
-        createdPatientData
+        createdPatientData,
+        searchState
       ];
 
   RegistrationState copywith(
@@ -99,6 +104,7 @@ class RegistrationState extends Equatable {
       String? email,
       String? ethnicity,
       String? addressLine3,
+      REGISTERATIONSEARCHSTATE? searchState,
       String? toke,
       String? emergencyContactName,
       String? emergencyContactPhoneNumber,
@@ -119,6 +125,7 @@ class RegistrationState extends Equatable {
       String? contactPreferences}) {
     return RegistrationState(
         token: toke ?? token,
+        searchState: searchState?? this.searchState,
         createdPatientData: createdPatientData ?? this.createdPatientData,
         firstName: firstName ?? this.firstName,
         emergencyContactName: emergencyContactName ?? this.emergencyContactName,

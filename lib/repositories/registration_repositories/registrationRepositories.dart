@@ -2,7 +2,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class RegistrationRepositories {
-  static const String root = "https://api.onyedap.com//";
+  static const String root = "https://api.onyedap.com/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
@@ -89,7 +89,7 @@ class RegistrationRepositories {
     }
   }
 
-  Future<List<dynamic>> getRegisterations({String? token}) async {
+  Future<List<dynamic>> getRegisterations({String? token, String? queryParam}) async {
     //1 Uri
     var uri = Uri.parse(root +
         'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
