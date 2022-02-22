@@ -4,7 +4,6 @@ import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
-import 'package:onye_front_ened/features/registration/registration_cubit.dart';
 
 class Checkin extends StatefulWidget {
   const Checkin({Key? key}) : super(key: key);
@@ -26,8 +25,8 @@ class _CheckinState extends State<Checkin> {
     }
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
       context
-          .read<RegistrationCubit>()
-          .getAppointments(token: context.read<LoginCubit>().state.homeToken);
+          .read<AppointmentCubit>()
+          .getRegisterations(token: context.read<LoginCubit>().state.homeToken);
     }
   }
 
@@ -90,9 +89,6 @@ class _CheckinState extends State<Checkin> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
-                /*   onChanged: (searchParams) => context
-                          .read<RegistrationCubit>()
-                          .set(searchParams),  */
                 obscureText: false,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -159,9 +155,10 @@ class _AppointmentState extends State<Appointment> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, RegistrationState>(
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        if (state.appointmentList.isEmpty) {
+        print(state);
+        if (state.registerationList.isEmpty) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.2,
               height: MediaQuery.of(context).size.height / 1.5,
@@ -213,12 +210,14 @@ class _AppointmentState extends State<Appointment> {
                         )))
               ]));
         } else {
+          print('was click');
+          print(state);
           return Expanded(
             flex: 1,
             child: ListView.builder(
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                itemCount: state.appointmentList.length,
+                itemCount: state.registerationList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -239,7 +238,7 @@ class _AppointmentState extends State<Appointment> {
                       ),
                       child: Stack(alignment: Alignment.topRight, children: [
                         AppointmentConfirmed(
-                          appointmentList: state.appointmentList,
+                          appointmentList: state.registerationList,
                           selectedIndex: index,
                         ),
                         Column(
@@ -254,7 +253,7 @@ class _AppointmentState extends State<Appointment> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      state.appointmentList[index]['patient']
+                                      state.registerationList[index]['patient']
                                           ['firstName'],
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -263,7 +262,7 @@ class _AppointmentState extends State<Appointment> {
                                     ),
                                   ),
                                   Text(
-                                    state.appointmentList[index]['patient']
+                                    state.registerationList[index]['patient']
                                         ['lastName'],
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -273,20 +272,20 @@ class _AppointmentState extends State<Appointment> {
                                   Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Text(
-                                      (state.appointmentList[index].containsKey(
+                                      (state.registerationList[index].containsKey(
                                               'appointmentDateTime'))
                                           ? dateFormat.format(DateTime.parse(
-                                              state.appointmentList[index]
+                                              state.registerationList[index]
                                                   ['appointmentDateTime']))
                                           : dateFormat.format(DateTime.parse(
-                                              state.appointmentList[index]
+                                              state.registerationList[index]
                                                   ['registrationDateTime'])),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
                                       ),
                                     ),
-                                  ),
+                                  ), 
                                 ],
                               ),
                             ),
@@ -298,7 +297,7 @@ class _AppointmentState extends State<Appointment> {
                                   Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      'Number: ${state.appointmentList[index]['patient']['patientNumber']}',
+                                      'Number: ${state.registerationList[index]['patient']['patientNumber']}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 12,
@@ -308,7 +307,7 @@ class _AppointmentState extends State<Appointment> {
                                   Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      'Phone: ${state.appointmentList[index]['patient']['phoneNumber']}',
+                                      'Phone: ${state.registerationList[index]['patient']['phoneNumber']}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 12,
@@ -319,7 +318,7 @@ class _AppointmentState extends State<Appointment> {
                               ),
                             ),
                             CheckInPatient(
-                              appointmentList: state.appointmentList,
+                              registerationList: state.registerationList,
                               selectedIndex: index,
                             ),
                           ],
@@ -414,21 +413,27 @@ class Confirmation extends StatelessWidget {
   }
 }
 
-class CheckInPatient extends StatelessWidget {
+class CheckInPatient extends StatefulWidget {
   CheckInPatient(
-      {Key? key, required this.appointmentList, required this.selectedIndex})
+      {Key? key, required this.registerationList, required this.selectedIndex})
       : super(key: key);
-  List<dynamic> appointmentList;
+  List<dynamic> registerationList;
   int selectedIndex;
 
   @override
+  State<CheckInPatient> createState() => _CheckInPatientState();
+}
+
+class _CheckInPatientState extends State<CheckInPatient> {
+  @override
   Widget build(BuildContext context) {
-    if (appointmentList[selectedIndex].containsKey('registrationDateTime')) {
+    if (widget.registerationList[widget.selectedIndex]
+        .containsKey('registrationDateTime')) {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Confirmation(
-            appointmentList: appointmentList,
-            selectedIndex: selectedIndex,
+            appointmentList: widget.registerationList,
+            selectedIndex: widget.selectedIndex,
           ));
     }
 
@@ -449,13 +454,18 @@ class CheckInPatient extends StatelessWidget {
             onPressed: () {
               context.read<AppointmentCubit>().createRegsitration(
                     token: context.read<LoginCubit>().state.homeToken,
-                    patientID: appointmentList[selectedIndex]['patient']['id'],
-                    medicalId: appointmentList[selectedIndex]
+                    patientID: widget.registerationList[widget.selectedIndex]
+                        ['patient']['id'],
+                    medicalId: widget.registerationList[widget.selectedIndex]
                         ['medicalPersonnel']['id'],
-                    appointmentId: appointmentList[selectedIndex]['id'],
-                    reasons: appointmentList[selectedIndex]['reasonForVisit'],
-                    typofVisit: appointmentList[selectedIndex]['typeOfVisit'],
+                    appointmentId: widget.registerationList[widget.selectedIndex]
+                        ['id'],
+                    reasons: widget.registerationList[widget.selectedIndex]
+                        ['reasonForVisit'],
+                    typofVisit: widget.registerationList[widget.selectedIndex]
+                        ['typeOfVisit'],
                   );
+              setState(() {});
             },
             child: const Text('Register')),
       ),

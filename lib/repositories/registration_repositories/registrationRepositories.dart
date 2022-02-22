@@ -2,7 +2,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class RegistrationRepositories {
-  static const String root = "http://localhost:8001/";
+  static const String root = "https://api.onyedap.com//";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
@@ -36,7 +36,7 @@ class RegistrationRepositories {
         zipCode != null &&
         city != null &&
         countryCode != null) {
-      address = json.encode({
+      address = {
         "line1": addressLine1,
         "line2": addressLine2,
         "line3": addressLine3,
@@ -44,18 +44,18 @@ class RegistrationRepositories {
         "zipCode": zipCode,
         "city": city,
         "countryCode": countryCode
-      });
+      };
     }
 
     var emergencyContact;
     if (emergencyContactName != null &&
         emergencyContactPhoneNumber != null &&
         emergencyContactRelationship != null) {
-      emergencyContact = json.encode({
+      emergencyContact = {
         "name": emergencyContactName,
         "phoneNumber": emergencyContactPhoneNumber,
         "relationship": emergencyContactRelationship
-      });
+      };
     }
 
     try {
@@ -89,7 +89,7 @@ class RegistrationRepositories {
     }
   }
 
-  Future<List<dynamic>> getAppointment({String? token}) async {
+  Future<List<dynamic>> getRegisterations({String? token}) async {
     //1 Uri
     var uri = Uri.parse(root +
         'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');

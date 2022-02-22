@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "http://localhost:8001/";
+  static const String root = "https://api.onyedap.com//";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -147,6 +147,48 @@ class AppointmentRepository {
       return null;
     }
   }
+
+    Future<List<dynamic>> getAppointments({String? token}) async {
+    //1 Uri
+    var uri = Uri.parse(root +
+        'api/rest/v1/appointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
+
+    //2 http call
+    http.Response reponse = await http.get(
+      uri,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    var body = json.decode(reponse.body);
+    var appointmentList = body['elements'];
+
+    return appointmentList;
+  }
+
+
+
+  Future<List<dynamic>> getRegisterations({String? token}) async {
+    //1 Uri
+    var uri = Uri.parse(root +'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
+
+    //2 http call
+    http.Response reponse = await http.get(
+      uri,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    var body = json.decode(reponse.body);
+    var appointmentList = body['elements'];
+
+    return appointmentList;
+  }
+
 
   Future<bool> createAppointment (
       {String? token,

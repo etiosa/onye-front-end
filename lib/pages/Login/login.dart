@@ -196,7 +196,18 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         if (state.homeToken.isNotEmpty) {
-          WidgetsBinding.instance?.addPostFrameCallback((_) {});
+            Messages.showMessage(
+                const Icon(
+                  IconData(0xf635, fontFamily: 'MaterialIcons'),
+                  color: Colors.green,
+                ),
+                'Login successful');
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  Navigator.of(context).pushNamed("/dashboard");
+
+                });
+
+          
         }
         return Container(
           width: 250,
@@ -215,22 +226,7 @@ class _SubmitButton extends StatelessWidget {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   context.read<LoginCubit>().login();
-                  if (state.homeToken.isNotEmpty) {
-                    Messages.showMessage(
-                        const Icon(
-                          IconData(0xf635, fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
-                        ),
-                        'Login successful');
-                    Navigator.of(context).pushNamed("/dashboard");
-                  } else {
-                    Messages.showMessage(
-                        const Icon(
-                          IconData(0xe237, fontFamily: 'MaterialIcons'),
-                          color: Colors.red,
-                        ),
-                        'Login failed');
-                  }
+               
                 }
               },
             ),

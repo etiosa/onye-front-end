@@ -9,7 +9,11 @@ class LoginState extends Equatable {
       this.password = '',
       this.statusCode = 0,
       this.loginToken = '',
-      this.homeToken='',
+      this.homeToken = '',
+      this.firstName = '',
+      this.lastName = '',
+      this.hospital = '',
+      this.department='',
       this.loginStatus = false});
 
   final String userName;
@@ -17,12 +21,16 @@ class LoginState extends Equatable {
   final int statusCode;
   final bool loginStatus;
   final String homeToken;
+  final String firstName;
+  final String lastName;
+  final String department;
+  final String hospital;
   final String loginToken;
 
   @override
   // TODO: implement props
   List<Object?> get props =>
-      [userName, password, statusCode, loginStatus, homeToken, loginToken];
+      [userName, password, statusCode, loginStatus, homeToken, loginToken, firstName,lastName, hospital, department];
 
   LoginState copywith(
       {String? userName,
@@ -30,8 +38,16 @@ class LoginState extends Equatable {
       int? statusCode,
       String? homeTokenS,
       String? loginToken,
+      String? firstName,
+      String? lastName,
+      String? department,
+      String? hospital,
       bool? loginStatus}) {
     return LoginState(
+        firstName: firstName?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        department: department ?? this.department,
+        hospital:  hospital ??this.hospital,
         homeToken: homeTokenS ?? homeToken,
         loginToken: loginToken ?? this.loginToken,
         userName: userName ?? this.userName,

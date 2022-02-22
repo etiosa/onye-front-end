@@ -131,22 +131,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                           });
                         }
                         break;
-                      case 2:
-                        if (context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedMedicalPeronnelId
-                                .isNotEmpty &&
-                            context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedPatientId
-                                .isNotEmpty) {
-                          setState(() {
-                            _index = index;
-                          });
-                        }
-                        break;
+                   
                       default:
                         break;
                     }
@@ -159,19 +144,13 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                         content: SearchPatientBody(
                           formIndex: 0,
                         )),
-                    Step(
-                        state: StepState.editing,
-                        isActive: _index == 1,
-                        title: const Text('Select doctor'),
-                        content: SearchDoctorBody(
-                          formIndex: 1,
-                        )),
+                
                     Step(
                         state: StepState.editing,
                         isActive: _index == 2,
                         title: const Text('Register'),
                         content: Register(
-                          formIndex: 2,
+                          formIndex: 1,
                         )),
                   ],
                 ),
@@ -184,63 +163,6 @@ class _CreateRegistrationState extends State<CreateRegistration> {
   }
 }
 
-class StepButtons extends StatelessWidget {
-  StepButtons({Key? key, required this.controlDetials}) : super(key: key);
-  ControlsDetails controlDetials;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 100,
-          height: 60,
-          padding: const EdgeInsets.all(2),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ElevatedButton(
-              autofocus: true,
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 56, 155, 152)),
-              ),
-              child: Text(controlDetials.currentStep == 2 ? '' : 'Next'),
-              onPressed: () {
-                controlDetials.onStepContinue;
-              },
-            ),
-          ),
-        ),
-        const SizedBox(width: 20),
-        Container(
-          width: 100,
-          height: 60,
-          padding: const EdgeInsets.all(2),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ElevatedButton(
-              autofocus: true,
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              onPressed: () {
-                controlDetials.onStepCancel;
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class SearchDoctorBody extends StatefulWidget {
   SearchDoctorBody({Key? key, required this.formIndex}) : super(key: key);

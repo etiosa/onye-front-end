@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -12,9 +14,9 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*   context
+    /*  context
         .read<LoginCubit>()
-        .home(tokens: context.read<LoginCubit>().state.loginToken); */
+        .home(tokens: context.read<LoginCubit>().state.loginToken);  */
   }
 
   @override
@@ -40,38 +42,28 @@ class _DashboardState extends State<Dashboard> {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width / 55,
                   left: MediaQuery.of(context).size.width / 9),
-              child: const Text(
-                'Doctor Joe John',
-                style: TextStyle(fontSize: 17, fontFamily: 'poppins'),
+              child: Text(
+                '${context.read<LoginCubit>().state.firstName} ${context.read<LoginCubit>().state.lastName}',
+                style: const TextStyle(fontSize: 17, fontFamily: 'poppins'),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 40.0),
-              child: Text(
-                'Surgery',
-                style: TextStyle(color: Color.fromARGB(255, 115, 109, 109)),
+             Padding(
+              padding: const EdgeInsets.only(left: 40.0),
+              child: Text(context.read<LoginCubit>().state.department,
+                style: const TextStyle(color: Color.fromARGB(255, 115, 109, 109)),
               ),
             ),
             const SizedBox(height: 60),
-            const Padding(
-              padding: EdgeInsets.only(left: 40.0),
-              child: Text(
-                'St. Hopkins Hospital',
-                style: TextStyle(
+            Padding(
+              padding: const EdgeInsets.only(left: 40.0),
+              child: Text(context.read<LoginCubit>().state.hospital,
+                style: const TextStyle(
                     fontFamily: 'poppins',
                     fontSize: 17,
                     fontWeight: FontWeight.w600),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(
-                left: 40.0,
-              ),
-              child: Text(
-                '010-444 444',
-                style: TextStyle(fontFamily: 'poppins', fontSize: 15),
-              ),
-            ),
+        
             //TODO: backend as well
             SizedBox(
               height: MediaQuery.of(context).size.height / 10,

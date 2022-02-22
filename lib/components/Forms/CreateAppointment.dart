@@ -975,7 +975,7 @@ class _PatientListState extends State<PatientList> {
                 ), */
                 ListTile(
                   title: Text(
-                      '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']} ${state.patientsList[index]['lastName']}'),
+                      '${state.patientsList[index]['firstName']}${state.patientsList[index]['middleName']??''} ${state.patientsList[index]['lastName']}'),
                   selected: (selectedIndex == index),
                   selectedColor: Colors.amber,
                   onTap: () {

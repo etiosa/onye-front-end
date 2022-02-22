@@ -15,6 +15,7 @@ class AppointmentState extends Equatable {
       this.endTime = '',
       this.searchState = SEARCHSTATE.inital,
       this.doctorsList = const [],
+      this.registerationList =const [],
       this.selectedMedicalPeronnelId = '',
       this.selectedPatientId = '',
       this.resonsForVist = '',
@@ -23,8 +24,12 @@ class AppointmentState extends Equatable {
       this.selectedPatientIndexs = 2,
       this.regState = REGISTRATIONSTATE.inita,
       this.selectedAppointmentId = '',
+      this.patientRegistered=false,
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
+  final List<dynamic> registerationList;
+
+
   final List<dynamic> patientsList;
   final String searchParams;
   final String startDateTime;
@@ -43,6 +48,7 @@ class AppointmentState extends Equatable {
   final int selectedMedicalIndexs;
   final REGISTRATIONSTATE regState;
   final selectedAppointmentId;
+  final bool patientRegistered;
 
   @override
   List<Object> get props => [
@@ -65,6 +71,8 @@ class AppointmentState extends Equatable {
         selectedMedicalIndexs,
         regState,
         selectedAppointmentId,
+        patientRegistered,
+        registerationList
       ];
 
   AppointmentState copywith({
@@ -73,6 +81,8 @@ class AppointmentState extends Equatable {
     List<dynamic>? patientsList,
     List<dynamic>? doctorsList,
     String? startDateTime,
+    List<dynamic>? registerationList,
+
     String? startTime,
     String? endTime,
     String? startDate,
@@ -80,6 +90,7 @@ class AppointmentState extends Equatable {
     String? selectedMedicalPersonnel,
     SEARCHSTATE? searchstate,
     REGISTRATIONSTATE? regstate,
+    bool? patientRegistered,
     String? endDate,
     String? typeOfVisit,
     String? reasonForVisit,
@@ -89,6 +100,8 @@ class AppointmentState extends Equatable {
     String? selectedAppointmentId,
   }) {
     return AppointmentState(
+      patientRegistered: patientRegistered?? this.patientRegistered,
+      registerationList: registerationList?? this.registerationList,
         typeOfVist: typeOfVisit ?? typeOfVist,
         regState: regstate ?? regState,
         resonsForVist: reasonForVisit ?? resonsForVist,

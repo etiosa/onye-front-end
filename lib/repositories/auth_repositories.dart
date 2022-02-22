@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AuthRepository {
-  static const String root = "http://localhost:8001/";
+  static const String root = "https://api.onyedap.com//";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
@@ -20,15 +20,13 @@ class AuthRepository {
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
       body = jsonDecode(reponse.body);
-      print(body);
       return body['token'];
     } catch (e) {
-      print(e);
       return body['token'];
     }
   }
 
-  Future<String> home({String? token}) async {
+  Future<dynamic> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
     var body;
     try {
@@ -38,9 +36,9 @@ class AuthRepository {
         "Authorization": "Bearer $token",
       });
       body = jsonDecode(response.body);
-      return body['token'];
+      return body;
     } catch (e) {
-      return body['token'];
+      return body;
     }
   }
 

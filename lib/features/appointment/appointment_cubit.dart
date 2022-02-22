@@ -128,7 +128,23 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         reasons: reasons,
         typofVisit: typofVisit);
 
+    emit(state.copywith(patientRegistered: true));
+
     return req;
+  }
+
+  void getRegisterations({String? token}) async {
+    var registerationList =
+        await _appointmentRepository.getRegisterations(token: token);
+        emit(state.copywith(registerationList: registerationList));
+  }
+
+  void getAppointments({String? token}) async {
+    var  appointList =
+        await _appointmentRepository.getRegisterations(token: token);
+    emit(state.copywith(appointmentList: appointList));
+
+    //var
   }
 
   Future<Response?> createAppointmenmt(
