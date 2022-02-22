@@ -554,7 +554,7 @@ class _DoctorListState extends State<DoctorList> {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(
-                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName']} ${state.doctorsList[index]['lastName']}'),
+                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName']??''} ${state.doctorsList[index]['lastName']}'),
                 selected: (selectedIndex == index),
                 selectedColor: Colors.amber,
                 onTap: () {
@@ -692,7 +692,7 @@ class _PatientListState extends State<PatientList> {
                 ), */
                 ListTile(
                   title: Text(
-                      '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']} ${state.patientsList[index]['lastName']}'),
+                      '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']??''} ${state.patientsList[index]['lastName']}'),
                   selected: (selectedIndex == index),
                   selectedColor: Colors.amber,
                   onTap: () {
