@@ -20,25 +20,27 @@ class AuthRepository {
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
       body = jsonDecode(reponse.body);
+      print(body);
       return body['token'];
     } catch (e) {
+      print(e);
       return body['token'];
     }
   }
 
   Future<String> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
-   var body;
+    var body;
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
         "Accept": accept,
         "Authorization": "Bearer $token",
       });
-    body = jsonDecode(response.body);
-       return body['token'];
+      body = jsonDecode(response.body);
+      return body['token'];
     } catch (e) {
-       return body['token'];
+      return body['token'];
     }
   }
 

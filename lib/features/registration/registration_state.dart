@@ -1,67 +1,67 @@
 part of 'registration_cubit.dart';
 
-enum RegistrationFormState { init, fail, scuessful }
-
 //TODO: Refactor
 class RegistrationState extends Equatable {
   const RegistrationState(
-      {this.firstName = '',
-      this.middleName = '',
-      this.lastName = '',
-      this.dateOfBirth = '',
+      {this.firstName,
+      this.middleName,
+      this.lastName,
+      required this.dateOfBirth,
       required this.gender,
       required this.religion,
       required this.educationLevel,
-      this.phoneNumber = '',
-      this.email = '',
-      this.contactPreferences = '',
-      this.countryCode = '',
-      this.addressLine1 = '',
-      this.addressLine2 = '',
-      this.city = '',
-      this.zipCode = '',
-      this.ethnicity = '',
-      this.addressLine3 = '',
-      this.addressLine4 = '',
+      this.phoneNumber,
+      this.email,
+      this.contactPreferences,
+      this.countryCode,
+      this.addressLine1,
+      this.addressLine2,
+      this.addressLine3,
+      this.addressLine4,
+      this.city,
+      this.zipCode,
+      required this.ethnicity,
       this.allOptions = const {},
       this.appointmentList = const [],
-      this.emergencyContactName = '',
-      this.emergencyContactPhoneNumber = '',
-      this.emergencyContactRelationship = '',
-      this.contactPrefernce = '',
-      this.token='',
+      this.emergencyContactName,
+      this.emergencyContactPhoneNumber,
+      this.emergencyContactRelationship,
+      this.contactPrefernce,
+      this.token = '',
+      this.createdPatientData = const {},
       this.registrationFormState = RegistrationFormState.init});
 
 //selcted value
-  final String firstName;
-  final String middleName;
-  final String lastName;
-  final String dateOfBirth;
-  final String gender;
-  final String religion;
-  final String educationLevel;
-  final String phoneNumber;
-  final String email;
-  final String token;
-  final String contactPreferences;
-  final String countryCode;
-  final String addressLine1;
-  final String addressLine2;
-  final String addressLine3;
-  final String addressLine4;
-  final String zipCode;
-  final String city;
+  final String? firstName;
+  final String? middleName;
+  final String? lastName;
+  final String? dateOfBirth;
+  final String? gender;
+  final String? religion;
+  final String? educationLevel;
+  final String? phoneNumber;
+  final String? email;
+  final String? token;
+  final String? contactPreferences;
+  final String? countryCode;
+  final String? addressLine1;
+  final String? addressLine2;
+  final String? addressLine3;
+  final String? addressLine4;
+  final String? zipCode;
+  final String? city;
   final String ethnicity;
-  final String contactPrefernce;
-  final String emergencyContactRelationship;
-  final String emergencyContactName;
+  final String? contactPrefernce;
+  final String? emergencyContactRelationship;
+  final String? emergencyContactName;
   final List<dynamic> appointmentList;
   final Map<String, dynamic> allOptions;
+  final dynamic createdPatientData;
   final RegistrationFormState registrationFormState;
-  final String emergencyContactPhoneNumber;
+  final String? emergencyContactPhoneNumber;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         firstName,
         lastName,
         dateOfBirth,
@@ -84,7 +84,8 @@ class RegistrationState extends Equatable {
         emergencyContactName,
         emergencyContactPhoneNumber,
         emergencyContactRelationship,
-        contactPrefernce
+        contactPrefernce,
+        createdPatientData
       ];
 
   RegistrationState copywith(
@@ -109,6 +110,7 @@ class RegistrationState extends Equatable {
       String? addressLine1,
       String? addressLine2,
       String? zipCode,
+      dynamic createdPatientData,
       String? emergencyContactRelationship,
       String? city,
       String? addressLine4,
@@ -116,7 +118,8 @@ class RegistrationState extends Equatable {
       RegistrationFormState? registrationFormState,
       String? contactPreferences}) {
     return RegistrationState(
-      token: toke?? token,
+        token: toke ?? token,
+        createdPatientData: createdPatientData ?? this.createdPatientData,
         firstName: firstName ?? this.firstName,
         emergencyContactName: emergencyContactName ?? this.emergencyContactName,
         ethnicity: ethnicity ?? this.ethnicity,

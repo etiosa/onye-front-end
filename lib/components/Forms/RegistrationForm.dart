@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
 import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({Key? key, this.restorationId}) : super(key: key);
@@ -21,6 +24,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+      //redirect to home
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Navigator.of(context).pushNamed("/dashboard");
+      });
+    }
   }
 
   @override
@@ -275,7 +284,7 @@ class DatePickerFeild extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    state.dateOfBirth,
+                    state.dateOfBirth!,
                     style: const TextStyle(fontFamily: 'poppins'),
                   ),
                 ),
@@ -1003,12 +1012,6 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a valid name';
-              }
-              return null;
-            },
           ),
         ),
         const SizedBox(height: 10),
@@ -1029,12 +1032,6 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a phone number';
-              }
-              return null;
-            },
           ),
         ),
         const SizedBox(height: 10),
@@ -1055,12 +1052,6 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a valid relationship';
-              }
-              return null;
-            },
           ),
         ),
       ],
@@ -1093,7 +1084,33 @@ class _SubmitButton extends StatelessWidget {
             child: const Text('Submit'),
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                context.read<RegistrationCubit>().register();
+                var response = context.read<RegistrationCubit>().register(
+                    token: context.read<LoginCubit>().state.homeToken);
+
+                response.then((value) => {
+                      if (value != null && value.statusCode == 201)
+                        {
+                          Messages.showMessage(
+                              const Icon(
+                                IconData(0xf635, fontFamily: 'MaterialIcons'),
+                                color: Colors.green,
+                              ),
+                              'Patient created'),
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: ((context) => const Dashboard())),
+                              ModalRoute.withName('/dashboard'))
+                        }
+                      else if (value != null && value.statusCode == 400)
+                        {
+                          Messages.showMessage(
+                              const Icon(
+                                IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                color: Colors.red,
+                              ),
+                              'Could not create patient'),
+                        }
+                    });
               }
             },
           ),

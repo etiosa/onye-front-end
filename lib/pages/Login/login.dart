@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
-import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
+import 'package:onye_front_ened/components/util/Messages.dart';
 
 class LoginPage extends StatefulWidget {
   //TODO: Ccall home
@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
- /*    if (context.read<LoginCubit>().state.loginToken.isNotEmpty) {
+    /*    if (context.read<LoginCubit>().state.loginToken.isNotEmpty) {
       Navigator.of(context).pushNamed("/dashboard");
     } */
 
@@ -194,14 +194,9 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      
       builder: (context, state) {
         if (state.homeToken.isNotEmpty) {
-          
-          WidgetsBinding.instance?.addPostFrameCallback((_) {
-            //context.read<LoginCubit>().home(tokens: state.loginToken);
-            Navigator.of(context).pushNamed("/dashboard");
-          });
+          WidgetsBinding.instance?.addPostFrameCallback((_) {});
         }
         return Container(
           width: 250,
@@ -220,6 +215,22 @@ class _SubmitButton extends StatelessWidget {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   context.read<LoginCubit>().login();
+                  if (state.homeToken.isNotEmpty) {
+                    Messages.showMessage(
+                        const Icon(
+                          IconData(0xf635, fontFamily: 'MaterialIcons'),
+                          color: Colors.green,
+                        ),
+                        'Login successful');
+                    Navigator.of(context).pushNamed("/dashboard");
+                  } else {
+                    Messages.showMessage(
+                        const Icon(
+                          IconData(0xe237, fontFamily: 'MaterialIcons'),
+                          color: Colors.red,
+                        ),
+                        'Login failed');
+                  }
                 }
               },
             ),

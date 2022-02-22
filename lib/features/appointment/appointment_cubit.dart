@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 import 'package:onye_front_ened/repositories/appointment_repositories/appointment_repositories.dart';
@@ -112,22 +113,40 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copywith(selctedPatientIndex: selectedIndex));
   }
 
-  void createRegsitration(
+  Future<Response?> createRegsitration(
       {String? token,
       String? patientID,
       String? medicalId,
       String? appointmentId,
       String? reasons,
       String? typofVisit}) async {
-    print(reasons);
-    print(typofVisit);
-
-    final bool reg = await _appointmentRepository.createRegisteration(
+    Response? req = await _appointmentRepository.createRegisteration(
         token: token,
         patientID: patientID,
         medicalId: medicalId,
         appointmentId: appointmentId,
         reasons: reasons,
         typofVisit: typofVisit);
+
+    return req;
+  }
+
+  Future<Response?> createAppointmenmt(
+      {String? appointmentDateTime,
+      String? patientID,
+      String? medicalId,
+      String? token,
+      int? minDuration,
+      String? typeOfVisit,
+      String? reasonForVisit,
+      String? languagePreference}) async {
+    Response? req = await _appointmentRepository.CreateAppointment(
+        patientID: patientID,
+        medicalId: medicalId,
+        token: token,
+        typofVisit: typeOfVisit,
+        reasons: reasonForVisit);
+
+    return req;
   }
 }

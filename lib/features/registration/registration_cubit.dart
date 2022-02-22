@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
+import 'package:onye_front_ened/features/schedule/cubit/shcedule_cubit.dart';
 import 'package:onye_front_ened/repositories/registration_repositories/registrationRepositories.dart';
 
 part 'registration_state.dart';
@@ -9,7 +11,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   RegistrationCubit(this._registrationRepositories)
       : super(const RegistrationState(
-            educationLevel: "", gender: "", religion: ""));
+            dateOfBirth: "",
+            educationLevel: "",
+            gender: "",
+            religion: "",
+            ethnicity: ""));
 
   void setFirstName(String? argFirstName) {
     final String firstName = argFirstName!;
@@ -37,7 +43,6 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }
 
   void setReligion(String? argReligion) {
-    print(argReligion);
     final String religion = argReligion!;
     emit(state.copywith(religion: religion));
   }
@@ -84,7 +89,6 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   void setCountryCode(String? argCountryCode) {
     final String? countryCode = argCountryCode!;
-    print(argCountryCode);
     emit(state.copywith(countryCode: countryCode));
   }
 
@@ -118,8 +122,9 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copywith(zipCode: zipcode));
   }
 
-  void register() async {
-    await _registrationRepositories.createNewPatient(
+  Future<Response?> register({String? token}) async {
+    Response? response = await _registrationRepositories.createNewPatient(
+        token: token,
         firstName: state.firstName,
         middleName: state.middleName,
         lastName: state.lastName,
@@ -139,12 +144,13 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         addressLine2: state.addressLine2,
         dateOfBirth: state.dateOfBirth,
         countryCode: state.countryCode);
+
+    return response;
   }
 
   void getAppointments({String? token}) async {
     var appointList =
         await _registrationRepositories.getAppointment(token: token);
-    print(appointList);
     emit(state.copywith(appointmentList: appointList));
   }
 }

@@ -62,7 +62,6 @@ class AppointmentRepository {
 
   Future<List<dynamic>> getDoctorList(
       {String? searchParams, String? token}) async {
-    print(searchParams);
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
@@ -84,7 +83,7 @@ class AppointmentRepository {
     return doctorsList;
   }
 
-  Future<bool> createRegisteration(
+  Future<http.Response?> createRegisteration(
       {String? token,
       String? patientID,
       String? medicalId,
@@ -93,12 +92,6 @@ class AppointmentRepository {
       String? typofVisit}) async {
     var uri = Uri.parse(root + 'api/rest/v1/registration?zoneId=Africa/Lagos');
     var body;
-    print('token');
-    print(token);
-    print(reasons);
-    print(typofVisit);
-    print(patientID);
-    print(medicalId);
 
     try {
       http.Response response = await http.post(uri,
@@ -116,10 +109,42 @@ class AppointmentRepository {
             "languagePreference": "en"
           }));
 
-      print(response.body);
-      return true;
+      return response;
     } catch (e) {
-      return false;
+      return null;
+    }
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<http.Response?> CreateAppointment(
+      {String? token,
+      String? patientID,
+      String? medicalId,
+      String? appointmentId,
+      String? reasons,
+      String? typofVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment?zoneId=Africa/Lagos');
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "appointmentDateTime": "2022-02-20T11:30:00.000Z",
+            "minDuration": 30,
+            "typeOfVisit": typofVisit,
+            "reasonForVisit": reasons,
+            "languagePreference": "en",
+            'patientId': patientID,
+            'medicalPersonnelId': medicalId
+          }));
+
+      return response;
+    } catch (e) {
+      return null;
     }
   }
 

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
 import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
-import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/appointment/registration/Checkin.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CreateRegistration extends StatefulWidget {
@@ -360,15 +361,6 @@ class RegisterField extends StatelessWidget {
                                 const Color.fromARGB(255, 56, 155, 152)),
                           ),
                           onPressed: () {
-                            print(context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedMedicalPeronnelId);
-
-                            print(context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedPatientId);
                             if (context
                                     .read<AppointmentCubit>()
                                     .state
@@ -379,17 +371,7 @@ class RegisterField extends StatelessWidget {
                                     .state
                                     .selectedPatientId
                                     .isNotEmpty) {
-                              print("inside submit if");
-                              print(context
-                                  .read<AppointmentCubit>()
-                                  .state
-                                  .typeOfVist);
-                              print(context
-                                  .read<AppointmentCubit>()
-                                  .state
-                                  .resonsForVist);
-
-                              context
+                              var response = context
                                   .read<AppointmentCubit>()
                                   .createRegsitration(
                                       token: context
@@ -412,6 +394,38 @@ class RegisterField extends StatelessWidget {
                                           .read<AppointmentCubit>()
                                           .state
                                           .resonsForVist);
+
+                              response.then((value) => {
+                                    if (value != null &&
+                                        value.statusCode == 201)
+                                      {
+                                        Messages.showMessage(
+                                            const Icon(
+                                              IconData(0xf635,
+                                                  fontFamily: 'MaterialIcons'),
+                                              color: Colors.green,
+                                            ),
+                                            'Registration created'),
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        const Checkin())),
+                                                ModalRoute.withName(
+                                                    '/dashboard'))
+                                      }
+                                    else if (value != null &&
+                                        value.statusCode == 400)
+                                      {
+                                        Messages.showMessage(
+                                            const Icon(
+                                              IconData(0xe237,
+                                                  fontFamily: 'MaterialIcons'),
+                                              color: Colors.red,
+                                            ),
+                                            'Could not create registration'),
+                                      }
+                                  });
                             }
                           },
                           child: const Text('Submit')),
@@ -625,6 +639,10 @@ class _DoctorListState extends State<DoctorList> {
                   setState(() {
                     selectedIndex = index;
                     selectedDctorId = state.doctorsList[index]['id'];
+
+                    print('index: $selectedIndex');
+                    print('doctorId: $selectedDctorId');
+
                     context
                         .read<AppointmentCubit>()
                         .setSelectedMedicalPersonnelId(selectedDctorId);
@@ -757,24 +775,17 @@ class _PatientListState extends State<PatientList> {
                   selectedColor: Colors.amber,
                   onTap: () {
                     setState(() {
-                      print(
-                          'appoitment id: ${state.appointmentList[index]['id']}');
+                      print(state.patientsList[index]);
+
                       selectedIndex = index;
                       selectedPatientId = state.patientsList[index]['id'];
-                      selectedAppointmentId =
-                          state.appointmentList[index]['id'];
 
-                      context
-                          .read<AppointmentCubit>()
-                          .setSelectedPatientIndex(selectedIndex);
+                      print('index: $selectedIndex');
+                      print('patientId: $selectedPatientId');
 
                       context
                           .read<AppointmentCubit>()
                           .setPatientId(selectedPatientId);
-
-                      context
-                          .read<AppointmentCubit>()
-                          .setAppointmentId(selectedAppointmentId);
                     });
                   },
                 ),
