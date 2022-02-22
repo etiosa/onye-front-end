@@ -490,6 +490,9 @@ Future dateTimePicker(BuildContext context, String label) async {
   print(newTime);
 
   context.read<AppointmentCubit>().setStartTime(formatTime);
+   // context.read<AppointmentCubit>().setEndTime(newTime);
+
+
 }
 
 class DateTimePickerFeild extends StatelessWidget {
