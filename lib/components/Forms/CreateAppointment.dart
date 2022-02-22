@@ -24,12 +24,12 @@ class _CreateAppointmentState extends State<CreateAppointment> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*   if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+       if (context.read<LoginCubit>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
-    } */
+    } 
   }
 
   @override
