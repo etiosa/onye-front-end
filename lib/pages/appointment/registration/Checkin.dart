@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
-import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
+import 'package:onye_front_ened/features/appointment/state/appointment_cubit.dart';
+import 'package:onye_front_ened/features/auth/state/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
-import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/features/registration/state/registration_cubit.dart';
 
 class Checkin extends StatefulWidget {
   const Checkin({Key? key}) : super(key: key);

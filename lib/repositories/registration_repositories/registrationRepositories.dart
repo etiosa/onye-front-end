@@ -36,7 +36,7 @@ class RegistrationRepositories {
         zipCode != null &&
         city != null &&
         countryCode != null) {
-      address = json.encode({
+      address = ({
         "line1": addressLine1,
         "line2": addressLine2,
         "line3": addressLine3,
@@ -51,7 +51,7 @@ class RegistrationRepositories {
     if (emergencyContactName != null &&
         emergencyContactPhoneNumber != null &&
         emergencyContactRelationship != null) {
-      emergencyContact = json.encode({
+      emergencyContact = ({
         "name": emergencyContactName,
         "phoneNumber": emergencyContactPhoneNumber,
         "relationship": emergencyContactRelationship

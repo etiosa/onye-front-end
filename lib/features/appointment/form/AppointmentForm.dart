@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
+import 'package:onye_front_ened/features/appointment/state/appointment_cubit.dart';
 
-import '../../features/login_cubit/login_cubit.dart';
+import '../../auth/state/login_cubit.dart';
 
 class AppointmentForm extends StatefulWidget {
   const AppointmentForm({Key? key, this.restorationId}) : super(key: key);

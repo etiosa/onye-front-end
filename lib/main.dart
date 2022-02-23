@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:onye_front_ened/components/Forms/AppointmentForm.dart';
-import 'package:onye_front_ened/components/Forms/CreateAppointment.dart';
-import 'package:onye_front_ened/components/Forms/CreateRegistration.dart';
-import 'package:onye_front_ened/components/Forms/RegistrationForm.dart';
-import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
-import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
-import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/features/appointment/form/AppointmentForm.dart';
+import 'package:onye_front_ened/features/appointment/form/CreateAppointment.dart';
+import 'package:onye_front_ened/features/registration/form/CreateRegistration.dart';
+import 'package:onye_front_ened/features/appointment/state/appointment_cubit.dart';
+import 'package:onye_front_ened/features/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/features/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/pages/Home/home.dart';
 import 'package:onye_front_ened/pages/Login/login.dart';
 import 'package:onye_front_ened/pages/Patients/patients.dart';
@@ -17,6 +16,7 @@ import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 import 'package:onye_front_ened/repositories/appointment_repositories/appointment_repositories.dart';
 import 'package:onye_front_ened/repositories/auth_repositories.dart';
 import 'package:onye_front_ened/repositories/registration_repositories/registrationRepositories.dart';
+import 'package:onye_front_ened/features/patient/form/CreatePatientForm.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
                 '/dashboard/appointment/createApppointment': (context) =>
                     const CreateAppointment(),
                 '/dashboard/registrationForm': (context) =>
-                    const RegistrationForm(),
+                    const CreatePatientForm(),
                 'dashboard/patient': (context) => const PatientsPage()
               },
             ),

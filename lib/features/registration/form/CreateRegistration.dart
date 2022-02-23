@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/features/appointment/appointment_cubit.dart';
-import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
+import 'package:onye_front_ened/features/appointment/state/appointment_cubit.dart';
+import 'package:onye_front_ened/features/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/appointment/registration/Checkin.dart';
 import 'package:shimmer/shimmer.dart';

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
-import 'package:onye_front_ened/features/registration/registration_cubit.dart';
+import 'package:onye_front_ened/features/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/features/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/dashboard/dashboard.dart';
 
-class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({Key? key, this.restorationId}) : super(key: key);
+class CreatePatientForm extends StatefulWidget {
+  const CreatePatientForm({Key? key, this.restorationId}) : super(key: key);
 
   final String? restorationId;
 
   @override
-  State<RegistrationForm> createState() => _RegistrationFormState();
+  State<CreatePatientForm> createState() => _CreatePatientFormState();
 }
 
 //TODO: Refactor
-class _RegistrationFormState extends State<RegistrationForm> {
+class _CreatePatientFormState extends State<CreatePatientForm> {
   DateTime? _dateTime;
   int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -275,7 +275,7 @@ class DatePickerFeild extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                _RegistrationFormState().datePicker(context);
+                _CreatePatientFormState().datePicker(context);
               },
               child: Container(
                 height: 45,

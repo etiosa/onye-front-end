@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:onye_front_ened/features/login_cubit/login_cubit.dart';
+import 'package:onye_front_ened/features/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 
 class LoginPage extends StatefulWidget {
