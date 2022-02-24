@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/session/authSession.dart';
+
+import '../components/util/Messages.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -10,15 +13,21 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  final _authSession = AuthSession();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*  context
-        .read<LoginCubit>()
-        .home(tokens: context.read<LoginCubit>().state.loginToken);  */
+     Messages.showMessage(
+        const Icon(
+          IconData(0xf635, fontFamily: 'MaterialIcons'),
+          color: Colors.green,
+        ),
+        'Login successful');
   }
 
+//TODO: Change the Button Structure to GridView
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,6 +36,44 @@ class _DashboardState extends State<Dashboard> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: 100,
+                height: 50,
+                padding: const EdgeInsets.all(2),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: ElevatedButton(
+                    autofocus: true,
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          const RoundedRectangleBorder(
+                        // borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(
+                            color: Color.fromARGB(255, 56, 155, 152)),
+                      )),
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                    ),
+                    child: const Text(
+                      'Logout',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 56, 155, 152)),
+                    ),
+                    onPressed: () async {
+                    /*   final  homeToken =
+                          _authSession.getHomeToken();
+                      homeToken.then((homeToken) =>
+                      context.read<LoginCubit>().logout(token: homeToken)
+                      ); */
+                      // context.read<LoginCubit>().logout(token: homeToken);
+                    },
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width / 6,
@@ -47,27 +94,31 @@ class _DashboardState extends State<Dashboard> {
                 style: const TextStyle(fontSize: 17, fontFamily: 'poppins'),
               ),
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.only(left: 40.0),
-              child: Text(context.read<LoginCubit>().state.department,
-                style: const TextStyle(color: Color.fromARGB(255, 115, 109, 109)),
+              child: Text(
+                context.read<LoginCubit>().state.department,
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 115, 109, 109)),
               ),
             ),
             const SizedBox(height: 60),
             Padding(
               padding: const EdgeInsets.only(left: 40.0),
-              child: Text(context.read<LoginCubit>().state.hospital,
+              child: Text(
+                context.read<LoginCubit>().state.hospital,
                 style: const TextStyle(
                     fontFamily: 'poppins',
                     fontSize: 17,
                     fontWeight: FontWeight.w600),
               ),
             ),
-        
+
             //TODO: backend as well
             SizedBox(
               height: MediaQuery.of(context).size.height / 10,
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
