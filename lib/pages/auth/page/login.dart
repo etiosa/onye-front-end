@@ -196,6 +196,7 @@ class _SubmitButton extends StatelessWidget {
         print(_authSession.getHomeToken()!=null);
         if (_authSession.getHomeToken() != null) {
           
+          
           Messages.showMessage(
               const Icon(
                 IconData(0xf635, fontFamily: 'MaterialIcons'),
