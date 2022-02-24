@@ -26,7 +26,7 @@ class _RegistrationState extends State<Registration> {
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
       context
           .read<AppointmentCubit>()
-          .getRegisterations(token: context.read<LoginCubit>().state.homeToken, searchParams: context.read<AppointmentCubit>().state.searchParams);
+          .searchRegistrations(token: context.read<LoginCubit>().state.homeToken, searchParams: context.read<AppointmentCubit>().state.searchParams);
     }
   }
 
@@ -127,7 +127,7 @@ class _RegistrationState extends State<Registration> {
                   style: TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  context.read<AppointmentCubit>().getRegisterations(token: context.read<LoginCubit>().state.homeToken,
+                  context.read<AppointmentCubit>().searchRegistrations(token: context.read<LoginCubit>().state.homeToken,
                     searchParams:  context.read<AppointmentCubit>().state.searchParams
 
 
@@ -465,7 +465,7 @@ class _CheckInPatientState extends State<CheckInPatient> {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              context.read<AppointmentCubit>().createRegsitration(
+              context.read<AppointmentCubit>().createRegistration(
                     token: context.read<LoginCubit>().state.homeToken,
                     patientID: widget.registerationList[widget.selectedIndex]
                         ['patient']['id'],

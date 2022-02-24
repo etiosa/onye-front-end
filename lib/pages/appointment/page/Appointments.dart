@@ -29,9 +29,6 @@ class _AppointmentsState extends State<Appointments> {
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
       context.read<AppointmentCubit>().searchAppointments(
           token: context.read<LoginCubit>().state.homeToken);
-      /*  context
-          .read<RegistrationCubit>()
-          .getAppointments(token: context.read<LoginCubit>().state.homeToken); */
     }
   }
 
@@ -288,13 +285,49 @@ class _AppointmentState extends State<Appointment> {
                                       fontSize: 20,
                                     ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      dateFormat.format(DateTime.parse(
+                                          state.appointmentList[index]
+                                          ['appointmentDateTime'])),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            /*   CheckInPatient(
-                              appointmentList: state.appointmentList,
-                              selectedIndex: index,
-                            ), */
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  20.0, 2.0, 8.0, 2.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Number: ${state.appointmentList[index]['patient']['patientNumber']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Phone: ${state.appointmentList[index]['patient']['phoneNumber']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ]),

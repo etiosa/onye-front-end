@@ -89,10 +89,10 @@ class RegistrationRepositories {
     }
   }
 
-  Future<List<dynamic>> getRegisterations({String? token, String? queryParam}) async {
+  Future<List<dynamic>> getRegistrations({String? token, String? queryParam}) async {
     //1 Uri
     var uri = Uri.parse(root +
-        'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
+        'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00&zoneId=Africa/Lagos');
 
     //2 http call
     http.Response reponse = await http.get(

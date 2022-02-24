@@ -408,7 +408,7 @@ class RegisterField extends StatelessWidget {
                                     .isNotEmpty) {
                               var response = context
                                   .read<AppointmentCubit>()
-                                  .createAppointmenmt(
+                                  .createAppointment(
                                       date: context
                                           .read<AppointmentCubit>()
                                           .state

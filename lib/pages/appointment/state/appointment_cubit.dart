@@ -16,7 +16,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   Future<void> searchAppointments({String? token, String? searchParams}) async {
     emit(state.copywith(searchstate: SEARCHSTATE.inital));
 
-    var appointments = await _appointmentRepository.getAppointmentList(
+    var appointments = await _appointmentRepository.searchAppointments(
         token: token, searchParams: state.searchParams);
     emit(state.copywith(appointmentList: appointments));
     if (state.appointmentList.isEmpty) {
@@ -27,14 +27,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   void searchPatients({String? query, String? token}) async {
-    var patients = await _appointmentRepository.getPatientsList(
+    var patients = await _appointmentRepository.searchPatients(
         searchParams: query, token: token);
     emit(state.copywith(patientsList: patients));
   }
 
   void searchDoctors({String? query, String? token}) async {
     emit(state.copywith(searchstate: SEARCHSTATE.startsearch));
-    var doctors = await _appointmentRepository.getDoctorList(
+    var doctors = await _appointmentRepository.searchDoctors(
         searchParams: query, token: token);
     if (doctors.isNotEmpty) {
       emit(state.copywith(
@@ -111,50 +111,39 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copywith(selctedPatientIndex: selectedIndex));
   }
 
-  Future<Response?> createRegsitration(
+  Future<Response?> createRegistration(
       {String? token,
       String? patientID,
       String? medicalId,
       String? appointmentId,
       String? reasons,
       String? typofVisit}) async {
-    Response? req = await _appointmentRepository.createRegisteration(
+    Response? req = await _appointmentRepository.createRegistration(
         token: token,
-        patientID: patientID,
+        patientId: patientID,
         medicalId: medicalId,
         appointmentId: appointmentId,
         reasons: reasons,
-        typofVisit: typofVisit);
-    getRegisterations(token: token);
+        typeOfVisit: typofVisit);
+    searchRegistrations(token: token);
 
     return req;
   }
 
-  void getRegisterations({String? token, String? searchParams}) async {
+  void searchRegistrations({String? token, String? searchParams}) async {
     emit(state.copywith(searchstate: SEARCHSTATE.inital));
-    var registerationList = await _appointmentRepository.getRegisterations(
+    var registrationsList = await _appointmentRepository.searchRegistrations(
         token: token, searchParams: searchParams);
-    emit(state.copywith(registerationList: registerationList));
-    print(registerationList);
+    emit(state.copywith(registerationList: registrationsList));
 
     if (state.registerationList.isEmpty) {
       emit(state.copywith(searchstate: SEARCHSTATE.notFound));
     } else {
       emit(state.copywith(searchstate: SEARCHSTATE.sucessful));
-      //emit(state.copywith(registerationList: registerationList));
-
     }
   }
 
-  void getAppointments({String? token}) async {
-    var appointList =
-        await _appointmentRepository.getRegisterations(token: token);
-    emit(state.copywith(appointmentList: appointList));
-
-    //var
-  }
-
-  Future<Response?> createAppointmenmt(
+  Future<Response?> createAppointment(
       {String? appointmentDateTime,
       String? patientID,
       String? medicalId,
@@ -169,14 +158,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     String Time = time!;
     var inputFormat = DateFormat('yyyy-dd-MM hh:mm a');
     var timedate = inputFormat.parse(Date + ' ' + Time, true);
-    print(timedate.toIso8601String());
 
-    Response? req = await _appointmentRepository.CreateAppointment(
+    Response? req = await _appointmentRepository.createAppointment(
         date: timedate.toIso8601String(),
-        patientID: patientID,
+        patientId: patientID,
         medicalId: medicalId,
         token: token,
-        typofVisit: typeOfVisit,
+        typeOfVisit: typeOfVisit,
         reasons: reasonForVisit);
 
     return req;

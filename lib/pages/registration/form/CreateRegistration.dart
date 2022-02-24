@@ -295,7 +295,7 @@ class RegisterField extends StatelessWidget {
                                     .isNotEmpty) {
                               var response = context
                                   .read<AppointmentCubit>()
-                                  .createRegsitration(
+                                  .createRegistration(
                                       token: context
                                           .read<LoginCubit>()
                                           .state
