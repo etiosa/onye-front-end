@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:onye_front_ened/pages/appointment/form/AppointmentForm.dart';
-import 'package:onye_front_ened/pages/appointment/form/CreateAppointment.dart';
-import 'package:onye_front_ened/pages/registration/form/CreateRegistration.dart';
+import 'package:onye_front_ened/pages/appointment/form/appointment_form.dart';
+import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
+import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/pages/registration/page/Registration.dart';
-import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
+import 'package:onye_front_ened/pages/registration/page/registrations.dart';
+import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/auth/page/login.dart';
 import 'package:onye_front_ened/pages/patient/page/patients.dart';
-import 'package:onye_front_ened/pages/appointment/page/Appointments.dart';
+import 'package:onye_front_ened/pages/appointment/page/appointments.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
-import 'package:onye_front_ened/pages/appointment/repository/AppointmentRepository.dart';
+import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart';
-import 'package:onye_front_ened/pages/patient/form/CreatePatientForm.dart';
+import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
 
 void main() async {
   runApp(const MyApp());

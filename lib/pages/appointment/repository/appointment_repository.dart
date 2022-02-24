@@ -7,7 +7,7 @@ class AppointmentRepository {
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
-  Future<List<dynamic>> getAppointmentList(
+  Future<List<dynamic>> searchAppointments(
       {String? searchParams,
       String? startDateTime,
       String? endDateTime,
@@ -22,7 +22,7 @@ class AppointmentRepository {
     });
 
     // http call
-    http.Response reponse = await http.get(
+    http.Response response = await http.get(
       uri,
       headers: {
         "Accept": accept,
@@ -30,14 +30,13 @@ class AppointmentRepository {
         "Authorization": "Bearer $token",
       },
     );
-    var body = json.decode(reponse.body);
+    var body = json.decode(response.body);
     var appointmentList = body['elements'];
-    print(appointmentList);
 
     return appointmentList;
   }
 
-  Future<List<dynamic>> getPatientsList(
+  Future<List<dynamic>> searchPatients(
       {String? searchParams, String? token}) async {
     var uri = Uri.parse(root + 'api/rest/v1/patient/search')
         .replace(queryParameters: <String, String>{
@@ -45,7 +44,7 @@ class AppointmentRepository {
     });
 
     // http call
-    http.Response reponse = await http.get(
+    http.Response response = await http.get(
       uri,
       headers: {
         "Accept": accept,
@@ -54,21 +53,20 @@ class AppointmentRepository {
       },
     );
 
-    var body = json.decode(reponse.body);
+    var body = json.decode(response.body);
     var patientsList = body['elements'];
 
     return patientsList;
   }
 
-  Future<List<dynamic>> getDoctorList(
+  Future<List<dynamic>> searchDoctors(
       {String? searchParams, String? token}) async {
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
     });
 
-    // http call
-    http.Response reponse = await http.get(
+    http.Response response = await http.get(
       uri,
       headers: {
         "Accept": accept,
@@ -77,21 +75,23 @@ class AppointmentRepository {
       },
     );
 
-    var body = json.decode(reponse.body);
+    var body = json.decode(response.body);
     var doctorsList = body['elements'];
 
     return doctorsList;
   }
 
-  Future<http.Response?> createRegisteration(
+  Future<http.Response?> createRegistration(
       {String? token,
-      String? patientID,
+      String? patientId,
       String? medicalId,
       String? appointmentId,
       String? reasons,
-      String? typofVisit}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/registration?zoneId=Africa/Lagos');
-    var body;
+      String? typeOfVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/registration')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
 
     try {
       http.Response response = await http.post(uri,
@@ -101,10 +101,10 @@ class AppointmentRepository {
             "Authorization": "Bearer $token",
           },
           body: json.encode({
-            "patientId": patientID,
+            "patientId": patientId,
             "appointmentId": appointmentId,
             "medicalPersonnelId": medicalId,
-            "typeOfVisit": typofVisit,
+            "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasons,
             "languagePreference": "en"
           }));
@@ -115,17 +115,19 @@ class AppointmentRepository {
     }
   }
 
-  // ignore: non_constant_identifier_names
-  Future<http.Response?> CreateAppointment(
+  Future<http.Response?> createAppointment(
       {String? token,
-      String? patientID,
+      String? patientId,
       String? medicalId,
       String? appointmentId,
       String? reasons,
       String? time,
       String? date,
-      String? typofVisit}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/appointment?zoneId=Africa/Lagos');
+      String? typeOfVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
 
     try {
       http.Response response = await http.post(uri,
@@ -137,10 +139,10 @@ class AppointmentRepository {
           body: json.encode({
             "appointmentDateTime": date,
             "minDuration": 30,
-            "typeOfVisit": typofVisit,
+            "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasons,
             "languagePreference": "en",
-            'patientId': patientID,
+            'patientId': patientId,
             'medicalPersonnelId': medicalId
           }));
 
@@ -150,40 +152,28 @@ class AppointmentRepository {
     }
   }
 
-  Future<List<dynamic>> getAppointments({
+  Future<http.Response?> cancelAppointment({
+    String? id,
     String? token,
   }) async {
-    var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
-        .replace(queryParameters: <String, String>{
-      'from': '2020-01-01T00:00',
-      'to': '2024-01-01T00:00',
-      'query': '',
-      'zoneId': 'Africa/Lagos',
-    });
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/$id');
 
-    //1 Uri
-    /*    var uri = Uri.parse(root +
-        'api/rest/v1/appointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
- */
-    //2 http call
-    http.Response reponse = await http.get(
-      uri,
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    );
-    var body = json.decode(reponse.body);
-    var appointmentList = body['elements'];
+    try {
+      http.Response response = await http.delete(uri,
+          headers: {
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+      );
 
-    return appointmentList;
+      return response;
+    } catch (e) {
+      return null;
+    }
   }
 
-  Future<List<dynamic>> getRegisterations(
+  Future<List<dynamic>> searchRegistrations(
       {String? token, String? searchParams}) async {
-    //1 Uri
-
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
@@ -193,10 +183,7 @@ class AppointmentRepository {
       'zoneId': 'Africa/Lagos',
     });
 
-    // var uri = Uri.parse(root +'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00');
-
-    //2 http call
-    http.Response reponse = await http.get(
+    http.Response response = await http.get(
       uri,
       headers: {
         "Accept": "application/json",
@@ -204,51 +191,9 @@ class AppointmentRepository {
         "Authorization": "Bearer $token",
       },
     );
-    var body = json.decode(reponse.body);
-    print(body);
-    var appointmentList = body['elements'];
+    var body = json.decode(response.body);
+    var registrationsList = body['elements'];
 
-    return appointmentList;
-  }
-
-  Future<bool> createAppointment(
-      {String? token,
-      String? patientID,
-      String? medicalId,
-      String? reasons,
-      String? from,
-      String? to,
-      String? typofVisit}) async {
-    var uri =
-        Uri.parse(root + '/api/rest/v1/appointment?zoneId=Europe/Stockholm');
-    var body;
-    print('token');
-    print(token);
-    print(reasons);
-    print(typofVisit);
-    print(patientID);
-    print(medicalId);
-
-    try {
-      http.Response response = await http.post(uri,
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": accept,
-            "Authorization": "Bearer $token",
-          },
-          body: json.encode({
-            "patientId": patientID,
-            "appointmentId": null,
-            "medicalPersonnelId": medicalId,
-            "typeOfVisit": typofVisit,
-            "reasonForVisit": reasons,
-            "languagePreference": "en"
-          }));
-
-      print(response.body);
-      return true;
-    } catch (e) {
-      return false;
-    }
+    return registrationsList;
   }
 }

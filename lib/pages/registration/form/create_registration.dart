@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/pages/appointment/page/Appointments.dart';
+import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:shimmer/shimmer.dart';
 
-class CreateAppointment extends StatefulWidget {
-  const CreateAppointment({Key? key, this.restorationId}) : super(key: key);
+class CreateRegistration extends StatefulWidget {
+  const CreateRegistration({Key? key, this.restorationId}) : super(key: key);
 
   final String? restorationId;
 
   @override
-  State<CreateAppointment> createState() => _CreateAppointmentState();
+  State<CreateRegistration> createState() => _CreateRegistrationState();
 }
 
 //TODO: Refactor
-class _CreateAppointmentState extends State<CreateAppointment> {
+class _CreateRegistrationState extends State<CreateRegistration> {
   int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -44,7 +43,7 @@ class _CreateAppointmentState extends State<CreateAppointment> {
             const Padding(
               padding: EdgeInsets.only(top: 20.0, left: 20),
               child: Text(
-                "Create Appointment",
+                "Create Registration",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
@@ -132,22 +131,7 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                           });
                         }
                         break;
-                      case 2:
-                        if (context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedMedicalPeronnelId
-                                .isNotEmpty &&
-                            context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedPatientId
-                                .isNotEmpty) {
-                          setState(() {
-                            _index = index;
-                          });
-                        }
-                        break;
+                   
                       default:
                         break;
                     }
@@ -156,34 +140,18 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     Step(
                         state: StepState.editing,
                         isActive: _index == 0,
-                        title: const Text(
-                          'Select patient',
-                          style: TextStyle(fontSize: 13),
-                        ),
+                        title: const Text('Select patient'),
                         content: SearchPatientBody(
                           formIndex: 0,
                         )),
+                
                     Step(
                         state: StepState.editing,
-                        isActive: _index == 1,
-                        title: const Text(
-                          'Select doctor',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        content: SearchDoctorBody(
+                        isActive: _index == 2,
+                        title: const Text('Register'),
+                        content: Register(
                           formIndex: 1,
                         )),
-                    Step(
-                      state: StepState.editing,
-                      isActive: _index == 2,
-                      title: const Text(
-                        'Appointment',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      content: Register(
-                        formIndex: 2,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -195,63 +163,6 @@ class _CreateAppointmentState extends State<CreateAppointment> {
   }
 }
 
-class StepButtons extends StatelessWidget {
-  StepButtons({Key? key, required this.controlDetials}) : super(key: key);
-  ControlsDetails controlDetials;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 100,
-          height: 60,
-          padding: const EdgeInsets.all(2),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ElevatedButton(
-              autofocus: true,
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 56, 155, 152)),
-              ),
-              child: Text(controlDetials.currentStep == 2 ? '' : 'Next'),
-              onPressed: () {
-                controlDetials.onStepContinue;
-              },
-            ),
-          ),
-        ),
-        const SizedBox(width: 20),
-        Container(
-          width: 100,
-          height: 60,
-          padding: const EdgeInsets.all(2),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ElevatedButton(
-              autofocus: true,
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              onPressed: () {
-                controlDetials.onStepCancel;
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class SearchDoctorBody extends StatefulWidget {
   SearchDoctorBody({Key? key, required this.formIndex}) : super(key: key);
@@ -359,30 +270,6 @@ class RegisterField extends StatelessWidget {
                     'Check Up',
                     'Consultation'
                   ]),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      DatePickerFeild(
-                        label: 'Date',
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      DateTimePickerFeild(
-                        label: 'Time',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
                   const SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -408,35 +295,27 @@ class RegisterField extends StatelessWidget {
                                     .isNotEmpty) {
                               var response = context
                                   .read<AppointmentCubit>()
-                                  .createAppointmenmt(
-                                      date: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .startDate,
-                                      time: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .startTime,
-                                      patientID: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .selectedPatientId,
-                                      medicalId: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .selectedMedicalPeronnelId,
+                                  .createRegistration(
                                       token: context
                                           .read<LoginCubit>()
                                           .state
                                           .homeToken,
-                                      reasonForVisit: context
+                                      medicalId: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .resonsForVist,
+                                          .selectedMedicalPeronnelId,
+                                      patientID: context
+                                          .read<AppointmentCubit>()
+                                          .state
+                                          .selectedPatientId,
                                       typeOfVisit: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .typeOfVist);
+                                          .typeOfVist,
+                                      reasons: context
+                                          .read<AppointmentCubit>()
+                                          .state
+                                          .resonsForVist);
 
                               response.then((value) => {
                                     if (value != null &&
@@ -448,12 +327,12 @@ class RegisterField extends StatelessWidget {
                                                   fontFamily: 'MaterialIcons'),
                                               color: Colors.green,
                                             ),
-                                            'Appointment created'),
+                                            'Registration created'),
                                         Navigator.of(context)
                                             .pushAndRemoveUntil(
                                                 MaterialPageRoute(
                                                     builder: ((context) =>
-                                                        const Appointments())),
+                                                        const Registration())),
                                                 ModalRoute.withName(
                                                     '/dashboard'))
                                       }
@@ -466,7 +345,7 @@ class RegisterField extends StatelessWidget {
                                                   fontFamily: 'MaterialIcons'),
                                               color: Colors.red,
                                             ),
-                                            'Could not create appointment'),
+                                            'Could not create registration'),
                                       }
                                   });
                             }
@@ -479,172 +358,6 @@ class RegisterField extends StatelessWidget {
             ),
           ),
         ]);
-  }
-}
-
-Future dateTimePicker(BuildContext context, String label) async {
-  final newTime =
-      await showTimePicker(context: context, initialTime: TimeOfDay.now());
-  if (newTime == null) return;
-  String formatTime = newTime.format(context);
-  print(newTime);
-
-  context.read<AppointmentCubit>().setStartTime(formatTime);
-   // context.read<AppointmentCubit>().setEndTime(newTime);
-
-
-}
-
-class DateTimePickerFeild extends StatelessWidget {
-  const DateTimePickerFeild({Key? key, required this.label}) : super(key: key);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-      builder: (context, state) {
-        print(state);
-        return (Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Time',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w100),
-            ),
-            InkWell(
-              onTap: () {
-                dateTimePicker(context, label);
-              },
-              child: Container(
-                height: 45,
-                width: 100,
-                color: const Color.fromARGB(255, 205, 226, 226),
-                child: Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: TimeContent(
-                      label: label,
-                    )),
-              ),
-            ),
-          ],
-        ));
-      },
-    );
-  }
-}
-
-class TimeContent extends StatelessWidget {
-  const TimeContent({Key? key, required this.label}) : super(key: key);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    if (label == 'From') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(
-          context.read<AppointmentCubit>().state.startTime,
-          style: const TextStyle(fontSize: 12),
-        ),
-      );
-    }
-    if (label == 'To') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.endTime,
-            style: const TextStyle(fontSize: 12)),
-      );
-    }
-    return Text(context.read<AppointmentCubit>().state.startTime);
-  }
-}
-
-Future datePicker(BuildContext context, String label) async {
-  var dateFormat = DateFormat('yyyy-MM-dd');
-
-  final initDate = DateTime.now();
-  final newDate = await showDatePicker(
-      context: context,
-      initialDate: initDate,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(DateTime.now().year + 5));
-
-  String formattedDate = dateFormat.format(newDate!);
-
-  // ignore: unnecessary_null_comparison
-  if (newDate == null) return;
-  context.read<AppointmentCubit>().setStartDate(formattedDate);
-}
-
-class DatePickerFeild extends StatelessWidget {
-  const DatePickerFeild({Key? key, required this.label}) : super(key: key);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-      builder: (context, state) {
-        return (Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w100),
-            ),
-            InkWell(
-              onTap: () {
-                datePicker(context, label);
-              },
-              child: Container(
-                height: 45,
-                width: 100,
-                color: const Color.fromARGB(255, 205, 226, 226),
-                child: Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: TextContent(
-                    label: label,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ));
-      },
-    );
-  }
-}
-
-class TextContent extends StatelessWidget {
-  const TextContent({Key? key, required this.label}) : super(key: key);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    if (label == 'From') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(
-          context.read<AppointmentCubit>().state.startDate,
-          style: const TextStyle(fontSize: 12),
-        ),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-      child: Text(context.read<AppointmentCubit>().state.startDate,
-          style: const TextStyle(fontSize: 12)),
-    );
   }
 }
 
@@ -841,13 +554,17 @@ class _DoctorListState extends State<DoctorList> {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(
-                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName']} ${state.doctorsList[index]['lastName']}'),
+                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName']??''} ${state.doctorsList[index]['lastName']}'),
                 selected: (selectedIndex == index),
                 selectedColor: Colors.amber,
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
                     selectedDctorId = state.doctorsList[index]['id'];
+
+                    print('index: $selectedIndex');
+                    print('doctorId: $selectedDctorId');
+
                     context
                         .read<AppointmentCubit>()
                         .setSelectedMedicalPersonnelId(selectedDctorId);
@@ -940,6 +657,7 @@ class _PatientListState extends State<PatientList> {
   @override
   Widget build(BuildContext context) {
     String? selectedPatientId = '';
+    String? selectedAppointmentId = '';
     int selectedIndex = -1;
 
     return BlocBuilder<AppointmentCubit, AppointmentState>(
@@ -974,17 +692,18 @@ class _PatientListState extends State<PatientList> {
                 ), */
                 ListTile(
                   title: Text(
-                      '${state.patientsList[index]['firstName']}${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}'),
+                      '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']??''} ${state.patientsList[index]['lastName']}'),
                   selected: (selectedIndex == index),
                   selectedColor: Colors.amber,
                   onTap: () {
                     setState(() {
+                      print(state.patientsList[index]);
+
                       selectedIndex = index;
                       selectedPatientId = state.patientsList[index]['id'];
 
-                      context
-                          .read<AppointmentCubit>()
-                          .setSelectedPatientIndex(selectedIndex);
+                      print('index: $selectedIndex');
+                      print('patientId: $selectedPatientId');
 
                       context
                           .read<AppointmentCubit>()

@@ -1,12 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../state/appointment_cubit.dart';
-
-import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:shimmer/shimmer.dart';
 
 class Appointments extends StatefulWidget {
   const Appointments({Key? key}) : super(key: key);
@@ -29,9 +29,6 @@ class _AppointmentsState extends State<Appointments> {
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
       context.read<AppointmentCubit>().searchAppointments(
           token: context.read<LoginCubit>().state.homeToken);
-      /*  context
-          .read<RegistrationCubit>()
-          .getAppointments(token: context.read<LoginCubit>().state.homeToken); */
     }
   }
 
@@ -168,11 +165,13 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        print(state);
         if (state.searchState == SEARCHSTATE.notFound) {
           return (const Center(
             child: SizedBox(
-                height: 50, width: 200, child: Card(child: Padding(
+                height: 50,
+                width: 200,
+                child: Card(
+                    child: Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text('NOT FOUND'),
                 ))),
@@ -288,13 +287,59 @@ class _AppointmentState extends State<Appointment> {
                                       fontSize: 20,
                                     ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      dateFormat.format(DateTime.parse(
+                                          state.appointmentList[index]
+                                              ['appointmentDateTime'])),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            /*   CheckInPatient(
-                              appointmentList: state.appointmentList,
-                              selectedIndex: index,
-                            ), */
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  20.0, 2.0, 8.0, 2.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Number: ${state.appointmentList[index]['patient']['patientNumber']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'Phone: ${state.appointmentList[index]['patient']['phoneNumber']}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                CancelAppointmentButton(
+                                  id: state.appointmentList[index]['id'],
+                                ),
+                                RescheduleAppointmentButton(
+                                  id: state.appointmentList[index]['id'],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ]),
@@ -304,6 +349,71 @@ class _AppointmentState extends State<Appointment> {
           );
         }
       },
+    );
+  }
+}
+
+class CancelAppointmentButton extends StatelessWidget {
+  CancelAppointmentButton(
+      {Key? key, required this.id})
+      : super(key: key);
+
+  String id;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 120,
+        height: 30,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromRGBO(128, 0, 0, 1.0)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () {
+              context.read<AppointmentCubit>().cancelAppointment(
+                    id: id,
+                    token: context.read<LoginCubit>().state.homeToken,
+                  );
+            },
+            child: const Text('Cancel')),
+      ),
+    );
+  }
+}
+
+class RescheduleAppointmentButton extends StatelessWidget {
+  RescheduleAppointmentButton({Key? key, required this.id})
+      : super(key: key);
+
+  String id;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 120,
+        height: 30,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 56, 155, 152)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () {
+            },
+            child: const Text('Reschedule')),
+      ),
     );
   }
 }
@@ -340,6 +450,7 @@ class Confirmation extends StatelessWidget {
       : super(key: key);
   List<dynamic> appointmentList;
   int selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(

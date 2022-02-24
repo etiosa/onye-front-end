@@ -1,4 +1,4 @@
-part of 'shcedule_cubit.dart';
+part of 'schedule_cubit.dart';
 
 abstract class ShceduleState extends Equatable {
   const ShceduleState();

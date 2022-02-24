@@ -4,6 +4,7 @@ enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
 
 class AppointmentState extends Equatable {
+
   const AppointmentState(
       {this.appointmentList = const [],
       this.patientsList = const [],
@@ -15,7 +16,7 @@ class AppointmentState extends Equatable {
       this.endTime = '',
       this.searchState = SEARCHSTATE.inital,
       this.doctorsList = const [],
-      this.registerationList =const [],
+      this.registrationList =const [],
       this.selectedMedicalPeronnelId = '',
       this.selectedPatientId = '',
       this.resonsForVist = '',
@@ -27,7 +28,7 @@ class AppointmentState extends Equatable {
       this.patientRegistered=false,
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
-  final List<dynamic> registerationList;
+  final List<dynamic> registrationList;
 
 
   final List<dynamic> patientsList;
@@ -72,10 +73,10 @@ class AppointmentState extends Equatable {
         regState,
         selectedAppointmentId,
         patientRegistered,
-        registerationList
+        registrationList
       ];
 
-  AppointmentState copywith({
+  AppointmentState copyWith({
     String? searchParams,
     List<dynamic>? appointmentList,
     List<dynamic>? patientsList,
@@ -94,22 +95,21 @@ class AppointmentState extends Equatable {
     String? endDate,
     String? typeOfVisit,
     String? reasonForVisit,
-    int? selctedPatientIndex,
-    int? seletedMedicalIndex,
+    int? selectedPatientIndex,
+    int? selectedMedicalIndex,
     String? endDateTime,
     String? selectedAppointmentId,
   }) {
     return AppointmentState(
       patientRegistered: patientRegistered?? this.patientRegistered,
-      registerationList: registerationList?? this.registerationList,
+      registrationList: registerationList?? this.registrationList,
         typeOfVist: typeOfVisit ?? typeOfVist,
         regState: regstate ?? regState,
         resonsForVist: reasonForVisit ?? resonsForVist,
         selectedMedicalIndexs:
-            seletedMedicalIndex ?? this.selectedMedicalIndexs,
+            selectedMedicalIndex ?? this.selectedMedicalIndexs,
         selectedPatientIndexs:
-            selctedPatientIndex ?? this.selectedPatientIndexs,
-        // ignore: unnecessary_this
+            selectedPatientIndex ?? this.selectedPatientIndexs,
         selectedMedicalPeronnelId:
             selectedMedicalPersonnel ?? selectedMedicalPeronnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,

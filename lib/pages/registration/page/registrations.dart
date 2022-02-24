@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:intl/intl.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -24,9 +24,9 @@ class _RegistrationState extends State<Registration> {
       });
     }
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
-      context
-          .read<AppointmentCubit>()
-          .getRegisterations(token: context.read<LoginCubit>().state.homeToken, searchParams: context.read<AppointmentCubit>().state.searchParams);
+      context.read<AppointmentCubit>().searchRegistrations(
+          token: context.read<LoginCubit>().state.homeToken,
+          searchParams: context.read<AppointmentCubit>().state.searchParams);
     }
   }
 
@@ -89,7 +89,8 @@ class _RegistrationState extends State<Registration> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
-                onChanged: (search)=>context.read<AppointmentCubit>().setSearchParams(search),
+                onChanged: (search) =>
+                    context.read<AppointmentCubit>().setSearchParams(search),
                 obscureText: false,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -122,16 +123,14 @@ class _RegistrationState extends State<Registration> {
                       const Color.fromARGB(255, 56, 155, 152)),
                 ),
                 child: const Text(
-
                   'Search',
                   style: TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  context.read<AppointmentCubit>().getRegisterations(token: context.read<LoginCubit>().state.homeToken,
-                    searchParams:  context.read<AppointmentCubit>().state.searchParams
-
-
-                  );
+                  context.read<AppointmentCubit>().searchRegistrations(
+                      token: context.read<LoginCubit>().state.homeToken,
+                      searchParams:
+                          context.read<AppointmentCubit>().state.searchParams);
                 },
               ),
             ),
@@ -163,14 +162,14 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-         if (state.searchState == SEARCHSTATE.notFound) {
+        if (state.searchState == SEARCHSTATE.notFound) {
           return (const Center(
               child: Card(
             child: Text('Not found'),
           )));
         }
 
-        if (state.registerationList.isEmpty) {
+        if (state.registrationList.isEmpty) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.2,
               height: MediaQuery.of(context).size.height / 1.5,
@@ -221,16 +220,13 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         )))
               ]));
-        }
-
-
-        else {
+        } else {
           return Expanded(
             flex: 1,
             child: ListView.builder(
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                itemCount: state.registerationList.length,
+                itemCount: state.registrationList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -251,7 +247,7 @@ class _AppointmentState extends State<Appointment> {
                       ),
                       child: Stack(alignment: Alignment.topRight, children: [
                         AppointmentConfirmed(
-                          appointmentList: state.registerationList,
+                          appointmentList: state.registrationList,
                           selectedIndex: index,
                         ),
                         Column(
@@ -266,7 +262,7 @@ class _AppointmentState extends State<Appointment> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      state.registerationList[index]['patient']
+                                      state.registrationList[index]['patient']
                                           ['firstName'],
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -275,7 +271,7 @@ class _AppointmentState extends State<Appointment> {
                                     ),
                                   ),
                                   Text(
-                                    state.registerationList[index]['patient']
+                                    state.registrationList[index]['patient']
                                         ['lastName'],
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -285,13 +281,14 @@ class _AppointmentState extends State<Appointment> {
                                   Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Text(
-                                      (state.registerationList[index].containsKey(
-                                              'appointmentDateTime'))
+                                      (state.registrationList[index]
+                                              .containsKey(
+                                                  'appointmentDateTime'))
                                           ? dateFormat.format(DateTime.parse(
-                                              state.registerationList[index]
+                                              state.registrationList[index]
                                                   ['appointmentDateTime']))
                                           : dateFormat.format(DateTime.parse(
-                                              state.registerationList[index]
+                                              state.registrationList[index]
                                                   ['registrationDateTime'])),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -310,7 +307,7 @@ class _AppointmentState extends State<Appointment> {
                                   Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      'Number: ${state.registerationList[index]['patient']['patientNumber']}',
+                                      'Number: ${state.registrationList[index]['patient']['patientNumber']}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 12,
@@ -320,7 +317,7 @@ class _AppointmentState extends State<Appointment> {
                                   Container(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      'Phone: ${state.registerationList[index]['patient']['phoneNumber']}',
+                                      'Phone: ${state.registrationList[index]['patient']['phoneNumber']}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 12,
@@ -330,8 +327,8 @@ class _AppointmentState extends State<Appointment> {
                                 ],
                               ),
                             ),
-                            CheckInPatient(
-                              registerationList: state.registerationList,
+                            RegisterPatient(
+                              registrationList: state.registrationList,
                               selectedIndex: index,
                             ),
                           ],
@@ -379,6 +376,7 @@ class Confirmation extends StatelessWidget {
       : super(key: key);
   List<dynamic> appointmentList;
   int selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -426,26 +424,27 @@ class Confirmation extends StatelessWidget {
   }
 }
 
-class CheckInPatient extends StatefulWidget {
-  CheckInPatient(
-      {Key? key, required this.registerationList, required this.selectedIndex})
+class RegisterPatient extends StatefulWidget {
+  RegisterPatient(
+      {Key? key, required this.registrationList, required this.selectedIndex})
       : super(key: key);
-  List<dynamic> registerationList;
+
+  List<dynamic> registrationList;
   int selectedIndex;
 
   @override
-  State<CheckInPatient> createState() => _CheckInPatientState();
+  State<RegisterPatient> createState() => _RegisterPatientState();
 }
 
-class _CheckInPatientState extends State<CheckInPatient> {
+class _RegisterPatientState extends State<RegisterPatient> {
   @override
   Widget build(BuildContext context) {
-    if (widget.registerationList[widget.selectedIndex]
+    if (widget.registrationList[widget.selectedIndex]
         .containsKey('registrationDateTime')) {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Confirmation(
-            appointmentList: widget.registerationList,
+            appointmentList: widget.registrationList,
             selectedIndex: widget.selectedIndex,
           ));
     }
@@ -465,17 +464,17 @@ class _CheckInPatientState extends State<CheckInPatient> {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              context.read<AppointmentCubit>().createRegsitration(
+              context.read<AppointmentCubit>().createRegistration(
                     token: context.read<LoginCubit>().state.homeToken,
-                    patientID: widget.registerationList[widget.selectedIndex]
+                    patientID: widget.registrationList[widget.selectedIndex]
                         ['patient']['id'],
-                    medicalId: widget.registerationList[widget.selectedIndex]
+                    medicalId: widget.registrationList[widget.selectedIndex]
                         ['medicalPersonnel']['id'],
-                    appointmentId: widget.registerationList[widget.selectedIndex]
+                    appointmentId: widget.registrationList[widget.selectedIndex]
                         ['id'],
-                    reasons: widget.registerationList[widget.selectedIndex]
+                    reasons: widget.registrationList[widget.selectedIndex]
                         ['reasonForVisit'],
-                    typofVisit: widget.registerationList[widget.selectedIndex]
+                    typeOfVisit: widget.registrationList[widget.selectedIndex]
                         ['typeOfVisit'],
                   );
               setState(() {});
