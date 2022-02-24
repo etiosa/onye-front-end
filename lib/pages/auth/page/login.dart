@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 
+import '../../../session/authSession.dart';
+
 class LoginPage extends StatefulWidget {
   //TODO: Ccall home
   const LoginPage({
@@ -16,10 +18,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
-    /*    if (context.read<LoginCubit>().state.loginToken.isNotEmpty) {
-      Navigator.of(context).pushNamed("/dashboard");
-    } */
-
     super.initState();
   }
 
@@ -187,27 +185,27 @@ class _Password extends StatelessWidget {
 
 class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
+  final _authSession = AuthSession();
 
-  const _SubmitButton(this.formKey) : super();
+  _SubmitButton(this.formKey) : super();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        if (state.homeToken.isNotEmpty) {
-            Messages.showMessage(
-                const Icon(
-                  IconData(0xf635, fontFamily: 'MaterialIcons'),
-                  color: Colors.green,
-                ),
-                'Login successful');
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
-                  Navigator.of(context).pushNamed("/dashboard");
-
-                });
-
+        print(_authSession.getHomeToken()!=null);
+        if (_authSession.getHomeToken() != null) {
           
-        }
+          Messages.showMessage(
+              const Icon(
+                IconData(0xf635, fontFamily: 'MaterialIcons'),
+                color: Colors.green,
+              ),
+              'Login successful');
+          WidgetsBinding.instance?.addPostFrameCallback((_) {
+            Navigator.of(context).pushNamed("/dashboard");
+          });
+        } 
         return Container(
           width: 250,
           height: 60,
@@ -225,7 +223,6 @@ class _SubmitButton extends StatelessWidget {
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   context.read<LoginCubit>().login();
-               
                 }
               },
             ),

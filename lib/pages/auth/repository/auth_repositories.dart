@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AuthRepository {
-  static const String root = "https://api.onyedap.com/";
+  static const String root = "http://localhost:8001/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
@@ -44,5 +44,22 @@ class AuthRepository {
 
   //grab the user data here as well.
 
-  Future<void> singout() async {}
+  Future<dynamic> signout({String? token}) async {
+    var uri = Uri.parse(root + "auth/logout");
+    var body;
+    try {
+      http.Response response = await http.post(uri, headers: {
+        "Content-Type": "application/json",
+        "Accept": accept,
+        "Authorization": "Bearer $token",
+      });
+      body = jsonDecode(response.body);
+      print(token);
+      print("logout");
+      print(response.body);
+      return body;
+    } catch (e) {
+      return body;
+    }
+  }
 }

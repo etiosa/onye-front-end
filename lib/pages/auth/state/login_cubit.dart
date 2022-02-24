@@ -2,12 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
+import 'package:onye_front_ened/session/authSession.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   // ignore: unused_field
   final AuthRepository _authRepository;
+  final _authSession = AuthSession();
 
   LoginCubit(this._authRepository) : super(const LoginState());
 
@@ -25,19 +27,26 @@ class LoginCubit extends Cubit<LoginState> {
     final String token = await _authRepository.signIn(
         username: state.userName, password: state.password);
     emit(state.copywith(loginToken: token));
-    home(tokens: state.loginToken);
+    home(homeToken: state.loginToken);
   }
 
-  void home({String? tokens}) async {
-    final body = await _authRepository.home(token: tokens);
+  void home({String? homeToken}) async {
+    final body = await _authRepository.home(token: homeToken);
     final String token = body['token'];
-    print(body['userInfo']);
     emit(state.copywith(
         homeTokenS: token,
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
-        department: body['userInfo']['facilityInfo']['department']
-      ));
+        department: body['userInfo']['facilityInfo']['department']));
+    _authSession.saveHomeToken(homeToken: token);
+  }
+
+  void logout({String? token}) async {
+    final response = await _authRepository.signout(token: token);
+    // print(response);
+//updated the state here after logout
+   await _authSession.removeHomeToken();
+   await _authSession.getHomeToken();
   }
 }
