@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -164,7 +165,6 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        print(state);
         if (state.searchState == SEARCHSTATE.notFound) {
           return (const Center(
             child: SizedBox(
@@ -354,7 +354,9 @@ class _AppointmentState extends State<Appointment> {
 }
 
 class CancelAppointmentButton extends StatelessWidget {
-  CancelAppointmentButton({Key? key, required this.id}) : super(key: key);
+  CancelAppointmentButton(
+      {Key? key, required this.id})
+      : super(key: key);
 
   String id;
 
@@ -375,7 +377,10 @@ class CancelAppointmentButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              print('id: $id');
+              context.read<AppointmentCubit>().cancelAppointment(
+                    id: id,
+                    token: context.read<LoginCubit>().state.homeToken,
+                  );
             },
             child: const Text('Cancel')),
       ),
@@ -406,7 +411,6 @@ class RescheduleAppointmentButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              print('id: $id');
             },
             child: const Text('Reschedule')),
       ),

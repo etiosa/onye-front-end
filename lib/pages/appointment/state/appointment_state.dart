@@ -4,6 +4,7 @@ enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
 
 class AppointmentState extends Equatable {
+
   const AppointmentState(
       {this.appointmentList = const [],
       this.patientsList = const [],

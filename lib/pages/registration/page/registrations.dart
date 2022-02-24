@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:intl/intl.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -24,9 +24,9 @@ class _RegistrationState extends State<Registration> {
       });
     }
     if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
-      context
-          .read<AppointmentCubit>()
-          .searchRegistrations(token: context.read<LoginCubit>().state.homeToken, searchParams: context.read<AppointmentCubit>().state.searchParams);
+      context.read<AppointmentCubit>().searchRegistrations(
+          token: context.read<LoginCubit>().state.homeToken,
+          searchParams: context.read<AppointmentCubit>().state.searchParams);
     }
   }
 
@@ -89,7 +89,8 @@ class _RegistrationState extends State<Registration> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
               child: TextFormField(
-                onChanged: (search)=>context.read<AppointmentCubit>().setSearchParams(search),
+                onChanged: (search) =>
+                    context.read<AppointmentCubit>().setSearchParams(search),
                 obscureText: false,
                 autofocus: true,
                 decoration: const InputDecoration(
@@ -122,16 +123,14 @@ class _RegistrationState extends State<Registration> {
                       const Color.fromARGB(255, 56, 155, 152)),
                 ),
                 child: const Text(
-
                   'Search',
                   style: TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  context.read<AppointmentCubit>().searchRegistrations(token: context.read<LoginCubit>().state.homeToken,
-                    searchParams:  context.read<AppointmentCubit>().state.searchParams
-
-
-                  );
+                  context.read<AppointmentCubit>().searchRegistrations(
+                      token: context.read<LoginCubit>().state.homeToken,
+                      searchParams:
+                          context.read<AppointmentCubit>().state.searchParams);
                 },
               ),
             ),
@@ -163,7 +162,7 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-         if (state.searchState == SEARCHSTATE.notFound) {
+        if (state.searchState == SEARCHSTATE.notFound) {
           return (const Center(
               child: Card(
             child: Text('Not found'),
@@ -221,10 +220,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         )))
               ]));
-        }
-
-
-        else {
+        } else {
           return Expanded(
             flex: 1,
             child: ListView.builder(
@@ -285,8 +281,9 @@ class _AppointmentState extends State<Appointment> {
                                   Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Text(
-                                      (state.registrationList[index].containsKey(
-                                              'appointmentDateTime'))
+                                      (state.registrationList[index]
+                                              .containsKey(
+                                                  'appointmentDateTime'))
                                           ? dateFormat.format(DateTime.parse(
                                               state.registrationList[index]
                                                   ['appointmentDateTime']))
@@ -379,6 +376,7 @@ class Confirmation extends StatelessWidget {
       : super(key: key);
   List<dynamic> appointmentList;
   int selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -430,6 +428,7 @@ class RegisterPatient extends StatefulWidget {
   RegisterPatient(
       {Key? key, required this.registrationList, required this.selectedIndex})
       : super(key: key);
+
   List<dynamic> registrationList;
   int selectedIndex;
 
@@ -475,7 +474,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
                         ['id'],
                     reasons: widget.registrationList[widget.selectedIndex]
                         ['reasonForVisit'],
-                    typofVisit: widget.registrationList[widget.selectedIndex]
+                    typeOfVisit: widget.registrationList[widget.selectedIndex]
                         ['typeOfVisit'],
                   );
               setState(() {});

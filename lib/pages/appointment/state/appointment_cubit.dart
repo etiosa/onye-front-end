@@ -2,13 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 
 part 'appointment_state.dart';
 
 class AppointmentCubit extends Cubit<AppointmentState> {
   AppointmentRepository _appointmentRepository;
+
   AppointmentCubit(
     this._appointmentRepository,
   ) : super(const AppointmentState());
@@ -117,14 +117,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? medicalId,
       String? appointmentId,
       String? reasons,
-      String? typofVisit}) async {
+      String? typeOfVisit}) async {
     Response? req = await _appointmentRepository.createRegistration(
         token: token,
         patientId: patientID,
         medicalId: medicalId,
         appointmentId: appointmentId,
         reasons: reasons,
-        typeOfVisit: typofVisit);
+        typeOfVisit: typeOfVisit);
     searchRegistrations(token: token);
 
     return req;
@@ -154,13 +154,11 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? date,
       String? time,
       String? languagePreference}) async {
-    String Date = date!;
-    String Time = time!;
     var inputFormat = DateFormat('yyyy-dd-MM hh:mm a');
-    var timedate = inputFormat.parse(Date + ' ' + Time, true);
+    var dateTime = inputFormat.parse(date! + ' ' + time!, true);
 
     Response? req = await _appointmentRepository.createAppointment(
-        date: timedate.toIso8601String(),
+        date: dateTime.toIso8601String(),
         patientId: patientID,
         medicalId: medicalId,
         token: token,
@@ -168,5 +166,17 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         reasons: reasonForVisit);
 
     return req;
+  }
+
+  Future<Response?> cancelAppointment({
+    String? id,
+    String? token,
+  }) async {
+    Response? response = await _appointmentRepository.cancelAppointment(
+      id: id,
+      token: token,
+    );
+
+    return response;
   }
 }

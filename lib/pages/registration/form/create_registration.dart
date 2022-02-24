@@ -308,7 +308,7 @@ class RegisterField extends StatelessWidget {
                                           .read<AppointmentCubit>()
                                           .state
                                           .selectedPatientId,
-                                      typofVisit: context
+                                      typeOfVisit: context
                                           .read<AppointmentCubit>()
                                           .state
                                           .typeOfVist,

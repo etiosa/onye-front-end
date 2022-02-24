@@ -152,6 +152,26 @@ class AppointmentRepository {
     }
   }
 
+  Future<http.Response?> cancelAppointment({
+    String? id,
+    String? token,
+  }) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/$id');
+
+    try {
+      http.Response response = await http.delete(uri,
+          headers: {
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+      );
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<List<dynamic>> searchRegistrations(
       {String? token, String? searchParams}) async {
     var uri =
