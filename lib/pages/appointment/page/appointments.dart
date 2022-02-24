@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../state/appointment_cubit.dart';
-
-import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:shimmer/shimmer.dart';
 
 class Appointments extends StatefulWidget {
   const Appointments({Key? key}) : super(key: key);
@@ -169,7 +168,10 @@ class _AppointmentState extends State<Appointment> {
         if (state.searchState == SEARCHSTATE.notFound) {
           return (const Center(
             child: SizedBox(
-                height: 50, width: 200, child: Card(child: Padding(
+                height: 50,
+                width: 200,
+                child: Card(
+                    child: Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text('NOT FOUND'),
                 ))),
@@ -290,7 +292,7 @@ class _AppointmentState extends State<Appointment> {
                                     child: Text(
                                       dateFormat.format(DateTime.parse(
                                           state.appointmentList[index]
-                                          ['appointmentDateTime'])),
+                                              ['appointmentDateTime'])),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
@@ -328,6 +330,16 @@ class _AppointmentState extends State<Appointment> {
                                 ],
                               ),
                             ),
+                            Row(
+                              children: [
+                                CancelAppointmentButton(
+                                  id: state.appointmentList[index]['id'],
+                                ),
+                                RescheduleAppointmentButton(
+                                  id: state.appointmentList[index]['id'],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ]),
@@ -337,6 +349,67 @@ class _AppointmentState extends State<Appointment> {
           );
         }
       },
+    );
+  }
+}
+
+class CancelAppointmentButton extends StatelessWidget {
+  CancelAppointmentButton({Key? key, required this.id}) : super(key: key);
+
+  String id;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 120,
+        height: 30,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromRGBO(128, 0, 0, 1.0)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () {
+              print('id: $id');
+            },
+            child: const Text('Cancel')),
+      ),
+    );
+  }
+}
+
+class RescheduleAppointmentButton extends StatelessWidget {
+  RescheduleAppointmentButton({Key? key, required this.id})
+      : super(key: key);
+
+  String id;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 120,
+        height: 30,
+        child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 56, 155, 152)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () {
+              print('id: $id');
+            },
+            child: const Text('Reschedule')),
+      ),
     );
   }
 }
@@ -373,6 +446,7 @@ class Confirmation extends StatelessWidget {
       : super(key: key);
   List<dynamic> appointmentList;
   int selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
