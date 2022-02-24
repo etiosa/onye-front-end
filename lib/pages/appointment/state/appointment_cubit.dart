@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
-import 'package:onye_front_ened/pages/appointment/repository/AppointmentRepository.dart';
+import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 
 part 'appointment_state.dart';
 

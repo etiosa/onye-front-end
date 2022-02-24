@@ -1,10 +1,10 @@
-part of 'registration_cubit.dart';
+part of 'patient_cubit.dart';
 
 enum REGISTERATIONSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 
 //TODO: Refactor
-class RegistrationState extends Equatable {
-  const RegistrationState(
+class PatientState extends Equatable {
+  const PatientState(
       {this.firstName,
       this.middleName,
       this.lastName,
@@ -93,7 +93,7 @@ class RegistrationState extends Equatable {
         searchState
       ];
 
-  RegistrationState copywith(
+  PatientState copywith(
       {String? firstName,
       String? middleName,
       String? lastName,
@@ -123,7 +123,7 @@ class RegistrationState extends Equatable {
       Map<String, dynamic>? allOptions,
       RegistrationFormState? registrationFormState,
       String? contactPreferences}) {
-    return RegistrationState(
+    return PatientState(
         token: toke ?? token,
         searchState: searchState?? this.searchState,
         createdPatientData: createdPatientData ?? this.createdPatientData,

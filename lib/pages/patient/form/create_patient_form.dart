@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
+import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 
@@ -129,7 +129,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, RegistrationState>(
+    return BlocBuilder<RegistrationCubit, PatientState>(
         builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -183,7 +183,7 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, RegistrationState>(
+    return BlocBuilder<RegistrationCubit, PatientState>(
         builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +228,7 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, RegistrationState>(
+    return BlocBuilder<RegistrationCubit, PatientState>(
         builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -260,7 +260,7 @@ class DatePickerFeild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return BlocBuilder<RegistrationCubit, RegistrationState>(
+    return BlocBuilder<RegistrationCubit, PatientState>(
       builder: (context, state) {
         return (Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -970,7 +970,7 @@ class _ContactPreferenceState extends State<ContactPreference> {
                   );
                 }).toList(),
                 onChanged: (val) {
-                  context.read<RegistrationCubit>().setContactPrefernce(val);
+                  context.read<RegistrationCubit>().setContactPreference(val);
                   setState(() {
                     _selectedText = val.toString();
                   });
@@ -1066,7 +1066,7 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, RegistrationState>(
+    return BlocBuilder<RegistrationCubit, PatientState>(
         builder: (context, state) {
       return Container(
         width: 320,

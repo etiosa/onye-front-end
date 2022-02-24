@@ -1,16 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
-import 'package:onye_front_ened/pages/schedule/cubit/shcedule_cubit.dart';
+import 'package:onye_front_ened/pages/schedule/cubit/schedule_cubit.dart';
 import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart';
 
-part 'registration_state.dart';
+part 'patient_state.dart';
 
-class RegistrationCubit extends Cubit<RegistrationState> {
+class RegistrationCubit extends Cubit<PatientState> {
   final RegistrationRepositories _registrationRepositories;
 
   RegistrationCubit(this._registrationRepositories)
-      : super(const RegistrationState(
+      : super(const PatientState(
             dateOfBirth: "",
             educationLevel: "",
             gender: "",
@@ -112,9 +112,9 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copywith(emergencyContactRelationship: contactRelationship));
   }
 
-  void setContactPrefernce(String? argContactPreference) {
-    final String contactPrefence = argContactPreference!;
-    emit(state.copywith(contactPreferences: contactPrefence));
+  void setContactPreference(String? argContactPreference) {
+    final String contactPreference = argContactPreference!;
+    emit(state.copywith(contactPreferences: contactPreference));
   }
 
   void setZipCode(String? argZipcode) {
@@ -146,11 +146,5 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         countryCode: state.countryCode);
 
     return response;
-  }
-
-  void getAppointments({String? token}) async {
-    var appointList =
-        await _registrationRepositories.getRegistrations(token: token);
-    emit(state.copywith(appointmentList: appointList));
   }
 }
