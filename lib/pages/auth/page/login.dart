@@ -193,20 +193,24 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        print(_authSession.getHomeToken()!=null);
-        if (_authSession.getHomeToken() != null) {
-          
-          
-          Messages.showMessage(
-              const Icon(
-                IconData(0xf635, fontFamily: 'MaterialIcons'),
-                color: Colors.green,
-              ),
-              'Login successful');
-          WidgetsBinding.instance?.addPostFrameCallback((_) {
-            Navigator.of(context).pushNamed("/dashboard");
-          });
-        } 
+
+        //TODO: move this to a welcome page and home page
+
+        _authSession.getHomeToken()!.then((value) => {
+              if (value != '')
+                {
+                  Messages.showMessage(
+                      const Icon(
+                        IconData(0xf635, fontFamily: 'MaterialIcons'),
+                        color: Colors.green,
+                      ),
+                      'Login successful'),
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.of(context).pushNamed("/dashboard");
+                  })
+                }
+            });
+
         return Container(
           width: 250,
           height: 60,

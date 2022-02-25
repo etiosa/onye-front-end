@@ -54,9 +54,7 @@ class AuthRepository {
         "Authorization": "Bearer $token",
       });
       body = jsonDecode(response.body);
-      print(token);
-      print("logout");
-      print(response.body);
+
       return body;
     } catch (e) {
       return body;

@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-     Messages.showMessage(
+    Messages.showMessage(
         const Icon(
           IconData(0xf635, fontFamily: 'MaterialIcons'),
           color: Colors.green,
@@ -63,12 +63,16 @@ class _DashboardState extends State<Dashboard> {
                           TextStyle(color: Color.fromARGB(255, 56, 155, 152)),
                     ),
                     onPressed: () async {
-                    /*   final  homeToken =
-                          _authSession.getHomeToken();
-                      homeToken.then((homeToken) =>
-                      context.read<LoginCubit>().logout(token: homeToken)
-                      ); */
-                      // context.read<LoginCubit>().logout(token: homeToken);
+                      context.read<LoginCubit>().logout();
+                      Messages.showMessage(
+                          const Icon(
+                            IconData(0xf635, fontFamily: 'MaterialIcons'),
+                            color: Colors.green,
+                          ),
+                          'Logout successful');
+                      WidgetsBinding.instance?.addPostFrameCallback((_) {
+                        Navigator.of(context).pushNamed("/login");
+                      });
                     },
                   ),
                 ),
