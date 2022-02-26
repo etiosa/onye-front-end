@@ -23,7 +23,6 @@ class _DropdownFieldtState extends State<DropdownField> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.options);
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Column(

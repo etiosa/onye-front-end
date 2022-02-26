@@ -530,7 +530,6 @@ class CheckInPatient extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              print("New registration");
             },
             child: const Text('Create new New registeration')),
       ),

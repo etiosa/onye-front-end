@@ -138,6 +138,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         patientId: patientId,
         medicalId: medicalId,
         note: note,
+        clincialNoteType: clincialNoteType,
         title: title);
 
     return req;

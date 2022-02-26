@@ -19,7 +19,6 @@ class AuthSession {
     final SharedPreferences prefs = await pref;
     final homeToken = prefs.getString('hometoken');
     if (homeToken == null) {
-      print('is null');
       return '';
     }
 

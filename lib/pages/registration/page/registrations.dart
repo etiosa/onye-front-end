@@ -7,6 +7,8 @@ import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../components/util/Messages.dart';
+
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
 
@@ -444,11 +446,10 @@ class Confirmation extends StatelessWidget {
         ' ' +
         appointment['patient']['lastName'];
     //final patientId =
-    print(appointment);
     final AuthSession authsession = AuthSession();
     var hometoken;
 
-    authsession.getHomeToken()?.then((value) => hometoken=value);
+    authsession.getHomeToken()?.then((value) => hometoken = value);
 
     return showDialog<String>(
       context: context,
@@ -576,9 +577,12 @@ class Confirmation extends StatelessWidget {
                 height: 10,
               ),
               TextButton(
-                  onPressed: () => {
-                        context.read<AppointmentCubit>().createClinicalNote(
+                  onPressed: () {
+                    var response = context
+                        .read<AppointmentCubit>()
+                        .createClinicalNote(
                             token: hometoken,
+                            medicalId: context.read<LoginCubit>().state.id,
                             note: context
                                 .read<AppointmentCubit>()
                                 .state
@@ -591,9 +595,37 @@ class Confirmation extends StatelessWidget {
                                 .read<AppointmentCubit>()
                                 .state
                                 .clinicalNoteType,
-                            patientId: appointment['patient']['id']),
-                        Navigator.pop(context, 'Add')
-                      },
+                            patientId: appointment['patient']['id']);
+
+                    response.then((value) => {
+                      if (value != null && value.statusCode == 201)
+                            {
+                              Messages.showMessage(
+                                  const Icon(
+                                    IconData(0xf635,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Colors.green,
+                                  ),
+                                  'Clinical Note created'),
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const Registration())),
+                                  ModalRoute.withName('/dashboard'))
+                            }
+                          else if (value != null && value.statusCode == 400)
+                            {
+                              Messages.showMessage(
+                                  const Icon(
+                                    IconData(0xe237,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Colors.red,
+                                  ),
+                                  'Could not create Clinical Note'),
+                            }
+                    });
+                    //Navigator.pop(context, 'Add');
+                  },
                   child: const Text('Add')),
             ],
           ),

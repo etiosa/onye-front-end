@@ -31,7 +31,6 @@ class _PatientsPageState extends State<PatientsPage> {
                           const Color.fromARGB(255, 56, 155, 152)),
                     ),
                     onPressed: () {
-                      print('register patient');
                     },
                     child: const Text('Register Patient')),
               )
@@ -101,7 +100,6 @@ class _PatientsPageState extends State<PatientsPage> {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
               onTap: () {
-                print("look at patient");
               },
               child: Container(
                 height: 100,

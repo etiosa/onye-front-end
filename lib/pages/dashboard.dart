@@ -243,23 +243,27 @@ class Logout extends StatelessWidget {
                   }
               });
 
-          return Container(
-            width: 250,
-            height: 60,
-            padding: const EdgeInsets.all(2),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: ElevatedButton(
-                autofocus: true,
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 56, 155, 152)),
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              width: 100,
+              height: 60,
+              padding: const EdgeInsets.all(2),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: ElevatedButton(
+                  autofocus: true,
+                  
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 56, 155, 152)),
+                  ),
+                  child: const Text('Logout'),
+                  onPressed: () async {
+                    context.read<LoginCubit>().logout();
+                  },
                 ),
-                child: const Text('Logout'),
-                onPressed: () async {
-                  context.read<LoginCubit>().logout();
-                },
               ),
             ),
           );

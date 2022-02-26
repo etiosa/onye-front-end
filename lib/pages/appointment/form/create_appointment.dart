@@ -363,8 +363,6 @@ class RegisterField extends StatelessWidget {
                     height: 30,
                   ),
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
                       DatePickerFeild(
                         label: 'Date',
@@ -504,7 +502,6 @@ class DateTimePickerFeild extends StatelessWidget {
     // TODO: implement build
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        print(state);
         return (Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

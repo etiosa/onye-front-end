@@ -33,14 +33,13 @@ class LoginCubit extends Cubit<LoginState> {
   void home({String? homeToken}) async {
     final body = await _authRepository.home(token: homeToken);
     final String token = body['token'];
-    print(body);
     emit(state.copywith(
         homeTokenS: token,
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
+        id: body['userInfo']['id'],
         department: body['userInfo']['facilityInfo']['department']));
-    print(state);
     _authSession.saveHomeToken(homeToken: token).then((value) => emit(
         state.copywith(
             loginStatus: LoginStatus.login, logoutstatus: LOGOUTSTATUS.init)));

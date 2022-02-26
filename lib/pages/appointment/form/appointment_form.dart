@@ -202,9 +202,7 @@ class _PatientListState extends State<PatientList> {
                     selectedIndex = index;
                     selectedPatientId = state.patientsList[index]['id'];
                   });
-                  print(index);
-                  print(selectedIndex);
-                  print(selectedPatientId);
+              
                 },
               ),
             );

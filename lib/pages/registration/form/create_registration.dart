@@ -562,8 +562,7 @@ class _DoctorListState extends State<DoctorList> {
                     selectedIndex = index;
                     selectedDctorId = state.doctorsList[index]['id'];
 
-                    print('index: $selectedIndex');
-                    print('doctorId: $selectedDctorId');
+    
 
                     context
                         .read<AppointmentCubit>()
@@ -697,14 +696,11 @@ class _PatientListState extends State<PatientList> {
                   selectedColor: Colors.amber,
                   onTap: () {
                     setState(() {
-                      print(state.patientsList[index]);
 
                       selectedIndex = index;
                       selectedPatientId = state.patientsList[index]['id'];
 
-                      print('index: $selectedIndex');
-                      print('patientId: $selectedPatientId');
-
+                     
                       context
                           .read<AppointmentCubit>()
                           .setPatientId(selectedPatientId);
