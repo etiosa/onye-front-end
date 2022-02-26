@@ -1,16 +1,42 @@
-# onye_front_ened
+# Onye Wellness Frontend app
+This is the repository for the Onye Wellness frontend application.
 
-A new Flutter project.
+## Basic information
 
-## Getting Started
+|               |         |
+|:--------------|--------:|
+| Language      |    Dart |
+| Framework     | Flutter |
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Backend
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+This application uses the Onye Core API for data access and manipulation. That repository can be found here: https://github.com/Onye-PRS/core-api
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Structure 
+
+The code is structured around the pages that are available from the home page when the user has logged in to the application.
+Every page accessible from there can be found in its own folder inside the `lib` folder.
+
+Ex:
+
+    lib
+    |
+    --- pages
+        |
+        --- appointment
+            |
+            --- form
+            --- page
+            --- repository
+            --- state
+
+Inside each folder you can find the sub pages, forms, state handling classes etc.
+
+## State handling
+State handling is done using the Bloc-pattern. Each page (see structure above) has its own state which can be found in the sub folder called `state`.
+
+## Backend connection
+Backend connection is done in repository classes found in a sub folder for each page called `repository`.
+Here you can find all the functions that are used to make http requests to the backend application.
