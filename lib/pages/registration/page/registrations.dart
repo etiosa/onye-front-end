@@ -393,7 +393,7 @@ class Confirmation extends StatelessWidget {
             style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.all(
-                    (!appointmentList[selectedIndex]
+                    (appointmentList[selectedIndex]
                             .containsKey('registrationDateTime'))
                         ? const Color.fromARGB(255, 56, 155, 152)
                         : Colors.grey),
