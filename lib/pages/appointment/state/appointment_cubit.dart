@@ -111,6 +111,38 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copyWith(selectedPatientIndex: selectedIndex));
   }
 
+  void setClincialNote(String? note) {
+    final String clinicalNote = note!;
+    emit(state.copyWith(clinicalNote: clinicalNote));
+  }
+
+  void setClinicialNoteTitle(String? title) {
+    final String clincialTitle = title!;
+    emit(state.copyWith(clinicalNoteTitle: clincialTitle));
+  }
+
+  void setClinicalNoteType(String? type) {
+    final String cliniclaType = type!;
+    emit(state.copyWith(clinicalNoteType: cliniclaType));
+  }
+
+  Future<Response?> createClinicalNote(
+      {String? token,
+      String? patientId,
+      String? medicalId,
+      String? title,
+      String? note,
+      String? clincialNoteType}) async {
+    Response? req = await _appointmentRepository.createClinicalNote(
+        token: token,
+        patientId: patientId,
+        medicalId: medicalId,
+        note: note,
+        title: title);
+
+    return req;
+  }
+
   Future<Response?> createRegistration(
       {String? token,
       String? patientID,

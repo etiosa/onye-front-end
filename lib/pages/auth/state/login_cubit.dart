@@ -33,33 +33,34 @@ class LoginCubit extends Cubit<LoginState> {
   void home({String? homeToken}) async {
     final body = await _authRepository.home(token: homeToken);
     final String token = body['token'];
+    print(body);
     emit(state.copywith(
         homeTokenS: token,
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         department: body['userInfo']['facilityInfo']['department']));
-    _authSession.saveHomeToken(homeToken: token).then((value) =>  emit(state.copywith(loginStatus: LoginStatus.login, logoutstatus: LOGOUTSTATUS.init)));
+    print(state);
+    _authSession.saveHomeToken(homeToken: token).then((value) => emit(
+        state.copywith(
+            loginStatus: LoginStatus.login, logoutstatus: LOGOUTSTATUS.init)));
+    //saved the profile information here
   }
 
   void logout({String? token}) async {
-    print('logout');
     final homeToken = await _authSession.getHomeToken();
 
     final response = await _authRepository.signout(token: homeToken);
 
     final logout = await _authSession.removeHomeToken();
     if (logout) {
-      print("logout sucessdful");
-      print(state);
-            emit(state.copywith(
+      emit(state.copywith(
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
-
     } else {
-      emit(state.copywith(loginStatus: LoginStatus.logout, logoutstatus: LOGOUTSTATUS.sucessful));
+      emit(state.copywith(
+          loginStatus: LoginStatus.logout,
+          logoutstatus: LOGOUTSTATUS.sucessful));
     }
   }
-
-  
 }

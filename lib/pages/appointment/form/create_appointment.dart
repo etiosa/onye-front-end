@@ -860,6 +860,7 @@ class _DoctorListState extends State<DoctorList> {
   }
 }
 
+//TODO: move to Widget class
 class DropDown extends StatefulWidget {
   DropDown({Key? key, required this.label, required this.options})
       : super(

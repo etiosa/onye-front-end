@@ -3,8 +3,8 @@ part of 'appointment_cubit.dart';
 enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
 
+//TODO Create clinical Note Model
 class AppointmentState extends Equatable {
-
   const AppointmentState(
       {this.appointmentList = const [],
       this.patientsList = const [],
@@ -16,7 +16,7 @@ class AppointmentState extends Equatable {
       this.endTime = '',
       this.searchState = SEARCHSTATE.inital,
       this.doctorsList = const [],
-      this.registrationList =const [],
+      this.registrationList = const [],
       this.selectedMedicalPeronnelId = '',
       this.selectedPatientId = '',
       this.resonsForVist = '',
@@ -25,12 +25,13 @@ class AppointmentState extends Equatable {
       this.selectedPatientIndexs = 2,
       this.regState = REGISTRATIONSTATE.inita,
       this.selectedAppointmentId = '',
-      this.patientRegistered=false,
+      this.patientRegistered = false,
+      this.clinicalNote = '',
+      this.clinicalNoteTitle = '',
+      this.clinicalNoteType='',
       this.endDateTime = ''});
   final List<dynamic> appointmentList;
   final List<dynamic> registrationList;
-
-
   final List<dynamic> patientsList;
   final String searchParams;
   final String startDateTime;
@@ -49,6 +50,9 @@ class AppointmentState extends Equatable {
   final int selectedMedicalIndexs;
   final REGISTRATIONSTATE regState;
   final selectedAppointmentId;
+  final String clinicalNoteTitle;
+  final String clinicalNote;
+  final String clinicalNoteType;
   final bool patientRegistered;
 
   @override
@@ -73,17 +77,21 @@ class AppointmentState extends Equatable {
         regState,
         selectedAppointmentId,
         patientRegistered,
-        registrationList
+        registrationList,
+        clinicalNote,
+        clinicalNoteTitle,
+        clinicalNoteType,
       ];
 
   AppointmentState copyWith({
     String? searchParams,
+    String? clinicalNoteTitle,
+    String? clinicalNote,
     List<dynamic>? appointmentList,
     List<dynamic>? patientsList,
     List<dynamic>? doctorsList,
     String? startDateTime,
     List<dynamic>? registerationList,
-
     String? startTime,
     String? endTime,
     String? startDate,
@@ -99,10 +107,14 @@ class AppointmentState extends Equatable {
     int? selectedMedicalIndex,
     String? endDateTime,
     String? selectedAppointmentId,
+    String? clinicalNoteType,
   }) {
     return AppointmentState(
-      patientRegistered: patientRegistered?? this.patientRegistered,
-      registrationList: registerationList?? this.registrationList,
+      clinicalNoteType: clinicalNoteType??this.clinicalNoteType,
+        clinicalNote: clinicalNote ?? this.clinicalNote,
+        clinicalNoteTitle: clinicalNoteTitle ?? this.clinicalNoteTitle,
+        patientRegistered: patientRegistered ?? this.patientRegistered,
+        registrationList: registerationList ?? this.registrationList,
         typeOfVist: typeOfVisit ?? typeOfVist,
         regState: regstate ?? regState,
         resonsForVist: reasonForVisit ?? resonsForVist,

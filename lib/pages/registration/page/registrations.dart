@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
+import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
 class Registration extends StatefulWidget {
@@ -379,44 +381,221 @@ class Confirmation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 30,
-      child: ElevatedButton(
-        style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(
-                (!appointmentList[selectedIndex]
-                        .containsKey('registrationDateTime'))
-                    ? const Color.fromARGB(255, 56, 155, 152)
-                    : Colors.grey),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ))),
-        onPressed: () => {
-          (!appointmentList[selectedIndex].containsKey('registrationDateTime'))
-              ? showDialogConfirmation(context)
-              : null
-        },
-        child: const Text('Register'),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SizedBox(
+          width: 120,
+          height: 30,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    (!appointmentList[selectedIndex]
+                            .containsKey('registrationDateTime'))
+                        ? const Color.fromARGB(255, 56, 155, 152)
+                        : Colors.grey),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () => {
+              (appointmentList[selectedIndex]
+                      .containsKey('registrationDateTime'))
+                  ? showDialogConfirmation(
+                      context, appointmentList[selectedIndex])
+                  : null
+            },
+            child: const Text('clinical note'),
+          ),
+        ),
+        SizedBox(
+          width: 120,
+          height: 30,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(
+                    (!appointmentList[selectedIndex]
+                            .containsKey('registrationDateTime'))
+                        ? const Color.fromARGB(255, 56, 155, 152)
+                        : Colors.grey),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ))),
+            onPressed: () => {
+              (!appointmentList[selectedIndex]
+                      .containsKey('registrationDateTime'))
+                  ? showDialogConfirmation(
+                      context, appointmentList[selectedIndex])
+                  : null
+            },
+            child: const Text('Register'),
+          ),
+        ),
+      ],
     );
   }
 
-  Future<String?> showDialogConfirmation(BuildContext context) {
+  Future<String?> showDialogConfirmation(
+      BuildContext context, dynamic appointment) {
+    final _patientName = appointment['patient']['firstName'] +
+        ' ' +
+        appointment['patient']['lastName'];
+    //final patientId =
+    print(appointment);
+    final AuthSession authsession = AuthSession();
+    var hometoken;
+
+    authsession.getHomeToken()?.then((value) => hometoken=value);
+
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        content: const Text('Do you want to check this patient in'),
+        content: const Text('Add clinical Note'),
         actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              DropDown(label: 'Note Type', options: const [
+                'CONSULTATION_NOTE',
+                'DISCHARGE_SUMMARY_NOTE',
+                'PROCEDURE_NOTE',
+                'PROGRESS_NOTE',
+              ]),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text(
+                  "Patient",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 56, 155, 152),
+                  ),
+                ),
+              ),
+              TextFormField(
+                readOnly: true,
+                initialValue: _patientName,
+                onChanged: (username) =>
+                    context.read<LoginCubit>().setUserName(username),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 205, 226, 226),
+                  labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text(
+                  "Title",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 56, 155, 152),
+                  ),
+                ),
+              ),
+              TextFormField(
+                onChanged: (title) => context
+                    .read<AppointmentCubit>()
+                    .setClinicialNoteTitle(title),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 205, 226, 226),
+                  labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600),
+                ),
+                validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text(
+                  "Note",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 56, 155, 152),
+                  ),
+                ),
+              ),
+              TextFormField(
+                maxLines: 7,
+                onChanged: (note) =>
+                    context.read<AppointmentCubit>().setClincialNote(note),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 205, 226, 226),
+                  labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600),
+                ),
+                validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a note';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => {
+                  Navigator.pop(context, 'Cancel'),
+                },
+                child: const Text('Cancel'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                  onPressed: () => {
+                        context.read<AppointmentCubit>().createClinicalNote(
+                            token: hometoken,
+                            note: context
+                                .read<AppointmentCubit>()
+                                .state
+                                .clinicalNote,
+                            title: context
+                                .read<AppointmentCubit>()
+                                .state
+                                .clinicalNoteTitle,
+                            clincialNoteType: context
+                                .read<AppointmentCubit>()
+                                .state
+                                .clinicalNoteType,
+                            patientId: appointment['patient']['id']),
+                        Navigator.pop(context, 'Add')
+                      },
+                  child: const Text('Add')),
+            ],
           ),
         ],
       ),
@@ -424,6 +603,67 @@ class Confirmation extends StatelessWidget {
   }
 }
 
+class DropDown extends StatefulWidget {
+  DropDown({Key? key, required this.label, required this.options})
+      : super(
+          key: key,
+        );
+  String label;
+  List<String> options;
+
+  @override
+  _DropDownState createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+  String? _selectedText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: Text(widget.label),
+        ),
+        SizedBox(
+          height: 45,
+          width: 300,
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            color: const Color.fromARGB(255, 205, 226, 226),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
+                isExpanded: true,
+                value: _selectedText,
+                hint: const Text("Select Note Type"),
+                items: widget.options.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _selectedText = val.toString();
+
+                    context
+                        .read<AppointmentCubit>()
+                        .setClinicalNoteType(_selectedText);
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ignore: must_be_immutable
 class RegisterPatient extends StatefulWidget {
   RegisterPatient(
       {Key? key, required this.registrationList, required this.selectedIndex})
@@ -477,7 +717,6 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     typeOfVisit: widget.registrationList[widget.selectedIndex]
                         ['typeOfVisit'],
                   );
-              setState(() {});
             },
             child: const Text('Register')),
       ),

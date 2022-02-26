@@ -115,6 +115,39 @@ class AppointmentRepository {
     }
   }
 
+  Future<http.Response?> createClinicalNote(
+      {String? token,
+      String? patientId,
+      String? medicalId,
+      String? title,
+      String? note,
+      String? clincialNoteType}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/clinicalNote')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "type": clincialNoteType,
+            "patientId": patientId,
+            "medicalPersonnelId": medicalId,
+            "title": title,
+            "text": note
+          }));
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<http.Response?> createAppointment(
       {String? token,
       String? patientId,
@@ -159,11 +192,12 @@ class AppointmentRepository {
     var uri = Uri.parse(root + 'api/rest/v1/appointment/$id');
 
     try {
-      http.Response response = await http.delete(uri,
-          headers: {
-            "Accept": accept,
-            "Authorization": "Bearer $token",
-          },
+      http.Response response = await http.delete(
+        uri,
+        headers: {
+          "Accept": accept,
+          "Authorization": "Bearer $token",
+        },
       );
 
       return response;
