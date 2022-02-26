@@ -187,8 +187,9 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? date,
       String? time,
       String? languagePreference}) async {
-    var inputFormat = DateFormat('yyyy-dd-MM hh:mm');
-    var dateTime = inputFormat.parse(date! + ' ' + time!, true);
+ 
+    var dateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!,true);
+
 
     Response? req = await _appointmentRepository.createAppointment(
         date: dateTime.toIso8601String(),
