@@ -7,22 +7,22 @@ import 'package:onye_front_ened/pages/appointment/repository/appointment_reposit
 part 'appointment_state.dart';
 
 class AppointmentCubit extends Cubit<AppointmentState> {
-  AppointmentRepository _appointmentRepository;
+  final AppointmentRepository _appointmentRepository;
 
   AppointmentCubit(
     this._appointmentRepository,
   ) : super(const AppointmentState());
 
   Future<void> searchAppointments({String? token, String? searchParams}) async {
-    emit(state.copyWith(searchstate: SEARCHSTATE.inital));
+    emit(state.copyWith(searchState: SEARCHSTATE.inital));
 
     var appointments = await _appointmentRepository.searchAppointments(
         token: token, searchParams: state.searchParams);
     emit(state.copyWith(appointmentList: appointments));
     if (state.appointmentList.isEmpty) {
-      emit(state.copyWith(searchstate: SEARCHSTATE.notFound));
+      emit(state.copyWith(searchState: SEARCHSTATE.notFound));
     } else {
-      emit(state.copyWith(searchstate: SEARCHSTATE.sucessful));
+      emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
     }
   }
 
@@ -33,22 +33,22 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   void searchDoctors({String? query, String? token}) async {
-    emit(state.copyWith(searchstate: SEARCHSTATE.startsearch));
+    emit(state.copyWith(searchState: SEARCHSTATE.startsearch));
     var doctors = await _appointmentRepository.searchDoctors(
         searchParams: query, token: token);
     if (doctors.isNotEmpty) {
       emit(state.copyWith(
-          doctorsList: doctors, searchstate: SEARCHSTATE.sucessful));
+          doctorsList: doctors, searchState: SEARCHSTATE.sucessful));
     }
     if (doctors.isEmpty) {
       emit(state.copyWith(
-          doctorsList: doctors, searchstate: SEARCHSTATE.notFound));
+          doctorsList: doctors, searchState: SEARCHSTATE.notFound));
     }
   }
 
   void setSelectedMedicalPersonnelId(String? argSelectedId) {
     final String selectedId = argSelectedId!;
-    emit(state.copyWith(selectedMedicalPersonnel: selectedId));
+    emit(state.copyWith(selectedMedicalPersonnelId: selectedId));
   }
 
   void setPatientId(String? argSelectedId) {
@@ -61,14 +61,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copyWith(selectedAppointmentId: selectedId));
   }
 
-  void setTypeOfVisit(String? argtypeOfVisit) {
-    final String typeofVisit = argtypeOfVisit!;
+  void setTypeOfVisit(String? argTypeOfVisit) {
+    final String typeofVisit = argTypeOfVisit!;
     emit(state.copyWith(typeOfVisit: typeofVisit));
   }
 
-  void setReasonForVisit(String? argresonsforvist) {
-    final String resonsForVisiit = argresonsforvist!;
-    emit(state.copyWith(reasonForVisit: resonsForVisiit));
+  void setReasonForVisit(String? argReasonForVisit) {
+    final String reasonForVisit = argReasonForVisit!;
+    emit(state.copyWith(reasonForVisit: reasonForVisit));
   }
 
   void setSearchParams(String? argSearchParams) {
@@ -92,14 +92,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copyWith(startDate: startDate));
   }
 
-  void setEndDate(String? argEndDate) {
-    final String endDate = argEndDate!;
-
-    emit(state.copyWith(endDate: endDate));
-  }
-
-  void setDatTimeDateFormat() {}
-
   void setSelectedMedicalIndex(int? argSelectedIndex) {
     final int selectedIndex = argSelectedIndex!;
     emit(state.copyWith(selectedMedicalIndex: selectedIndex));
@@ -111,19 +103,19 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copyWith(selectedPatientIndex: selectedIndex));
   }
 
-  void setClincialNote(String? note) {
+  void setClinicalNote(String? note) {
     final String clinicalNote = note!;
     emit(state.copyWith(clinicalNote: clinicalNote));
   }
 
-  void setClinicialNoteTitle(String? title) {
-    final String clincialTitle = title!;
-    emit(state.copyWith(clinicalNoteTitle: clincialTitle));
+  void setClinicalNoteTitle(String? title) {
+    final String clinicalNoteTitle = title!;
+    emit(state.copyWith(clinicalNoteTitle: clinicalNoteTitle));
   }
 
   void setClinicalNoteType(String? type) {
-    final String cliniclaType = type!;
-    emit(state.copyWith(clinicalNoteType: cliniclaType));
+    final String clinicalNoteType = type!;
+    emit(state.copyWith(clinicalNoteType: clinicalNoteType));
   }
 
   Future<Response?> createClinicalNote(
@@ -132,13 +124,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? medicalId,
       String? title,
       String? note,
-      String? clincialNoteType}) async {
+      String? clinicalNoteType}) async {
     Response? req = await _appointmentRepository.createClinicalNote(
         token: token,
         patientId: patientId,
         medicalId: medicalId,
         note: note,
-        clincialNoteType: clincialNoteType,
+        clincialNoteType: clinicalNoteType,
         title: title);
 
     return req;
@@ -164,15 +156,15 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   void searchRegistrations({String? token, String? searchParams}) async {
-    emit(state.copyWith(searchstate: SEARCHSTATE.inital));
+    emit(state.copyWith(searchState: SEARCHSTATE.inital));
     var registrationsList = await _appointmentRepository.searchRegistrations(
         token: token, searchParams: searchParams);
-    emit(state.copyWith(registerationList: registrationsList));
+    emit(state.copyWith(registrationList: registrationsList));
 
     if (state.registrationList.isEmpty) {
-      emit(state.copyWith(searchstate: SEARCHSTATE.notFound));
+      emit(state.copyWith(searchState: SEARCHSTATE.notFound));
     } else {
-      emit(state.copyWith(searchstate: SEARCHSTATE.sucessful));
+      emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
     }
   }
 
@@ -187,9 +179,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? date,
       String? time,
       String? languagePreference}) async {
- 
     var dateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!,true);
-
 
     Response? req = await _appointmentRepository.createAppointment(
         date: dateTime.toIso8601String(),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/appointment/page/Appointments.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/pages/appointment/page/Appointments.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CreateAppointment extends StatefulWidget {
@@ -136,7 +136,7 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                         if (context
                                 .read<AppointmentCubit>()
                                 .state
-                                .selectedMedicalPeronnelId
+                                .selectedMedicalPersonnelId
                                 .isNotEmpty &&
                             context
                                 .read<AppointmentCubit>()
@@ -364,13 +364,13 @@ class RegisterField extends StatelessWidget {
                   ),
                   Row(
                     children: const [
-                      DatePickerFeild(
+                      DatePickerField(
                         label: 'Date',
                       ),
                       SizedBox(
                         width: 5,
                       ),
-                      DateTimePickerFeild(
+                      DateTimePickerField(
                         label: 'Time',
                       ),
                     ],
@@ -397,7 +397,7 @@ class RegisterField extends StatelessWidget {
                             if (context
                                     .read<AppointmentCubit>()
                                     .state
-                                    .selectedMedicalPeronnelId
+                                    .selectedMedicalPersonnelId
                                     .isNotEmpty &&
                                 context
                                     .read<AppointmentCubit>()
@@ -407,22 +407,25 @@ class RegisterField extends StatelessWidget {
                               var response = context
                                   .read<AppointmentCubit>()
                                   .createAppointment(
-                                      date: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .startDate,
-                                      time: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .startTime,
-                                      patientID: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .selectedPatientId,
+                                      date:
+                                          context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .startDate,
+                                      time:
+                                          context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .startTime,
+                                      patientID:
+                                          context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .selectedPatientId,
                                       medicalId: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .selectedMedicalPeronnelId,
+                                          .selectedMedicalPersonnelId,
                                       token: context
                                           .read<LoginCubit>()
                                           .state
@@ -430,11 +433,11 @@ class RegisterField extends StatelessWidget {
                                       reasonForVisit: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .resonsForVist,
+                                          .reasonForVisit,
                                       typeOfVisit: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .typeOfVist);
+                                          .typeOfVisit);
 
                               response.then((value) => {
                                     if (value != null &&
@@ -484,17 +487,16 @@ Future dateTimePicker(BuildContext context, String label) async {
   final newTime =
       await showTimePicker(context: context, initialTime: TimeOfDay.now());
   if (newTime == null) return;
+
+  print('newTime: $newTime');
   String formatTime = newTime.format(context);
-  print(newTime);
+  print('formatTime: $formatTime');
 
   context.read<AppointmentCubit>().setStartTime(formatTime);
-   // context.read<AppointmentCubit>().setEndTime(newTime);
-
-
 }
 
-class DateTimePickerFeild extends StatelessWidget {
-  const DateTimePickerFeild({Key? key, required this.label}) : super(key: key);
+class DateTimePickerField extends StatelessWidget {
+  const DateTimePickerField({Key? key, required this.label}) : super(key: key);
   final String label;
 
   @override
@@ -522,7 +524,7 @@ class DateTimePickerFeild extends StatelessWidget {
                 width: 100,
                 color: const Color.fromARGB(255, 205, 226, 226),
                 child: Padding(
-                    padding: EdgeInsets.all(1.0),
+                    padding: const EdgeInsets.all(1.0),
                     child: TimeContent(
                       label: label,
                     )),
@@ -553,7 +555,7 @@ class TimeContent extends StatelessWidget {
     if (label == 'To') {
       return Padding(
         padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.endTime,
+        child: Text(context.read<AppointmentCubit>().state.startTime,
             style: const TextStyle(fontSize: 12)),
       );
     }
@@ -578,8 +580,8 @@ Future datePicker(BuildContext context, String label) async {
   context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
-class DatePickerFeild extends StatelessWidget {
-  const DatePickerFeild({Key? key, required this.label}) : super(key: key);
+class DatePickerField extends StatelessWidget {
+  const DatePickerField({Key? key, required this.label}) : super(key: key);
   final String label;
 
   @override
@@ -754,7 +756,7 @@ class DoctorList extends StatefulWidget {
 class _DoctorListState extends State<DoctorList> {
   @override
   Widget build(BuildContext context) {
-    String? selectedDctorId = '';
+    String? selectedDoctorId = '';
     int selectedIndex = -1;
 
     return BlocBuilder<AppointmentCubit, AppointmentState>(
@@ -844,10 +846,10 @@ class _DoctorListState extends State<DoctorList> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    selectedDctorId = state.doctorsList[index]['id'];
+                    selectedDoctorId = state.doctorsList[index]['id'];
                     context
                         .read<AppointmentCubit>()
-                        .setSelectedMedicalPersonnelId(selectedDctorId);
+                        .setSelectedMedicalPersonnelId(selectedDoctorId);
                   });
                 },
               ),

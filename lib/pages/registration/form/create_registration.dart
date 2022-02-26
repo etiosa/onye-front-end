@@ -299,7 +299,7 @@ class RegisterField extends StatelessWidget {
                                       medicalId: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .selectedMedicalPeronnelId,
+                                          .selectedMedicalPersonnelId,
                                       patientID: context
                                           .read<AppointmentCubit>()
                                           .state
@@ -307,11 +307,11 @@ class RegisterField extends StatelessWidget {
                                       typeOfVisit: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .typeOfVist,
+                                          .typeOfVisit,
                                       reasons: context
                                           .read<AppointmentCubit>()
                                           .state
-                                          .resonsForVist);
+                                          .reasonForVisit);
 
                               response.then((value) => {
                                     if (value != null &&
@@ -558,8 +558,6 @@ class _DoctorListState extends State<DoctorList> {
                     selectedIndex = index;
                     selectedDctorId = state.doctorsList[index]['id'];
 
-    
-
                     context
                         .read<AppointmentCubit>()
                         .setSelectedMedicalPersonnelId(selectedDctorId);
@@ -692,11 +690,9 @@ class _PatientListState extends State<PatientList> {
                   selectedColor: Colors.amber,
                   onTap: () {
                     setState(() {
-
                       selectedIndex = index;
                       selectedPatientId = state.patientsList[index]['id'];
 
-                     
                       context
                           .read<AppointmentCubit>()
                           .setPatientId(selectedPatientId);

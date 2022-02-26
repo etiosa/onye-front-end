@@ -511,7 +511,7 @@ class Confirmation extends StatelessWidget {
               TextFormField(
                 onChanged: (title) => context
                     .read<AppointmentCubit>()
-                    .setClinicialNoteTitle(title),
+                    .setClinicalNoteTitle(title),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   filled: true,
@@ -545,7 +545,7 @@ class Confirmation extends StatelessWidget {
               TextFormField(
                 maxLines: 7,
                 onChanged: (note) =>
-                    context.read<AppointmentCubit>().setClincialNote(note),
+                    context.read<AppointmentCubit>().setClinicalNote(note),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   filled: true,
@@ -591,7 +591,7 @@ class Confirmation extends StatelessWidget {
                                 .read<AppointmentCubit>()
                                 .state
                                 .clinicalNoteTitle,
-                            clincialNoteType: context
+                            clinicalNoteType: context
                                 .read<AppointmentCubit>()
                                 .state
                                 .clinicalNoteType,

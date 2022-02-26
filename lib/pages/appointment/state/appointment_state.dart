@@ -11,45 +11,40 @@ class AppointmentState extends Equatable {
       this.searchParams = '',
       this.startDateTime = '',
       this.startDate = '',
-      this.endDate = '',
       this.startTime = '',
-      this.endTime = '',
       this.searchState = SEARCHSTATE.inital,
       this.doctorsList = const [],
       this.registrationList = const [],
-      this.selectedMedicalPeronnelId = '',
+      this.selectedMedicalPersonnelId = '',
       this.selectedPatientId = '',
-      this.resonsForVist = '',
-      this.typeOfVist = '',
-      this.selectedMedicalIndexs = 0,
-      this.selectedPatientIndexs = 2,
-      this.regState = REGISTRATIONSTATE.inita,
+      this.reasonForVisit = '',
+      this.typeOfVisit = '',
+      this.selectedMedicalIndex = 0,
+      this.selectedPatientIndex = 2,
+      this.registrationState = REGISTRATIONSTATE.inita,
       this.selectedAppointmentId = '',
       this.patientRegistered = false,
       this.clinicalNote = '',
       this.clinicalNoteTitle = '',
-      this.clinicalNoteType='',
-      this.endDateTime = ''});
+      this.clinicalNoteType = ''});
+
   final List<dynamic> appointmentList;
   final List<dynamic> registrationList;
   final List<dynamic> patientsList;
   final String searchParams;
   final String startDateTime;
-  final String endDateTime;
   final String startDate;
-  final String endDate;
   final String startTime;
-  final String endTime;
   final String selectedPatientId;
-  final String selectedMedicalPeronnelId;
+  final String selectedMedicalPersonnelId;
   final List<dynamic> doctorsList;
   final SEARCHSTATE searchState;
-  final String typeOfVist;
-  final String resonsForVist;
-  final int selectedPatientIndexs;
-  final int selectedMedicalIndexs;
-  final REGISTRATIONSTATE regState;
-  final selectedAppointmentId;
+  final String typeOfVisit;
+  final String reasonForVisit;
+  final int selectedPatientIndex;
+  final int selectedMedicalIndex;
+  final REGISTRATIONSTATE registrationState;
+  final String selectedAppointmentId;
   final String clinicalNoteTitle;
   final String clinicalNote;
   final String clinicalNoteType;
@@ -61,20 +56,17 @@ class AppointmentState extends Equatable {
         patientsList,
         searchParams,
         startDateTime,
-        endDateTime,
-        endDate,
         startDate,
-        endTime,
         startTime,
         doctorsList,
         searchState,
-        selectedMedicalPeronnelId,
+        selectedMedicalPersonnelId,
         selectedPatientId,
-        typeOfVist,
-        resonsForVist,
-        selectedMedicalIndexs,
-        selectedMedicalIndexs,
-        regState,
+        typeOfVisit,
+        reasonForVisit,
+        selectedMedicalIndex,
+        selectedMedicalIndex,
+        registrationState,
         selectedAppointmentId,
         patientRegistered,
         registrationList,
@@ -91,51 +83,43 @@ class AppointmentState extends Equatable {
     List<dynamic>? patientsList,
     List<dynamic>? doctorsList,
     String? startDateTime,
-    List<dynamic>? registerationList,
+    List<dynamic>? registrationList,
     String? startTime,
     String? endTime,
     String? startDate,
     String? selectedPatientId,
-    String? selectedMedicalPersonnel,
-    SEARCHSTATE? searchstate,
-    REGISTRATIONSTATE? regstate,
+    String? selectedMedicalPersonnelId,
+    SEARCHSTATE? searchState,
+    REGISTRATIONSTATE? registrationState,
     bool? patientRegistered,
-    String? endDate,
     String? typeOfVisit,
     String? reasonForVisit,
     int? selectedPatientIndex,
     int? selectedMedicalIndex,
-    String? endDateTime,
     String? selectedAppointmentId,
     String? clinicalNoteType,
   }) {
     return AppointmentState(
-      clinicalNoteType: clinicalNoteType??this.clinicalNoteType,
+        clinicalNoteType: clinicalNoteType ?? this.clinicalNoteType,
         clinicalNote: clinicalNote ?? this.clinicalNote,
         clinicalNoteTitle: clinicalNoteTitle ?? this.clinicalNoteTitle,
         patientRegistered: patientRegistered ?? this.patientRegistered,
-        registrationList: registerationList ?? this.registrationList,
-        typeOfVist: typeOfVisit ?? typeOfVist,
-        regState: regstate ?? regState,
-        resonsForVist: reasonForVisit ?? resonsForVist,
-        selectedMedicalIndexs:
-            selectedMedicalIndex ?? this.selectedMedicalIndexs,
-        selectedPatientIndexs:
-            selectedPatientIndex ?? this.selectedPatientIndexs,
-        selectedMedicalPeronnelId:
-            selectedMedicalPersonnel ?? selectedMedicalPeronnelId,
+        registrationList: registrationList ?? this.registrationList,
+        typeOfVisit: typeOfVisit ?? this.typeOfVisit,
+        registrationState: registrationState ?? this.registrationState,
+        reasonForVisit: reasonForVisit ?? this.reasonForVisit,
+        selectedMedicalIndex: selectedMedicalIndex ?? this.selectedMedicalIndex,
+        selectedPatientIndex: selectedPatientIndex ?? this.selectedPatientIndex,
+        selectedMedicalPersonnelId: selectedMedicalPersonnelId ?? this.selectedMedicalPersonnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,
         selectedAppointmentId:
             selectedAppointmentId ?? this.selectedAppointmentId,
-        searchState: searchstate ?? searchState,
+        searchState: searchState ?? this.searchState,
         searchParams: searchParams ?? this.searchParams,
         doctorsList: doctorsList ?? this.doctorsList,
-        endDate: endDate ?? this.endDate,
         startDate: startDate ?? this.startDate,
         startTime: startTime ?? this.startTime,
-        endTime: endTime ?? this.endTime,
         startDateTime: startDateTime ?? this.startDateTime,
-        endDateTime: endDateTime ?? this.endDateTime,
         appointmentList: appointmentList ?? this.appointmentList,
         patientsList: patientsList ?? this.patientsList);
   }
