@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:onye_front_ened/pages/Welcome.dart';
 import 'package:onye_front_ened/pages/appointment/form/appointment_form.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
@@ -23,6 +24,7 @@ void main() async {
 }
 
 //TODO: create private Route later
+//TODO: App wrapper i
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -40,8 +42,8 @@ class MyApp extends StatelessWidget {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              lazy: false,
               create: (_) => LoginCubit(_authRepository),
+               
             ),
             BlocProvider(
               create: (_) => RegistrationCubit(_registerRepository),
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Onye',
               routes: {
-                '/': (context) => const HomePage(),
+                '/': (context) => const Welcome(),
                 '/login': (context) => const LoginPage(),
                 '/dashboard': (context) => const Dashboard(),
                 '/dashboard/checkin': (context) => const Registration(),
@@ -74,3 +76,18 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
+/* 
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+// final LoginCubit loginCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(value: loginCubit,
+            child: HomePage(),
+
+    
+    
+    );
+  }
+} */

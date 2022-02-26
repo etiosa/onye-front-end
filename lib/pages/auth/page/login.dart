@@ -192,11 +192,17 @@ class _SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) =>
+          previous.loginStatus != LoginStatus.login,
       builder: (context, state) {
+        print(state);
+        
 
         //TODO: move this to a welcome page and home page
 
         _authSession.getHomeToken()!.then((value) => {
+              print('login'),
+              print(value),
               if (value != '')
                 {
                   Messages.showMessage(

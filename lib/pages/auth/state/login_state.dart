@@ -1,7 +1,7 @@
 part of 'login_cubit.dart';
 
-enum LoginStatus { sucessful, failed, unknown, initial }
-enum LOGOUTSTATUS { sucessful, failed, unknown, init}
+enum LoginStatus { login, failed, unknown, logout, init }
+enum LOGOUTSTATUS { sucessful, failed, unknown, init }
 
 @immutable
 class LoginState extends Equatable {
@@ -15,13 +15,12 @@ class LoginState extends Equatable {
       this.lastName = '',
       this.hospital = '',
       this.department = '',
-      this.logoutstatus= LOGOUTSTATUS.init,
-      this.loginStatus = false});
+      this.logoutstatus = LOGOUTSTATUS.init,
+      this.loginStatus = LoginStatus.init});
 
   final String userName;
   final String password;
   final int statusCode;
-  final bool loginStatus;
   final String homeToken;
   final String firstName;
   final String lastName;
@@ -29,7 +28,7 @@ class LoginState extends Equatable {
   final String hospital;
   final LOGOUTSTATUS logoutstatus;
   final String loginToken;
-
+  final LoginStatus loginStatus;
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -43,7 +42,8 @@ class LoginState extends Equatable {
         lastName,
         hospital,
         department,
-        logoutstatus
+        logoutstatus,
+        
       ];
 
   LoginState copywith(
@@ -57,9 +57,9 @@ class LoginState extends Equatable {
       String? department,
       String? hospital,
       LOGOUTSTATUS? logoutstatus,
-      bool? loginStatus}) {
+      LoginStatus? loginStatus}) {
     return LoginState(
-      logoutstatus: logoutstatus??this.logoutstatus,
+        logoutstatus: logoutstatus ?? this.logoutstatus,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
         department: department ?? this.department,

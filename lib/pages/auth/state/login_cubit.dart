@@ -39,19 +39,27 @@ class LoginCubit extends Cubit<LoginState> {
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         department: body['userInfo']['facilityInfo']['department']));
-    _authSession.saveHomeToken(homeToken: token);
+    _authSession.saveHomeToken(homeToken: token).then((value) =>  emit(state.copywith(loginStatus: LoginStatus.login, logoutstatus: LOGOUTSTATUS.init)));
   }
 
   void logout({String? token}) async {
+    print('logout');
     final homeToken = await _authSession.getHomeToken();
 
     final response = await _authRepository.signout(token: homeToken);
 
-    await _authSession
-        .removeHomeToken()
-        .then((value) =>
-            emit(state.copywith(logoutstatus: LOGOUTSTATUS.sucessful)))
-        .onError((error, stackTrace) =>
-            emit(state.copywith(logoutstatus: LOGOUTSTATUS.failed)));
+    final logout = await _authSession.removeHomeToken();
+    if (logout) {
+      print("logout sucessdful");
+      print(state);
+            emit(state.copywith(
+          loginStatus: LoginStatus.logout,
+          logoutstatus: LOGOUTSTATUS.sucessful));
+
+    } else {
+      emit(state.copywith(loginStatus: LoginStatus.logout, logoutstatus: LOGOUTSTATUS.sucessful));
+    }
   }
+
+  
 }

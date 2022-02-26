@@ -19,14 +19,17 @@ class AuthSession {
     final SharedPreferences prefs = await pref;
     final homeToken = prefs.getString('hometoken');
     if (homeToken == null) {
+      print('is null');
       return '';
     }
 
     return homeToken;
   }
 
-  Future<void> removeHomeToken() async {
+  Future<bool> removeHomeToken() async {
     final SharedPreferences prefs = await pref;
-    prefs.remove('hometoken');
+    final bool = prefs.remove('hometoken');
+
+    return bool;
   }
 }

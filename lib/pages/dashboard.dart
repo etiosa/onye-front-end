@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/pages/auth/page/login.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
@@ -36,48 +37,7 @@ class _DashboardState extends State<Dashboard> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                width: 100,
-                height: 50,
-                padding: const EdgeInsets.all(2),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: ElevatedButton(
-                    autofocus: true,
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          const RoundedRectangleBorder(
-                        // borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(
-                            color: Color.fromARGB(255, 56, 155, 152)),
-                      )),
-                      elevation: MaterialStateProperty.all(0),
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                    ),
-                    child: const Text(
-                      'Logout',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 56, 155, 152)),
-                    ),
-                    onPressed: () async {
-                      context.read<LoginCubit>().logout();
-                      Messages.showMessage(
-                          const Icon(
-                            IconData(0xf635, fontFamily: 'MaterialIcons'),
-                            color: Colors.green,
-                          ),
-                          'Logout successful');
-                      WidgetsBinding.instance?.addPostFrameCallback((_) {
-                        Navigator.of(context).pushNamed("/login");
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
+            Logout(),
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width / 6,
@@ -214,3 +174,105 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+
+class Logout extends StatelessWidget {
+  const Logout({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+        buildWhen: (previous, current) =>
+            current.loginStatus != previous.loginStatus,
+        builder: (context, state) {
+          final _authSession = AuthSession();
+          _authSession.getHomeToken()!.then((value) => {
+                if (value == '')
+                  {
+                    Messages.showMessage(
+                        const Icon(
+                          IconData(0xf635, fontFamily: 'MaterialIcons'),
+                          color: Colors.green,
+                        ),
+                        'Logout successful'),
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      Navigator.of(context).pushNamed("/login");
+                    })
+                  }
+              });
+
+          return Container(
+            width: 250,
+            height: 60,
+            padding: const EdgeInsets.all(2),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: ElevatedButton(
+                autofocus: true,
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(0),
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color.fromARGB(255, 56, 155, 152)),
+                ),
+                child: const Text('Logout'),
+                onPressed: () async {
+                  context.read<LoginCubit>().logout();
+                },
+              ),
+            ),
+          );
+        });
+  }
+}   
+      
+    
+    /*  return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        width: 100,
+        height: 50,
+        padding: const EdgeInsets.all(2),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: ElevatedButton(
+            autofocus: true,
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  const RoundedRectangleBorder(
+                // borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(
+                    color: Color.fromARGB(255, 56, 155, 152)),
+              )),
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor:
+                  MaterialStateProperty.all(Colors.transparent),
+            ),
+            child: const Text(
+              'Logout',
+              style:
+                  TextStyle(color: Color.fromARGB(255, 56, 155, 152)),
+            ),
+            onPressed: () async {
+              context.read<LoginCubit>().logout();
+              //print(context.read<LoginCubit>().state);
+
+              if (context.read<LoginCubit>().state.logoutstatus ==
+                  LOGOUTSTATUS.sucessful) {
+                Messages.showMessage(
+                    const Icon(
+                      IconData(0xf635, fontFamily: 'MaterialIcons'),
+                      color: Colors.green,
+                    ),
+                    'Logout successful');
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  Navigator.of(context).pushNamed("/login");
+                });
+              }
+            },
+          ),
+        ),
+      ),
+    ); */
+  
+
