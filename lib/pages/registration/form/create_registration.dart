@@ -283,11 +283,7 @@ class RegisterField extends StatelessWidget {
                                 const Color.fromARGB(255, 56, 155, 152)),
                           ),
                           onPressed: () {
-                            if (context
-                                    .read<AppointmentCubit>()
-                                    .state
-                                    .selectedMedicalPeronnelId
-                                    .isNotEmpty &&
+                            if (
                                 context
                                     .read<AppointmentCubit>()
                                     .state
