@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
@@ -104,14 +106,13 @@ class _PatientsPageState extends State<PatientsPage> {
                       child: const Text('Search'),
                       onPressed: () async {
                         authsession.getHomeToken()!.then((homeToken) {
-                        if (homeToken != '') {
-                          context
-                              .read<AppointmentCubit>()
-                              .searchPatients(query: context.read<PatientCubit>().state.query, token: homeToken);
-                        }
-                      });
-                  } 
-                      ,
+                          if (homeToken != '') {
+                            context.read<AppointmentCubit>().searchPatients(
+                                query: context.read<PatientCubit>().state.query,
+                                token: homeToken);
+                          }
+                        });
+                      },
                     ),
                   ),
                 )
@@ -120,13 +121,16 @@ class _PatientsPageState extends State<PatientsPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 25,
             ),
-            const SingleChildScrollView(child: PatientList()),
-          ],
+           
+                const PatientList()
+            ],
         ),
       ),
     ));
   }
 }
+
+
 
 class PatientDetails extends StatelessWidget {
   const PatientDetails({
@@ -147,7 +151,18 @@ class PatientDetails extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {},
+        onTap: ()=> {
+          showMaterialModalBottomSheet(
+            expand: true,
+            elevation: 10.0,
+            enableDrag: true,
+          
+            isDismissible: true,
+            useRootNavigator: true,
+            context: context,
+            builder: (context) => const PatientInformation(),
+          )
+        },
         child: Container(
           height: 100,
           width: MediaQuery.of(context).size.width / 1.05,
@@ -165,27 +180,65 @@ class PatientDetails extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    children: const [
+                    children: [
                       Text(
-                        'Jean Joe',
-                        style: TextStyle(
+                        patientFullName,
+                        style: const TextStyle(
                             fontSize: 20,
                             fontFamily: 'poppins',
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 20),
-                      Text('02/22/2022')
+                      const SizedBox(height: 20),
+                      Text(dateofBirth)
                     ],
                   ),
                   Column(
-                    children: const [
-                      Text('Patient number'),
-                      SizedBox(height: 20),
-                      Text('1111')
+                    children: [
+                      const Text('Patient number'),
+                      const SizedBox(height: 20),
+                      Text(patientNumber)
                     ],
                   )
                 ]),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class PatientInformation extends StatelessWidget {
+  const PatientInformation({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+        
+          children: [
+              const Text('Paitent Information'),
+           const  Divider(color: Colors.amber, thickness: 3,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                
+                children: [
+                  Text('Patient First Name'),
+                    Text('Patient First Name')
+              ],),
+            Row(
+              
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                
+                children: [
+                  Text('Etiosa '),
+                    Text('Obasuyi')
+              ],),
+               
+          ],
         ),
       ),
     );

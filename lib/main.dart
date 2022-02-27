@@ -77,18 +77,3 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-/* 
-class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
-// final LoginCubit loginCubit;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider.value(value: loginCubit,
-            child: HomePage(),
-
-    
-    
-    );
-  }
-} */
