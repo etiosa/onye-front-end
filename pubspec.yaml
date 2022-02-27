@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.17.0
   hydrated_bloc: ^8.0.0
   shared_preferences: ^2.0.13
+  modal_bottom_sheet: ^2.0.0
 
 
 

@@ -25,11 +25,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
     }
   }
+  //TODO: separate this method
 
   void searchPatients({String? query, String? token}) async {
     var patients = await _appointmentRepository.searchPatients(
         searchParams: query, token: token);
     emit(state.copyWith(patientsList: patients));
+    print(patients);
   }
 
   void searchDoctors({String? query, String? token}) async {

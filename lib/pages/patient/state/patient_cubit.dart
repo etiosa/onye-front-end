@@ -6,10 +6,10 @@ import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart'
 
 part 'patient_state.dart';
 
-class RegistrationCubit extends Cubit<PatientState> {
-  final RegistrationRepositories _registrationRepositories;
+class PatientCubit extends Cubit<PatientState> {
+  final PatientRepositories _registrationRepositories;
 
-  RegistrationCubit(this._registrationRepositories)
+  PatientCubit(this._registrationRepositories)
       : super(const PatientState(
             dateOfBirth: "",
             educationLevel: "",
@@ -20,6 +20,11 @@ class RegistrationCubit extends Cubit<PatientState> {
   void setFirstName(String? argFirstName) {
     final String firstName = argFirstName!;
     emit(state.copywith(firstName: firstName));
+  }
+
+  void setSearchQuery(String? query) {
+    final String searchquery = query!;
+    emit(state.copywith(query:searchquery));
   }
 
   void setMiddleName(String? argMiddleName) {
@@ -122,7 +127,7 @@ class RegistrationCubit extends Cubit<PatientState> {
     emit(state.copywith(zipCode: zipcode));
   }
 
-  Future<Response?> register({String? token}) async {
+  Future<Response?> createNewPatient({String? token}) async {
     Response? response = await _registrationRepositories.createNewPatient(
         token: token,
         firstName: state.firstName,

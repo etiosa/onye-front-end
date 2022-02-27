@@ -110,7 +110,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
         lastDate: DateTime(DateTime.now().year + 5));
     if (newDate == null) return;
     context
-        .read<RegistrationCubit>()
+        .read<PatientCubit>()
         .setDateofBirth(newDate.toString().split(' ')[0]);
   }
 }
@@ -129,7 +129,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, PatientState>(
+    return BlocBuilder<PatientCubit, PatientState>(
         builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -183,7 +183,7 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, PatientState>(
+    return BlocBuilder<PatientCubit, PatientState>(
         builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +228,7 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, PatientState>(
+    return BlocBuilder<PatientCubit, PatientState>(
         builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -260,7 +260,7 @@ class DatePickerFeild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return BlocBuilder<RegistrationCubit, PatientState>(
+    return BlocBuilder<PatientCubit, PatientState>(
       builder: (context, state) {
         return (Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -315,7 +315,7 @@ class FirstName extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (firstName) =>
-                context.read<RegistrationCubit>().setFirstName(firstName),
+                context.read<PatientCubit>().setFirstName(firstName),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -356,7 +356,7 @@ class MiddleName extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (middleName) =>
-                context.read<RegistrationCubit>().setMiddleName(middleName),
+                context.read<PatientCubit>().setMiddleName(middleName),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -396,7 +396,7 @@ class LastName extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (lastName) =>
-                context.read<RegistrationCubit>().setLastName(lastName),
+                context.read<PatientCubit>().setLastName(lastName),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -458,7 +458,7 @@ class _GenderState extends State<Gender> {
                   );
                 }).toList(),
                 onChanged: (val) {
-                  context.read<RegistrationCubit>().setGender(val);
+                  context.read<PatientCubit>().setGender(val);
                   setState(() {
                     _selectedText = val.toString();
                   });
@@ -517,7 +517,7 @@ class _ReligionState extends State<Religion> {
                   );
                 }).toList(),
                 onChanged: (val) {
-                  context.read<RegistrationCubit>().setReligion(val);
+                  context.read<PatientCubit>().setReligion(val);
                   setState(() {
                     _selectedText = val.toString();
                   });
@@ -580,7 +580,7 @@ class _EducationLevelState extends State<EducationLevel> {
                   );
                 }).toList(),
                 onChanged: (val) {
-                  context.read<RegistrationCubit>().setEducationLevel(val);
+                  context.read<PatientCubit>().setEducationLevel(val);
                   setState(() {
                     _selectedText = val.toString();
                   });
@@ -642,7 +642,7 @@ class _EthnicityState extends State<Ethnicity> {
                   );
                 }).toList(),
                 onChanged: (val) {
-                  context.read<RegistrationCubit>().setEthnicity(val);
+                  context.read<PatientCubit>().setEthnicity(val);
 
                   setState(() {
                     _selectedText = val.toString();
@@ -674,7 +674,7 @@ class PhoneNumber extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (phoneNumber) =>
-                context.read<RegistrationCubit>().setPhoneNumber(phoneNumber),
+                context.read<PatientCubit>().setPhoneNumber(phoneNumber),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -714,7 +714,7 @@ class Email extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (email) =>
-                context.read<RegistrationCubit>().setEmail(email),
+                context.read<PatientCubit>().setEmail(email),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -754,7 +754,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (addressline1) => context
-                .read<RegistrationCubit>()
+                .read<PatientCubit>()
                 .setAddlressLine1(addressline1),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -780,7 +780,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (addressline2) => context
-                .read<RegistrationCubit>()
+                .read<PatientCubit>()
                 .setAddlressLine2(addressline2),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -806,7 +806,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (addressline3) => context
-                .read<RegistrationCubit>()
+                .read<PatientCubit>()
                 .setAddlressLine3(addressline3),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -832,7 +832,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (addressline4) => context
-                .read<RegistrationCubit>()
+                .read<PatientCubit>()
                 .setAddlressLine4(addressline4),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -858,7 +858,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (zipcode) =>
-                context.read<RegistrationCubit>().setZipCode(zipcode),
+                context.read<PatientCubit>().setZipCode(zipcode),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -883,7 +883,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (city) =>
-                context.read<RegistrationCubit>().setCity(city),
+                context.read<PatientCubit>().setCity(city),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -908,7 +908,7 @@ class Address extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (countryCode) =>
-                context.read<RegistrationCubit>().setCountryCode(countryCode),
+                context.read<PatientCubit>().setCountryCode(countryCode),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -970,7 +970,7 @@ class _ContactPreferenceState extends State<ContactPreference> {
                   );
                 }).toList(),
                 onChanged: (val) {
-                  context.read<RegistrationCubit>().setContactPreference(val);
+                  context.read<PatientCubit>().setContactPreference(val);
                   setState(() {
                     _selectedText = val.toString();
                   });
@@ -1001,7 +1001,7 @@ class EmergencyContact extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (name) =>
-                context.read<RegistrationCubit>().setEmergencyContactName(name),
+                context.read<PatientCubit>().setEmergencyContactName(name),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -1020,7 +1020,7 @@ class EmergencyContact extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (phoneNumber) => context
-                .read<RegistrationCubit>()
+                .read<PatientCubit>()
                 .setEmergencyContactPhoneNumber(phoneNumber),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -1040,7 +1040,7 @@ class EmergencyContact extends StatelessWidget {
           width: 320,
           child: TextFormField(
             onChanged: (relationship) => context
-                .read<RegistrationCubit>()
+                .read<PatientCubit>()
                 .setEmergencyContactRelationship(relationship),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -1066,7 +1066,7 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegistrationCubit, PatientState>(
+    return BlocBuilder<PatientCubit, PatientState>(
         builder: (context, state) {
       return Container(
         width: 320,
@@ -1084,7 +1084,7 @@ class _SubmitButton extends StatelessWidget {
             child: const Text('Submit'),
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                var response = context.read<RegistrationCubit>().register(
+                var response = context.read<PatientCubit>().createNewPatient(
                     token: context.read<LoginCubit>().state.homeToken);
 
                 response.then((value) => {

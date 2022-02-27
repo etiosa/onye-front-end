@@ -4,12 +4,12 @@ import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/pages/Welcome.dart';
 import 'package:onye_front_ened/pages/appointment/form/appointment_form.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
+import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
-import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/auth/page/login.dart';
 import 'package:onye_front_ened/pages/patient/page/patients.dart';
 import 'package:onye_front_ened/pages/appointment/page/appointments.dart';
@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthRepository _authRepository = AuthRepository();
-    final RegistrationRepositories _registerRepository =
-        RegistrationRepositories();
+    final PatientRepositories _registerRepository =
+        PatientRepositories();
     final AppointmentRepository _appointmentRepository =
         AppointmentRepository();
 
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                
             ),
             BlocProvider(
-              create: (_) => RegistrationCubit(_registerRepository),
+              create: (_) => PatientCubit(_registerRepository),
             ),
             BlocProvider(
                 create: (_) => AppointmentCubit(_appointmentRepository))
@@ -56,7 +56,8 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Onye',
               routes: {
-                '/': (context) => const Welcome(),
+                '/': (context) => const HomePage(),
+                '/dashboard/patient': (context) => const PatientsPage(),
                 '/login': (context) => const LoginPage(),
                 '/dashboard': (context) => const Dashboard(),
                 '/dashboard/checkin': (context) => const Registration(),
