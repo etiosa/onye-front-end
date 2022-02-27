@@ -488,9 +488,7 @@ Future dateTimePicker(BuildContext context, String label) async {
       await showTimePicker(context: context, initialTime: TimeOfDay.now());
   if (newTime == null) return;
 
-  print('newTime: $newTime');
   String formatTime = newTime.format(context);
-  print('formatTime: $formatTime');
 
   context.read<AppointmentCubit>().setStartTime(formatTime);
 }
