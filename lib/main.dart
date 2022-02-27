@@ -4,12 +4,12 @@ import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/pages/Welcome.dart';
 import 'package:onye_front_ened/pages/appointment/form/appointment_form.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
+import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
-import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/auth/page/login.dart';
 import 'package:onye_front_ened/pages/patient/page/patients.dart';
 import 'package:onye_front_ened/pages/appointment/page/appointments.dart';
@@ -56,7 +56,8 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Onye',
               routes: {
-                '/': (context) => const Welcome(),
+                '/': (context) => const HomePage(),
+                '/dashboard/patient': (context) => const PatientsPage(),
                 '/login': (context) => const LoginPage(),
                 '/dashboard': (context) => const Dashboard(),
                 '/dashboard/checkin': (context) => const Registration(),

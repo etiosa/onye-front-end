@@ -31,8 +31,10 @@ class _PatientsPageState extends State<PatientsPage> {
                           const Color.fromARGB(255, 56, 155, 152)),
                     ),
                     onPressed: () {
+                      Navigator.of(context)
+                          .pushNamed('/dashboard/registrationForm');
                     },
-                    child: const Text('Register Patient')),
+                    child: const Text('Create Patient')),
               )
             ],
           ),
@@ -99,8 +101,7 @@ class _PatientsPageState extends State<PatientsPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
-              onTap: () {
-              },
+              onTap: () {},
               child: Container(
                 height: 100,
                 width: MediaQuery.of(context).size.width / 1.05,
@@ -147,4 +148,3 @@ class _PatientsPageState extends State<PatientsPage> {
     ));
   }
 }
-

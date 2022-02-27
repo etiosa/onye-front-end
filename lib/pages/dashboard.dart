@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/pages/auth/page/login.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
@@ -138,7 +137,7 @@ class _DashboardState extends State<Dashboard> {
               child: InkWell(
                 onTap: (() => {
                       Navigator.of(context)
-                          .pushNamed("/dashboard/registrationForm")
+                          .pushNamed("/dashboard/patient")
                     }),
                 child: Container(
                   height: 120,
