@@ -11,7 +11,7 @@ import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/auth/page/login.dart';
 import 'package:onye_front_ened/pages/patient/page/patients.dart';
-import 'package:onye_front_ened/pages/appointment/page/appointments.dart';
+import 'package:onye_front_ened/pages/appointments.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';

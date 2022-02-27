@@ -6,8 +6,8 @@ import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../components/util/Messages.dart';
-import '../state/appointment_cubit.dart';
+import '../components/util/Messages.dart';
+import 'appointment/state/appointment_cubit.dart';
 
 class Appointments extends StatefulWidget {
   const Appointments({Key? key}) : super(key: key);
