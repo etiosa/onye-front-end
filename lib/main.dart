@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthRepository _authRepository = AuthRepository();
-    final RegistrationRepositories _registerRepository =
-        RegistrationRepositories();
+    final PatientRepositories _registerRepository =
+        PatientRepositories();
     final AppointmentRepository _appointmentRepository =
         AppointmentRepository();
 
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                
             ),
             BlocProvider(
-              create: (_) => RegistrationCubit(_registerRepository),
+              create: (_) => PatientCubit(_registerRepository),
             ),
             BlocProvider(
                 create: (_) => AppointmentCubit(_appointmentRepository))

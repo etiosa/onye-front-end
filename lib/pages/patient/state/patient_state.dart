@@ -1,6 +1,12 @@
 part of 'patient_cubit.dart';
 
-enum REGISTERATIONSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
+enum REGISTERATIONSEARCHSTATE {
+  inital,
+  sucessful,
+  error,
+  notFound,
+  startsearch
+}
 
 //TODO: Refactor
 class PatientState extends Equatable {
@@ -30,7 +36,8 @@ class PatientState extends Equatable {
       this.emergencyContactRelationship,
       this.contactPrefernce,
       this.token = '',
-      this.searchState= REGISTERATIONSEARCHSTATE.inital,
+      this.query='',
+      this.searchState = REGISTERATIONSEARCHSTATE.inital,
       this.createdPatientData = const {},
       this.registrationFormState = RegistrationFormState.init});
 
@@ -53,6 +60,7 @@ class PatientState extends Equatable {
   final String? addressLine3;
   final String? addressLine4;
   final String? zipCode;
+  final String? query;
   final String? city;
   final String ethnicity;
   final String? contactPrefernce;
@@ -90,7 +98,8 @@ class PatientState extends Equatable {
         emergencyContactRelationship,
         contactPrefernce,
         createdPatientData,
-        searchState
+        searchState,
+        query
       ];
 
   PatientState copywith(
@@ -99,6 +108,7 @@ class PatientState extends Equatable {
       String? lastName,
       String? dateOfBirth,
       String? gender,
+      String? query,
       String? religion,
       String? educationLevel,
       String? email,
@@ -125,7 +135,8 @@ class PatientState extends Equatable {
       String? contactPreferences}) {
     return PatientState(
         token: toke ?? token,
-        searchState: searchState?? this.searchState,
+        query: query?? this.query,
+        searchState: searchState ?? this.searchState,
         createdPatientData: createdPatientData ?? this.createdPatientData,
         firstName: firstName ?? this.firstName,
         emergencyContactName: emergencyContactName ?? this.emergencyContactName,
