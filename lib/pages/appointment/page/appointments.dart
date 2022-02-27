@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../components/util/Messages.dart';
 import '../state/appointment_cubit.dart';
 
 class Appointments extends StatefulWidget {
@@ -335,7 +337,7 @@ class _AppointmentState extends State<Appointment> {
                                   id: state.appointmentList[index]['id'],
                                 ),
                                 RescheduleAppointmentButton(
-                                  id: state.appointmentList[index]['id'],
+                                  appointment: state.appointmentList[index],
                                 ),
                               ],
                             ),
@@ -353,9 +355,7 @@ class _AppointmentState extends State<Appointment> {
 }
 
 class CancelAppointmentButton extends StatelessWidget {
-  CancelAppointmentButton(
-      {Key? key, required this.id})
-      : super(key: key);
+  CancelAppointmentButton({Key? key, required this.id}) : super(key: key);
 
   String id;
 
@@ -376,10 +376,38 @@ class CancelAppointmentButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
-              context.read<AppointmentCubit>().cancelAppointment(
+              var response = context.read<AppointmentCubit>().cancelAppointment(
                     id: id,
                     token: context.read<LoginCubit>().state.homeToken,
                   );
+
+              response.then((value) => {
+                if (value != null && value.statusCode == 200)
+                  {
+                    Messages.showMessage(
+                        const Icon(
+                          IconData(0xf635,
+                              fontFamily: 'MaterialIcons'),
+                          color: Colors.green,
+                        ),
+                        'Appointment cancelled'),
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: ((context) =>
+                            const Appointments())),
+                        ModalRoute.withName('/dashboard'))
+                  }
+                else if (value != null && value.statusCode == 400)
+                  {
+                    Messages.showMessage(
+                        const Icon(
+                          IconData(0xe237,
+                              fontFamily: 'MaterialIcons'),
+                          color: Colors.red,
+                        ),
+                        'Could not cancel appointment'),
+                  }
+              });
             },
             child: const Text('Cancel')),
       ),
@@ -388,10 +416,10 @@ class CancelAppointmentButton extends StatelessWidget {
 }
 
 class RescheduleAppointmentButton extends StatelessWidget {
-  RescheduleAppointmentButton({Key? key, required this.id})
+  RescheduleAppointmentButton({Key? key, required this.appointment})
       : super(key: key);
 
-  String id;
+  var appointment;
 
   @override
   Widget build(BuildContext context) {
@@ -410,11 +438,364 @@ class RescheduleAppointmentButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
+              showDialogConfirmation(context, appointment);
             },
-            child: const Text('Reschedule')),
+            child: const Text('Edit')),
       ),
     );
   }
+
+  Future<String?> showDialogConfirmation(
+      BuildContext context, dynamic appointment) {
+    final AuthSession authsession = AuthSession();
+    var hometoken;
+
+    authsession.getHomeToken()?.then((value) => hometoken = value);
+
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: const Text('Edit appointment'),
+        actions: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              DropDown(label: 'Language Preference', initialValue: 'EN', options: const ['EN']),
+              const SizedBox(height: 25),
+              DropDown(
+                  label: 'Type of Visit',
+                  initialValue: appointment['typeOfVisit'],
+                  options: const ['Follow-up', 'Consultation']),
+              const SizedBox(height: 25),
+              DropDown(label: 'Reason for Visit', initialValue: appointment['reasonForVisit'], options: const [
+                'Headache',
+                'Follow-up',
+                'Malaria',
+                'Fever',
+                'Injection',
+                'Test Result',
+                'Lab Test',
+                'PUD',
+                'Check Up',
+                'Consultation'
+              ]),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                children: const [
+                  DatePickerField(
+                    label: 'Date',
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  DateTimePickerField(
+                    label: 'Time',
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () => {
+                  Navigator.pop(context, 'Cancel'),
+                },
+                child: const Text('Cancel'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                  onPressed: () {
+                    var response = context
+                        .read<AppointmentCubit>()
+                        .updateAppointment(
+                          id: appointment['id'],
+                          date:
+                              context.read<AppointmentCubit>().state.startDate,
+                          time:
+                              context.read<AppointmentCubit>().state.startTime,
+                          languagePreference: 'en',
+                          typeOfVisit: context
+                              .read<AppointmentCubit>()
+                              .state
+                              .typeOfVisit,
+                          reasonForVisit: context
+                              .read<AppointmentCubit>()
+                              .state
+                              .reasonForVisit,
+                          token: hometoken,
+                        );
+
+                    response.then((value) => {
+                          if (value != null && value.statusCode == 202)
+                            {
+                              Messages.showMessage(
+                                  const Icon(
+                                    IconData(0xf635,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Colors.green,
+                                  ),
+                                  'Appointment updated'),
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const Appointments())),
+                                  ModalRoute.withName('/dashboard'))
+                            }
+                          else if (value != null && value.statusCode == 400)
+                            {
+                              Messages.showMessage(
+                                  const Icon(
+                                    IconData(0xe237,
+                                        fontFamily: 'MaterialIcons'),
+                                    color: Colors.red,
+                                  ),
+                                  'Could not update appointment'),
+                            }
+                        });
+                  },
+                  child: const Text('Save')),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DropDown extends StatefulWidget {
+  DropDown({Key? key, required this.label, required this.options, this.initialValue})
+      : super(
+          key: key,
+        );
+  String label;
+  List<String> options;
+  String? initialValue;
+
+  @override
+  _DropDownState createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+  String? _selectedText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: Text(widget.label),
+        ),
+        SizedBox(
+          height: 45,
+          width: 320,
+          child: Container(
+            padding: const EdgeInsets.all(10.0),
+            color: const Color.fromARGB(255, 205, 226, 226),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
+                isExpanded: true,
+                value: _selectedText ?? widget.initialValue,
+                items: widget.options.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _selectedText = val.toString();
+                    if (widget.label == 'Type of Visit') {
+                      context
+                          .read<AppointmentCubit>()
+                          .setTypeOfVisit(_selectedText);
+                    }
+
+                    if (widget.label == 'Reason for Visit') {
+                      context
+                          .read<AppointmentCubit>()
+                          .setReasonForVisit(_selectedText);
+                    }
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DateTimePickerField extends StatelessWidget {
+  const DateTimePickerField({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Time',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+                dateTimePicker(context, label);
+              },
+              child: Container(
+                height: 45,
+                width: 100,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: TimeContent(
+                      label: label,
+                    )),
+              ),
+            ),
+          ],
+        ));
+      },
+    );
+  }
+}
+
+Future dateTimePicker(BuildContext context, String label) async {
+  final newTime =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (newTime == null) return;
+
+  String formatTime = newTime.format(context);
+
+  context.read<AppointmentCubit>().setStartTime(formatTime);
+}
+
+class DatePickerField extends StatelessWidget {
+  const DatePickerField({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return (Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w100),
+            ),
+            InkWell(
+              onTap: () {
+                datePicker(context, label);
+              },
+              child: Container(
+                height: 45,
+                width: 100,
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: TextContent(
+                    label: label,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ));
+      },
+    );
+  }
+}
+
+class TextContent extends StatelessWidget {
+  const TextContent({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    if (label == 'From') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(
+          context.read<AppointmentCubit>().state.startDate,
+          style: const TextStyle(fontSize: 12),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+      child: Text(context.read<AppointmentCubit>().state.startDate,
+          style: const TextStyle(fontSize: 12)),
+    );
+  }
+}
+
+class TimeContent extends StatelessWidget {
+  const TimeContent({Key? key, required this.label}) : super(key: key);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    if (label == 'From') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(
+          context.read<AppointmentCubit>().state.startTime,
+          style: const TextStyle(fontSize: 12),
+        ),
+      );
+    }
+    if (label == 'To') {
+      return Padding(
+        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
+        child: Text(context.read<AppointmentCubit>().state.startTime,
+            style: const TextStyle(fontSize: 12)),
+      );
+    }
+    return Text(context.read<AppointmentCubit>().state.startTime);
+  }
+}
+
+Future datePicker(BuildContext context, String label) async {
+  var dateFormat = DateFormat('yyyy-MM-dd');
+
+  final initDate = DateTime.now();
+  final newDate = await showDatePicker(
+      context: context,
+      initialDate: initDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(DateTime.now().year + 5));
+
+  String formattedDate = dateFormat.format(newDate!);
+
+  // ignore: unnecessary_null_comparison
+  if (newDate == null) return;
+  context.read<AppointmentCubit>().setStartDate(formattedDate);
 }
 
 // ignore: must_be_immutable
@@ -529,8 +910,7 @@ class CheckInPatient extends StatelessWidget {
                     RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
-            onPressed: () {
-            },
+            onPressed: () {},
             child: const Text('Create new New registeration')),
       ),
     );

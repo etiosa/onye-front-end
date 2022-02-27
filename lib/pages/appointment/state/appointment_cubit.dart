@@ -195,6 +195,29 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     return req;
   }
 
+  Future<Response?> updateAppointment({
+    String? id,
+    String? date,
+    String? time,
+    String? languagePreference,
+    String? typeOfVisit,
+    String? reasonForVisit,
+    String? token,
+  }) async {
+    var dateTime =
+        DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!, true);
+    Response? response = await _appointmentRepository.updateAppointment(
+      id: id,
+      languagePreference: languagePreference,
+      typeOfVisit: typeOfVisit,
+      reasonForVisit: reasonForVisit,
+      appointmentDateTime: dateTime.toIso8601String(),
+      token: token,
+    );
+
+    return response;
+  }
+
   Future<Response?> cancelAppointment({
     String? id,
     String? token,

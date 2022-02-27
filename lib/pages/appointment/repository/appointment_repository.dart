@@ -185,6 +185,39 @@ class AppointmentRepository {
     }
   }
 
+  Future<http.Response?> updateAppointment({
+    String? id,
+    String? languagePreference,
+    String? typeOfVisit,
+    String? reasonForVisit,
+    String? appointmentDateTime,
+    String? token,
+  }) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/$id')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
+
+    try {
+      http.Response response = await http.patch(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "typeOfVisit": typeOfVisit,
+            "reasonForVisit": reasonForVisit,
+            "languagePreference": languagePreference,
+            "appointmentDateTime": appointmentDateTime,
+          }));
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<http.Response?> cancelAppointment({
     String? id,
     String? token,
