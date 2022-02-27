@@ -15,7 +15,8 @@ jobs:
           
       - name: build flutter web
         run: flutter build web -v
-
+      - name: firebase Dependecies
+        run: npm install -g firebase-tools
       - name: deploy to firebase
         run: firebase deploy
 
