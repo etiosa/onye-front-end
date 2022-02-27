@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -445,7 +444,6 @@ class Confirmation extends StatelessWidget {
     final _patientName = appointment['patient']['firstName'] +
         ' ' +
         appointment['patient']['lastName'];
-    //final patientId =
     final AuthSession authsession = AuthSession();
     var hometoken;
 

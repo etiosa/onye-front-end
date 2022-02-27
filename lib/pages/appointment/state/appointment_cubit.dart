@@ -179,7 +179,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? date,
       String? time,
       String? languagePreference}) async {
-    var dateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!,true);
+    var dateTime =
+        DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!, true);
 
     Response? req = await _appointmentRepository.createAppointment(
         date: dateTime.toIso8601String(),
@@ -190,6 +191,29 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         reasons: reasonForVisit);
 
     return req;
+  }
+
+  Future<Response?> updateAppointment({
+    String? id,
+    String? date,
+    String? time,
+    String? languagePreference,
+    String? typeOfVisit,
+    String? reasonForVisit,
+    String? token,
+  }) async {
+    var dateTime =
+        DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!, true);
+    Response? response = await _appointmentRepository.updateAppointment(
+      id: id,
+      languagePreference: languagePreference,
+      typeOfVisit: typeOfVisit,
+      reasonForVisit: reasonForVisit,
+      appointmentDateTime: dateTime.toIso8601String(),
+      token: token,
+    );
+
+    return response;
   }
 
   Future<Response?> cancelAppointment({

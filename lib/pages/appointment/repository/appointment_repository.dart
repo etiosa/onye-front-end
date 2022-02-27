@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "https://api.onyedap.com/";
+  static const String root = "http://localhost:8001/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -177,6 +177,39 @@ class AppointmentRepository {
             "languagePreference": "en",
             'patientId': patientId,
             'medicalPersonnelId': medicalId
+          }));
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<http.Response?> updateAppointment({
+    String? id,
+    String? languagePreference,
+    String? typeOfVisit,
+    String? reasonForVisit,
+    String? appointmentDateTime,
+    String? token,
+  }) async {
+    var uri = Uri.parse(root + 'api/rest/v1/appointment/$id')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
+
+    try {
+      http.Response response = await http.patch(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "typeOfVisit": typeOfVisit,
+            "reasonForVisit": reasonForVisit,
+            "languagePreference": languagePreference,
+            "appointmentDateTime": appointmentDateTime,
           }));
 
       return response;
