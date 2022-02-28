@@ -152,7 +152,7 @@ class PatientDetails extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: ()=> {
-              Navigator.of(context).pushNamed('/dashboard/patient/patientprofile')
+            /*   Navigator.of(context).pushNamed('/dashboard/patient/patientprofile') */
         },
         child: Container(
           height: 100,
