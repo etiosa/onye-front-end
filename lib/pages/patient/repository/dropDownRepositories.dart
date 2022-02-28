@@ -4,7 +4,7 @@ import "package:http/http.dart" as http;
 //TODO:  Move the root url to environment variable
 
 class DropDownRepositories {
-  static const String root = "https://api.onyedap.com/ ";
+  static const String root = "https://api.onyedap.com/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
