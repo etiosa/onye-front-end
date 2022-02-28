@@ -175,7 +175,7 @@ class _AppointmentState extends State<Appointment> {
         if (state.registrationList.isEmpty) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 1.5,
+              height: MediaQuery.of(context).size.height / 1.8,
               padding:
                   const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
               child: Column(mainAxisSize: MainAxisSize.max, children: [
@@ -191,8 +191,8 @@ class _AppointmentState extends State<Appointment> {
                             child: Row(
                               children: [
                                 const SizedBox(
-                                  width: 48,
-                                  height: 48,
+                                  width: 20,
+                                  height: 20,
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.only(bottom: 1.0),
@@ -206,7 +206,7 @@ class _AppointmentState extends State<Appointment> {
                                       height: 10.0,
                                       color: Colors.white,
                                     ),
-                                    Container(
+                                     Container(
                                       width: double.infinity,
                                       height: 10.0,
                                       color: Colors.white,
@@ -216,6 +216,7 @@ class _AppointmentState extends State<Appointment> {
                                       height: 10.0,
                                       color: Colors.white,
                                     ),
+                                   
                                   ],
                                 ))
                               ],
