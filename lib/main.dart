@@ -4,6 +4,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/pages/appointment/form/appointment_form.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/home.dart';
+import 'package:onye_front_ened/pages/patient/page/PatientProfile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
                 '/dashboard/patient': (context) => const PatientsPage(),
                 '/login': (context) => const LoginPage(),
                 '/dashboard': (context) => const Dashboard(),
+                 '/dashboard/patient/patientprofile': (context) => const PatientProfile(),
                 '/dashboard/checkin': (context) => const Registration(),
                 '/dashboard/appointment': (context) => const Appointments(),
                 '/dashboard/appointment/createAppointment': (context) =>

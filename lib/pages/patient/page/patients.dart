@@ -152,16 +152,7 @@ class PatientDetails extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: ()=> {
-          showMaterialModalBottomSheet(
-            expand: true,
-            elevation: 10.0,
-            enableDrag: true,
-          
-            isDismissible: true,
-            useRootNavigator: true,
-            context: context,
-            builder: (context) => const PatientInformation(),
-          )
+              Navigator.of(context).pushNamed('/dashboard/patient/patientprofile')
         },
         child: Container(
           height: 100,
@@ -244,6 +235,12 @@ class PatientInformation extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
 
 //TODO: move this  to a widget foldder
 class PatientList extends StatefulWidget {

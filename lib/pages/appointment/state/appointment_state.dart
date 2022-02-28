@@ -3,7 +3,7 @@ part of 'appointment_cubit.dart';
 enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
 
-//TODO Create clinical Note Model
+//TODO create modal later
 class AppointmentState extends Equatable {
   const AppointmentState(
       {this.appointmentList = const [],
@@ -49,6 +49,7 @@ class AppointmentState extends Equatable {
   final String clinicalNote;
   final String clinicalNoteType;
   final bool patientRegistered;
+
 
   @override
   List<Object> get props => [

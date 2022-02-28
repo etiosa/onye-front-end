@@ -444,144 +444,114 @@ class Confirmation extends StatelessWidget {
     final _patientName = appointment['patient']['firstName'] +
         ' ' +
         appointment['patient']['lastName'];
+    final clincialNoteid = appointment['clinicalNoteId'];
     final AuthSession authsession = AuthSession();
+    //saved note type
+    //saved the title
+    //saved the note
+    String? note;
+    String? title;
+    String? noteType;
+
     var hometoken;
 
-    authsession.getHomeToken()?.then((value) => hometoken = value);
+    authsession.getHomeToken()?.then((value) => {
+          hometoken = value,
+          if (appointment.containsKey('clinicalNoteId'))
+            {
+              context
+                  .read<AppointmentCubit>()
+                  .getPatientClinicalNote(id: clincialNoteid, token: hometoken)
+            }
+        });
 
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         content: const Text('Add clinical Note'),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              DropDown(label: 'Note Type', options: const [
+        actions: ClinicalNoteForm(
+            appointment, _patientName, context, note, hometoken),
+      ),
+    );
+  }
+
+  List<Widget> ClinicalNoteForm(appointment, _patientName, BuildContext context,
+      String? note, hometoken) {
+    return <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          DropDown(
+              label: 'Note Type',
+              registeration: appointment,
+              options: const [
                 'CONSULTATION_NOTE',
                 'DISCHARGE_SUMMARY_NOTE',
                 'PROCEDURE_NOTE',
                 'PROGRESS_NOTE',
               ]),
-            ],
+        ],
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Text(
+              "Patient",
+              style: TextStyle(
+                color: Color.fromARGB(255, 56, 155, 152),
+              ),
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text(
-                  "Patient",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 56, 155, 152),
-                  ),
-                ),
-              ),
-              TextFormField(
-                readOnly: true,
-                initialValue: _patientName,
-                onChanged: (username) =>
-                    context.read<LoginCubit>().setUserName(username),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 205, 226, 226),
-                  labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ],
+          TextFormField(
+            readOnly: true,
+            initialValue: _patientName,
+            onChanged: (username) =>
+                context.read<LoginCubit>().setUserName(username),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              filled: true,
+              fillColor: Color.fromARGB(255, 205, 226, 226),
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600),
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text(
-                  "Title",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 56, 155, 152),
-                  ),
-                ),
-              ),
-              TextFormField(
-                onChanged: (title) => context
-                    .read<AppointmentCubit>()
-                    .setClinicalNoteTitle(title),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 205, 226, 226),
-                  labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600),
-                ),
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a title';
-                  }
-                  return null;
-                },
-              ),
-            ],
+        ],
+      ),
+      ClinicalNoteTitleField(
+        appointment: appointment,
+      ),
+      ClinicalNoteField(
+        appointment: appointment,
+      ),
+      const SizedBox(height: 20),
+      Row(
+        children: [
+          TextButton(
+            onPressed: () => {
+              Navigator.pop(context, 'Cancel'),
+            },
+            child: const Text('Cancel'),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text(
-                  "Note",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 56, 155, 152),
-                  ),
-                ),
-              ),
-              TextFormField(
-                maxLines: 7,
-                onChanged: (note) =>
-                    context.read<AppointmentCubit>().setClinicalNote(note),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 205, 226, 226),
-                  labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600),
-                ),
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a note';
-                  }
-                  return null;
-                },
-              ),
-            ],
+          const SizedBox(
+            height: 10,
           ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () => {
-                  Navigator.pop(context, 'Cancel'),
-                },
-                child: const Text('Cancel'),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextButton(
-                  onPressed: () {
-                    var response = context
-                        .read<AppointmentCubit>()
-                        .createClinicalNote(
+          TextButton(
+              onPressed: () {
+                if (appointment.containsKey('clinicalNoteId')) {
+                  print('save clincial note');
+                  var response =
+                      context.read<AppointmentCubit>().updateClinicalNote(
                             token: hometoken,
-                            medicalId: context.read<LoginCubit>().state.id,
-                            note: context
+                            id: appointment['clinicalNoteId'],
+                            type: context
+                                .read<AppointmentCubit>()
+                                .state
+                                .clinicalNoteType,
+                            noteText: context
                                 .read<AppointmentCubit>()
                                 .state
                                 .clinicalNote,
@@ -589,57 +559,257 @@ class Confirmation extends StatelessWidget {
                                 .read<AppointmentCubit>()
                                 .state
                                 .clinicalNoteTitle,
-                            clinicalNoteType: context
+                          );
+                  response.then((value) => {
+                        if (value != null && value.statusCode == 202)
+                          {
+                            Messages.showMessage(
+                                const Icon(
+                                  IconData(0xf635, fontFamily: 'MaterialIcons'),
+                                  color: Colors.green,
+                                ),
+                                'Clinical Note updated'),
+                            context
                                 .read<AppointmentCubit>()
-                                .state
-                                .clinicalNoteType,
-                            patientId: appointment['patient']['id']);
+                                .getPatientClinicalNote(
+                                    token: hometoken,
+                                    id: appointment['clinicalNoteId']),
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        const Registration())),
+                                ModalRoute.withName('/dashboard'))
+                          }
+                        else if (value != null && value.statusCode == 400)
+                          {
+                            Messages.showMessage(
+                                const Icon(
+                                  IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                  color: Colors.red,
+                                ),
+                                'Could not update Clinical Note'),
+                          }
+                      });
+                } else {
+                  var response = context
+                      .read<AppointmentCubit>()
+                      .createClinicalNote(
+                          token: hometoken,
+                          registerationId: appointment['id'],
+                          medicalId: context.read<LoginCubit>().state.id,
+                          note: context
+                              .read<AppointmentCubit>()
+                              .state
+                              .clinicalNote,
+                          title: context
+                              .read<AppointmentCubit>()
+                              .state
+                              .clinicalNoteTitle,
+                          clinicalNoteType: context
+                              .read<AppointmentCubit>()
+                              .state
+                              .clinicalNoteType,
+                          patientId: appointment['patient']['id']);
 
-                    response.then((value) => {
-                      if (value != null && value.statusCode == 201)
-                            {
-                              Messages.showMessage(
-                                  const Icon(
-                                    IconData(0xf635,
-                                        fontFamily: 'MaterialIcons'),
-                                    color: Colors.green,
-                                  ),
-                                  'Clinical Note created'),
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const Registration())),
-                                  ModalRoute.withName('/dashboard'))
-                            }
-                          else if (value != null && value.statusCode == 400)
-                            {
-                              Messages.showMessage(
-                                  const Icon(
-                                    IconData(0xe237,
-                                        fontFamily: 'MaterialIcons'),
-                                    color: Colors.red,
-                                  ),
-                                  'Could not create Clinical Note'),
-                            }
-                    });
-                    //Navigator.pop(context, 'Add');
-                  },
-                  child: const Text('Add')),
-            ],
-          ),
+                  response.then((value) => {
+                        if (value != null && value.statusCode == 201)
+                          {
+                            Messages.showMessage(
+                                const Icon(
+                                  IconData(0xf635, fontFamily: 'MaterialIcons'),
+                                  color: Colors.green,
+                                ),
+                                'Clinical Note created'),
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        const Registration())),
+                                ModalRoute.withName('/dashboard'))
+                          }
+                        else if (value != null && value.statusCode == 400)
+                          {
+                            Messages.showMessage(
+                                const Icon(
+                                  IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                  color: Colors.red,
+                                ),
+                                'Could not create Clinical Note'),
+                          }
+                      });
+                  //Navigator.pop(context, 'Add');
+                }
+              },
+              child: Text(
+                  appointment.containsKey('clinicalNoteId') ? 'save' : 'add')),
         ],
       ),
+    ];
+  }
+}
+
+class ClinicalNoteTitleField extends StatefulWidget {
+  ClinicalNoteTitleField({
+    required this.appointment,
+    Key? key,
+  }) : super(key: key);
+  dynamic appointment;
+
+  @override
+  State<ClinicalNoteTitleField> createState() => _ClinicalNoteTitleFieldState();
+}
+
+class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
+    String? _selectedText;
+
+  @override
+  
+   void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _controller.text = context.read<AppointmentCubit>().state.clinicalNoteTitle;
+    _selectedText = context.read<AppointmentCubit>().state.clinicalNoteTitle;
+  }
+
+  final TextEditingController _controller = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+        builder: (context, state) {
+    if (state.clinicalNoteTitle.isNotEmpty &&
+          state.clinicalNoteTitle != _controller.text) {
+        _controller.text = context.read<AppointmentCubit>().state.clinicalNoteTitle;
+      }
+      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Padding(
+          padding: EdgeInsets.all(2.0),
+          child: Text(
+            "Title",
+            style: TextStyle(
+              color: Color.fromARGB(255, 56, 155, 152),
+            ),
+          ),
+        ),
+        TextFormField(
+           controller: _controller,
+        
+          onChanged: (title) =>
+              context.read<AppointmentCubit>().setClinicalNoteTitle(title),
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(borderSide: BorderSide.none),
+            filled: true,
+            fillColor: Color.fromARGB(255, 205, 226, 226),
+            labelStyle: TextStyle(
+                color: Colors.black,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600),
+          ),
+          validator: (String? value) {
+            if (value!.isEmpty) {
+              return 'Please enter a title';
+            }
+            return null;
+          },
+        ),
+      ]);
+    });
+  }
+}
+
+class ClinicalNoteField extends StatefulWidget {
+  ClinicalNoteField({
+    required this.appointment,
+    this.title,
+    Key? key,
+  }) : super(key: key);
+  dynamic appointment;
+  var title;
+
+  @override
+  State<ClinicalNoteField> createState() => _ClinicalNoteFieldState();
+}
+
+class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
+  String? _selectedText;
+  // String t= context.read();
+
+  final TextEditingController _controller = TextEditingController(text: '');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _controller.text = context.read<AppointmentCubit>().state.clinicalNote;
+    _selectedText = context.read<AppointmentCubit>().state.clinicalNote;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        if (state.clinicalNote.isNotEmpty &&
+            state.clinicalNote != _controller.text) {
+          _controller.text =
+              context.read<AppointmentCubit>().state.clinicalNote;
+        }
+        return (Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(2.0),
+              child: Text(
+                "Note",
+                style: TextStyle(
+                  color: Color.fromARGB(255, 56, 155, 152),
+                ),
+              ),
+            ),
+            TextFormField(
+              controller: _controller,
+              maxLines: 7,
+              onChanged: (note) {
+                print(note);
+                setState(() {
+                  _selectedText = note;
+                  context.read<AppointmentCubit>().setClinicalNote(note);
+                });
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(borderSide: BorderSide.none),
+                filled: true,
+                fillColor: Color.fromARGB(255, 205, 226, 226),
+                labelStyle: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600),
+              ),
+              validator: (String? value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a note';
+                }
+                return null;
+              },
+            ),
+          ],
+        ));
+      },
     );
   }
 }
 
 class DropDown extends StatefulWidget {
-  DropDown({Key? key, required this.label, required this.options})
+  DropDown(
+      {Key? key,
+      required this.label,
+      required this.options,
+      this.registeration})
       : super(
           key: key,
         );
   String label;
   List<String> options;
+  dynamic registeration;
 
   @override
   _DropDownState createState() => _DropDownState();
@@ -647,48 +817,64 @@ class DropDown extends StatefulWidget {
 
 class _DropDownState extends State<DropDown> {
   String? _selectedText;
+  String? clinicalType;
+  //
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Text(widget.label),
-        ),
-        SizedBox(
-          height: 45,
-          width: 300,
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            color: const Color.fromARGB(255, 205, 226, 226),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                isExpanded: true,
-                value: _selectedText,
-                hint: const Text("Select Note Type"),
-                items: widget.options.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  setState(() {
-                    _selectedText = val.toString();
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: ((context, state) {
+        //print("dropdown");
+        //print(state.clinicalNote);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: Text(widget.label),
+            ),
+            SizedBox(
+              height: 45,
+              width: 300,
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                color: const Color.fromARGB(255, 205, 226, 226),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    dropdownColor: const Color.fromARGB(255, 205, 226, 226),
+                    isExpanded: true,
+                    value: state.clinicalNoteType.isEmpty &&
+                            widget.registeration.containsKey('clinicalNoteId')
+                        ? _selectedText
+                        : state.clinicalNoteType,
+                    hint: const Text("Select Note Type"),
+                    items: widget.options.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _selectedText = val.toString();
 
-                    context
-                        .read<AppointmentCubit>()
-                        .setClinicalNoteType(_selectedText);
-                  });
-                },
+                        context
+                            .read<AppointmentCubit>()
+                            .setClinicalNoteType(_selectedText);
+                      });
+                    },
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      }),
     );
   }
 }

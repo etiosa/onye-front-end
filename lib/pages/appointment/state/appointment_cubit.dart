@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
@@ -25,13 +27,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
     }
   }
+
   //TODO: separate this method
 
   void searchPatients({String? query, String? token}) async {
     var patients = await _appointmentRepository.searchPatients(
         searchParams: query, token: token);
     emit(state.copyWith(patientsList: patients));
-    print(patients);
   }
 
   void searchDoctors({String? query, String? token}) async {
@@ -126,12 +128,14 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? medicalId,
       String? title,
       String? note,
+      String? registerationId,
       String? clinicalNoteType}) async {
     Response? req = await _appointmentRepository.createClinicalNote(
         token: token,
         patientId: patientId,
         medicalId: medicalId,
         note: note,
+        registerationId: registerationId,
         clincialNoteType: clinicalNoteType,
         title: title);
 
@@ -155,6 +159,25 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     searchRegistrations(token: token);
 
     return req;
+  }
+
+  Future<Response?> getPatientClinicalNote({
+    String? token,
+    String? id,
+  }) async {
+    Response? req = await _appointmentRepository.getPatientClinicalNote(
+        token: token, id: id);
+    setPatientClinicalNote(req!);
+    return req;
+  }
+
+  void setPatientClinicalNote(Response req) async {
+    final body = jsonDecode(req.body);
+
+    emit(state.copyWith(
+        clinicalNote: body['text'],
+        clinicalNoteTitle: body['title'],
+        clinicalNoteType: body['type']));
   }
 
   void searchRegistrations({String? token, String? searchParams}) async {
@@ -193,6 +216,32 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         reasons: reasonForVisit);
 
     return req;
+  }
+  /* 
+  "type": "CONSULTATION_NOTE",
+	"title": "Note title",
+	"text": "Note text"
+  
+  
+  */
+
+  Future<Response?> updateClinicalNote({
+    String? id,
+    String? type,
+    String? title,
+    String? noteText,
+    String? token,
+  }) async {
+
+    Response? response = await _appointmentRepository.updateClinicalNote(
+      id: id,
+      type: type,
+      noteText: noteText,
+      title: title,
+      token: token,
+    );
+
+    return response;
   }
 
   Future<Response?> updateAppointment({
