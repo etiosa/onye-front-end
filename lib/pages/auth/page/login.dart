@@ -45,10 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                         SingleChildScrollView(child: _formSection()),
                       ]),
                     ),
-                    if (context.read<LoginCubit>().state.statusCode > 0)
-                      const Text('Yes')
-                    else
-                      const ScaffoldMessenger(child: Text('Please Login'))
+                 
                   ],
                 ),
               ),
