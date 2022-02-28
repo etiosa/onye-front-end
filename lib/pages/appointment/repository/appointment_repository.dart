@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "https://api.onyedap.com/";
+  static const String root = "https://api.onyedap.com/ ";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 

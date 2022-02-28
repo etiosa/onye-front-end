@@ -53,61 +53,92 @@ class _DashboardState extends State<Dashboard> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 247, 253, 253),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Logout(),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.width / 6,
-                  bottom: 1.0,
-                  left: MediaQuery.of(context).size.width / 9),
-              child: const Text(
-                "Good afternoon",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Logout(),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width / 6,
+                    bottom: 1.0,
+                    left: MediaQuery.of(context).size.width / 9),
+                child: const Text(
+                  "Good afternoon",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
               ),
-            ),
-            //TODO: backend login here
-
-            DashboardProfile(),
-
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 10,
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: (() =>
-                      {Navigator.of(context).pushNamed("/dashboard/checkin")}),
-                  child: Container(
-                    height: 120,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 56, 155, 152),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: const Offset(0, 3),
+              //TODO: backend login here
+        
+              DashboardProfile(),
+        
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 10,
+              ),
+        
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: (() =>
+                        {Navigator.of(context).pushNamed("/dashboard/checkin")}),
+                    child: Container(
+                      height: 120,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 56, 155, 152),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 40.0, left: 20),
+                        child: Text(
+                          'Registration',
+                          style: TextStyle(color: Colors.white),
                         ),
-                      ],
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 40.0, left: 20),
-                      child: Text(
-                        'Registration',
-                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                ),
-                InkWell(
+                  InkWell(
+                    onTap: (() => {
+                          Navigator.of(context)
+                              .pushNamed("/dashboard/appointment")
+                        }),
+                    child: Container(
+                      height: 120,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 40.0, left: 20),
+                        child: Text('Appointment'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 50),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: InkWell(
                   onTap: (() => {
                         Navigator.of(context)
-                            .pushNamed("/dashboard/appointment")
+                            .pushNamed("/dashboard/patient")
                       }),
                   child: Container(
                     height: 120,
@@ -125,42 +156,13 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     child: const Padding(
                       padding: EdgeInsets.only(top: 40.0, left: 20),
-                      child: Text('Appointment'),
+                      child: Text('Create a Patient'),
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: InkWell(
-                onTap: (() => {
-                      Navigator.of(context)
-                          .pushNamed("/dashboard/patient")
-                    }),
-                child: Container(
-                  height: 120,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 40.0, left: 20),
-                    child: Text('Create a Patient'),
-                  ),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
