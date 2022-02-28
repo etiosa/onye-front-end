@@ -22,9 +22,11 @@ class _PatientsPageState extends State<PatientsPage> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: const Color.fromARGB(255, 252, 255, 255),
-      body: SingleChildScrollView(
-        child: Column(
+      
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -122,10 +124,10 @@ class _PatientsPageState extends State<PatientsPage> {
               height: MediaQuery.of(context).size.height / 25,
             ),
            
-                const PatientList()
+                 const PatientList()
             ],
         ),
-      ),
+      
     ));
   }
 }
@@ -273,22 +275,25 @@ class _PatientListState extends State<PatientList> {
         ));
       }
 
-      return ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          itemCount: state.patientsList.length,
-          itemBuilder: (BuildContext context, index) {
-            return Stack(alignment: Alignment.topRight, children: [
-              PatientDetails(
-                patientId: state.patientsList[index]['id'],
-                patientFullName: state.patientsList[index]['firstName'] +
-                    state.patientsList[index]['lastName'],
-                dateofBirth: state.patientsList[index]['dateOfBirth'],
-                patientNumber: state.patientsList[index]['patientNumber'],
-              ),
-            ]);
-          });
+      return Expanded(
+        flex: 1,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            itemCount: state.patientsList.length,
+            itemBuilder: (BuildContext context, index) {
+              return Stack(alignment: Alignment.topRight, children: [
+                PatientDetails(
+                  patientId: state.patientsList[index]['id'],
+                  patientFullName: state.patientsList[index]['firstName'] +
+                      state.patientsList[index]['lastName'],
+                  dateofBirth: state.patientsList[index]['dateOfBirth'],
+                  patientNumber: state.patientsList[index]['patientNumber'],
+                ),
+              ]);
+            }),
+      );
     });
   }
 }
