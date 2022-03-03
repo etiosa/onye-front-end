@@ -19,30 +19,38 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _authSession.getHomeToken()?.then((token) => {
-          if (token == '')
-            {
-              Messages.showMessage(
-                  const Icon(
-                    IconData(0xf635, fontFamily: 'MaterialIcons'),
-                    color: Colors.green,
-                  ),
-                  'please login'),
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                Navigator.of(context).pushNamed("/login");
-              })
-            }
-          else
-            {
-              context.read<LoginCubit>().home(homeToken: token),
-              Messages.showMessage(
-                  const Icon(
-                    IconData(0xf635, fontFamily: 'MaterialIcons'),
-                    color: Colors.green,
-                  ),
-                  'Login successful')
-            }
-        });
+
+    if (context.read<LoginCubit>().state.loginToken.isEmpty) {
+      print("redirect to login pgae");
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Navigator.of(context).pushNamed("/login");
+      }); 
+    } else {
+     _authSession.getHomeToken()?.then((token) => {
+            if (token == '')
+              {
+                Messages.showMessage(
+                    const Icon(
+                      IconData(0xf635, fontFamily: 'MaterialIcons'),
+                      color: Colors.green,
+                    ),
+                    'please login'),
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  Navigator.of(context).pushNamed("/login");
+                })
+              }
+            else
+              {
+                context.read<LoginCubit>().home(homeToken: token),
+                Messages.showMessage(
+                    const Icon(
+                      IconData(0xf635, fontFamily: 'MaterialIcons'),
+                      color: Colors.green,
+                    ),
+                    'Login successful')
+              }
+          });
+    }
 
     /*  ; */
   }
@@ -69,19 +77,20 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               //TODO: backend login here
-        
+
               DashboardProfile(),
-        
+
               SizedBox(
                 height: MediaQuery.of(context).size.height / 10,
               ),
-        
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   InkWell(
-                    onTap: (() =>
-                        {Navigator.of(context).pushNamed("/dashboard/checkin")}),
+                    onTap: (() => {
+                          Navigator.of(context).pushNamed("/dashboard/checkin")
+                        }),
                     child: Container(
                       height: 120,
                       width: 150,
@@ -136,10 +145,8 @@ class _DashboardState extends State<Dashboard> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: InkWell(
-                  onTap: (() => {
-                        Navigator.of(context)
-                            .pushNamed("/dashboard/patient")
-                      }),
+                  onTap: (() =>
+                      {Navigator.of(context).pushNamed("/dashboard/patient")}),
                   child: Container(
                     height: 120,
                     width: 150,
@@ -178,7 +185,7 @@ class DashboardProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-       return  Column(
+        return Column(
           children: [
             Padding(
               padding: EdgeInsets.only(
@@ -212,8 +219,6 @@ class DashboardProfile extends StatelessWidget {
         );
       },
     );
-
- 
   }
 }
 
@@ -254,7 +259,6 @@ class Logout extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 5),
                 child: ElevatedButton(
                   autofocus: true,
-                  
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all(0),
                     backgroundColor: MaterialStateProperty.all(

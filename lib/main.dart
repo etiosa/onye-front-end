@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
@@ -78,3 +80,74 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
+ 
+
+/* import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  static const String _title = 'Flutter Code Sample';
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: _title,
+      home: Scaffold(
+          appBar: AppBar(title: const Text(_title)),
+          body: const MyStatelessWidget()),
+    );
+  }
+}
+
+class MyStatelessWidget extends StatelessWidget {
+  const MyStatelessWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final PageController controller = PageController(initialPage: 0);
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: PageView(
+            pageSnapping: true,
+            controller: controller,
+            children: <Widget>[
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        controller.nextPage(
+                            duration: const Duration(milliseconds: 320),
+                            curve: Curves.easeIn);
+                      },
+                      child: Text('Next')),
+                  Container(color: Colors.amber, child: Text('First Page')),
+                ],
+              ),
+              Column(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        controller.nextPage(
+                            duration: const Duration(milliseconds: 320),
+                            curve: Curves.easeIn);
+                      },
+                      child: Text('Next')),
+                  Container(
+                      color: Colors.redAccent, child: Text('second Page')),
+                ],
+              ),
+              Container(color: Colors.amberAccent, child: Text('third Page')),
+              Container(color: Colors.black12, child: Text('Foruth Page')),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+} */

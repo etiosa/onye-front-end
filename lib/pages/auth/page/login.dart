@@ -27,26 +27,27 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            resizeToAvoidBottomInset: true,
+            resizeToAvoidBottomInset: false,
             backgroundColor: const Color.fromARGB(255, 247, 253, 253),
             body: Container(
               margin: const EdgeInsets.only(top: 70),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _LoginText(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Stack(children: [
-                        SingleChildScrollView(child: _formSection()),
-                      ]),
+              child: SingleChildScrollView(
+                child: Center(
+                 
+                   
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _LoginText(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Stack(children: [
+                          _formSection(),
+                        ]),
+                      ],
                     ),
                  
-                  ],
                 ),
               ),
             )));
@@ -194,21 +195,24 @@ class _SubmitButton extends StatelessWidget {
       builder: (context, state) {
         //TODO: move this to a welcome page and home page
 
-        _authSession.getHomeToken()!.then((value) => {
-              if (value != '')
-                {
-                  Messages.showMessage(
-                      const Icon(
-                        IconData(0xf635, fontFamily: 'MaterialIcons'),
-                        color: Colors.green,
-                      ),
-                      'Login successful'),
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context).pushNamed("/dashboard");
-                  })
-                }
-            });
+            if(state.loginToken.isNotEmpty){
+          _authSession.getHomeToken()!.then((value) => {
+                if (value != '')
+                  {
+                    Messages.showMessage(
+                        const Icon(
+                          IconData(0xf635, fontFamily: 'MaterialIcons'),
+                          color: Colors.green,
+                        ),
+                        'Login successful'),
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      Navigator.of(context).pushNamed("/dashboard");
+                    })
+                  }
+              });
 
+            }
+       
         return Container(
           width: 250,
           height: 60,

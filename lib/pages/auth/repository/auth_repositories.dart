@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AuthRepository {
-  static const String root = "https://api.onyedap.com/";
+  static const String root = "http://localhost:8001/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
@@ -35,8 +35,16 @@ class AuthRepository {
         "Accept": accept,
         "Authorization": "Bearer $token",
       });
-      body = jsonDecode(response.body);
-      return body;
+      switch (response.statusCode) {
+        case 200:
+          body = jsonDecode(response.body);
+          return body;
+        case 401:
+          return response.statusCode;
+        default:
+          return response.statusCode;
+      }
+
     } catch (e) {
       return body;
     }
