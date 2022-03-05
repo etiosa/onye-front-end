@@ -382,32 +382,29 @@ class CancelAppointmentButton extends StatelessWidget {
                   );
 
               response.then((value) => {
-                if (value != null && value.statusCode == 200)
-                  {
-                    Messages.showMessage(
-                        const Icon(
-                          IconData(0xf635,
-                              fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
-                        ),
-                        'Appointment cancelled'),
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: ((context) =>
-                            const Appointments())),
-                        ModalRoute.withName('/dashboard'))
-                  }
-                else if (value != null && value.statusCode == 400)
-                  {
-                    Messages.showMessage(
-                        const Icon(
-                          IconData(0xe237,
-                              fontFamily: 'MaterialIcons'),
-                          color: Colors.red,
-                        ),
-                        'Could not cancel appointment'),
-                  }
-              });
+                    if (value != null && value.statusCode == 200)
+                      {
+                        Messages.showMessage(
+                            const Icon(
+                              IconData(0xf635, fontFamily: 'MaterialIcons'),
+                              color: Colors.green,
+                            ),
+                            'Appointment cancelled'),
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: ((context) => const Appointments())),
+                            ModalRoute.withName('/dashboard'))
+                      }
+                    else if (value != null && value.statusCode == 400)
+                      {
+                        Messages.showMessage(
+                            const Icon(
+                              IconData(0xe237, fontFamily: 'MaterialIcons'),
+                              color: Colors.red,
+                            ),
+                            'Could not cancel appointment'),
+                      }
+                  });
             },
             child: const Text('Cancel')),
       ),
@@ -461,25 +458,31 @@ class RescheduleAppointmentButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              DropDown(label: 'Language Preference', initialValue: 'EN', options: const ['EN']),
+              DropDown(
+                  label: 'Language Preference',
+                  initialValue: 'EN',
+                  options: const ['EN']),
               const SizedBox(height: 25),
               DropDown(
                   label: 'Type of Visit',
                   initialValue: appointment['typeOfVisit'],
                   options: const ['Follow-up', 'Consultation']),
               const SizedBox(height: 25),
-              DropDown(label: 'Reason for Visit', initialValue: appointment['reasonForVisit'], options: const [
-                'Headache',
-                'Follow-up',
-                'Malaria',
-                'Fever',
-                'Injection',
-                'Test Result',
-                'Lab Test',
-                'PUD',
-                'Check Up',
-                'Consultation'
-              ]),
+              DropDown(
+                  label: 'Reason for Visit',
+                  initialValue: appointment['reasonForVisit'],
+                  options: const [
+                    'Headache',
+                    'Follow-up',
+                    'Malaria',
+                    'Fever',
+                    'Injection',
+                    'Test Result',
+                    'Lab Test',
+                    'PUD',
+                    'Check Up',
+                    'Consultation'
+                  ]),
               const SizedBox(
                 height: 30,
               ),
@@ -570,7 +573,8 @@ class RescheduleAppointmentButton extends StatelessWidget {
 }
 
 class DropDown extends StatefulWidget {
-  DropDown({Key? key, required this.label, required this.options, this.initialValue})
+  DropDown(
+      {Key? key, required this.label, required this.options, this.initialValue})
       : super(
           key: key,
         );
@@ -604,7 +608,7 @@ class _DropDownState extends State<DropDown> {
               child: DropdownButton<String>(
                 dropdownColor: const Color.fromARGB(255, 205, 226, 226),
                 isExpanded: true,
-                value: _selectedText ?? widget.initialValue,
+                value: setValue(),
                 items: widget.options.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -633,6 +637,18 @@ class _DropDownState extends State<DropDown> {
         ),
       ],
     );
+  }
+
+  String? setValue() {
+    if (widget.label == 'Type of Visit' && _selectedText == null) {
+      context.read<AppointmentCubit>().setTypeOfVisit(widget.initialValue);
+    }
+
+    if (widget.label == 'Reason for Visit' && _selectedText == null) {
+      context.read<AppointmentCubit>().setReasonForVisit(widget.initialValue);
+    }
+
+    return _selectedText ?? widget.initialValue;
   }
 }
 
