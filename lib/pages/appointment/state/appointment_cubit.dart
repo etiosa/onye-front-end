@@ -229,4 +229,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
     return response;
   }
+
+  void clearState() {
+    emit(const AppointmentState());
+  }
 }

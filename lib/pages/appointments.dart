@@ -538,6 +538,7 @@ class RescheduleAppointmentButton extends StatelessWidget {
                     response.then((value) => {
                           if (value != null && value.statusCode == 202)
                             {
+                              context.read<AppointmentCubit>().clearState(),
                               Messages.showMessage(
                                   const Icon(
                                     IconData(0xf635,
