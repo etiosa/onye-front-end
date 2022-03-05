@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
-import 'package:onye_front_ened/pages/schedule/cubit/schedule_cubit.dart';
 import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart';
+import 'package:onye_front_ened/pages/schedule/cubit/schedule_cubit.dart';
 
 part 'patient_state.dart';
 
@@ -23,8 +23,8 @@ class PatientCubit extends Cubit<PatientState> {
   }
 
   void setSearchQuery(String? query) {
-    final String searchquery = query!;
-    emit(state.copywith(query:searchquery));
+    final String searchQuery = query!;
+    emit(state.copywith(query: searchQuery));
   }
 
   void setMiddleName(String? argMiddleName) {
@@ -37,7 +37,7 @@ class PatientCubit extends Cubit<PatientState> {
     emit(state.copywith(lastName: lastName));
   }
 
-  void setDateofBirth(String? argDateOfBirth) {
+  void setDateOfBirth(String? argDateOfBirth) {
     final String dateOfBirth = argDateOfBirth!;
     emit(state.copywith(dateOfBirth: dateOfBirth));
   }
@@ -52,8 +52,8 @@ class PatientCubit extends Cubit<PatientState> {
     emit(state.copywith(religion: religion));
   }
 
-  void setEducationLevel(String? argeducationLevel) {
-    final String educationLevel = argeducationLevel!;
+  void setEducationLevel(String? argEducationLevel) {
+    final String educationLevel = argEducationLevel!;
     emit(state.copywith(educationLevel: educationLevel));
   }
 
@@ -72,22 +72,22 @@ class PatientCubit extends Cubit<PatientState> {
     emit(state.copywith(email: email));
   }
 
-  void setAddlressLine1(String? argAddressLine1) {
+  void setAddressLine1(String? argAddressLine1) {
     final String addressLine1 = argAddressLine1!;
     emit(state.copywith(addressLine1: addressLine1));
   }
 
-  void setAddlressLine2(String? argAddressLine2) {
+  void setAddressLine2(String? argAddressLine2) {
     final String addressLine2 = argAddressLine2!;
     emit(state.copywith(addressLine2: addressLine2));
   }
 
-  void setAddlressLine3(String? argAddressLine3) {
+  void setAddressLine3(String? argAddressLine3) {
     final String addressLine2 = argAddressLine3!;
     emit(state.copywith(addressLine3: addressLine2));
   }
 
-  void setAddlressLine4(String? argAddressLine4) {
+  void setAddressLine4(String? argAddressLine4) {
     final String addressLine4 = argAddressLine4!;
     emit(state.copywith(addressLine4: addressLine4));
   }
@@ -151,5 +151,14 @@ class PatientCubit extends Cubit<PatientState> {
         countryCode: state.countryCode);
 
     return response;
+  }
+
+  void clearState() {
+    emit(const PatientState(
+        dateOfBirth: "",
+        educationLevel: "",
+        gender: "",
+        religion: "",
+        ethnicity: ""));
   }
 }
