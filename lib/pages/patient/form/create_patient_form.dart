@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
+import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 
 class CreatePatientForm extends StatefulWidget {
@@ -16,9 +17,13 @@ class CreatePatientForm extends StatefulWidget {
 
 //TODO: Refactor
 class _CreatePatientFormState extends State<CreatePatientForm> {
-  DateTime? _dateTime;
   int _index = 0;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<GlobalKey<FormState>> _formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>()
+  ];
+  final PatientFormValidator validator = PatientFormValidator();
 
   @override
   void initState() {
@@ -80,17 +85,20 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                         state: StepState.editing,
                         isActive: _index == 0,
                         title: const Text('Basic info'),
-                        content: const BasicInfoFormBody()),
+                        content: BasicInfoFormBody(
+                            formKey: _formKeys[0], validator: validator)),
                     Step(
                         state: StepState.editing,
                         isActive: _index == 1,
                         title: const Text('Contact info'),
-                        content: const ContactInfoFormBody()),
+                        content: ContactInfoFormBody(
+                            formKey: _formKeys[1], validator: validator)),
                     Step(
                         state: StepState.complete,
                         isActive: _index == 2,
                         title: const Text('Additional info'),
-                        content: const AdditionalInfoFormBody()),
+                        content: AdditionalInfoFormBody(
+                            formKeys: _formKeys, validator: validator)),
                   ],
                 ),
               ),
@@ -118,14 +126,23 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 class BasicInfoFormBody extends StatefulWidget {
   const BasicInfoFormBody({
     Key? key,
+    required this.formKey,
+    required this.validator,
   }) : super();
 
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
   @override
-  State<BasicInfoFormBody> createState() => _BasicInfoFormBodyState();
+  State<BasicInfoFormBody> createState() =>
+      _BasicInfoFormBodyState(formKey: formKey, validator: validator);
 }
 
 class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
+  _BasicInfoFormBodyState({required this.formKey, required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -137,27 +154,27 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    FirstName(),
-                    SizedBox(height: 10),
+                  children: [
+                    FirstName(validator: validator),
+                    const SizedBox(height: 10),
                     MiddleName(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     LastName(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     DatePickerFeild(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Gender(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Religion(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     EducationLevel(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Ethnicity(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -171,14 +188,22 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 class ContactInfoFormBody extends StatefulWidget {
   const ContactInfoFormBody({
     Key? key,
+    required this.formKey,
+    required this.validator,
   }) : super();
 
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
   @override
-  State<ContactInfoFormBody> createState() => _ContactInfoFormBodyState();
+  State<ContactInfoFormBody> createState() =>
+      _ContactInfoFormBodyState(formKey: formKey);
 }
 
 class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey;
+
+  _ContactInfoFormBodyState({required this.formKey});
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +215,7 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -215,14 +240,24 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
 class AdditionalInfoFormBody extends StatefulWidget {
   const AdditionalInfoFormBody({
     Key? key,
+    required this.formKeys,
+    required this.validator,
   }) : super();
 
+  final List<GlobalKey<FormState>> formKeys;
+  final PatientFormValidator validator;
+
   @override
-  State<AdditionalInfoFormBody> createState() => _AdditionalInfoFormBodyState();
+  State<AdditionalInfoFormBody> createState() =>
+      _AdditionalInfoFormBodyState(formKeys: formKeys, validator: validator);
 }
 
 class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<GlobalKey<FormState>> formKeys;
+  final PatientFormValidator validator;
+
+  _AdditionalInfoFormBodyState(
+      {required this.formKeys, required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -234,14 +269,14 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key: formKeys[2],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const EmergencyContact(),
                     const SizedBox(height: 10),
-                    _SubmitButton(formKey: _formKey)
+                    _SubmitButton(formKeys: formKeys, validator: validator)
                   ],
                 ),
               ),
@@ -295,7 +330,9 @@ class DatePickerFeild extends StatelessWidget {
 }
 
 class FirstName extends StatelessWidget {
-  const FirstName({Key? key}) : super(key: key);
+  const FirstName({Key? key, required this.validator}) : super(key: key);
+
+  final PatientFormValidator validator;
 
   @override
   Widget build(BuildContext context) {
@@ -326,7 +363,9 @@ class FirstName extends StatelessWidget {
               if (value!.isEmpty) {
                 return 'Please enter a valid first name';
               }
-              return null;
+              print('validator is about to get called');
+              print('validator firstName: ${validator.getFirstNameError()}');
+              return validator.getFirstNameError();
             },
           ),
         ),
@@ -1026,9 +1065,11 @@ class EmergencyContact extends StatelessWidget {
 }
 
 class _SubmitButton extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
+  final List<GlobalKey<FormState>> formKeys;
+  final PatientFormValidator validator;
 
-  const _SubmitButton({required this.formKey}) : super();
+  const _SubmitButton({required this.formKeys, required this.validator})
+      : super();
 
   @override
   Widget build(BuildContext context) {
@@ -1048,36 +1089,38 @@ class _SubmitButton extends StatelessWidget {
             ),
             child: const Text('Submit'),
             onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                var response = context.read<PatientCubit>().createNewPatient(
-                    token: context.read<LoginCubit>().state.homeToken);
+              if (formsAreValid()) {
+                var response = await context
+                    .read<PatientCubit>()
+                    .createNewPatient(
+                        token: context.read<LoginCubit>().state.homeToken);
 
-                var res = await response;
+                validator.setFirstNameError('first name was wrong');
 
-                print('response: ${res?.body}');
-
-                if (res != null) {
-                  switch (res.statusCode) {
-                    case 201:
-                      context.read<PatientCubit>().clearState();
-                      Messages.showMessage(
-                          const Icon(
-                            IconData(0xf635, fontFamily: 'MaterialIcons'),
-                            color: Colors.green,
-                          ),
-                          'Patient created');
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: ((context) => const Dashboard())),
-                          ModalRoute.withName('/dashboard'));
-                      break;
-                    default:
-                      Messages.showMessage(
-                          const Icon(
-                            IconData(0xe237, fontFamily: 'MaterialIcons'),
-                            color: Colors.red,
-                          ),
-                          'Could not create patient');
+                if (formsAreValid()) {
+                  if (response != null) {
+                    switch (response.statusCode) {
+                      case 201:
+                        context.read<PatientCubit>().clearState();
+                        Messages.showMessage(
+                            const Icon(
+                              IconData(0xf635, fontFamily: 'MaterialIcons'),
+                              color: Colors.green,
+                            ),
+                            'Patient created');
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: ((context) => const Dashboard())),
+                            ModalRoute.withName('/dashboard'));
+                        break;
+                      default:
+                        Messages.showMessage(
+                            const Icon(
+                              IconData(0xe237, fontFamily: 'MaterialIcons'),
+                              color: Colors.red,
+                            ),
+                            'Could not create patient');
+                    }
                   }
                 }
               }
@@ -1086,5 +1129,15 @@ class _SubmitButton extends StatelessWidget {
         ),
       );
     });
+  }
+
+  bool formsAreValid() {
+    bool isValid = true;
+    for (var formKey in formKeys) {
+      if (!formKey.currentState!.validate()) {
+        isValid = false;
+      }
+    }
+    return isValid;
   }
 }
