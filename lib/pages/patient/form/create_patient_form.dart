@@ -893,31 +893,6 @@ class Address extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          width: 320,
-          child: TextFormField(
-            onChanged: (countryCode) =>
-                context.read<PatientCubit>().setCountryCode(countryCode),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              hintText: "Country code",
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
-            ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a country code';
-              }
-              return null;
-            },
-          ),
-        ),
       ],
     );
   }
@@ -1053,7 +1028,7 @@ class EmergencyContact extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
-  _SubmitButton({required this.formKey}) : super();
+  const _SubmitButton({required this.formKey}) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -1077,31 +1052,34 @@ class _SubmitButton extends StatelessWidget {
                 var response = context.read<PatientCubit>().createNewPatient(
                     token: context.read<LoginCubit>().state.homeToken);
 
-                response.then((value) => {
-                      if (value != null && value.statusCode == 201)
-                        {
-                          context.read<PatientCubit>().clearState(),
-                          Messages.showMessage(
-                              const Icon(
-                                IconData(0xf635, fontFamily: 'MaterialIcons'),
-                                color: Colors.green,
-                              ),
-                              'Patient created'),
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: ((context) => const Dashboard())),
-                              ModalRoute.withName('/dashboard'))
-                        }
-                      else if (value != null && value.statusCode == 400)
-                        {
-                          Messages.showMessage(
-                              const Icon(
-                                IconData(0xe237, fontFamily: 'MaterialIcons'),
-                                color: Colors.red,
-                              ),
-                              'Could not create patient'),
-                        }
-                    });
+                var res = await response;
+
+                print('response: ${res?.body}');
+
+                if (res != null) {
+                  switch (res.statusCode) {
+                    case 201:
+                      context.read<PatientCubit>().clearState();
+                      Messages.showMessage(
+                          const Icon(
+                            IconData(0xf635, fontFamily: 'MaterialIcons'),
+                            color: Colors.green,
+                          ),
+                          'Patient created');
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: ((context) => const Dashboard())),
+                          ModalRoute.withName('/dashboard'));
+                      break;
+                    default:
+                      Messages.showMessage(
+                          const Icon(
+                            IconData(0xe237, fontFamily: 'MaterialIcons'),
+                            color: Colors.red,
+                          ),
+                          'Could not create patient');
+                  }
+                }
               }
             },
           ),
