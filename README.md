@@ -40,3 +40,11 @@ State handling is done using the Bloc-pattern. Each page (see structure above) h
 ## Backend connection
 Backend connection is done in repository classes found in a sub folder for each page called `repository`.
 Here you can find all the functions that are used to make http requests to the backend application.
+
+## Deploy
+You need to be logged in to firebase before deploying.
+The default is to deploy to onye-development.
+
+    flutter build web
+
+    firebase deploy
