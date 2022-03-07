@@ -11,14 +11,14 @@ class AuthRepository {
     // ignore: prefer_typing_uninitialized_variables
     try {
       var uri = Uri.parse(root + "auth/login");
-      http.Response reponse = await http.post(uri,
+      http.Response response = await http.post(uri,
           headers: {
             "Content-Type": contentType,
             "Accept": accept,
           },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
-      return reponse;
+      return response;
     } catch (e) {
       return null;
     }
@@ -26,6 +26,7 @@ class AuthRepository {
 
   Future<http.Response?> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
+    dynamic body;
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
@@ -34,7 +35,7 @@ class AuthRepository {
       });
 
       return response;
-   
+
     } catch (e) {
       return null;
     }
@@ -44,7 +45,7 @@ class AuthRepository {
 
   Future<dynamic> signout({String? token}) async {
     var uri = Uri.parse(root + "auth/logout");
-    var body;
+    dynamic body;
     try {
       http.Response response = await http.post(uri, headers: {
         "Content-Type": "application/json",

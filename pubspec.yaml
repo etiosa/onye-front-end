@@ -32,6 +32,7 @@ dependencies:
   flutter_bloc: ^8.0.0
   equatable: ^2.0.3
   oktoast: ^3.1.5
+  flutter_form_builder: ^7.1.1
   json_annotation: ^4.4.0
 
   # The following adds the Cupertino Icons font to your application.
