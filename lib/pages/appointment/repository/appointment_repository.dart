@@ -290,11 +290,7 @@ class AppointmentRepository {
             "Accept": accept,
             "Authorization": "Bearer $token",
           },
-          body: json.encode({
-            "type": type,
-            "title": title,
-            "text": noteText
-          }));
+          body: json.encode({"type": type, "title": title, "text": noteText}));
       print(response);
       return response;
     } catch (e) {
@@ -333,7 +329,6 @@ class AppointmentRepository {
       'query': searchParams!,
       'zoneId': 'Africa/Lagos',
     });
-
     http.Response response = await http.get(
       uri,
       headers: {
@@ -343,6 +338,7 @@ class AppointmentRepository {
       },
     );
     var body = json.decode(response.body);
+ 
     var registrationsList = body['elements'];
 
     return registrationsList;

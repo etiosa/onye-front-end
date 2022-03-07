@@ -156,6 +156,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         appointmentId: appointmentId,
         reasons: reasons,
         typeOfVisit: typeOfVisit);
+    print(token);
     searchRegistrations(token: token);
 
     return req;
@@ -217,13 +218,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
     return req;
   }
-  /* 
-  "type": "CONSULTATION_NOTE",
-	"title": "Note title",
-	"text": "Note text"
-  
-  
-  */
 
   Future<Response?> updateClinicalNote({
     String? id,
@@ -232,7 +226,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     String? noteText,
     String? token,
   }) async {
-
     Response? response = await _appointmentRepository.updateClinicalNote(
       id: id,
       type: type,
@@ -277,5 +270,9 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     );
 
     return response;
+  }
+
+  void clearState() {
+    emit(const AppointmentState());
   }
 }

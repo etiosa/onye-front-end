@@ -19,6 +19,7 @@ class CreateRegistration extends StatefulWidget {
 class _CreateRegistrationState extends State<CreateRegistration> {
   int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  int currentPageIndex = 0;
 
   @override
   void initState() {
@@ -34,7 +35,8 @@ class _CreateRegistrationState extends State<CreateRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController(initialPage: 0);
+    final PageController controller =
+        PageController(initialPage: currentPageIndex);
 
     return Scaffold(
       body: SafeArea(
@@ -43,7 +45,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.only(top: 20.0, left: 20),
+              padding: EdgeInsets.only(top: 25.0, left: 20),
               child: Text(
                 "Create Registration",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -63,10 +65,10 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                           shape: BoxShape.circle,
                           color: Color.fromARGB(255, 26, 155, 152),
                         ),
-                        child: const Center(
+                        child: Center(
                             child: Text(
-                          '1',
-                          style: TextStyle(color: Colors.white),
+                          '${controller.initialPage + 1}',
+                          style: const TextStyle(color: Colors.white),
                         )),
                       ),
                     ),
@@ -80,9 +82,11 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                   children: [
                     InkWell(
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color.fromARGB(255, 26, 155, 152),
+                          color: currentPageIndex == 1
+                              ? const Color.fromARGB(255, 26, 155, 152)
+                              : const Color.fromARGB(255, 205, 226, 226),
                         ),
                         height: 30,
                         width: 30,
@@ -97,6 +101,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                 ),
               ],
             ),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
@@ -126,108 +131,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                 ),
               ),
 
-              /*  child: Stepper(
-                  elevation: 0,
-                  type: StepperType.horizontal,
-                  currentStep: _index,
-                  onStepCancel: () {
-                    if (_index > 0) {
-                      setState(() {
-                        _index -= 1;
-                      });
-                    }
-                  },
-                  onStepContinue: () {
-                    if (_index < 2) {
-                      setState(() {
-                        _index += 1;
-                      });
-                    }
-                  },
-                  controlsBuilder: (context, details) {
-                    return (Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 60,
-                            width: 80,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(0),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      details.currentStep == 2
-                                          ? Colors.transparent
-                                          : const Color.fromARGB(
-                                              255, 56, 155, 152)),
-                                ),
-                                onPressed: details.onStepContinue,
-                                child: Text(
-                                    details.currentStep == 2 ? '' : 'Next')),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 60,
-                            width: 80,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(0),
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.transparent),
-                                ),
-                                onPressed: details.onStepCancel,
-                                child: const Text(
-                                  'cancel',
-                                  style: TextStyle(color: Colors.black),
-                                )),
-                          ),
-                        ),
-                      ],
-                    ));
-                  },
-                  onStepTapped: (int index) {
-                    switch (index) {
-                      case 0:
-                        setState(() {
-                          _index = index;
-                        });
-                        break;
-                      case 1:
-                        if (context
-                            .read<AppointmentCubit>()
-                            .state
-                            .selectedPatientId
-                            .isNotEmpty) {
-                          setState(() {
-                            _index = index;
-                          });
-                        }
-                        break;
-                   
-                      default:
-                        break;
-                    }
-                  },
-                  steps: <Step>[
-                    Step(
-                        state: StepState.editing,
-                        isActive: _index == 0,
-                        title: const Text('Select patient'),
-                        content: SearchPatientBody(
-                          formIndex: 0,
-                        )),
-                
-                    Step(
-                        state: StepState.editing,
-                        isActive: _index == 2,
-                        title: const Text('Register'),
-                        content: Register(
-                          formIndex: 1,
-                        )),
-                  ],
-                ), */
+           
             ),
           ],
         ),
@@ -236,47 +140,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
   }
 }
 
-class SearchDoctorBody extends StatefulWidget {
-  SearchDoctorBody({Key? key, required this.formIndex}) : super(key: key);
-  int formIndex;
 
-  @override
-  State<SearchDoctorBody> createState() => _SearchDoctorBodyState();
-}
-
-class _SearchDoctorBodyState extends State<SearchDoctorBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SearchBar(
-                      formIndex: widget.formIndex,
-                      field: 'Search doctor',
-                    ),
-                    const SizedBox(height: 10),
-                    const DoctorList(),
-                  ],
-                ),
-              ),
-            ),
-          ]);
-    });
-  }
-}
 
 class Register extends StatefulWidget {
   Register({Key? key, required this.formIndex}) : super(key: key);
@@ -388,6 +252,9 @@ class RegisterField extends StatelessWidget {
                                     if (value != null &&
                                         value.statusCode == 201)
                                       {
+                                        context
+                                            .read<AppointmentCubit>()
+                                            .clearState(),
                                         Messages.showMessage(
                                             const Icon(
                                               IconData(0xf635,
@@ -448,11 +315,6 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
       return
-
-          /*  SearchBar(
-            formIndex: widget.formIndex,
-            field: 'Search patient',
-          ), */
           //const SizedBox(height: 10),
           PatientList(
         pageController: widget.pageController,
@@ -517,119 +379,6 @@ class SearchBar extends StatelessWidget {
   }
 }
 
-class DoctorList extends StatefulWidget {
-  const DoctorList({Key? key}) : super(key: key);
-
-  @override
-  _DoctorListState createState() => _DoctorListState();
-}
-
-class _DoctorListState extends State<DoctorList> {
-  @override
-  Widget build(BuildContext context) {
-    String? selectedDctorId = '';
-    int selectedIndex = -1;
-
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
-      if (SEARCHSTATE.startsearch == state.searchState &&
-          state.doctorsList.isEmpty) {
-        return Container(
-            width: MediaQuery.of(context).size.width / 1.2,
-            height: MediaQuery.of(context).size.height / 1.5,
-            padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
-            child: Column(mainAxisSize: MainAxisSize.max, children: [
-              Expanded(
-                  child: Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
-                      enabled: true,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (_, __) => Padding(
-                          padding: const EdgeInsets.only(bottom: 1.0),
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 48,
-                                height: 48,
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 1.0),
-                              ),
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 10.0,
-                                    color: Colors.white,
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 10.0,
-                                    color: Colors.white,
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 10.0,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ))
-                            ],
-                          ),
-                        ),
-                      )))
-            ]));
-      }
-
-      if (SEARCHSTATE.notFound == state.searchState ||
-          state.doctorsList.isEmpty) {
-        return (const Center(
-          child: SizedBox(
-            height: 70,
-            width: 180,
-            child: Card(
-              margin: EdgeInsets.only(top: 10),
-              child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text('No result'),
-              ),
-            ),
-          ),
-        ));
-      }
-      return ListView.builder(
-          shrinkWrap: true,
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          itemCount: state.doctorsList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-              key: ValueKey(state.doctorsList[index]['name']),
-              margin: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(
-                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName'] ?? ''} ${state.doctorsList[index]['lastName']}'),
-                selected: (selectedIndex == index),
-                selectedColor: Colors.amber,
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                    selectedDctorId = state.doctorsList[index]['id'];
-
-                    context
-                        .read<AppointmentCubit>()
-                        .setSelectedMedicalPersonnelId(selectedDctorId);
-                  });
-                },
-              ),
-            );
-          });
-    });
-  }
-}
 
 class DropDown extends StatefulWidget {
   DropDown({Key? key, required this.label, required this.options})
@@ -711,6 +460,7 @@ class PatientList extends StatefulWidget {
 
 class _PatientListState extends State<PatientList> {
   int selectedIndex = -1;
+  String selectedPatientId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -742,11 +492,17 @@ class _PatientListState extends State<PatientList> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-            /*         widget.pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn); */
+                    selectedPatientId = state.patientsList[index]['id'];
+                
+
+                    context
+                        .read<AppointmentCubit>()
+                        .setPatientId(selectedPatientId);
+                    selectedIndex = index;
+                    widget.pageController.nextPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeIn);
                   });
-                  
                 },
                 child: Container(
                   width: 50,

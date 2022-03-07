@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
+import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 
 class CreatePatientForm extends StatefulWidget {
   const CreatePatientForm({Key? key, this.restorationId}) : super(key: key);
@@ -111,7 +111,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     if (newDate == null) return;
     context
         .read<PatientCubit>()
-        .setDateofBirth(newDate.toString().split(' ')[0]);
+        .setDateOfBirth(newDate.toString().split(' ')[0]);
   }
 }
 
@@ -129,8 +129,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PatientCubit, PatientState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,8 +182,7 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PatientCubit, PatientState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -228,8 +226,7 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PatientCubit, PatientState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -713,8 +710,7 @@ class Email extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onChanged: (email) =>
-                context.read<PatientCubit>().setEmail(email),
+            onChanged: (email) => context.read<PatientCubit>().setEmail(email),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -753,9 +749,8 @@ class Address extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onChanged: (addressline1) => context
-                .read<PatientCubit>()
-                .setAddlressLine1(addressline1),
+            onChanged: (addressline1) =>
+                context.read<PatientCubit>().setAddressLine1(addressline1),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -779,9 +774,8 @@ class Address extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onChanged: (addressline2) => context
-                .read<PatientCubit>()
-                .setAddlressLine2(addressline2),
+            onChanged: (addressline2) =>
+                context.read<PatientCubit>().setAddressLine2(addressline2),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -805,9 +799,8 @@ class Address extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onChanged: (addressline3) => context
-                .read<PatientCubit>()
-                .setAddlressLine3(addressline3),
+            onChanged: (addressline3) =>
+                context.read<PatientCubit>().setAddressLine3(addressline3),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -831,9 +824,8 @@ class Address extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onChanged: (addressline4) => context
-                .read<PatientCubit>()
-                .setAddlressLine4(addressline4),
+            onChanged: (addressline4) =>
+                context.read<PatientCubit>().setAddressLine4(addressline4),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -882,8 +874,7 @@ class Address extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
-            onChanged: (city) =>
-                context.read<PatientCubit>().setCity(city),
+            onChanged: (city) => context.read<PatientCubit>().setCity(city),
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
@@ -1066,8 +1057,7 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PatientCubit, PatientState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       return Container(
         width: 320,
         height: 45,
@@ -1090,6 +1080,7 @@ class _SubmitButton extends StatelessWidget {
                 response.then((value) => {
                       if (value != null && value.statusCode == 201)
                         {
+                          context.read<PatientCubit>().clearState(),
                           Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
