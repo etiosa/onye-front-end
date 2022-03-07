@@ -8,18 +8,17 @@ class AuthRepository {
   static const String accept = "application/json";
 
   Future<String> signIn({String? username, String? password}) async {
-    // ignore: prefer_typing_uninitialized_variables
-    var body;
+    dynamic body;
     try {
       var uri = Uri.parse(root + "auth/login");
-      http.Response reponse = await http.post(uri,
+      http.Response response = await http.post(uri,
           headers: {
             "Content-Type": contentType,
             "Accept": accept,
           },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
-      body = jsonDecode(reponse.body);
+      body = jsonDecode(response.body);
       return body['token'];
     } catch (e) {
       return body['token'];
@@ -28,7 +27,7 @@ class AuthRepository {
 
   Future<dynamic> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
-    var body;
+    dynamic body;
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
@@ -46,7 +45,7 @@ class AuthRepository {
 
   Future<dynamic> signout({String? token}) async {
     var uri = Uri.parse(root + "auth/logout");
-    var body;
+    dynamic body;
     try {
       http.Response response = await http.post(uri, headers: {
         "Content-Type": "application/json",

@@ -11,11 +11,12 @@ class PatientCubit extends Cubit<PatientState> {
 
   PatientCubit(this._registrationRepositories)
       : super(const PatientState(
-            dateOfBirth: "",
-            educationLevel: "",
-            gender: "",
-            religion: "",
-            ethnicity: ""));
+          dateOfBirth: '',
+          gender: '',
+          religion: '',
+          educationLevel: '',
+          ethnicity: '',
+        ));
 
   void setFirstName(String? argFirstName) {
     final String firstName = argFirstName!;
@@ -92,11 +93,6 @@ class PatientCubit extends Cubit<PatientState> {
     emit(state.copywith(addressLine4: addressLine4));
   }
 
-  void setCountryCode(String? argCountryCode) {
-    final String? countryCode = argCountryCode!;
-    emit(state.copywith(countryCode: countryCode));
-  }
-
   void setCity(String? argCity) {
     final String? city = argCity!;
     emit(state.copywith(city: city));
@@ -128,6 +124,14 @@ class PatientCubit extends Cubit<PatientState> {
   }
 
   Future<Response?> createNewPatient({String? token}) async {
+
+    String? dateOfBirth;
+    if (state.dateOfBirth != null && state.dateOfBirth!.isEmpty) {
+      dateOfBirth = null;
+    } else {
+      dateOfBirth = state.dateOfBirth;
+    }
+
     Response? response = await _registrationRepositories.createNewPatient(
         token: token,
         firstName: state.firstName,
@@ -147,18 +151,19 @@ class PatientCubit extends Cubit<PatientState> {
         emergencyContactPhoneNumber: state.emergencyContactPhoneNumber,
         emergencyContactRelationship: state.emergencyContactRelationship,
         addressLine2: state.addressLine2,
-        dateOfBirth: state.dateOfBirth,
-        countryCode: state.countryCode);
+        dateOfBirth: dateOfBirth,
+        countryCode: 'NG');
 
     return response;
   }
 
   void clearState() {
     emit(const PatientState(
-        dateOfBirth: "",
-        educationLevel: "",
-        gender: "",
-        religion: "",
-        ethnicity: ""));
+      dateOfBirth: '',
+      gender: '',
+      religion: '',
+      educationLevel: '',
+      ethnicity: '',
+    ));
   }
 }
