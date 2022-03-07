@@ -19,14 +19,14 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    if (context.read<LoginCubit>().state.loginToken.isEmpty) {
-      print("redirect to login pgae");
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+     if (context.read<LoginCubit>().state.statusCode==400 ||
+        context.read<LoginCubit>().state.statusCode == 401 ) {
+     
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/login");
-      }); 
-    } else {
-     _authSession.getHomeToken()?.then((token) => {
+      });
+    }  
+      _authSession.getHomeToken()?.then((token) => {
             if (token == '')
               {
                 Messages.showMessage(
@@ -50,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
                     'Login successful')
               }
           });
-    }
+    
 
     /*  ; */
   }
@@ -64,6 +64,7 @@ class _DashboardState extends State<Dashboard> {
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               const Logout(),
               Padding(

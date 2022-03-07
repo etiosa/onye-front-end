@@ -34,6 +34,8 @@ class _CreateRegistrationState extends State<CreateRegistration> {
 
   @override
   Widget build(BuildContext context) {
+    final PageController controller = PageController(initialPage: 0);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -47,12 +49,84 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromARGB(255, 26, 155, 152),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          '1',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('search patient'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromARGB(255, 26, 155, 152),
+                        ),
+                        height: 30,
+                        width: 30,
+                        child: const Center(child: Text('2')),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('register'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height / 1.2,
                 width: MediaQuery.of(context).size.width / 1.05,
-                child: Stepper(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  pageSnapping: true,
+                  controller: controller,
+                  children: <Widget>[
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        SearchBar(
+                          formIndex: 0,
+                          field: 'Search patient',
+                        ),
+                        const SizedBox(height: 20),
+                        SearchPatientBody(
+                          formIndex: 0,
+                          pageController: controller,
+                        ),
+                      ],
+                    ),
+                    Register(formIndex: 1),
+                  ],
+                ),
+              ),
+
+              /*  child: Stepper(
                   elevation: 0,
                   type: StepperType.horizontal,
                   currentStep: _index,
@@ -153,8 +227,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                           formIndex: 1,
                         )),
                   ],
-                ),
-              ),
+                ), */
             ),
           ],
         ),
@@ -162,7 +235,6 @@ class _CreateRegistrationState extends State<CreateRegistration> {
     );
   }
 }
-
 
 class SearchDoctorBody extends StatefulWidget {
   SearchDoctorBody({Key? key, required this.formIndex}) : super(key: key);
@@ -244,7 +316,7 @@ class RegisterField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -283,12 +355,11 @@ class RegisterField extends StatelessWidget {
                                 const Color.fromARGB(255, 56, 155, 152)),
                           ),
                           onPressed: () {
-                            if (
-                                context
-                                    .read<AppointmentCubit>()
-                                    .state
-                                    .selectedPatientId
-                                    .isNotEmpty) {
+                            if (context
+                                .read<AppointmentCubit>()
+                                .state
+                                .selectedPatientId
+                                .isNotEmpty) {
                               var response = context
                                   .read<AppointmentCubit>()
                                   .createRegistration(
@@ -358,9 +429,12 @@ class RegisterField extends StatelessWidget {
 }
 
 class SearchPatientBody extends StatefulWidget {
-  SearchPatientBody({Key? key, required this.formIndex}) : super();
+  SearchPatientBody(
+      {Key? key, required this.formIndex, required this.pageController})
+      : super();
 
   int formIndex;
+  PageController pageController;
 
   @override
   State<SearchPatientBody> createState() => _SearchPatientBodyState();
@@ -373,29 +447,16 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SearchBar(
-                      formIndex: widget.formIndex,
-                      field: 'Search patient',
-                    ),
-                    const SizedBox(height: 10),
-                    const PatientList(),
-                  ],
-                ),
-              ),
-            ),
-          ]);
+      return
+
+          /*  SearchBar(
+            formIndex: widget.formIndex,
+            field: 'Search patient',
+          ), */
+          //const SizedBox(height: 10),
+          PatientList(
+        pageController: widget.pageController,
+      );
     });
   }
 }
@@ -550,7 +611,7 @@ class _DoctorListState extends State<DoctorList> {
               margin: const EdgeInsets.all(10),
               child: ListTile(
                 title: Text(
-                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName']??''} ${state.doctorsList[index]['lastName']}'),
+                    '${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName'] ?? ''} ${state.doctorsList[index]['lastName']}'),
                 selected: (selectedIndex == index),
                 selectedColor: Colors.amber,
                 onTap: () {
@@ -638,21 +699,21 @@ class _DropDownState extends State<DropDown> {
 }
 
 class PatientList extends StatefulWidget {
-  const PatientList({
+  PatientList({
+    required this.pageController,
     Key? key,
   }) : super();
+  PageController pageController;
 
   @override
   State<PatientList> createState() => _PatientListState();
 }
 
 class _PatientListState extends State<PatientList> {
+  int selectedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
-    String? selectedPatientId = '';
-    String? selectedAppointmentId = '';
-    int selectedIndex = -1;
-
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
       if (state.patientsList.isEmpty) {
@@ -670,38 +731,55 @@ class _PatientListState extends State<PatientList> {
           ),
         ));
       }
-      return ListView.builder(
-          shrinkWrap: true,
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          itemCount: state.patientsList.length,
-          itemBuilder: (BuildContext context, index) {
-            return Card(
-              key: ValueKey(state.patientsList[index]['name']),
-              margin: const EdgeInsets.all(10),
-              child: Stack(alignment: Alignment.topRight, children: [
-                /*   Selected(
-                  selectedIndex: state.selectedPatientIndexs,
-                  currentIndex: index,
-                ), */
-                ListTile(
-                  title: Text(
-                      '${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName']??''} ${state.patientsList[index]['lastName']}'),
-                  selected: (selectedIndex == index),
-                  selectedColor: Colors.amber,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                      selectedPatientId = state.patientsList[index]['id'];
-
-                      context
-                          .read<AppointmentCubit>()
-                          .setPatientId(selectedPatientId);
-                    });
-                  },
+      return Expanded(
+        flex: 1,
+        child: ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            itemCount: state.patientsList.length,
+            itemBuilder: (BuildContext context, index) {
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+            /*         widget.pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn); */
+                  });
+                  
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: selectedIndex == index
+                        ? const Color.fromARGB(255, 26, 155, 152)
+                        : const Color.fromARGB(255, 248, 254, 254),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
+                      style: TextStyle(
+                          color: selectedIndex == index
+                              ? Colors.white
+                              : Colors.black),
+                    ),
+                  ),
                 ),
-              ]),
-            );
-          });
+              );
+            }),
+      );
     });
   }
 }

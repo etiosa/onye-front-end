@@ -33,21 +33,18 @@ class _LoginPageState extends State<LoginPage> {
               margin: const EdgeInsets.only(top: 70),
               child: SingleChildScrollView(
                 child: Center(
-                 
-                   
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _LoginText(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Stack(children: [
-                          _formSection(),
-                        ]),
-                      ],
-                    ),
-                 
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _LoginText(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Stack(children: [
+                        _formSection(),
+                      ]),
+                    ],
+                  ),
                 ),
               ),
             )));
@@ -194,9 +191,8 @@ class _SubmitButton extends StatelessWidget {
           previous.loginStatus != LoginStatus.login,
       builder: (context, state) {
         //TODO: move this to a welcome page and home page
-
-            if(state.loginToken.isNotEmpty){
-          _authSession.getHomeToken()!.then((value) => {
+      
+         _authSession.getHomeToken()!.then((value) => {
                 if (value != '')
                   {
                     Messages.showMessage(
@@ -209,10 +205,9 @@ class _SubmitButton extends StatelessWidget {
                       Navigator.of(context).pushNamed("/dashboard");
                     })
                   }
-              });
+              }); 
+        
 
-            }
-       
         return Container(
           width: 250,
           height: 60,

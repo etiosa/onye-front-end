@@ -7,9 +7,8 @@ class AuthRepository {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
-  Future<String> signIn({String? username, String? password}) async {
+  Future<http.Response?> signIn({String? username, String? password}) async {
     // ignore: prefer_typing_uninitialized_variables
-    var body;
     try {
       var uri = Uri.parse(root + "auth/login");
       http.Response reponse = await http.post(uri,
@@ -19,34 +18,25 @@ class AuthRepository {
           },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
-      body = jsonDecode(reponse.body);
-      return body['token'];
+      return reponse;
     } catch (e) {
-      return body['token'];
+      return null;
     }
   }
 
-  Future<dynamic> home({String? token}) async {
+  Future<http.Response?> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
-    var body;
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
         "Accept": accept,
         "Authorization": "Bearer $token",
       });
-      switch (response.statusCode) {
-        case 200:
-          body = jsonDecode(response.body);
-          return body;
-        case 401:
-          return response.statusCode;
-        default:
-          return response.statusCode;
-      }
 
+      return response;
+   
     } catch (e) {
-      return body;
+      return null;
     }
   }
 

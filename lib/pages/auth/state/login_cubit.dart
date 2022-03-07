@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/session/authSession.dart';
+import "package:http/http.dart" as http;
 
 part 'login_state.dart';
 
@@ -23,27 +26,33 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copywith(userName: userName));
   }
 
+//TODO: move this to model class later
   void login() async {
-    final String token = await _authRepository.signIn(
+    final http.Response? response = await _authRepository.signIn(
         username: state.userName, password: state.password);
-    emit(state.copywith(loginToken: token));
+    final body = jsonDecode(response!.body);
+    final token = body['token'];
+    print(token);
+    final statusCode = response.statusCode;
+    emit(state.copywith(loginToken: token, statusCode: statusCode));
     home(homeToken: state.loginToken);
   }
 
   void home({String? homeToken}) async {
-    final body = await _authRepository.home(token: homeToken);
-    if (body == 401) {
-      print("please login");
-      print(state.loginToken.isEmpty);
-      return;
-    } else {
-      final String token = body['token'];
-      setLoginData(token, body);
-      _authSession.saveHomeToken(homeToken: token).then((value) => emit(
-          state.copywith(
+    final http.Response? response =
+        await _authRepository.home(token: homeToken);
+   
+    final body =  jsonDecode(response!.body);
+    final statusCode =response.statusCode;
+    final token = body['token'];
+
+
+    setLoginData(token, body);
+    _authSession.saveHomeToken(homeToken: token).then((value) => emit(
+      state.copywith(
+        statusCode: statusCode,
               loginStatus: LoginStatus.login,
-              logoutstatus: LOGOUTSTATUS.init)));
-    }
+              logoutstatus: LOGOUTSTATUS.init))); 
   }
 
   void setLoginData(String token, body) {
