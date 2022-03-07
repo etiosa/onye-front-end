@@ -31,28 +31,26 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.0
   equatable: ^2.0.3
-  json_serializable: ^6.1.4
   oktoast: ^3.1.5
   flutter_form_builder: ^7.1.1
+  json_annotation: ^4.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^0.13.4
-  syncfusion_flutter_calendar: ^19.4.48
-  step_progress_indicator: ^1.0.2
   shimmer: ^2.0.0
   intl: ^0.17.0
   hydrated_bloc: ^8.0.0
   shared_preferences: ^2.0.13
-  modal_bottom_sheet: ^2.0.0
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
+  build_runner: ^2.0.0
+  json_serializable: ^6.1.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

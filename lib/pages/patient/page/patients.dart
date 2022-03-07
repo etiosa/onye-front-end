@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
@@ -22,9 +21,11 @@ class _PatientsPageState extends State<PatientsPage> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: const Color.fromARGB(255, 252, 255, 255),
-      body: SingleChildScrollView(
-        child: Column(
+      
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -122,10 +123,10 @@ class _PatientsPageState extends State<PatientsPage> {
               height: MediaQuery.of(context).size.height / 25,
             ),
            
-                const PatientList()
+                 const PatientList()
             ],
         ),
-      ),
+      
     ));
   }
 }
@@ -152,16 +153,7 @@ class PatientDetails extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: ()=> {
-          showMaterialModalBottomSheet(
-            expand: true,
-            elevation: 10.0,
-            enableDrag: true,
-          
-            isDismissible: true,
-            useRootNavigator: true,
-            context: context,
-            builder: (context) => const PatientInformation(),
-          )
+            /*   Navigator.of(context).pushNamed('/dashboard/patient/patientprofile') */
         },
         child: Container(
           height: 100,
@@ -245,6 +237,12 @@ class PatientInformation extends StatelessWidget {
   }
 }
 
+
+
+
+
+
+
 //TODO: move this  to a widget foldder
 class PatientList extends StatefulWidget {
   const PatientList({
@@ -276,22 +274,25 @@ class _PatientListState extends State<PatientList> {
         ));
       }
 
-      return ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          itemCount: state.patientsList.length,
-          itemBuilder: (BuildContext context, index) {
-            return Stack(alignment: Alignment.topRight, children: [
-              PatientDetails(
-                patientId: state.patientsList[index]['id'],
-                patientFullName: state.patientsList[index]['firstName'] +
-                    state.patientsList[index]['lastName'],
-                dateofBirth: state.patientsList[index]['dateOfBirth'],
-                patientNumber: state.patientsList[index]['patientNumber'],
-              ),
-            ]);
-          });
+      return Expanded(
+        flex: 1,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            itemCount: state.patientsList.length,
+            itemBuilder: (BuildContext context, index) {
+              return Stack(alignment: Alignment.topRight, children: [
+                PatientDetails(
+                  patientId: state.patientsList[index]['id'],
+                  patientFullName: state.patientsList[index]['firstName'] +
+                      state.patientsList[index]['lastName'],
+                  dateofBirth: state.patientsList[index]['dateOfBirth'],
+                  patientNumber: state.patientsList[index]['patientNumber'],
+                ),
+              ]);
+            }),
+      );
     });
   }
 }

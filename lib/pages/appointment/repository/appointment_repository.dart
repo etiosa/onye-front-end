@@ -115,12 +115,67 @@ class AppointmentRepository {
     }
   }
 
+  Future<http.Response?> getPatientClinicalNote(
+      {String? token, String? id, String? typeOfVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/clinicalNote/$id');
+
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": accept,
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<http.Response?> getPatientClinicalNotes(
+      {String? token,
+      String? patientId,
+      String? medicalId,
+      String? appointmentId,
+      String? reasons,
+      String? typeOfVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/registration')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "patientId": patientId,
+            "appointmentId": appointmentId,
+            "medicalPersonnelId": medicalId,
+            "typeOfVisit": typeOfVisit,
+            "reasonForVisit": reasons,
+            "languagePreference": "en"
+          }));
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<http.Response?> createClinicalNote(
       {String? token,
       String? patientId,
       String? medicalId,
       String? title,
       String? note,
+      String? registerationId,
       String? clincialNoteType}) async {
     var uri = Uri.parse(root + 'api/rest/v1/clinicalNote')
         .replace(queryParameters: <String, String>{
@@ -139,7 +194,8 @@ class AppointmentRepository {
             "patientId": patientId,
             "medicalPersonnelId": medicalId,
             "title": title,
-            "text": note
+            "text": note,
+            "registrationId": registerationId
           }));
 
       return response;
@@ -218,6 +274,30 @@ class AppointmentRepository {
     }
   }
 
+  Future<http.Response?> updateClinicalNote({
+    String? id,
+    String? type,
+    String? title,
+    String? noteText,
+    String? token,
+  }) async {
+    var uri = Uri.parse(root + 'api/rest/v1/clinicalNote/$id');
+
+    try {
+      http.Response response = await http.patch(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({"type": type, "title": title, "text": noteText}));
+      print(response);
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<http.Response?> cancelAppointment({
     String? id,
     String? token,
@@ -249,7 +329,6 @@ class AppointmentRepository {
       'query': searchParams!,
       'zoneId': 'Africa/Lagos',
     });
-
     http.Response response = await http.get(
       uri,
       headers: {
@@ -259,6 +338,7 @@ class AppointmentRepository {
       },
     );
     var body = json.decode(response.body);
+ 
     var registrationsList = body['elements'];
 
     return registrationsList;

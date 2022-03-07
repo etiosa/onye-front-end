@@ -182,7 +182,7 @@ class _AppointmentState extends State<Appointment> {
         if (state.appointmentList.isEmpty) {
           return Container(
               width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 1.5,
+              height: MediaQuery.of(context).size.height / 1.8,
               padding:
                   const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
               child: Column(mainAxisSize: MainAxisSize.max, children: [
