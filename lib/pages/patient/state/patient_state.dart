@@ -21,7 +21,6 @@ class PatientState extends Equatable {
       this.phoneNumber,
       this.email,
       this.contactPreferences,
-      this.countryCode,
       this.addressLine1,
       this.addressLine2,
       this.addressLine3,
@@ -34,7 +33,7 @@ class PatientState extends Equatable {
       this.emergencyContactName,
       this.emergencyContactPhoneNumber,
       this.emergencyContactRelationship,
-      this.contactPrefernce,
+      this.contactPreference,
       this.token = '',
       this.query='',
       this.searchState = REGISTERATIONSEARCHSTATE.inital,
@@ -54,7 +53,6 @@ class PatientState extends Equatable {
   final REGISTERATIONSEARCHSTATE searchState;
   final String? token;
   final String? contactPreferences;
-  final String? countryCode;
   final String? addressLine1;
   final String? addressLine2;
   final String? addressLine3;
@@ -62,8 +60,8 @@ class PatientState extends Equatable {
   final String? zipCode;
   final String? query;
   final String? city;
-  final String ethnicity;
-  final String? contactPrefernce;
+  final String? ethnicity;
+  final String? contactPreference;
   final String? emergencyContactRelationship;
   final String? emergencyContactName;
   final List<dynamic> appointmentList;
@@ -83,7 +81,6 @@ class PatientState extends Equatable {
         phoneNumber,
         email,
         contactPreferences,
-        countryCode,
         zipCode,
         addressLine1,
         addressLine2,
@@ -96,7 +93,7 @@ class PatientState extends Equatable {
         emergencyContactName,
         emergencyContactPhoneNumber,
         emergencyContactRelationship,
-        contactPrefernce,
+        contactPreference,
         createdPatientData,
         searchState,
         query
@@ -120,9 +117,8 @@ class PatientState extends Equatable {
       String? emergencyContactPhoneNumber,
       List<dynamic>? appointmentList,
       String? phoneNumber,
-      String? countryCode,
       String? zipcode,
-      String? contactPrefernce,
+      String? contactPreference,
       String? addressLine1,
       String? addressLine2,
       String? zipCode,
@@ -150,14 +146,13 @@ class PatientState extends Equatable {
         educationLevel: educationLevel ?? this.educationLevel,
         email: email ?? this.email,
         phoneNumber: phoneNumber ?? this.phoneNumber,
-        countryCode: countryCode ?? this.countryCode,
         contactPreferences: contactPreferences ?? this.contactPreferences,
         addressLine1: addressLine1 ?? this.addressLine1,
         addressLine2: addressLine2 ?? this.addressLine2,
         zipCode: zipCode ?? this.zipCode,
         addressLine3: addressLine3 ?? this.addressLine3,
         allOptions: allOptions ?? this.allOptions,
-        contactPrefernce: contactPreferences ?? this.contactPreferences,
+        contactPreference: contactPreferences ?? this.contactPreferences,
         emergencyContactRelationship:
             emergencyContactRelationship ?? this.emergencyContactRelationship,
         emergencyContactPhoneNumber:

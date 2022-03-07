@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
+import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 
 class CreatePatientForm extends StatefulWidget {
@@ -16,9 +20,13 @@ class CreatePatientForm extends StatefulWidget {
 
 //TODO: Refactor
 class _CreatePatientFormState extends State<CreatePatientForm> {
-  DateTime? _dateTime;
   int _index = 0;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<GlobalKey<FormState>> _formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>()
+  ];
+  final PatientFormValidator validator = PatientFormValidator();
 
   @override
   void initState() {
@@ -80,17 +88,20 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                         state: StepState.editing,
                         isActive: _index == 0,
                         title: const Text('Basic info'),
-                        content: const BasicInfoFormBody()),
+                        content: BasicInfoFormBody(
+                            formKey: _formKeys[0], validator: validator)),
                     Step(
                         state: StepState.editing,
                         isActive: _index == 1,
                         title: const Text('Contact info'),
-                        content: const ContactInfoFormBody()),
+                        content: ContactInfoFormBody(
+                            formKey: _formKeys[1], validator: validator)),
                     Step(
                         state: StepState.complete,
                         isActive: _index == 2,
                         title: const Text('Additional info'),
-                        content: const AdditionalInfoFormBody()),
+                        content: AdditionalInfoFormBody(
+                            formKeys: _formKeys, validator: validator)),
                   ],
                 ),
               ),
@@ -118,14 +129,23 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 class BasicInfoFormBody extends StatefulWidget {
   const BasicInfoFormBody({
     Key? key,
+    required this.formKey,
+    required this.validator,
   }) : super();
 
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
   @override
-  State<BasicInfoFormBody> createState() => _BasicInfoFormBodyState();
+  State<BasicInfoFormBody> createState() =>
+      _BasicInfoFormBodyState(formKey: formKey, validator: validator);
 }
 
 class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
+  _BasicInfoFormBodyState({required this.formKey, required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -137,27 +157,27 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    FirstName(),
-                    SizedBox(height: 10),
-                    MiddleName(),
-                    SizedBox(height: 10),
-                    LastName(),
-                    SizedBox(height: 10),
-                    DatePickerFeild(),
-                    SizedBox(height: 10),
-                    Gender(),
-                    SizedBox(height: 10),
-                    Religion(),
-                    SizedBox(height: 10),
-                    EducationLevel(),
-                    SizedBox(height: 10),
-                    Ethnicity(),
-                    SizedBox(height: 10),
+                  children: [
+                    FirstName(validator: validator),
+                    const SizedBox(height: 10),
+                    MiddleName(validator: validator),
+                    const SizedBox(height: 10),
+                    LastName(validator: validator),
+                    const SizedBox(height: 10),
+                    const DatePickerField(),
+                    const SizedBox(height: 10),
+                    Gender(validator: validator),
+                    const SizedBox(height: 10),
+                    Religion(validator: validator),
+                    const SizedBox(height: 10),
+                    EducationLevel(validator: validator),
+                    const SizedBox(height: 10),
+                    Ethnicity(validator: validator),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -171,14 +191,23 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 class ContactInfoFormBody extends StatefulWidget {
   const ContactInfoFormBody({
     Key? key,
+    required this.formKey,
+    required this.validator,
   }) : super();
 
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
   @override
-  State<ContactInfoFormBody> createState() => _ContactInfoFormBodyState();
+  State<ContactInfoFormBody> createState() =>
+      _ContactInfoFormBodyState(formKey: formKey, validator: validator);
 }
 
 class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
+  _ContactInfoFormBodyState({required this.formKey, required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -190,19 +219,22 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    PhoneNumber(),
-                    SizedBox(height: 10),
-                    Email(),
-                    SizedBox(height: 10),
+                  children: [
+                    PhoneNumber(validator: validator),
+                    const SizedBox(height: 10),
+                    Email(validator: validator),
+                    const SizedBox(height: 10),
                     Address(),
-                    SizedBox(height: 10),
-                    ContactPreference(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    ContactPreference(
+                      formKey: formKey,
+                      validator: validator,
+                    ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -215,14 +247,24 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
 class AdditionalInfoFormBody extends StatefulWidget {
   const AdditionalInfoFormBody({
     Key? key,
+    required this.formKeys,
+    required this.validator,
   }) : super();
 
+  final List<GlobalKey<FormState>> formKeys;
+  final PatientFormValidator validator;
+
   @override
-  State<AdditionalInfoFormBody> createState() => _AdditionalInfoFormBodyState();
+  State<AdditionalInfoFormBody> createState() =>
+      _AdditionalInfoFormBodyState(formKeys: formKeys, validator: validator);
 }
 
 class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final List<GlobalKey<FormState>> formKeys;
+  final PatientFormValidator validator;
+
+  _AdditionalInfoFormBodyState(
+      {required this.formKeys, required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -234,14 +276,14 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: _formKey,
+                key: formKeys[2],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const EmergencyContact(),
                     const SizedBox(height: 10),
-                    _SubmitButton(formKey: _formKey)
+                    _SubmitButton(formKeys: formKeys, validator: validator)
                   ],
                 ),
               ),
@@ -251,8 +293,8 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
   }
 }
 
-class DatePickerFeild extends StatelessWidget {
-  const DatePickerFeild({Key? key}) : super(key: key);
+class DatePickerField extends StatelessWidget {
+  const DatePickerField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +337,9 @@ class DatePickerFeild extends StatelessWidget {
 }
 
 class FirstName extends StatelessWidget {
-  const FirstName({Key? key}) : super(key: key);
+  const FirstName({Key? key, required this.validator}) : super(key: key);
+
+  final PatientFormValidator validator;
 
   @override
   Widget build(BuildContext context) {
@@ -324,9 +368,9 @@ class FirstName extends StatelessWidget {
             ),
             validator: (String? value) {
               if (value!.isEmpty) {
-                return 'Please enter a valid first name';
+                return 'Please enter a first name';
               }
-              return null;
+              return validator.firstNameError;
             },
           ),
         ),
@@ -336,7 +380,9 @@ class FirstName extends StatelessWidget {
 }
 
 class MiddleName extends StatelessWidget {
-  const MiddleName({Key? key}) : super(key: key);
+  const MiddleName({Key? key, required this.validator}) : super(key: key);
+
+  final PatientFormValidator validator;
 
   @override
   Widget build(BuildContext context) {
@@ -363,12 +409,6 @@ class MiddleName extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a valid middle name';
-              }
-              return null;
-            },
           ),
         ),
       ],
@@ -377,7 +417,9 @@ class MiddleName extends StatelessWidget {
 }
 
 class LastName extends StatelessWidget {
-  const LastName({Key? key}) : super(key: key);
+  const LastName({Key? key, required this.validator}) : super(key: key);
+
+  final PatientFormValidator validator;
 
   @override
   Widget build(BuildContext context) {
@@ -405,9 +447,9 @@ class LastName extends StatelessWidget {
             ),
             validator: (String? value) {
               if (value!.isEmpty) {
-                return 'Please enter a valid lasts name';
+                return 'Please enter a last name';
               }
-              return null;
+              return validator.lastNameError;
             },
           ),
         ),
@@ -418,14 +460,18 @@ class LastName extends StatelessWidget {
 
 //TODO: move this to a dropdown widget
 class Gender extends StatefulWidget {
-  const Gender({Key? key}) : super(key: key);
+  final PatientFormValidator validator;
+  const Gender({Key? key, required this.validator}) : super(key: key);
 
   @override
-  State<Gender> createState() => _GenderState();
+  State<Gender> createState() => _GenderState(validator: validator);
 }
 
 class _GenderState extends State<Gender> {
   String? _selectedText;
+  PatientFormValidator validator;
+
+  _GenderState({required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -440,27 +486,28 @@ class _GenderState extends State<Gender> {
           height: 45,
           width: 320,
           child: Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             color: const Color.fromARGB(255, 205, 226, 226),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                isExpanded: true,
-                value: _selectedText,
-                hint: const Text("Select gender"),
-                items: <String>['MALE', 'FEMALE', 'OTHER'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  context.read<PatientCubit>().setGender(val);
-                  setState(() {
-                    _selectedText = val.toString();
-                  });
-                },
-              ),
+            child: FormBuilderDropdown(
+              name: 'Gender',
+              items: <String>['MALE', 'FEMALE', 'OTHER'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: const Text("Select gender"),
+              onChanged: (String? val) {
+                context.read<PatientCubit>().setContactPreference(val);
+                setState(() {
+                  _selectedText = val.toString();
+                });
+              },
+              validator: (String? value) {
+                if (value == null) {
+                  return 'select gender';
+                }
+              },
             ),
           ),
         ),
@@ -470,14 +517,18 @@ class _GenderState extends State<Gender> {
 }
 
 class Religion extends StatefulWidget {
-  const Religion({Key? key}) : super(key: key);
+  final PatientFormValidator validator;
+  const Religion({Key? key, required this.validator}) : super(key: key);
 
   @override
-  State<Religion> createState() => _ReligionState();
+  State<Religion> createState() => _ReligionState(validator: validator);
 }
 
 class _ReligionState extends State<Religion> {
   String? _selectedText;
+  PatientFormValidator validator;
+
+  _ReligionState({required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -492,34 +543,35 @@ class _ReligionState extends State<Religion> {
           height: 45,
           width: 320,
           child: Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             color: const Color.fromARGB(255, 205, 226, 226),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                isExpanded: true,
-                value: _selectedText,
-                hint: const Text("Select religion"),
-                items: <String>[
-                  'HINDUISM',
-                  'BUDDHISM',
-                  'JUDAISM',
-                  'CHRISTIANITY',
-                  'ISLAM',
-                  'OTHER',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  context.read<PatientCubit>().setReligion(val);
-                  setState(() {
-                    _selectedText = val.toString();
-                  });
-                },
-              ),
+            child: FormBuilderDropdown(
+              name: 'Religion',
+              items: <String>[
+                'HINDUISM',
+                'BUDDHISM',
+                'JUDAISM',
+                'CHRISTIANITY',
+                'ISLAM',
+                'OTHER',
+              ].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: const Text("Select religion"),
+              onChanged: (String? val) {
+                context.read<PatientCubit>().setContactPreference(val);
+                setState(() {
+                  _selectedText = val.toString();
+                });
+              },
+              validator: (String? value) {
+                if (value == null) {
+                  return 'select religion';
+                }
+              },
             ),
           ),
         ),
@@ -529,14 +581,20 @@ class _ReligionState extends State<Religion> {
 }
 
 class EducationLevel extends StatefulWidget {
-  const EducationLevel({Key? key}) : super(key: key);
+  final PatientFormValidator validator;
+
+  const EducationLevel({Key? key, required this.validator}) : super(key: key);
 
   @override
-  State<EducationLevel> createState() => _EducationLevelState();
+  State<EducationLevel> createState() =>
+      _EducationLevelState(validator: validator);
 }
 
 class _EducationLevelState extends State<EducationLevel> {
   String? _selectedText;
+  PatientFormValidator validator;
+
+  _EducationLevelState({required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -551,38 +609,39 @@ class _EducationLevelState extends State<EducationLevel> {
           height: 45,
           width: 320,
           child: Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             color: const Color.fromARGB(255, 205, 226, 226),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                isExpanded: true,
-                value: _selectedText,
-                hint: const Text("Select education level"),
-                items: <String>[
-                  'NONE',
-                  'PRE_PRIMARY',
-                  'PRIMARY',
-                  'LOWER_SECONDARY',
-                  'UPPER_SECONDARY',
-                  'POST_SECONDARY',
-                  'SHORT_CYCLE_TERTIARY',
-                  'BACHELORS_DEGREE',
-                  'MASTERS_DEGREE',
-                  'DOCTORATE',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  context.read<PatientCubit>().setEducationLevel(val);
-                  setState(() {
-                    _selectedText = val.toString();
-                  });
-                },
-              ),
+            child: FormBuilderDropdown(
+              name: 'Education Level',
+              items: <String>[
+                'NONE',
+                'PRE_PRIMARY',
+                'PRIMARY',
+                'LOWER_SECONDARY',
+                'UPPER_SECONDARY',
+                'POST_SECONDARY',
+                'SHORT_CYCLE_TERTIARY',
+                'BACHELORS_DEGREE',
+                'MASTERS_DEGREE',
+                'DOCTORATE',
+              ].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: const Text("Select education level"),
+              onChanged: (String? val) {
+                context.read<PatientCubit>().setContactPreference(val);
+                setState(() {
+                  _selectedText = val.toString();
+                });
+              },
+              validator: (String? value) {
+                if (value == null) {
+                  return 'select education level';
+                }
+              },
             ),
           ),
         ),
@@ -592,14 +651,19 @@ class _EducationLevelState extends State<EducationLevel> {
 }
 
 class Ethnicity extends StatefulWidget {
-  const Ethnicity({Key? key}) : super(key: key);
+  final PatientFormValidator validator;
+
+  const Ethnicity({Key? key, required this.validator}) : super(key: key);
 
   @override
-  State<Ethnicity> createState() => _EthnicityState();
+  State<Ethnicity> createState() => _EthnicityState(validator: validator);
 }
 
 class _EthnicityState extends State<Ethnicity> {
   String? _selectedText;
+  PatientFormValidator validator;
+
+  _EthnicityState({required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -614,38 +678,38 @@ class _EthnicityState extends State<Ethnicity> {
           height: 45,
           width: 320,
           child: Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             color: const Color.fromARGB(255, 205, 226, 226),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                isExpanded: true,
-                value: _selectedText,
-                hint: const Text("Select ethnicity"),
-                items: <String>[
-                  'HAUSA',
-                  'YORUBA',
-                  'IJAW',
-                  'IGBO',
-                  'IBIBIO',
-                  'TIV',
-                  'FULANI',
-                  'KANURI',
-                  'OTHER',
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  context.read<PatientCubit>().setEthnicity(val);
-
-                  setState(() {
-                    _selectedText = val.toString();
-                  });
-                },
-              ),
+            child: FormBuilderDropdown(
+              name: 'Ethnicity',
+              items: <String>[
+                'HAUSA',
+                'YORUBA',
+                'IJAW',
+                'IGBO',
+                'IBIBIO',
+                'TIV',
+                'FULANI',
+                'KANURI',
+                'OTHER',
+              ].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: const Text("Select ethnicity"),
+              onChanged: (String? val) {
+                context.read<PatientCubit>().setContactPreference(val);
+                setState(() {
+                  _selectedText = val.toString();
+                });
+              },
+              validator: (String? value) {
+                if (value == null) {
+                  return 'select ethnicity';
+                }
+              },
             ),
           ),
         ),
@@ -655,7 +719,9 @@ class _EthnicityState extends State<Ethnicity> {
 }
 
 class PhoneNumber extends StatelessWidget {
-  const PhoneNumber({Key? key}) : super(key: key);
+  const PhoneNumber({Key? key, required this.validator}) : super(key: key);
+
+  final PatientFormValidator validator;
 
   @override
   Widget build(BuildContext context) {
@@ -683,9 +749,9 @@ class PhoneNumber extends StatelessWidget {
             ),
             validator: (String? value) {
               if (value!.isEmpty) {
-                return 'Please enter a valid phone number';
+                return 'Please enter a phone number';
               }
-              return null;
+              return validator.phoneNumberError;
             },
           ),
         ),
@@ -695,7 +761,9 @@ class PhoneNumber extends StatelessWidget {
 }
 
 class Email extends StatelessWidget {
-  const Email({Key? key}) : super(key: key);
+  const Email({Key? key, required this.validator}) : super(key: key);
+
+  final PatientFormValidator validator;
 
   @override
   Widget build(BuildContext context) {
@@ -721,10 +789,7 @@ class Email extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a valid email address';
-              }
-              return null;
+              return validator.emailError;
             },
           ),
         ),
@@ -762,9 +827,6 @@ class Address extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a address line';
-              }
               return null;
             },
           ),
@@ -787,9 +849,6 @@ class Address extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a address line';
-              }
               return null;
             },
           ),
@@ -812,9 +871,6 @@ class Address extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a address line';
-              }
               return null;
             },
           ),
@@ -837,9 +893,6 @@ class Address extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a address line';
-              }
               return null;
             },
           ),
@@ -862,9 +915,6 @@ class Address extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a zip code';
-              }
               return null;
             },
           ),
@@ -886,34 +936,6 @@ class Address extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a city';
-              }
-              return null;
-            },
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          width: 320,
-          child: TextFormField(
-            onChanged: (countryCode) =>
-                context.read<PatientCubit>().setCountryCode(countryCode),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              hintText: "Country code",
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
-            ),
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return 'Please enter a country code';
-              }
               return null;
             },
           ),
@@ -924,13 +946,23 @@ class Address extends StatelessWidget {
 }
 
 class ContactPreference extends StatefulWidget {
-  const ContactPreference({Key? key}) : super(key: key);
+  final GlobalKey<FormState> formKey;
+  final PatientFormValidator validator;
+
+  const ContactPreference(
+      {Key? key, required this.formKey, required this.validator})
+      : super(key: key);
 
   @override
-  State<ContactPreference> createState() => _ContactPreferenceState();
+  State<ContactPreference> createState() =>
+      _ContactPreferenceState(formKey: formKey, validator: validator);
 }
 
 class _ContactPreferenceState extends State<ContactPreference> {
+  _ContactPreferenceState({required this.formKey, required this.validator});
+
+  GlobalKey<FormState> formKey;
+  PatientFormValidator validator;
   String? _selectedText;
 
   @override
@@ -943,30 +975,31 @@ class _ContactPreferenceState extends State<ContactPreference> {
           child: Text("Contact Preference"),
         ),
         SizedBox(
-          height: 45,
+          height: 50,
           width: 320,
           child: Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
             color: const Color.fromARGB(255, 205, 226, 226),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                isExpanded: true,
-                value: _selectedText,
-                hint: const Text("Select contact preference"),
-                items: <String>['PHONE', 'SMS', 'EMAIL'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  context.read<PatientCubit>().setContactPreference(val);
-                  setState(() {
-                    _selectedText = val.toString();
-                  });
-                },
-              ),
+            child: FormBuilderDropdown(
+              name: 'Contact Preference',
+              items: <String>['PHONE', 'SMS', 'EMAIL'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              hint: const Text("Select contact preference"),
+              onChanged: (String? val) {
+                context.read<PatientCubit>().setContactPreference(val);
+                setState(() {
+                  _selectedText = val.toString();
+                });
+              },
+              validator: (String? value) {
+                if (value == null) {
+                  return 'select contact preference';
+                }
+              },
             ),
           ),
         ),
@@ -1051,9 +1084,11 @@ class EmergencyContact extends StatelessWidget {
 }
 
 class _SubmitButton extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
+  final List<GlobalKey<FormState>> formKeys;
+  final PatientFormValidator validator;
 
-  _SubmitButton({required this.formKey}) : super();
+  const _SubmitButton({required this.formKeys, required this.validator})
+      : super();
 
   @override
   Widget build(BuildContext context) {
@@ -1073,40 +1108,86 @@ class _SubmitButton extends StatelessWidget {
             ),
             child: const Text('Submit'),
             onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                var response = context.read<PatientCubit>().createNewPatient(
-                    token: context.read<LoginCubit>().state.homeToken);
+              if (formsAreValid()) {
+                var response = await context
+                    .read<PatientCubit>()
+                    .createNewPatient(
+                        token: context.read<LoginCubit>().state.homeToken);
 
-                response.then((value) => {
-                      if (value != null && value.statusCode == 201)
-                        {
-                          context.read<PatientCubit>().clearState(),
-                          Messages.showMessage(
-                              const Icon(
-                                IconData(0xf635, fontFamily: 'MaterialIcons'),
-                                color: Colors.green,
-                              ),
-                              'Patient created'),
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: ((context) => const Dashboard())),
-                              ModalRoute.withName('/dashboard'))
-                        }
-                      else if (value != null && value.statusCode == 400)
-                        {
-                          Messages.showMessage(
-                              const Icon(
-                                IconData(0xe237, fontFamily: 'MaterialIcons'),
-                                color: Colors.red,
-                              ),
-                              'Could not create patient'),
-                        }
-                    });
+                if (response != null && response.body.contains('errors')) {
+                  dynamic errors = json.decode(response.body)['errors'];
+                  String errorsJson = jsonEncode(errors);
+                  if (errorsJson.contains('firstName')) {
+                    validator.firstNameError =
+                        jsonDecode(errorsJson)['firstName'];
+                  }
+                  if (errorsJson.contains('lastName')) {
+                    validator.lastNameError =
+                        jsonDecode(errorsJson)['lastName'];
+                  }
+                  if (errorsJson.contains('gender')) {
+                    validator.genderError = jsonDecode(errorsJson)['gender'];
+                  }
+                  if (errorsJson.contains('phoneNumber')) {
+                    validator.phoneNumberError =
+                        jsonDecode(errorsJson)['phoneNumber'];
+                  }
+                  if (errorsJson.contains('email')) {
+                    validator.emailError = jsonDecode(errorsJson)['email'];
+                  }
+                }
+
+                bool valid = formsAreValid();
+
+                if (response != null) {
+                  switch (response.statusCode) {
+                    case 201:
+                      context.read<PatientCubit>().clearState();
+                      Messages.showMessage(
+                          const Icon(
+                            IconData(0xf635, fontFamily: 'MaterialIcons'),
+                            color: Colors.green,
+                          ),
+                          'Patient created');
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: ((context) => const Dashboard())),
+                          ModalRoute.withName('/dashboard'));
+                      break;
+                    case 400:
+                      if (!valid) {
+                        Messages.showMessage(
+                            const Icon(
+                              IconData(0xe237, fontFamily: 'MaterialIcons'),
+                              color: Colors.red,
+                            ),
+                            'Could not create patient, invalid input');
+                      }
+                      break;
+                    default:
+                      Messages.showMessage(
+                          const Icon(
+                            IconData(0xe237, fontFamily: 'MaterialIcons'),
+                            color: Colors.red,
+                          ),
+                          'Could not create patient');
+                  }
+                }
               }
             },
           ),
         ),
       );
     });
+  }
+
+  bool formsAreValid() {
+    bool isValid = true;
+    for (var formKey in formKeys) {
+      if (!formKey.currentState!.validate()) {
+        isValid = false;
+      }
+    }
+    return isValid;
   }
 }

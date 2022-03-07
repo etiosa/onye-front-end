@@ -7,18 +7,28 @@ class AuthRepository {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
+<<<<<<< HEAD
   Future<http.Response?> signIn({String? username, String? password}) async {
     // ignore: prefer_typing_uninitialized_variables
+=======
+  Future<String> signIn({String? username, String? password}) async {
+    dynamic body;
+>>>>>>> 6818e5536e212308001e95b84db12686c985d199
     try {
       var uri = Uri.parse(root + "auth/login");
-      http.Response reponse = await http.post(uri,
+      http.Response response = await http.post(uri,
           headers: {
             "Content-Type": contentType,
             "Accept": accept,
           },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
+<<<<<<< HEAD
       return reponse;
+=======
+      body = jsonDecode(response.body);
+      return body['token'];
+>>>>>>> 6818e5536e212308001e95b84db12686c985d199
     } catch (e) {
       return null;
     }
@@ -26,6 +36,10 @@ class AuthRepository {
 
   Future<http.Response?> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
+<<<<<<< HEAD
+=======
+    dynamic body;
+>>>>>>> 6818e5536e212308001e95b84db12686c985d199
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
@@ -44,7 +58,7 @@ class AuthRepository {
 
   Future<dynamic> signout({String? token}) async {
     var uri = Uri.parse(root + "auth/logout");
-    var body;
+    dynamic body;
     try {
       http.Response response = await http.post(uri, headers: {
         "Content-Type": "application/json",
