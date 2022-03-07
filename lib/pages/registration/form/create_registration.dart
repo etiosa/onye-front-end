@@ -176,7 +176,7 @@ class RegisterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
@@ -504,9 +504,9 @@ class _PatientListState extends State<PatientList> {
                         curve: Curves.easeIn);
                   });
                 },
-                child: Container(
+                  child: Container(
                   width: 50,
-                  height: 50,
+                  height: 120,
                   margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: selectedIndex == index
@@ -524,12 +524,40 @@ class _PatientListState extends State<PatientList> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
-                      style: TextStyle(
-                          color: selectedIndex == index
-                              ? Colors.white
-                              : Colors.black),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                              color: selectedIndex == index
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                       const  SizedBox(height:10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text('patient number'),
+                            Text(
+                              '  ${state.patientsList[index]['patientNumber']} ',
+                            ),
+                          ],
+                        ),
+                            const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text('phone number'),
+                            Text(
+                              '  ${state.patientsList[index]['phoneNumber']} ',
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),

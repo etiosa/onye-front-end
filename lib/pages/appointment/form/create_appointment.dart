@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -62,7 +61,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                 Row(
                   children: [
                     InkWell(
-                    /*   onTap:()=>{ controller.nextPage(
+                      /*   onTap:()=>{ controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeIn),}, */
                       child: Container(
@@ -85,11 +84,10 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                     ),
                   ],
                 ),
-                
                 Row(
                   children: [
                     InkWell(
-                    /*   onTap:()=>{ controller.nextPage(
+                      /*   onTap:()=>{ controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeIn),}, */
                       child: Container(
@@ -108,13 +106,12 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                       padding: EdgeInsets.all(8.0),
                       child: Text('select doctor'),
                     ),
-                
                   ],
                 ),
-                 Row(
+                Row(
                   children: [
                     InkWell(
-                   /*    onTap:()=>{ controller.nextPage(
+                      /*    onTap:()=>{ controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeIn),
                       }, */
@@ -130,7 +127,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                         child: const Center(child: Text('3')),
                       ),
                     ),
-                        const Padding(
+                    const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text('appointment'),
                     ),
@@ -164,7 +161,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                       ],
                     ),
                     //Search doctor
-                     Column(
+                    Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         SearchBar(
@@ -172,12 +169,12 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                           field: 'Search doctor',
                         ),
                         const SizedBox(height: 10),
-                     DoctorList(pageController:controller,),
-                        
+                        DoctorList(
+                          pageController: controller,
+                        ),
                       ],
                     ),
                     Register(formIndex: 2)
-                   
                   ],
                 ),
               ),
@@ -351,7 +348,6 @@ class TextContent extends StatelessWidget {
   }
 }
 
-
 class Register extends StatefulWidget {
   Register({Key? key, required this.formIndex}) : super(key: key);
   int formIndex;
@@ -386,18 +382,18 @@ class RegisterField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(15.0),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 10),
+                 
                   DropDown(label: 'Language Preference', options: const ['EN']),
                   const SizedBox(height: 25),
                   DropDown(
@@ -510,13 +506,13 @@ class RegisterField extends StatelessWidget {
                                               color: Colors.green,
                                             ),
                                             'Appointment created'),
-                                         Navigator.of(context)
+                                        Navigator.of(context)
                                             .pushAndRemoveUntil(
                                                 MaterialPageRoute(
                                                     builder: ((context) =>
                                                         const Appointments())),
                                                 ModalRoute.withName(
-                                                    '/dashboard')) 
+                                                    '/dashboard'))
                                       }
                                     else if (value != null &&
                                         value.statusCode == 400)
@@ -542,8 +538,6 @@ class RegisterField extends StatelessWidget {
         ]);
   }
 }
-
-
 
 class SearchPatientBody extends StatefulWidget {
   SearchPatientBody(
@@ -754,7 +748,7 @@ class _PatientListState extends State<PatientList> {
                 },
                 child: Container(
                   width: 50,
-                  height: 50,
+                  height: 120,
                   margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: selectedIndex == index
@@ -772,12 +766,40 @@ class _PatientListState extends State<PatientList> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
-                      style: TextStyle(
-                          color: selectedIndex == index
-                              ? Colors.white
-                              : Colors.black),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                              color: selectedIndex == index
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                       const  SizedBox(height:10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text('patient number'),
+                            Text(
+                              '  ${state.patientsList[index]['patientNumber']} ',
+                            ),
+                          ],
+                        ),
+                            const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text('phone number'),
+                            Text(
+                              '  ${state.patientsList[index]['phoneNumber']} ',
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -787,7 +809,6 @@ class _PatientListState extends State<PatientList> {
     });
   }
 }
-
 
 class DoctorList extends StatefulWidget {
   DoctorList({
@@ -845,42 +866,69 @@ class _DoctorListState extends State<DoctorList> {
                         curve: Curves.easeIn);
                   });
                 },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: selectedIndex == index
-                        ? const Color.fromARGB(255, 26, 155, 152)
-                        : const Color.fromARGB(255, 248, 254, 254),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+               
+                  child: Container(
+                    width: 50,
+                    height: 120,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: selectedIndex == index
+                          ? const Color.fromARGB(255, 26, 155, 152)
+                          : const Color.fromARGB(255, 248, 254, 254),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '  ${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName'] ?? ''} ${state.doctorsList[index]['lastName']}',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: selectedIndex == index
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text('personnel number'),
+                              Text(
+                                '  ${state.doctorsList[index]['personnelNumber']} ',
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text('phone number'),
+                              Text(
+                                '  ${state.doctorsList[index]['phoneNumber']} ',
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      '  ${state.doctorsList[index]['firstName']} ${state.doctorsList[index]['middleName'] ?? ''} ${state.doctorsList[index]['lastName']}',
-                      style: TextStyle(
-                          color: selectedIndex == index
-                              ? Colors.white
-                              : Colors.black),
                     ),
                   ),
-                ),
+                  
+            
               );
             }),
       );
     });
   }
 }
-
-
-
-
