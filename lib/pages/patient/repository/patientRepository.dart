@@ -30,8 +30,8 @@ class PatientRepositories {
       String? emergencyContactName,
       String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/patient");
-    final body;
-    var address;
+
+    dynamic address;
     if (addressLine1 != null &&
         zipCode != null &&
         city != null &&
@@ -39,15 +39,13 @@ class PatientRepositories {
       address = {
         "line1": addressLine1,
         "line2": addressLine2,
-        "line3": addressLine3,
-        "line4": addressLine4,
         "zipCode": zipCode,
         "city": city,
         "countryCode": countryCode
       };
     }
 
-    var emergencyContact;
+    dynamic emergencyContact;
     if (emergencyContactName != null &&
         emergencyContactPhoneNumber != null &&
         emergencyContactRelationship != null) {
