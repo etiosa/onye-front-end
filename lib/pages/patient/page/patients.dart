@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
+import 'package:onye_front_ened/components/util/functions.dart';
 
 import '../../appointment/state/appointment_cubit.dart';
 
@@ -131,11 +132,9 @@ class _PatientsPageState extends State<PatientsPage> {
   }
 }
 
-
-
 class PatientDetails extends StatelessWidget {
   const PatientDetails({
-    required this.dateofBirth,
+    this.dateOfBirth,
     required this.patientFullName,
     required this.patientNumber,
     required this.patientId,
@@ -143,7 +142,7 @@ class PatientDetails extends StatelessWidget {
   }) : super(key: key);
 
   final String patientFullName;
-  final String dateofBirth;
+  final String? dateOfBirth;
   final String patientNumber;
   final String patientId;
 
@@ -163,7 +162,7 @@ class PatientDetails extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 1,
               blurRadius: 1,
-              offset: const Offset(0, 1), // changes positi
+              offset: const Offset(0, 1), // changes position
             ), //BoxShadow
           ]),
           child: Padding(
@@ -181,7 +180,7 @@ class PatientDetails extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 20),
-                      Text(dateofBirth)
+                      Text(dateOfBirth ?? '')
                     ],
                   ),
                   Column(
@@ -206,32 +205,27 @@ class PatientInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-        
-          children: [
-              const Text('Paitent Information'),
-           const  Divider(color: Colors.amber, thickness: 3,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                
-                children: [
-                  Text('Patient First Name'),
-                    Text('Patient First Name')
-              ],),
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+            const Text('Paitent Information'),
+         const  Divider(color: Colors.amber, thickness: 3,),
             Row(
-              
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                
-                children: [
-                  Text('Etiosa '),
-                    Text('Obasuyi')
-              ],),
-               
-          ],
-        ),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+              children: const [
+                Text('Patient First Name'),
+                  Text('Patient First Name')
+            ],),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                Text('Etiosa '),
+                  Text('Obasuyi')
+            ],),
+
+        ],
       ),
     );
   }
@@ -285,9 +279,12 @@ class _PatientListState extends State<PatientList> {
               return Stack(alignment: Alignment.topRight, children: [
                 PatientDetails(
                   patientId: state.patientsList[index]['id'],
-                  patientFullName: state.patientsList[index]['firstName'] +
-                      state.patientsList[index]['lastName'],
-                  dateofBirth: state.patientsList[index]['dateOfBirth'],
+                  patientFullName: Functions.buildFullName(
+                    state.patientsList[index]['firstName'],
+                    state.patientsList[index]['middleName'],
+                    state.patientsList[index]['lastName'],
+                  ),
+                  dateOfBirth: state.patientsList[index]['dateOfBirth'],
                   patientNumber: state.patientsList[index]['patientNumber'],
                 ),
               ]);
