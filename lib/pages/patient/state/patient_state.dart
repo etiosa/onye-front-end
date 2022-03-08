@@ -35,7 +35,7 @@ class PatientState extends Equatable {
       this.emergencyContactRelationship,
       this.contactPreference,
       this.token = '',
-      this.query='',
+      this.query = '',
       this.searchState = REGISTERATIONSEARCHSTATE.inital,
       this.createdPatientData = const {},
       this.registrationFormState = RegistrationFormState.init});
@@ -73,6 +73,7 @@ class PatientState extends Equatable {
   @override
   List<Object?> get props => [
         firstName,
+        middleName,
         lastName,
         dateOfBirth,
         gender,
@@ -99,7 +100,7 @@ class PatientState extends Equatable {
         query
       ];
 
-  PatientState copywith(
+  PatientState copyWith(
       {String? firstName,
       String? middleName,
       String? lastName,
@@ -131,7 +132,7 @@ class PatientState extends Equatable {
       String? contactPreferences}) {
     return PatientState(
         token: toke ?? token,
-        query: query?? this.query,
+        query: query ?? this.query,
         searchState: searchState ?? this.searchState,
         createdPatientData: createdPatientData ?? this.createdPatientData,
         firstName: firstName ?? this.firstName,

@@ -162,23 +162,23 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FirstName(validator: validator),
-                    const SizedBox(height: 10),
-                    MiddleName(validator: validator),
-                    const SizedBox(height: 10),
-                    LastName(validator: validator),
-                    const SizedBox(height: 10),
-                    const DatePickerField(),
-                    const SizedBox(height: 10),
-                    const Gender(),
-                    const SizedBox(height: 10),
-                    const Religion(),
-                    const SizedBox(height: 10),
-                    const EducationLevel(),
-                    const SizedBox(height: 10),
-                    const Ethnicity(),
-                    const SizedBox(height: 10),
+                  children: const [
+                    FirstName(),
+                    SizedBox(height: 10),
+                    MiddleName(),
+                    SizedBox(height: 10),
+                    LastName(),
+                    SizedBox(height: 10),
+                    DatePickerField(),
+                    SizedBox(height: 10),
+                    Gender(),
+                    SizedBox(height: 10),
+                    Religion(),
+                    SizedBox(height: 10),
+                    EducationLevel(),
+                    SizedBox(height: 10),
+                    Ethnicity(),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -335,9 +335,7 @@ class DatePickerField extends StatelessWidget {
 }
 
 class FirstName extends StatelessWidget {
-  const FirstName({Key? key, required this.validator}) : super(key: key);
-
-  final PatientFormValidator validator;
+  const FirstName({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -373,9 +371,7 @@ class FirstName extends StatelessWidget {
 }
 
 class MiddleName extends StatelessWidget {
-  const MiddleName({Key? key, required this.validator}) : super(key: key);
-
-  final PatientFormValidator validator;
+  const MiddleName({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -401,6 +397,7 @@ class MiddleName extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            validator: FormBuilderValidators.match(context, '^(?!\s*\$).+', errorText: 'Cannot be empty string'),
           ),
         ),
       ],
@@ -409,9 +406,7 @@ class MiddleName extends StatelessWidget {
 }
 
 class LastName extends StatelessWidget {
-  const LastName({Key? key, required this.validator}) : super(key: key);
-
-  final PatientFormValidator validator;
+  const LastName({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -691,8 +686,8 @@ class PhoneNumber extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(
-                  context, errorText: 'Phone number is required'),
+              FormBuilderValidators.required(context,
+                  errorText: 'Phone number is required'),
               (value) {
                 return validator.phoneNumberError;
               }
@@ -986,6 +981,8 @@ class _SubmitButton extends StatelessWidget {
                     .read<PatientCubit>()
                     .createNewPatient(
                         token: context.read<LoginCubit>().state.homeToken);
+
+                validator.clearErrors();
 
                 if (response != null && response.body.contains('errors')) {
                   dynamic errors = json.decode(response.body)['errors'];
