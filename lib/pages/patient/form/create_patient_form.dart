@@ -397,7 +397,6 @@ class MiddleName extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: FormBuilderValidators.match(context, '^(?!\s*\$).+', errorText: 'Cannot be empty string'),
           ),
         ),
       ],
