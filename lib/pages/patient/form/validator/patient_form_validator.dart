@@ -1,6 +1,4 @@
-
 class PatientFormValidator {
-
   String? phoneNumberError;
   String? emailError;
 

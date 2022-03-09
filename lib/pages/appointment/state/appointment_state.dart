@@ -26,6 +26,8 @@ class AppointmentState extends Equatable {
       this.patientRegistered = false,
       this.clinicalNote = '',
       this.clinicalNoteTitle = '',
+      this.maxPageNumber=0,  
+      this.nextPage=0,    
       this.clinicalNoteType = ''});
 
   final List<dynamic> appointmentList;
@@ -49,7 +51,8 @@ class AppointmentState extends Equatable {
   final String clinicalNote;
   final String clinicalNoteType;
   final bool patientRegistered;
-
+  final int maxPageNumber;
+  final int nextPage;
 
   @override
   List<Object> get props => [
@@ -74,33 +77,38 @@ class AppointmentState extends Equatable {
         clinicalNote,
         clinicalNoteTitle,
         clinicalNoteType,
+        maxPageNumber,
+        nextPage
       ];
 
-  AppointmentState copyWith({
-    String? searchParams,
-    String? clinicalNoteTitle,
-    String? clinicalNote,
-    List<dynamic>? appointmentList,
-    List<dynamic>? patientsList,
-    List<dynamic>? doctorsList,
-    String? startDateTime,
-    List<dynamic>? registrationList,
-    String? startTime,
-    String? endTime,
-    String? startDate,
-    String? selectedPatientId,
-    String? selectedMedicalPersonnelId,
-    SEARCHSTATE? searchState,
-    REGISTRATIONSTATE? registrationState,
-    bool? patientRegistered,
-    String? typeOfVisit,
-    String? reasonForVisit,
-    int? selectedPatientIndex,
-    int? selectedMedicalIndex,
-    String? selectedAppointmentId,
-    String? clinicalNoteType,
-  }) {
+  AppointmentState copyWith(
+      {String? searchParams,
+      String? clinicalNoteTitle,
+      String? clinicalNote,
+      List<dynamic>? appointmentList,
+      List<dynamic>? patientsList,
+      List<dynamic>? doctorsList,
+      String? startDateTime,
+      List<dynamic>? registrationList,
+      String? startTime,
+      String? endTime,
+      String? startDate,
+      String? selectedPatientId,
+      String? selectedMedicalPersonnelId,
+      SEARCHSTATE? searchState,
+      REGISTRATIONSTATE? registrationState,
+      bool? patientRegistered,
+      String? typeOfVisit,
+      String? reasonForVisit,
+      int? selectedPatientIndex,
+      int? selectedMedicalIndex,
+      String? selectedAppointmentId,
+      String? clinicalNoteType,
+      int? nextPage,
+      int? maxPageNumber}) {
     return AppointmentState(
+      nextPage: nextPage?? this.nextPage,
+      maxPageNumber: maxPageNumber?? this.maxPageNumber,
         clinicalNoteType: clinicalNoteType ?? this.clinicalNoteType,
         clinicalNote: clinicalNote ?? this.clinicalNote,
         clinicalNoteTitle: clinicalNoteTitle ?? this.clinicalNoteTitle,
@@ -111,7 +119,8 @@ class AppointmentState extends Equatable {
         reasonForVisit: reasonForVisit ?? this.reasonForVisit,
         selectedMedicalIndex: selectedMedicalIndex ?? this.selectedMedicalIndex,
         selectedPatientIndex: selectedPatientIndex ?? this.selectedPatientIndex,
-        selectedMedicalPersonnelId: selectedMedicalPersonnelId ?? this.selectedMedicalPersonnelId,
+        selectedMedicalPersonnelId:
+            selectedMedicalPersonnelId ?? this.selectedMedicalPersonnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,
         selectedAppointmentId:
             selectedAppointmentId ?? this.selectedAppointmentId,

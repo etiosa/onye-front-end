@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:onye_front_ened/Widgets/InputField.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/Widgets/DropDown.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
@@ -146,6 +148,40 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
   final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
 
+  void setGender(String? value) {
+    context.read<PatientCubit>().setGender(value);
+  }
+
+  void setReligion(String? value) {
+    context.read<PatientCubit>().setReligion(value);
+  }
+
+  void setEducationLevel(String? value) {
+    context.read<PatientCubit>().setEducationLevel(value);
+  }
+
+  void setEthnicity(String? value) {
+    //print(value);
+    context.read<PatientCubit>().setEthnicity(value);
+  }
+
+  void setContactPreference(String? value) {
+    //print(value);
+    context.read<PatientCubit>().setContactPreference(value);
+  }
+
+  void setFirstName(String? firstName) {
+    context.read<PatientCubit>().setFirstName(firstName);
+  }
+
+  void setMiddleName(String? firstName) {
+    context.read<PatientCubit>().setMiddleName(firstName);
+  }
+
+  void setLastName(String? firstName) {
+    context.read<PatientCubit>().setLastName(firstName);
+  }
+
   _BasicInfoFormBodyState({required this.formKey, required this.validator});
 
   @override
@@ -162,22 +198,73 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    FirstName(),
+                  children: [
+                    InputField(label: 'First Name', setValue: setFirstName),
+                    // FirstName(),
                     SizedBox(height: 10),
-                    MiddleName(),
+                    InputField(label: 'Middle Name', setValue: setMiddleName),
+                    // MiddleName(),
                     SizedBox(height: 10),
-                    LastName(),
+                    InputField(label: 'Last Name', setValue: setLastName),
+
+                   // LastName(),
                     SizedBox(height: 10),
                     DatePickerField(),
                     SizedBox(height: 10),
-                    Gender(),
+                    DropDown(
+                      label: 'Gender',
+                      options: const ['MALE', 'FEMALE', 'OTHER'],
+                      setValue: setGender,
+                    ),
                     SizedBox(height: 10),
-                    Religion(),
+                    DropDown(
+                      label: 'Religion',
+                      options: const [
+                        '  HINDUISM',
+                        'BUDDHISM',
+                        'JUDAISM',
+                        'CHRISTIANITY',
+                        'ISLAM',
+                        'OTHER',
+                      ],
+                      setValue: setReligion,
+                    ),
+                    //Religion(),
                     SizedBox(height: 10),
-                    EducationLevel(),
+                    DropDown(
+                      label: 'Education Level',
+                      options: const [
+                        'NONE',
+                        'PRE_PRIMARY',
+                        'PRIMARY',
+                        'LOWER_SECONDARY',
+                        'UPPER_SECONDARY',
+                        'POST_SECONDARY',
+                        'SHORT_CYCLE_TERTIARY',
+                        'BACHELORS_DEGREE',
+                        'MASTERS_DEGREE',
+                        'DOCTORATE',
+                      ],
+                      setValue: setReligion,
+                    ),
+                    // EducationLevel(),
                     SizedBox(height: 10),
-                    Ethnicity(),
+                    DropDown(
+                      label: 'Ethnicity',
+                      options: const [
+                        'HAUSA',
+                        'YORUBA',
+                        'IJAW',
+                        'IGBO',
+                        'IBIBIO',
+                        'TIV',
+                        'FULANI',
+                        'KANURI',
+                        'OTHER',
+                      ],
+                      setValue: setEthnicity,
+                    ),
+                    // Ethnicity(),
                     SizedBox(height: 10),
                   ],
                 ),
@@ -207,6 +294,16 @@ class ContactInfoFormBody extends StatefulWidget {
 class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
   final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
+  void setContactPreference(String? value) {
+    //print(value);
+    context.read<PatientCubit>().setContactPreference(value);
+    // print(context.read<PatientCubit>().state.gender);
+    // setMethod(label, value!);
+  }
+
+  void setLastName(String? firstName) {
+    context.read<PatientCubit>().setLastName(firstName);
+  }
 
   _ContactInfoFormBodyState({required this.formKey, required this.validator});
 
@@ -231,7 +328,12 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
                     const SizedBox(height: 10),
                     const Address(),
                     const SizedBox(height: 10),
-                    const ContactPreference(),
+                    DropDown(
+                      label: 'Contact Preference',
+                      options: const ['PHONE', 'SMS', 'EMAIL'],
+                      setValue: setContactPreference,
+                    ),
+                    //const ContactPreference(),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -439,222 +541,9 @@ class LastName extends StatelessWidget {
   }
 }
 
-//TODO: move this to a dropdown widget
-class Gender extends StatefulWidget {
-  const Gender({Key? key}) : super(key: key);
 
-  @override
-  State<Gender> createState() => _GenderState();
-}
 
-class _GenderState extends State<Gender> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Gender"),
-        ),
-        SizedBox(
-          width: 320,
-          child: FormBuilderDropdown<String>(
-            name: 'gender',
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              border: UnderlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-            ),
-            items: <String>['MALE', 'FEMALE', 'OTHER'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            hint: const Text("Select gender"),
-            onChanged: (String? val) {
-              context.read<PatientCubit>().setGender(val);
-            },
-            validator: FormBuilderValidators.required(context,
-                errorText: 'Gender is required'),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
-class Religion extends StatefulWidget {
-  const Religion({Key? key}) : super(key: key);
-
-  @override
-  State<Religion> createState() => _ReligionState();
-}
-
-class _ReligionState extends State<Religion> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Religion"),
-        ),
-        SizedBox(
-          width: 320,
-          child: FormBuilderDropdown<String>(
-            name: 'religion',
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              border: UnderlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-            ),
-            items: <String>[
-              'HINDUISM',
-              'BUDDHISM',
-              'JUDAISM',
-              'CHRISTIANITY',
-              'ISLAM',
-              'OTHER',
-            ].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            hint: const Text("Select religion"),
-            onChanged: (String? val) {
-              context.read<PatientCubit>().setReligion(val);
-            },
-            validator: FormBuilderValidators.required(context,
-                errorText: 'Religion is required'),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class EducationLevel extends StatefulWidget {
-  const EducationLevel({Key? key}) : super(key: key);
-
-  @override
-  State<EducationLevel> createState() => _EducationLevelState();
-}
-
-class _EducationLevelState extends State<EducationLevel> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Education Level"),
-        ),
-        SizedBox(
-          width: 320,
-          child: FormBuilderDropdown<String>(
-            name: 'education level',
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              border: UnderlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-            ),
-            items: <String>[
-              'NONE',
-              'PRE_PRIMARY',
-              'PRIMARY',
-              'LOWER_SECONDARY',
-              'UPPER_SECONDARY',
-              'POST_SECONDARY',
-              'SHORT_CYCLE_TERTIARY',
-              'BACHELORS_DEGREE',
-              'MASTERS_DEGREE',
-              'DOCTORATE',
-            ].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            hint: const Text("Select education level"),
-            onChanged: (String? val) {
-              context.read<PatientCubit>().setEducationLevel(val);
-            },
-            validator: FormBuilderValidators.required(context,
-                errorText: 'Education level is required'),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class Ethnicity extends StatefulWidget {
-  const Ethnicity({Key? key}) : super(key: key);
-
-  @override
-  State<Ethnicity> createState() => _EthnicityState();
-}
-
-class _EthnicityState extends State<Ethnicity> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Ethnicity"),
-        ),
-        SizedBox(
-          width: 320,
-          child: FormBuilderDropdown<String>(
-            name: 'ethnicity',
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              border: UnderlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-            ),
-            items: <String>[
-              'HAUSA',
-              'YORUBA',
-              'IJAW',
-              'IGBO',
-              'IBIBIO',
-              'TIV',
-              'FULANI',
-              'KANURI',
-              'OTHER',
-            ].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            hint: const Text("Select ethnicity"),
-            onChanged: (String? val) {
-              context.read<PatientCubit>().setEthnicity(val);
-            },
-            validator: FormBuilderValidators.required(context,
-                errorText: 'Ethnicity level is required'),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class PhoneNumber extends StatelessWidget {
   const PhoneNumber({Key? key, required this.validator}) : super(key: key);
@@ -826,54 +715,6 @@ class Address extends StatelessWidget {
   }
 }
 
-class ContactPreference extends StatefulWidget {
-  const ContactPreference({Key? key}) : super(key: key);
-
-  @override
-  State<ContactPreference> createState() => _ContactPreferenceState();
-}
-
-class _ContactPreferenceState extends State<ContactPreference> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Contact Preference"),
-        ),
-        SizedBox(
-          width: 320,
-          child: FormBuilderDropdown<String>(
-            name: 'contact preference',
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
-            ),
-            items: <String>['PHONE', 'SMS', 'EMAIL'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            hint: const Text("Select contact preference"),
-            onChanged: (String? val) {
-              context.read<PatientCubit>().setContactPreference(val);
-            },
-            validator: FormBuilderValidators.required(context,
-                errorText: 'Contact preference is required'),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class EmergencyContact extends StatelessWidget {
   const EmergencyContact({Key? key}) : super(key: key);

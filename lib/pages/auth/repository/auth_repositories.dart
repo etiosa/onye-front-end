@@ -7,6 +7,8 @@ class AuthRepository {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
+
+    // ignore: prefer_typing_uninitialized_variables
   Future<http.Response?> signIn({String? username, String? password}) async {
     // ignore: prefer_typing_uninitialized_variables
     try {
@@ -18,14 +20,16 @@ class AuthRepository {
           },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
-      return response;
-    } catch (e) {
+        return response;
+
+    } catch(e){
       return null;
     }
   }
 
   Future<http.Response?> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
+
     dynamic body;
     try {
       http.Response response = await http.get(uri, headers: {
@@ -59,4 +63,4 @@ class AuthRepository {
       return body;
     }
   }
-}
+  }
