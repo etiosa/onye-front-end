@@ -73,7 +73,7 @@ class _AppointmentsState extends State<Appointments> {
                         ),
                         onPressed: () {
                           Navigator.of(context).pushNamed(
-                              '/dashboard/appointment/createApppointment');
+                              '/dashboard/appointment/createAppointment');
                         },
                       ),
                     ),
@@ -416,7 +416,7 @@ class RescheduleAppointmentButton extends StatelessWidget {
   RescheduleAppointmentButton({Key? key, required this.appointment})
       : super(key: key);
 
-  var appointment;
+  dynamic appointment;
 
   @override
   Widget build(BuildContext context) {
@@ -445,9 +445,9 @@ class RescheduleAppointmentButton extends StatelessWidget {
   Future<String?> showDialogConfirmation(
       BuildContext context, dynamic appointment) {
     final AuthSession authsession = AuthSession();
-    var hometoken;
+    dynamic homeToken;
 
-    authsession.getHomeToken()?.then((value) => hometoken = value);
+    authsession.getHomeToken()?.then((value) => homeToken = value);
 
     return showDialog<String>(
       context: context,
@@ -520,9 +520,9 @@ class RescheduleAppointmentButton extends StatelessWidget {
                         .updateAppointment(
                           id: appointment['id'],
                           date:
-                              context.read<AppointmentCubit>().state.startDate,
+                              context.read<AppointmentCubit>().state.appointmentDate,
                           time:
-                              context.read<AppointmentCubit>().state.startTime,
+                              context.read<AppointmentCubit>().state.appointmentTime,
                           languagePreference: 'en',
                           typeOfVisit: context
                               .read<AppointmentCubit>()
@@ -532,7 +532,7 @@ class RescheduleAppointmentButton extends StatelessWidget {
                               .read<AppointmentCubit>()
                               .state
                               .reasonForVisit,
-                          token: hometoken,
+                          token: homeToken,
                         );
 
                     response.then((value) => {
@@ -702,7 +702,7 @@ Future dateTimePicker(BuildContext context, String label) async {
 
   String formatTime = newTime.format(context);
 
-  context.read<AppointmentCubit>().setStartTime(formatTime);
+  context.read<AppointmentCubit>().setAppointmentTime(formatTime);
 }
 
 class DatePickerField extends StatelessWidget {
@@ -754,19 +754,9 @@ class TextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (label == 'From') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(
-          context.read<AppointmentCubit>().state.startDate,
-          style: const TextStyle(fontSize: 12),
-        ),
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-      child: Text(context.read<AppointmentCubit>().state.startDate,
+      child: Text(context.read<AppointmentCubit>().state.appointmentDate,
           style: const TextStyle(fontSize: 12)),
     );
   }
@@ -778,30 +768,15 @@ class TimeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (label == 'From') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(
-          context.read<AppointmentCubit>().state.startTime,
-          style: const TextStyle(fontSize: 12),
-        ),
-      );
-    }
-    if (label == 'To') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.startTime,
-            style: const TextStyle(fontSize: 12)),
-      );
-    }
-    return Text(context.read<AppointmentCubit>().state.startTime);
+    return Text(context.read<AppointmentCubit>().state.appointmentTime);
   }
 }
 
 Future datePicker(BuildContext context, String label) async {
   var dateFormat = DateFormat('yyyy-MM-dd');
 
-  final initDate = DateTime.now();
+  DateTime initDate = DateTime.now();
+
   final newDate = await showDatePicker(
       context: context,
       initialDate: initDate,
@@ -812,7 +787,7 @@ Future datePicker(BuildContext context, String label) async {
 
   // ignore: unnecessary_null_comparison
   if (newDate == null) return;
-  context.read<AppointmentCubit>().setStartDate(formattedDate);
+  context.read<AppointmentCubit>().setAppointmentDate(formattedDate);
 }
 
 // ignore: must_be_immutable

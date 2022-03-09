@@ -9,9 +9,9 @@ class AppointmentState extends Equatable {
       {this.appointmentList = const [],
       this.patientsList = const [],
       this.searchParams = '',
-      this.startDateTime = '',
-      this.startDate = '',
-      this.startTime = '',
+      this.appointmentDateTime = '',
+      this.appointmentDate = '',
+      this.appointmentTime = '',
       this.searchState = SEARCHSTATE.inital,
       this.doctorsList = const [],
       this.registrationList = const [],
@@ -26,17 +26,17 @@ class AppointmentState extends Equatable {
       this.patientRegistered = false,
       this.clinicalNote = '',
       this.clinicalNoteTitle = '',
-      this.maxPageNumber=0,  
-      this.nextPage=0,    
+      this.maxPageNumber = 0,
+      this.nextPage = 0,
       this.clinicalNoteType = ''});
 
   final List<dynamic> appointmentList;
   final List<dynamic> registrationList;
   final List<dynamic> patientsList;
   final String searchParams;
-  final String startDateTime;
-  final String startDate;
-  final String startTime;
+  final String appointmentDateTime;
+  final String appointmentDate;
+  final String appointmentTime;
   final String selectedPatientId;
   final String selectedMedicalPersonnelId;
   final List<dynamic> doctorsList;
@@ -59,9 +59,9 @@ class AppointmentState extends Equatable {
         appointmentList,
         patientsList,
         searchParams,
-        startDateTime,
-        startDate,
-        startTime,
+        appointmentDateTime,
+        appointmentDate,
+        appointmentTime,
         doctorsList,
         searchState,
         selectedMedicalPersonnelId,
@@ -88,11 +88,10 @@ class AppointmentState extends Equatable {
       List<dynamic>? appointmentList,
       List<dynamic>? patientsList,
       List<dynamic>? doctorsList,
-      String? startDateTime,
       List<dynamic>? registrationList,
-      String? startTime,
-      String? endTime,
-      String? startDate,
+      String? appointmentDateTime,
+      String? appointmentTime,
+      String? appointmentDate,
       String? selectedPatientId,
       String? selectedMedicalPersonnelId,
       SEARCHSTATE? searchState,
@@ -107,8 +106,8 @@ class AppointmentState extends Equatable {
       int? nextPage,
       int? maxPageNumber}) {
     return AppointmentState(
-      nextPage: nextPage?? this.nextPage,
-      maxPageNumber: maxPageNumber?? this.maxPageNumber,
+        nextPage: nextPage ?? this.nextPage,
+        maxPageNumber: maxPageNumber ?? this.maxPageNumber,
         clinicalNoteType: clinicalNoteType ?? this.clinicalNoteType,
         clinicalNote: clinicalNote ?? this.clinicalNote,
         clinicalNoteTitle: clinicalNoteTitle ?? this.clinicalNoteTitle,
@@ -127,9 +126,9 @@ class AppointmentState extends Equatable {
         searchState: searchState ?? this.searchState,
         searchParams: searchParams ?? this.searchParams,
         doctorsList: doctorsList ?? this.doctorsList,
-        startDate: startDate ?? this.startDate,
-        startTime: startTime ?? this.startTime,
-        startDateTime: startDateTime ?? this.startDateTime,
+        appointmentDate: appointmentDate ?? this.appointmentDate,
+        appointmentTime: appointmentTime ?? this.appointmentTime,
+        appointmentDateTime: appointmentDateTime ?? this.appointmentDateTime,
         appointmentList: appointmentList ?? this.appointmentList,
         patientsList: patientsList ?? this.patientsList);
   }

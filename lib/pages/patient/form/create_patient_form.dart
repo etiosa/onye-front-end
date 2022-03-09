@@ -198,24 +198,32 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InputField(label: 'First Name', setValue: setFirstName),
-                    // FirstName(),
-                    SizedBox(height: 10),
-                    InputField(label: 'Middle Name', setValue: setMiddleName),
-                    // MiddleName(),
-                    SizedBox(height: 10),
-                    InputField(label: 'Last Name', setValue: setLastName),
-
-                    // LastName(),
-                    SizedBox(height: 10),
-                    DatePickerField(),
-                    SizedBox(height: 10),
+                    InputField(
+                      label: 'First Name',
+                      setValue: setFirstName,
+                      isRequired: true,
+                    ),
+                    const SizedBox(height: 10),
+                    InputField(
+                      label: 'Middle Name',
+                      setValue: setMiddleName,
+                      isRequired: false,
+                    ),
+                    const SizedBox(height: 10),
+                    InputField(
+                      label: 'Last Name',
+                      setValue: setLastName,
+                      isRequired: true,
+                    ),
+                    const SizedBox(height: 10),
+                    const DatePickerField(),
+                    const SizedBox(height: 10),
                     DropDown(
                       label: 'Gender',
                       options: const ['MALE', 'FEMALE', 'OTHER'],
                       setValue: setGender,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     DropDown(
                       label: 'Religion',
                       options: const [
@@ -228,8 +236,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                       ],
                       setValue: setReligion,
                     ),
-                    //Religion(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     DropDown(
                       label: 'Education Level',
                       options: const [
@@ -246,8 +253,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                       ],
                       setValue: setReligion,
                     ),
-                    // EducationLevel(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     DropDown(
                       label: 'Ethnicity',
                       options: const [
@@ -263,8 +269,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                       ],
                       setValue: setEthnicity,
                     ),
-                    // Ethnicity(),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -295,10 +300,7 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
   final PatientFormValidator validator;
 
   void setContactPreference(String? value) {
-    //print(value);
     context.read<PatientCubit>().setContactPreference(value);
-    // print(context.read<PatientCubit>().state.gender);
-    // setMethod(label, value!);
   }
 
   void setLastName(String? firstName) {
@@ -432,111 +434,6 @@ class DatePickerField extends StatelessWidget {
           ],
         ));
       },
-    );
-  }
-}
-
-class FirstName extends StatelessWidget {
-  const FirstName({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 1.0),
-          child: Text("First Name"),
-        ),
-        SizedBox(
-          width: 320,
-          child: TextFormField(
-            onChanged: (firstName) =>
-                context.read<PatientCubit>().setFirstName(firstName),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
-            ),
-            validator: FormBuilderValidators.required(context,
-                errorText: 'First name is required'),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class MiddleName extends StatelessWidget {
-  const MiddleName({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 1.0),
-          child: Text("Middle Name"),
-        ),
-        SizedBox(
-          width: 320,
-          child: TextFormField(
-            onChanged: (middleName) =>
-                context.read<PatientCubit>().setMiddleName(middleName),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class LastName extends StatelessWidget {
-  const LastName({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(1.0),
-          child: Text("Last Name"),
-        ),
-        SizedBox(
-          width: 320,
-          child: TextFormField(
-            onChanged: (lastName) =>
-                context.read<PatientCubit>().setLastName(lastName),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
-            ),
-            validator: FormBuilderValidators.required(context,
-                errorText: 'Last name is required'),
-          ),
-        ),
-      ],
     );
   }
 }

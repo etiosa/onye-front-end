@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class InputField extends StatelessWidget {
-  InputField({Key? key, required this.label, required this.setValue})
+  InputField(
+      {Key? key,
+      required this.label,
+      required this.setValue,
+      required this.isRequired})
       : super(key: key);
   final String label;
   Function setValue;
+  bool isRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +18,7 @@ class InputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-      Padding(
+        Padding(
           padding: const EdgeInsets.only(left: 1.0),
           child: Text(label),
         ),
@@ -32,8 +37,10 @@ class InputField extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
-            validator: FormBuilderValidators.required(context,
-                errorText: '$label is required'),
+            validator: isRequired
+                ? FormBuilderValidators.required(context,
+                    errorText: '$label is required')
+                : null,
           ),
         ),
       ],

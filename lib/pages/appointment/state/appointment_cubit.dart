@@ -31,9 +31,9 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   //TODO: separate this method
 
   void searchPatients({String? query, String? token, int? nextPage}) async {
-    var searchReponse = await _appointmentRepository.searchPatients(
+    var searchResponse = await _appointmentRepository.searchPatients(
         searchParams: query, token: token);
-    var body = json.decode(searchReponse!.body);
+    var body = json.decode(searchResponse!.body);
     var totalPages = body['totalPages'];
 
     var patientsList = body['elements'];
@@ -111,19 +111,14 @@ emit(state.copyWith(
     emit(state.copyWith(searchParams: searchParams));
   }
 
-  void setStartTime(String? argStartTime) {
-    final String startTime = argStartTime!;
-    emit(state.copyWith(startTime: startTime));
+  void setAppointmentTime(String? argAppointmentTime) {
+    final String appointmentTime = argAppointmentTime!;
+    emit(state.copyWith(appointmentTime: appointmentTime));
   }
 
-  void setEndTime(String? argEndTime) {
-    final String endTime = argEndTime!;
-    emit(state.copyWith(endTime: endTime));
-  }
-
-  void setStartDate(String? argStartDate) {
-    final String startDate = argStartDate!;
-    emit(state.copyWith(startDate: startDate));
+  void setAppointmentDate(String? argAppointmentDate) {
+    final String appointmentDate = argAppointmentDate!;
+    emit(state.copyWith(appointmentDate: appointmentDate));
   }
 
   void setSelectedMedicalIndex(int? argSelectedIndex) {
@@ -158,14 +153,14 @@ emit(state.copyWith(
       String? medicalId,
       String? title,
       String? note,
-      String? registerationId,
+      String? registrationId,
       String? clinicalNoteType}) async {
     Response? req = await _appointmentRepository.createClinicalNote(
         token: token,
         patientId: patientId,
         medicalId: medicalId,
         note: note,
-        registerationId: registerationId,
+        registerationId: registrationId,
         clincialNoteType: clinicalNoteType,
         title: title);
 
@@ -186,7 +181,6 @@ emit(state.copyWith(
         appointmentId: appointmentId,
         reasons: reasons,
         typeOfVisit: typeOfVisit);
-    print(token);
     searchRegistrations(token: token);
 
     return req;
@@ -234,9 +228,9 @@ emit(state.copyWith(
     emit(state.copyWith(nextPage: nextPage));
     if (state.nextPage <= state.maxPageNumber) {
       //call search
-      var searchReponse = await _appointmentRepository.searchRegistrations(
+      var searchResponse = await _appointmentRepository.searchRegistrations(
           token: token, searchParams: searchParams, nextPage: state.nextPage);
-      var body = json.decode(searchReponse!.body);
+      var body = json.decode(searchResponse!.body);
       var registrationsList = body['elements'];
       emit(state.copyWith(registrationList: registrationsList));
     }

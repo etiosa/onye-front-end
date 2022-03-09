@@ -193,7 +193,7 @@ Future dateTimePicker(BuildContext context, String label) async {
 
   String formatTime = newTime.format(context);
 
-  context.read<AppointmentCubit>().setStartTime(formatTime);
+  context.read<AppointmentCubit>().setAppointmentTime(formatTime);
 }
 
 class DateTimePickerField extends StatelessWidget {
@@ -248,7 +248,7 @@ class TimeContent extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.only(top: 15.0, left: 5.0),
         child: Text(
-          context.read<AppointmentCubit>().state.startTime,
+          context.read<AppointmentCubit>().state.appointmentTime,
           style: const TextStyle(fontSize: 12),
         ),
       );
@@ -256,11 +256,11 @@ class TimeContent extends StatelessWidget {
     if (label == 'To') {
       return Padding(
         padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-        child: Text(context.read<AppointmentCubit>().state.startTime,
+        child: Text(context.read<AppointmentCubit>().state.appointmentTime,
             style: const TextStyle(fontSize: 12)),
       );
     }
-    return Text(context.read<AppointmentCubit>().state.startTime);
+    return Text(context.read<AppointmentCubit>().state.appointmentTime);
   }
 }
 
@@ -278,7 +278,7 @@ Future datePicker(BuildContext context, String label) async {
 
   // ignore: unnecessary_null_comparison
   if (newDate == null) return;
-  context.read<AppointmentCubit>().setStartDate(formattedDate);
+  context.read<AppointmentCubit>().setAppointmentDate(formattedDate);
 }
 
 class DatePickerField extends StatelessWidget {
@@ -334,7 +334,7 @@ class TextContent extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.only(top: 15.0, left: 5.0),
         child: Text(
-          context.read<AppointmentCubit>().state.startDate,
+          context.read<AppointmentCubit>().state.appointmentDate,
           style: const TextStyle(fontSize: 12),
         ),
       );
@@ -342,7 +342,7 @@ class TextContent extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(top: 15.0, left: 5.0),
-      child: Text(context.read<AppointmentCubit>().state.startDate,
+      child: Text(context.read<AppointmentCubit>().state.appointmentDate,
           style: const TextStyle(fontSize: 12)),
     );
   }
@@ -464,12 +464,12 @@ class RegisterField extends StatelessWidget {
                                           context
                                               .read<AppointmentCubit>()
                                               .state
-                                              .startDate,
+                                              .appointmentDate,
                                       time:
                                           context
                                               .read<AppointmentCubit>()
                                               .state
-                                              .startTime,
+                                              .appointmentTime,
                                       patientID:
                                           context
                                               .read<AppointmentCubit>()

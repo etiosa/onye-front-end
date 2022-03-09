@@ -649,7 +649,7 @@ class Confirmation extends StatelessWidget {
                       .read<AppointmentCubit>()
                       .createClinicalNote(
                           token: homeToken,
-                          registerationId: appointment['id'],
+                          registrationId: appointment['id'],
                           medicalId: context.read<LoginCubit>().state.id,
                           note: context
                               .read<AppointmentCubit>()
