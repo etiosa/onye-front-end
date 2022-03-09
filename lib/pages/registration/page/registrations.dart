@@ -145,7 +145,70 @@ class _RegistrationState extends State<Registration> {
   }
 
   Widget registrationBody() {
-    return (const Appointment());
+    print(context.read<AppointmentCubit>().state.maxPageNumber);
+    const int heightOffset = 300;
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height - heightOffset,
+          child: Column(
+            children: [
+              (const Appointment()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (var index = 0;
+                      index <=
+                          context.read<AppointmentCubit>().state.maxPageNumber;
+                      index++)
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: InkWell(
+                        onTap: () {
+                          print("was tap $index");
+                          context
+                              .read<AppointmentCubit>()
+                              .setNextPage(nextPage: index, token:  context.read<LoginCubit>().state.homeToken, searchParams: context.read<AppointmentCubit>().state.searchParams);
+                        },
+                        child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 56, 155, 152),
+                                borderRadius: BorderRadius.circular(100)),
+                            child: Center(
+                                child: Text(
+                              "${index+1}",
+                              style: const TextStyle(color: Colors.white),
+                            ))),
+                      ),
+                    )
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+
+    /*  return SizedBox(
+      height: MediaQuery.of(context).size.height - heightOffset,
+      child: Column(
+        children: [
+          (const Appointment()),
+        
+            Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              for (var index = 0;
+                  index <= context.read<AppointmentCubit>().state.maxPageNumber;
+                  index++)
+                Text("New $index")
+            ],
+          ) 
+        ],
+      ),
+    ); */
   }
 }
 
@@ -206,7 +269,7 @@ class _AppointmentState extends State<Appointment> {
                                       height: 10.0,
                                       color: Colors.white,
                                     ),
-                                     Container(
+                                    Container(
                                       width: double.infinity,
                                       height: 10.0,
                                       color: Colors.white,
@@ -216,7 +279,6 @@ class _AppointmentState extends State<Appointment> {
                                       height: 10.0,
                                       color: Colors.white,
                                     ),
-                                   
                                   ],
                                 ))
                               ],
@@ -470,13 +532,13 @@ class Confirmation extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         content: const Text('Add clinical Note'),
-        actions: ClinicalNoteForm(
+        actions: clinicaNoteForm(
             appointment, _patientName, context, note, hometoken),
       ),
     );
   }
 
-  List<Widget> ClinicalNoteForm(appointment, _patientName, BuildContext context,
+  List<Widget> clinicaNoteForm(appointment, _patientName, BuildContext context,
       String? note, hometoken) {
     return <Widget>[
       Row(
@@ -543,7 +605,6 @@ class Confirmation extends StatelessWidget {
           TextButton(
               onPressed: () {
                 if (appointment.containsKey('clinicalNoteId')) {
-                  print('save clincial note');
                   var response =
                       context.read<AppointmentCubit>().updateClinicalNote(
                             token: hometoken,
@@ -637,7 +698,6 @@ class Confirmation extends StatelessWidget {
                                 'Could not create Clinical Note'),
                           }
                       });
-                  //Navigator.pop(context, 'Add');
                 }
               },
               child: Text(
@@ -660,11 +720,10 @@ class ClinicalNoteTitleField extends StatefulWidget {
 }
 
 class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
-    String? _selectedText;
+  String? _selectedText;
 
   @override
-  
-   void initState() {
+  void initState() {
     // TODO: implement initState
     super.initState();
 
@@ -677,9 +736,10 @@ class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
         builder: (context, state) {
-    if (state.clinicalNoteTitle.isNotEmpty &&
+      if (state.clinicalNoteTitle.isNotEmpty &&
           state.clinicalNoteTitle != _controller.text) {
-        _controller.text = context.read<AppointmentCubit>().state.clinicalNoteTitle;
+        _controller.text =
+            context.read<AppointmentCubit>().state.clinicalNoteTitle;
       }
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Padding(
@@ -692,8 +752,7 @@ class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
           ),
         ),
         TextFormField(
-           controller: _controller,
-        
+          controller: _controller,
           onChanged: (title) =>
               context.read<AppointmentCubit>().setClinicalNoteTitle(title),
           decoration: const InputDecoration(
@@ -770,7 +829,6 @@ class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
               controller: _controller,
               maxLines: 7,
               onChanged: (note) {
-                print(note);
                 setState(() {
                   _selectedText = note;
                   context.read<AppointmentCubit>().setClinicalNote(note);

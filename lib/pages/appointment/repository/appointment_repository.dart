@@ -319,8 +319,9 @@ class AppointmentRepository {
     }
   }
 
-  Future<List<dynamic>> searchRegistrations(
-      {String? token, String? searchParams}) async {
+  Future<http.Response?> searchRegistrations(
+      {String? token, String? searchParams, int?nextPage=0}) async {
+    int pageNumber = 3;
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
@@ -328,19 +329,29 @@ class AppointmentRepository {
       'to': '2024-01-01T00:00',
       'query': searchParams!,
       'zoneId': 'Africa/Lagos',
+      "page": "$nextPage"
     });
-    http.Response response = await http.get(
-      uri,
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    );
-    var body = json.decode(response.body);
- 
-    var registrationsList = body['elements'];
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } catch (err) {
+      return null;
+    }
+    // var body = json.decode(response.body);
+    // print(body);
+    //i need totalpages from here
 
-    return registrationsList;
+    //var registrationsList = body['elements'];
+    //var reg = <String,List<dynamic>>{};
+    //reg.addEntries('elements':registrationsList);
+
+    // return registrationsList;
   }
 }

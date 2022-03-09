@@ -181,16 +181,39 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         clinicalNoteType: body['type']));
   }
 
-  void searchRegistrations({String? token, String? searchParams}) async {
+  void searchRegistrations(
+      {String? token, String? searchParams, int? nextPage}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
-    var registrationsList = await _appointmentRepository.searchRegistrations(
+    var searchReponse = await _appointmentRepository.searchRegistrations(
         token: token, searchParams: searchParams);
-    emit(state.copyWith(registrationList: registrationsList));
+
+    var body = json.decode(searchReponse!.body);
+    var registrationsList = body['elements'];
+    var totalPages = body['totalPages'];
+
+    //print(searchReponse!.body);
+
+    emit(state.copyWith(
+        registrationList: registrationsList, maxPageNumber: totalPages));
+    print(state.maxPageNumber);
 
     if (state.registrationList.isEmpty) {
       emit(state.copyWith(searchState: SEARCHSTATE.notFound));
     } else {
       emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
+    }
+  }
+
+  void setNextPage({int? nextPage, String? token, String? searchParams}) async {
+    emit(state.copyWith(nextPage: nextPage));
+    if (state.nextPage <= state.maxPageNumber) {
+      //call search
+      var searchReponse = await _appointmentRepository.searchRegistrations(
+          token: token, searchParams: searchParams, nextPage: state.nextPage);
+      var body = json.decode(searchReponse!.body);
+          var registrationsList = body['elements'];
+emit(state.copyWith(
+          registrationList: registrationsList));
     }
   }
 
