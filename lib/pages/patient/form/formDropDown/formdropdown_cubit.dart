@@ -17,34 +17,23 @@ class FormdropdownCubit extends Cubit<FormdropdownState> {
     emit(state);
   }
 
-  void educationDropDown () async {
-  final dropDown = await _downRepositories.getFormDropDown();
-  emit(state.copyWith(educationLevel: dropDown['educationLevel']));
-
-
+  void educationDropDown() async {
+    final dropDown = await _downRepositories.getFormDropDown();
+    emit(state.copyWith(educationLevel: dropDown['educationLevel']));
   }
 
-
-    void genderDropDown() async {
+  void genderDropDown() async {
     final dropDown = await _downRepositories.getFormDropDown();
     emit(state.copyWith(gender: dropDown['gender']));
-
-    }
-
-  void religionDropDown() async {
-  final dropDown = await _downRepositories.getFormDropDown();
-  emit(state.copyWith(religion: dropDown['religion']));
-
-
   }
 
-    void ethnicityDropDown() async {
+  void religionDropDown() async {
     final dropDown = await _downRepositories.getFormDropDown();
-      emit(state.copyWith(ethnicity: dropDown['ethnicity']));
+    emit(state.copyWith(religion: dropDown['religion']));
+  }
 
-
-    }
-
-
-
+  void ethnicityDropDown() async {
+    final dropDown = await _downRepositories.getFormDropDown();
+    emit(state.copyWith(ethnicity: dropDown['ethnicity']));
+  }
 }
