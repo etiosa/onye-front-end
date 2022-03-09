@@ -20,8 +20,6 @@ class PatientRepositories {
       String? zipCode,
       String? addressLine1,
       String? addressLine2,
-      String? addressLine3,
-      String? addressLine4,
       String? city,
       String? ethnicity,
       String? contactPreference,
