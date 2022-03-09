@@ -36,29 +36,61 @@ class AppointmentRepository {
     return appointmentList;
   }
 
-  Future<List<dynamic>> searchPatients(
-      {String? searchParams, String? token}) async {
+/*   Future<http.Response?> searchRegistrations(
+      {String? token, String? searchParams, int? nextPage = 0}) async {
+    int pageNumber = 3;
+    var uri =
+        Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
+            .replace(queryParameters: <String, String>{
+      'from': '2020-01-01T00:00',
+      'to': '2024-01-01T00:00',
+      'query': searchParams!,
+      'zoneId': 'Africa/Lagos',
+      "page": "$nextPage"
+    });
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } catch (err) {
+      return null;
+    }
+  }
+ */
+//TODO: move to patientCubit
+  Future<http.Response?> searchPatients(
+      {String? searchParams, String? token, int? nextPage=0}) async {
     var uri = Uri.parse(root + 'api/rest/v1/patient/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
+      "page":"$nextPage"
     });
 
     // http call
-    http.Response response = await http.get(
-      uri,
-      headers: {
-        "Accept": accept,
-        "Content-Type": contentType,
-        "Authorization": "Bearer $token",
-      },
-    );
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Accept": accept,
+          "Content-Type": contentType,
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } catch (ee) {
+      return null;
+    }
 
-    var body = json.decode(response.body);
-    var patientsList = body['elements'];
-
-    return patientsList;
+  
   }
 
+//TODO: move to DoctorCubit
   Future<List<dynamic>> searchDoctors(
       {String? searchParams, String? token}) async {
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
@@ -291,7 +323,6 @@ class AppointmentRepository {
             "Authorization": "Bearer $token",
           },
           body: json.encode({"type": type, "title": title, "text": noteText}));
-      print(response);
       return response;
     } catch (e) {
       return null;
@@ -320,7 +351,7 @@ class AppointmentRepository {
   }
 
   Future<http.Response?> searchRegistrations(
-      {String? token, String? searchParams, int?nextPage=0}) async {
+      {String? token, String? searchParams, int? nextPage = 0}) async {
     int pageNumber = 3;
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
@@ -344,14 +375,5 @@ class AppointmentRepository {
     } catch (err) {
       return null;
     }
-    // var body = json.decode(response.body);
-    // print(body);
-    //i need totalpages from here
-
-    //var registrationsList = body['elements'];
-    //var reg = <String,List<dynamic>>{};
-    //reg.addEntries('elements':registrationsList);
-
-    // return registrationsList;
   }
 }

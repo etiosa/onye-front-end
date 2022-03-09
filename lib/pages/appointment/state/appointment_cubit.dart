@@ -30,11 +30,41 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   //TODO: separate this method
 
-  void searchPatients({String? query, String? token}) async {
-    var patients = await _appointmentRepository.searchPatients(
+  void searchPatients({String? query, String? token, int? nextPage}) async {
+    var searchReponse = await _appointmentRepository.searchPatients(
         searchParams: query, token: token);
-    emit(state.copyWith(patientsList: patients));
+    var body = json.decode(searchReponse!.body);
+    var totalPages = body['totalPages'];
+
+    var patientsList = body['elements'];
+    emit(state.copyWith(patientsList: patientsList, maxPageNumber: totalPages));
   }
+
+  void setPatientNextSearchIndex(
+      {int? nextPage, String? token, String? searchParams}) async {
+    if (state.nextPage <= state.maxPageNumber) {
+      var searchReponse = await _appointmentRepository.searchPatients(
+          searchParams: searchParams, token: token, nextPage: nextPage);
+
+      var body = json.decode(searchReponse!.body);
+      var patientsList = body['elements'];
+      emit(state.copyWith(patientsList: patientsList));
+    }
+  }
+
+/*   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
+    emit(state.copyWith(nextPage: nextPage));
+    if (state.nextPage <= state.maxPageNumber) {
+      //call search
+      var searchReponse = await _appointmentRepository.searchRegistrations(
+          token: token, searchParams: searchParams, nextPage: state.nextPage);
+      var body = json.decode(searchReponse!.body);
+          var registrationsList = body['elements'];
+emit(state.copyWith(
+          registrationList: registrationsList));
+    }
+  }
+*/
 
   void searchDoctors({String? query, String? token}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.startsearch));
@@ -190,12 +220,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     var body = json.decode(searchReponse!.body);
     var registrationsList = body['elements'];
     var totalPages = body['totalPages'];
-
-    //print(searchReponse!.body);
-
     emit(state.copyWith(
         registrationList: registrationsList, maxPageNumber: totalPages));
-    print(state.maxPageNumber);
 
     if (state.registrationList.isEmpty) {
       emit(state.copyWith(searchState: SEARCHSTATE.notFound));
@@ -211,9 +237,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       var searchReponse = await _appointmentRepository.searchRegistrations(
           token: token, searchParams: searchParams, nextPage: state.nextPage);
       var body = json.decode(searchReponse!.body);
-          var registrationsList = body['elements'];
-emit(state.copyWith(
-          registrationList: registrationsList));
+      var registrationsList = body['elements'];
+      emit(state.copyWith(registrationList: registrationsList));
     }
   }
 
