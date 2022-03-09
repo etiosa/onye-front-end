@@ -147,7 +147,6 @@ class _RegistrationState extends State<Registration> {
   }
 
   Widget registrationBody() {
-    print(context.read<AppointmentCubit>().state.maxPageNumber);
     const int heightOffset = 300;
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
@@ -525,21 +524,21 @@ class Confirmation extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         content: const Text('Add clinical Note'),
-        actions: clinicaNoteForm(
+        actions: clinicalNoteForm(
             appointment, _patientName, context, note, hometoken),
       ),
     );
   }
 
-  List<Widget> clinicaNoteForm(appointment, _patientName, BuildContext context,
-      String? note, hometoken) {
+  List<Widget> clinicalNoteForm(appointment, _patientName, BuildContext context,
+      String? note, homeToken) {
     return <Widget>[
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           DropDown(
               label: 'Note Type',
-              registeration: appointment,
+              registration: appointment,
               options: const [
                 'CONSULTATION_NOTE',
                 'DISCHARGE_SUMMARY_NOTE',
@@ -600,7 +599,7 @@ class Confirmation extends StatelessWidget {
                 if (appointment.containsKey('clinicalNoteId')) {
                   var response =
                       context.read<AppointmentCubit>().updateClinicalNote(
-                            token: hometoken,
+                            token: homeToken,
                             id: appointment['clinicalNoteId'],
                             type: context
                                 .read<AppointmentCubit>()
@@ -627,7 +626,7 @@ class Confirmation extends StatelessWidget {
                             context
                                 .read<AppointmentCubit>()
                                 .getPatientClinicalNote(
-                                    token: hometoken,
+                                    token: homeToken,
                                     id: appointment['clinicalNoteId']),
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
@@ -649,7 +648,7 @@ class Confirmation extends StatelessWidget {
                   var response = context
                       .read<AppointmentCubit>()
                       .createClinicalNote(
-                          token: hometoken,
+                          token: homeToken,
                           registerationId: appointment['id'],
                           medicalId: context.read<LoginCubit>().state.id,
                           note: context
@@ -855,13 +854,13 @@ class DropDown extends StatefulWidget {
       {Key? key,
       required this.label,
       required this.options,
-      this.registeration})
+      this.registration})
       : super(
           key: key,
         );
   String label;
   List<String> options;
-  dynamic registeration;
+  dynamic registration;
 
   @override
   _DropDownState createState() => _DropDownState();
@@ -901,7 +900,7 @@ class _DropDownState extends State<DropDown> {
                     dropdownColor: const Color.fromARGB(255, 205, 226, 226),
                     isExpanded: true,
                     value: state.clinicalNoteType.isEmpty &&
-                            widget.registeration.containsKey('clinicalNoteId')
+                            widget.registration.containsKey('clinicalNoteId')
                         ? _selectedText
                         : state.clinicalNoteType,
                     hint: const Text("Select Note Type"),

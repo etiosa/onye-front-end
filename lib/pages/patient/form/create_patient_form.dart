@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:onye_front_ened/Widgets/DropDown.dart';
 import 'package:onye_front_ened/Widgets/InputField.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
-import 'package:onye_front_ened/Widgets/DropDown.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
@@ -207,7 +206,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                     SizedBox(height: 10),
                     InputField(label: 'Last Name', setValue: setLastName),
 
-                   // LastName(),
+                    // LastName(),
                     SizedBox(height: 10),
                     DatePickerField(),
                     SizedBox(height: 10),
@@ -294,6 +293,7 @@ class ContactInfoFormBody extends StatefulWidget {
 class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
   final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
+
   void setContactPreference(String? value) {
     //print(value);
     context.read<PatientCubit>().setContactPreference(value);
@@ -541,10 +541,6 @@ class LastName extends StatelessWidget {
   }
 }
 
-
-
-
-
 class PhoneNumber extends StatelessWidget {
   const PhoneNumber({Key? key, required this.validator}) : super(key: key);
 
@@ -655,6 +651,15 @@ class Address extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (!allAddressFieldsValid(context) &&
+                  value != null &&
+                  value.isEmpty) {
+                return 'Line 1 is required to complete address';
+              }
+              return null;
+            },
           ),
         ),
         const SizedBox(height: 10),
@@ -691,6 +696,15 @@ class Address extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (!allAddressFieldsValid(context) &&
+                  value != null &&
+                  value.isEmpty) {
+                return 'Zip code is required to complete address';
+              }
+              return null;
+            },
           ),
         ),
         const SizedBox(height: 10),
@@ -708,13 +722,44 @@ class Address extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (!allAddressFieldsValid(context) &&
+                  value != null &&
+                  value.isEmpty) {
+                return 'City is required to complete address';
+              }
+              return null;
+            },
           ),
         ),
       ],
     );
   }
-}
 
+  bool allAddressFieldsValid(BuildContext context) {
+    if (context.read<PatientCubit>().state.addressLine1 == null &&
+        context.read<PatientCubit>().state.zipCode == null &&
+        context.read<PatientCubit>().state.city == null) {
+      return true;
+    }
+
+    if (context.read<PatientCubit>().state.addressLine1 == null ||
+        context.read<PatientCubit>().state.addressLine1!.isEmpty) {
+      return false;
+    }
+    if (context.read<PatientCubit>().state.zipCode == null ||
+        context.read<PatientCubit>().state.zipCode!.isEmpty) {
+      return false;
+    }
+    if (context.read<PatientCubit>().state.city == null ||
+        context.read<PatientCubit>().state.city!.isEmpty) {
+      return false;
+    }
+
+    return true;
+  }
+}
 
 class EmergencyContact extends StatelessWidget {
   const EmergencyContact({Key? key}) : super(key: key);
@@ -729,7 +774,6 @@ class EmergencyContact extends StatelessWidget {
           child: Text("Emergency Contact"),
         ),
         SizedBox(
-          height: 45,
           width: 320,
           child: TextFormField(
             onChanged: (name) =>
@@ -744,11 +788,19 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (!allEmergencyContactFieldsAreValid(context) &&
+                  value != null &&
+                  value.isEmpty) {
+                return 'Name is required to complete emergency contact';
+              }
+              return null;
+            },
           ),
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 45,
           width: 320,
           child: TextFormField(
             onChanged: (phoneNumber) => context
@@ -764,11 +816,19 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (!allEmergencyContactFieldsAreValid(context) &&
+                  value != null &&
+                  value.isEmpty) {
+                return 'Phone number is required to complete emergency contact';
+              }
+              return null;
+            },
           ),
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 45,
           width: 320,
           child: TextFormField(
             onChanged: (relationship) => context
@@ -784,10 +844,54 @@ class EmergencyContact extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600),
             ),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              if (!allEmergencyContactFieldsAreValid(context) &&
+                  value != null &&
+                  value.isEmpty) {
+                return 'Relationship is required to complete emergency contact';
+              }
+              return null;
+            },
           ),
         ),
       ],
     );
+  }
+
+  bool allEmergencyContactFieldsAreValid(BuildContext context) {
+    if (context.read<PatientCubit>().state.emergencyContactName == null &&
+        context.read<PatientCubit>().state.emergencyContactPhoneNumber ==
+            null &&
+        context.read<PatientCubit>().state.emergencyContactRelationship ==
+            null) {
+      return true;
+    }
+
+    if (context.read<PatientCubit>().state.emergencyContactName == null ||
+        context.read<PatientCubit>().state.emergencyContactName!.isEmpty) {
+      return false;
+    }
+    if (context.read<PatientCubit>().state.emergencyContactPhoneNumber ==
+            null ||
+        context
+            .read<PatientCubit>()
+            .state
+            .emergencyContactPhoneNumber!
+            .isEmpty) {
+      return false;
+    }
+    if (context.read<PatientCubit>().state.emergencyContactRelationship ==
+            null ||
+        context
+            .read<PatientCubit>()
+            .state
+            .emergencyContactRelationship!
+            .isEmpty) {
+      return false;
+    }
+
+    return true;
   }
 }
 
