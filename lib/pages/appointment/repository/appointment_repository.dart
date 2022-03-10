@@ -354,12 +354,13 @@ class AppointmentRepository {
   Future<http.Response?> searchRegistrations(
       {String? token, String? searchParams, int? nextPage = 0}) async {
     int pageNumber = 3;
+    print('search params: $searchParams');
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
       'from': '2020-01-01T00:00',
       'to': '2024-01-01T00:00',
-      'query': searchParams!,
+      'query': searchParams ?? '',
       'zoneId': 'Africa/Lagos',
       "page": "$nextPage"
     });

@@ -880,8 +880,6 @@ class _DropDownState extends State<DropDown> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: ((context, state) {
-        //print("dropdown");
-        //print(state.clinicalNote);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
