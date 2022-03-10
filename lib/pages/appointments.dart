@@ -435,6 +435,12 @@ class RescheduleAppointmentButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {
+              var dateFormat = DateFormat('yyyy-MM-dd');
+              String? date = dateFormat.format(DateTime.parse(appointment['appointmentDateTime']));
+              String? time = TimeOfDay.fromDateTime(DateTime.parse(appointment['appointmentDateTime'])).format(context);
+
+              context.read<AppointmentCubit>().setAppointmentDate(date);
+              context.read<AppointmentCubit>().setAppointmentTime(time);
               showDialogConfirmation(context, appointment);
             },
             child: const Text('Edit')),

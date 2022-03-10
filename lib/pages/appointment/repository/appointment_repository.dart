@@ -96,6 +96,7 @@ class AppointmentRepository {
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
       'query': searchParams!,
+      'type': 'DOCTOR',
     });
 
     http.Response response = await http.get(
