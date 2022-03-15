@@ -32,7 +32,6 @@ class LoginCubit extends Cubit<LoginState> {
         username: state.userName, password: state.password);
     final body = jsonDecode(response!.body);
     final token = body['token'];
-    print(token);
     final statusCode = response.statusCode;
     emit(state.copywith(loginToken: token, statusCode: statusCode));
     home(homeToken: state.loginToken);
