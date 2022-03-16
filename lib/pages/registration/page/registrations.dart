@@ -163,13 +163,13 @@ class _RegistrationState extends State<Registration> {
                           context.read<AppointmentCubit>().state.maxPageNumber;
                       index++)
                     Padding(
-                      padding: const EdgeInsets.only(top:30.0),
+                      padding: const EdgeInsets.only(top: 30.0),
                       child: InkWell(
                         onTap: () {
                           setState(() {
                             initPageSelected = index;
                           });
-                        
+
                           context.read<AppointmentCubit>().setNextPage(
                               nextPage: index,
                               token: context.read<LoginCubit>().state.homeToken,
@@ -182,14 +182,19 @@ class _RegistrationState extends State<Registration> {
                             height: 45,
                             width: 45,
                             decoration: BoxDecoration(
-                                color:  initPageSelected ==index?  const Color.fromARGB(255, 56, 155, 152):Colors.transparent,
+                                color: initPageSelected == index
+                                    ? const Color.fromARGB(255, 56, 155, 152)
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(100)),
                             child: Center(
                                 child: Text(
                               "${index + 1}",
-                              style: TextStyle( fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                                color: initPageSelected ==index? Colors.white: const Color.fromARGB(
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: initPageSelected == index
+                                      ? Colors.white
+                                      : const Color.fromARGB(
                                           255, 56, 155, 152)),
                             ))),
                       ),
@@ -501,10 +506,7 @@ class Confirmation extends StatelessWidget {
         appointment['patient']['lastName'];
     final clincialNoteid = appointment['clinicalNoteId'];
     final AuthSession authsession = AuthSession();
-    //saved note type
-    //saved the title
-    //saved the note
-    String? note;
+
     String? title;
     String? noteType;
 
@@ -524,8 +526,8 @@ class Confirmation extends StatelessWidget {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         content: const Text('Add clinical Note'),
-        actions: clinicalNoteForm(
-            appointment, _patientName, context, note, hometoken),
+        actions:
+            clinicalNoteForm(appointment, _patientName, context, '', hometoken),
       ),
     );
   }
@@ -851,10 +853,7 @@ class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
 
 class DropDown extends StatefulWidget {
   DropDown(
-      {Key? key,
-      required this.label,
-      required this.options,
-      this.registration})
+      {Key? key, required this.label, required this.options, this.registration})
       : super(
           key: key,
         );
@@ -897,14 +896,15 @@ class _DropDownState extends State<DropDown> {
                   child: DropdownButton<String>(
                     dropdownColor: const Color.fromARGB(255, 205, 226, 226),
                     isExpanded: true,
-                    value: state.clinicalNoteType.isEmpty &&
+                    value: "test",
+                    /*   value: state.clinicalNoteType.isEmpty &&
                             widget.registration.containsKey('clinicalNoteId')
                         ? _selectedText
-                        : state.clinicalNoteType,
+                        : state.clinicalNoteType,  */
                     hint: const Text("Select Note Type"),
                     items: widget.options.map((String value) {
                       return DropdownMenuItem<String>(
-                        value: value,
+                      //  value: "test",
                         child: Text(value),
                       );
                     }).toList(),
