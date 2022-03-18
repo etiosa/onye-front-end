@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -163,13 +165,13 @@ class _RegistrationState extends State<Registration> {
                           context.read<AppointmentCubit>().state.maxPageNumber;
                       index++)
                     Padding(
-                      padding: const EdgeInsets.only(top:30.0),
+                      padding: const EdgeInsets.only(top: 30.0),
                       child: InkWell(
                         onTap: () {
                           setState(() {
                             initPageSelected = index;
                           });
-                        
+
                           context.read<AppointmentCubit>().setNextPage(
                               nextPage: index,
                               token: context.read<LoginCubit>().state.homeToken,
@@ -182,14 +184,19 @@ class _RegistrationState extends State<Registration> {
                             height: 45,
                             width: 45,
                             decoration: BoxDecoration(
-                                color:  initPageSelected ==index?  const Color.fromARGB(255, 56, 155, 152):Colors.transparent,
+                                color: initPageSelected == index
+                                    ? const Color.fromARGB(255, 56, 155, 152)
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(100)),
                             child: Center(
                                 child: Text(
                               "${index + 1}",
-                              style: TextStyle( fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                                color: initPageSelected ==index? Colors.white: const Color.fromARGB(
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: initPageSelected == index
+                                      ? Colors.white
+                                      : const Color.fromARGB(
                                           255, 56, 155, 152)),
                             ))),
                       ),
@@ -501,15 +508,11 @@ class Confirmation extends StatelessWidget {
         appointment['patient']['lastName'];
     final clincialNoteid = appointment['clinicalNoteId'];
     final AuthSession authsession = AuthSession();
-    //saved note type
-    //saved the title
-    //saved the note
-    String? note;
+
     String? title;
     String? noteType;
 
     var hometoken;
-
     authsession.getHomeToken()?.then((value) => {
           hometoken = value,
           if (appointment.containsKey('clinicalNoteId'))
@@ -519,13 +522,15 @@ class Confirmation extends StatelessWidget {
                   .getPatientClinicalNote(id: clincialNoteid, token: hometoken)
             }
         });
+    print(appointment);
+    print("appointment");
 
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         content: const Text('Add clinical Note'),
-        actions: clinicalNoteForm(
-            appointment, _patientName, context, note, hometoken),
+        actions:
+            clinicalNoteForm(appointment, _patientName, context, '', hometoken),
       ),
     );
   }
@@ -597,6 +602,7 @@ class Confirmation extends StatelessWidget {
           TextButton(
               onPressed: () {
                 if (appointment.containsKey('clinicalNoteId')) {
+                  print("update");
                   var response =
                       context.read<AppointmentCubit>().updateClinicalNote(
                             token: homeToken,
@@ -623,6 +629,10 @@ class Confirmation extends StatelessWidget {
                                   color: Colors.green,
                                 ),
                                 'Clinical Note updated'),
+                            //clearState after update
+                            context
+                                .read<AppointmentCubit>()
+                                .clearClinicalNoteState(),
                             context
                                 .read<AppointmentCubit>()
                                 .getPatientClinicalNote(
@@ -645,6 +655,8 @@ class Confirmation extends StatelessWidget {
                           }
                       });
                 } else {
+                  print("create");
+
                   var response = context
                       .read<AppointmentCubit>()
                       .createClinicalNote(
@@ -668,6 +680,9 @@ class Confirmation extends StatelessWidget {
                   response.then((value) => {
                         if (value != null && value.statusCode == 201)
                           {
+                              context
+                                .read<AppointmentCubit>()
+                                .clearClinicalNoteState(),
                             Messages.showMessage(
                                 const Icon(
                                   IconData(0xf635, fontFamily: 'MaterialIcons'),
@@ -851,10 +866,7 @@ class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
 
 class DropDown extends StatefulWidget {
   DropDown(
-      {Key? key,
-      required this.label,
-      required this.options,
-      this.registration})
+      {Key? key, required this.label, required this.options, this.registration})
       : super(
           key: key,
         );
@@ -867,17 +879,48 @@ class DropDown extends StatefulWidget {
 }
 
 class _DropDownState extends State<DropDown> {
-  String? _selectedText;
   String? clinicalType;
   //
+  String dropdownValue = 'CONSULTATION_NOTE';
+  String? clinicalNoteId;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    context.read<AppointmentCubit>().setClinicalNoteType(dropdownValue);
   }
+
+  final AuthSession authsession = AuthSession();
 
   @override
   Widget build(BuildContext context) {
+    // run get clincial note // by check if  the current selected wiget has the clinicalNoted id
+    if (widget.registration.containsKey('clinicalNoteId')) {
+      clinicalNoteId = widget.registration['clinicalNoteId'];
+
+      authsession.getHomeToken()?.then((value) => {
+            {
+              context
+                  .read<AppointmentCubit>()
+                  .getPatientClinicalNote(id: clinicalNoteId, token: value)
+                  .then((value) {
+                context.read<AppointmentCubit>().setclinicalNoteID(
+                      clinicalNoteId!,
+                    );
+                //
+              })
+            }
+          });
+      // print("fetch the current clincial note");
+    } else {
+      //check if the clincialnote state is not empty if its empty the clincial note
+      if (context.read<AppointmentCubit>().state.clinicalNoteID.isNotEmpty) {
+        context.read<AppointmentCubit>().clearClinicalNoteState();
+      }
+    }
+
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: ((context, state) {
         return Column(
@@ -891,20 +934,60 @@ class _DropDownState extends State<DropDown> {
               height: 45,
               width: 300,
               child: Container(
-                padding: const EdgeInsets.all(10.0),
-                color: const Color.fromARGB(255, 205, 226, 226),
-                child: DropdownButtonHideUnderline(
+                  padding: const EdgeInsets.all(10.0),
+                  color: const Color.fromARGB(255, 205, 226, 226),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      hint: const Text("Select Note Type"),
+                      dropdownColor: const Color.fromARGB(255, 205, 226, 226),
+                      value: dropdownValue,
+                      icon: const Icon(Icons.arrow_downward),
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                          context
+                              .read<AppointmentCubit>()
+                              .setClinicalNoteType(dropdownValue);
+                        });
+                      },
+                      items: <String>[
+                        'CONSULTATION_NOTE',
+                        'DISCHARGE_SUMMARY_NOTE',
+                        'PROCEDURE_NOTE',
+                        'PROGRESS_NOTE',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  )
+
+                  /* DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     dropdownColor: const Color.fromARGB(255, 205, 226, 226),
                     isExpanded: true,
-                    value: state.clinicalNoteType.isEmpty &&
+                    
+                  value: state.clinicalNoteType.isEmpty &&
                             widget.registration.containsKey('clinicalNoteId')
                         ? _selectedText
-                        : state.clinicalNoteType,
+                        : state.clinicalNoteType,   
                     hint: const Text("Select Note Type"),
-                    items: widget.options.map((String value) {
+                    items: <String>[
+                      'CONSULTATION_NOTE',
+                      'DISCHARGE_SUMMARY_NOTE',
+                      'PROCEDURE_NOTE',
+                      'PROGRESS_NOTE',
+                    ].map((String value) {
                       return DropdownMenuItem<String>(
-                        value: value,
+                       value: value,
                         child: Text(value),
                       );
                     }).toList(),
@@ -918,8 +1001,8 @@ class _DropDownState extends State<DropDown> {
                       });
                     },
                   ),
-                ),
-              ),
+                ), */
+                  ),
             ),
           ],
         );

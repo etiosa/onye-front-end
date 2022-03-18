@@ -205,6 +205,10 @@ emit(state.copyWith(
         clinicalNoteType: body['type']));
   }
 
+  void setclinicalNoteID(String clinicalNoteId) {
+    emit(state.copyWith(clinicalNoteID: clinicalNoteId));
+  }
+
   void searchRegistrations(
       {String? token, String? searchParams, int? nextPage}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
@@ -268,6 +272,7 @@ emit(state.copyWith(
     String? noteText,
     String? token,
   }) async {
+    print(token);
     Response? response = await _appointmentRepository.updateClinicalNote(
       id: id,
       type: type,
@@ -316,5 +321,13 @@ emit(state.copyWith(
 
   void clearState() {
     emit(const AppointmentState());
+  }
+
+//TODO: move this to a different class
+  void clearClinicalNoteState() {
+    emit(state.copyWith(
+        clinicalNote: '',
+        clinicalNoteID: '',
+        clinicalNoteTitle: ''));
   }
 }

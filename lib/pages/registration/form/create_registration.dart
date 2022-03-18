@@ -130,8 +130,6 @@ class _CreateRegistrationState extends State<CreateRegistration> {
                   ],
                 ),
               ),
-
-           
             ),
           ],
         ),
@@ -139,8 +137,6 @@ class _CreateRegistrationState extends State<CreateRegistration> {
     );
   }
 }
-
-
 
 class Register extends StatefulWidget {
   Register({Key? key, required this.formIndex}) : super(key: key);
@@ -207,85 +203,112 @@ class RegisterField extends StatelessWidget {
                     'Consultation'
                   ]),
                   const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 60,
-                      width: 80,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 56, 155, 152)),
-                          ),
-                          onPressed: () {
-                            if (context
-                                .read<AppointmentCubit>()
-                                .state
-                                .selectedPatientId
-                                .isNotEmpty) {
-                              var response = context
-                                  .read<AppointmentCubit>()
-                                  .createRegistration(
-                                      token: context
-                                          .read<LoginCubit>()
-                                          .state
-                                          .homeToken,
-                                      medicalId: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .selectedMedicalPersonnelId,
-                                      patientID: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .selectedPatientId,
-                                      typeOfVisit: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .typeOfVisit,
-                                      reasons: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .reasonForVisit);
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 60,
+                          width: 80,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 56, 155, 152)),
+                              ),
+                              onPressed: () {
+                                if (context
+                                    .read<AppointmentCubit>()
+                                    .state
+                                    .selectedPatientId
+                                    .isNotEmpty) {
+                                  var response = context
+                                      .read<AppointmentCubit>()
+                                      .createRegistration(
+                                          token: context
+                                              .read<LoginCubit>()
+                                              .state
+                                              .homeToken,
+                                          medicalId: context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .selectedMedicalPersonnelId,
+                                          patientID: context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .selectedPatientId,
+                                          typeOfVisit: context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .typeOfVisit,
+                                          reasons: context
+                                              .read<AppointmentCubit>()
+                                              .state
+                                              .reasonForVisit);
 
-                              response.then((value) => {
-                                    if (value != null &&
-                                        value.statusCode == 201)
-                                      {
-                                        context
-                                            .read<AppointmentCubit>()
-                                            .clearState(),
-                                        Messages.showMessage(
-                                            const Icon(
-                                              IconData(0xf635,
-                                                  fontFamily: 'MaterialIcons'),
-                                              color: Colors.green,
-                                            ),
-                                            'Registration created'),
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: ((context) =>
-                                                        const Registration())),
-                                                ModalRoute.withName(
-                                                    '/dashboard'))
-                                      }
-                                    else if (value != null &&
-                                        value.statusCode == 400)
-                                      {
-                                        Messages.showMessage(
-                                            const Icon(
-                                              IconData(0xe237,
-                                                  fontFamily: 'MaterialIcons'),
-                                              color: Colors.red,
-                                            ),
-                                            'Could not create registration'),
-                                      }
-                                  });
-                            }
-                          },
-                          child: const Text('Submit')),
-                    ),
+                                  response.then((value) => {
+                                        if (value != null &&
+                                            value.statusCode == 201)
+                                          {
+                                            context
+                                                .read<AppointmentCubit>()
+                                                .clearState(),
+                                            Messages.showMessage(
+                                                const Icon(
+                                                  IconData(0xf635,
+                                                      fontFamily:
+                                                          'MaterialIcons'),
+                                                  color: Colors.green,
+                                                ),
+                                                'Registration created'),
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: ((context) =>
+                                                            const Registration())),
+                                                    ModalRoute.withName(
+                                                        '/dashboard'))
+                                          }
+                                        else if (value != null &&
+                                            value.statusCode == 400)
+                                          {
+                                            Messages.showMessage(
+                                                const Icon(
+                                                  IconData(0xe237,
+                                                      fontFamily:
+                                                          'MaterialIcons'),
+                                                  color: Colors.red,
+                                                ),
+                                                'Could not create registration'),
+                                          }
+                                      });
+                                }
+                              },
+                              child: const Text('Submit')),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 60,
+                          width: 80,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 129, 175, 174)),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const Registration())),
+                                    ModalRoute.withName('/dashboard/checkin'));
+                              },
+                              child: const Text("Cancel")),
+                        ),
+                      )
+                    ],
                   )
                 ],
               ),
@@ -378,7 +401,6 @@ class SearchBar extends StatelessWidget {
     );
   }
 }
-
 
 class DropDown extends StatefulWidget {
   DropDown({Key? key, required this.label, required this.options})
@@ -493,7 +515,6 @@ class _PatientListState extends State<PatientList> {
                   setState(() {
                     selectedIndex = index;
                     selectedPatientId = state.patientsList[index]['id'];
-                
 
                     context
                         .read<AppointmentCubit>()
@@ -504,7 +525,7 @@ class _PatientListState extends State<PatientList> {
                         curve: Curves.easeIn);
                   });
                 },
-                  child: Container(
+                child: Container(
                   width: 50,
                   height: 120,
                   margin: const EdgeInsets.only(bottom: 10),
@@ -531,13 +552,13 @@ class _PatientListState extends State<PatientList> {
                         Text(
                           '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
                           style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                               color: selectedIndex == index
                                   ? Colors.white
                                   : Colors.black),
                         ),
-                       const  SizedBox(height:10),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -547,7 +568,7 @@ class _PatientListState extends State<PatientList> {
                             ),
                           ],
                         ),
-                            const SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
