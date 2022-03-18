@@ -432,101 +432,127 @@ class RegisterField extends StatelessWidget {
                     height: 30,
                   ),
                   const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 60,
-                      width: 80,
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 56, 155, 152)),
-                          ),
-                          onPressed: () {
-                            if (context
-                                    .read<AppointmentCubit>()
-                                    .state
-                                    .selectedMedicalPersonnelId
-                                    .isNotEmpty &&
-                                context
-                                    .read<AppointmentCubit>()
-                                    .state
-                                    .selectedPatientId
-                                    .isNotEmpty) {
-                              var response = context
-                                  .read<AppointmentCubit>()
-                                  .createAppointment(
-                                      date:
-                                          context
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 60,
+                          width: 80,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 56, 155, 152)),
+                              ),
+                              onPressed: () {
+                                if (context
+                                        .read<AppointmentCubit>()
+                                        .state
+                                        .selectedMedicalPersonnelId
+                                        .isNotEmpty &&
+                                    context
+                                        .read<AppointmentCubit>()
+                                        .state
+                                        .selectedPatientId
+                                        .isNotEmpty) {
+                                  var response = context
+                                      .read<AppointmentCubit>()
+                                      .createAppointment(
+                                          date:
+                                              context
+                                                  .read<AppointmentCubit>()
+                                                  .state
+                                                  .appointmentDate,
+                                          time:
+                                              context
+                                                  .read<AppointmentCubit>()
+                                                  .state
+                                                  .appointmentTime,
+                                          patientID:
+                                              context
+                                                  .read<AppointmentCubit>()
+                                                  .state
+                                                  .selectedPatientId,
+                                          medicalId: context
                                               .read<AppointmentCubit>()
                                               .state
-                                              .appointmentDate,
-                                      time:
-                                          context
+                                              .selectedMedicalPersonnelId,
+                                          token: context
+                                              .read<LoginCubit>()
+                                              .state
+                                              .homeToken,
+                                          reasonForVisit: context
                                               .read<AppointmentCubit>()
                                               .state
-                                              .appointmentTime,
-                                      patientID:
-                                          context
+                                              .reasonForVisit,
+                                          typeOfVisit: context
                                               .read<AppointmentCubit>()
                                               .state
-                                              .selectedPatientId,
-                                      medicalId: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .selectedMedicalPersonnelId,
-                                      token: context
-                                          .read<LoginCubit>()
-                                          .state
-                                          .homeToken,
-                                      reasonForVisit: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .reasonForVisit,
-                                      typeOfVisit: context
-                                          .read<AppointmentCubit>()
-                                          .state
-                                          .typeOfVisit);
+                                              .typeOfVisit);
 
-                              response.then((value) => {
-                                    if (value != null &&
-                                        value.statusCode == 201)
-                                      {
-                                        context
-                                            .read<AppointmentCubit>()
-                                            .clearState(),
-                                        Messages.showMessage(
-                                            const Icon(
-                                              IconData(0xf635,
-                                                  fontFamily: 'MaterialIcons'),
-                                              color: Colors.green,
-                                            ),
-                                            'Appointment created'),
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: ((context) =>
-                                                        const Appointments())),
-                                                ModalRoute.withName(
-                                                    '/dashboard'))
-                                      }
-                                    else if (value != null &&
-                                        value.statusCode == 400)
-                                      {
-                                        Messages.showMessage(
-                                            const Icon(
-                                              IconData(0xe237,
-                                                  fontFamily: 'MaterialIcons'),
-                                              color: Colors.red,
-                                            ),
-                                            'Could not create appointment'),
-                                      }
-                                  });
-                            }
-                          },
-                          child: const Text('Submit')),
-                    ),
+                                  response.then((value) => {
+                                        if (value != null &&
+                                            value.statusCode == 201)
+                                          {
+                                            context
+                                                .read<AppointmentCubit>()
+                                                .clearState(),
+                                            Messages.showMessage(
+                                                const Icon(
+                                                  IconData(0xf635,
+                                                      fontFamily: 'MaterialIcons'),
+                                                  color: Colors.green,
+                                                ),
+                                                'Appointment created'),
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: ((context) =>
+                                                            const Appointments())),
+                                                    ModalRoute.withName(
+                                                        '/dashboard'))
+                                          }
+                                        else if (value != null &&
+                                            value.statusCode == 400)
+                                          {
+                                            Messages.showMessage(
+                                                const Icon(
+                                                  IconData(0xe237,
+                                                      fontFamily: 'MaterialIcons'),
+                                                  color: Colors.red,
+                                                ),
+                                                'Could not create appointment'),
+                                          }
+                                      });
+                                }
+                              },
+                              child: const Text('Submit')),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 60,
+                          width: 80,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 129, 175, 174)),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const Appointments())),
+                                    ModalRoute.withName('/dashboard/appointment'));
+                              },
+                              child: const Text("Cancel")),
+                        ),
+                      )
+                    ],
+                    
                   )
                 ],
               ),
