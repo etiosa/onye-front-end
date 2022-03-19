@@ -2,7 +2,7 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
-'on':
+"on":
   push:
     branches:
       - main
@@ -17,12 +17,11 @@ jobs:
       - name: build flutter web
         run: flutter build web
       - name: firebase Dependecies
-        run:  npm install -g firebase-tools
-      - name: deploy to firebase
-        run: firebase login:ci && firebase deploy
+        run: npm install -g firebase-tools
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ONYE_DEVELOPMENT }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ONYE_DEVELOPMENT }}"
           channelId: live
           projectId: onye-development
