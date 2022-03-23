@@ -655,8 +655,6 @@ class Confirmation extends StatelessWidget {
                           }
                       });
                 } else {
-                  print("create");
-
                   var response = context
                       .read<AppointmentCubit>()
                       .createClinicalNote(
