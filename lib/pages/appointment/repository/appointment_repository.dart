@@ -3,7 +3,7 @@ import 'dart:convert';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "http://localhost:8001/";
+  static const String root = "https://api.onyedap.com/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -65,12 +65,12 @@ class AppointmentRepository {
  */
 //TODO: move to patientCubit
   Future<http.Response?> searchPatients(
-      {String? searchParams, String? token, int? nextPage=0}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/patient/search')
-        .replace(queryParameters: <String, String>{
-      'query': searchParams!,
-      "page":"$nextPage"
-    });
+      {String? searchParams, String? token, int? nextPage = 0}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
+        queryParameters: <String, String>{
+          'query': searchParams!,
+          "page": "$nextPage"
+        });
 
     // http call
     try {
@@ -86,17 +86,15 @@ class AppointmentRepository {
     } catch (ee) {
       return null;
     }
-
-  
   }
 
-//TODO: move to DoctorCubit
+  //TODO: move to DoctorCubit
   Future<List<dynamic>> searchDoctors(
       {String? searchParams, String? token}) async {
     var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
         .replace(queryParameters: <String, String>{
-      'query': searchParams!,
-     
+      'type': 'DOCTOR',
+      'query': searchParams ?? '',
     });
 
     http.Response response = await http.get(
