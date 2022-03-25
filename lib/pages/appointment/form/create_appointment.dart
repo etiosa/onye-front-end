@@ -664,7 +664,6 @@ class SearchBar extends StatelessWidget {
                 style: TextStyle(fontSize: 12),
               ),
               onPressed: () {
-                print(context.read<AppointmentCubit>().state.searchParams);
                 if (field == 'Search patient') {
                   context.read<AppointmentCubit>().searchPatients(
                       query:
