@@ -91,11 +91,19 @@ class AppointmentRepository {
   //TODO: move to DoctorCubit
   Future<List<dynamic>> searchDoctors(
       {String? searchParams, String? token}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-        .replace(queryParameters: <String, String>{
-      'type': 'DOCTOR',
-      'query': searchParams ?? '',
-    });
+    Uri uri;
+    if (searchParams != null && searchParams.isNotEmpty) {
+      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
+          .replace(queryParameters: <String, String>{
+        'type': 'DOCTOR',
+        'query': searchParams,
+      });
+    } else {
+      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
+          .replace(queryParameters: <String, String>{
+        'type': 'DOCTOR',
+      });
+    }
 
     http.Response response = await http.get(
       uri,
