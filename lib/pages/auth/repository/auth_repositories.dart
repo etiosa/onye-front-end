@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:http/http.dart" as http;
 
 class AuthRepository {
-  static const String root = "https://api.onyedap.com/";
+  static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 

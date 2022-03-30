@@ -8,6 +8,15 @@ jobs:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
+      - name: Post to ONYE Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: "C0391T56PNX"
+          # For posting a simple plain text message
+          slack-message: "CI/CD Workflow Started on Pull Request..."
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       - uses: actions/checkout@v2
       - name: Install Dependecies
         run: :|
@@ -23,3 +32,24 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ONYE_DEVELOPMENT }}"
           projectId: onye-development
+      - name: Post to a Slack channel
+        id: slack2
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: "C0391T56PNX"
+        # For posting a simple plain text message
+        payload: |
+          {
+            "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                }
+              }
+            ]
+          }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
