@@ -39,11 +39,24 @@ jobs:
         uses: slackapi/slack-github-action@v1.16.0
         with:
           channel-id: "C0391T56PNX"
-          # For posting a simple plain text message
           payload: |
             {
-              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Pull request",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Who?:* ${{ github.event.pull_request.user.login }} *State:* ${{ github.event.pull_request.state }}"
+                  }
+                },
                 {
                   "type": "section",
                   "text": {
@@ -55,7 +68,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Preview URL: ${{ steps.firebase_deploy.outputs.urls }}\nPreview Expires:${{steps.firebase_deploy.outputs.expire_time}}"
+                    "text": "*Preview URL:* <${{ steps.firebase_deploy.outputs.urls }}|onye-preview-url>\n*Preview Expires:*${{steps.firebase_deploy.outputs.expire_time}}"
                   }
                 }
               ]
