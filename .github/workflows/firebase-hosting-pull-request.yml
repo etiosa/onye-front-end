@@ -36,7 +36,7 @@ jobs:
           projectId: onye-development
       - name: Post to a Slack channel
         id: slack2
-        uses: slackapi/slack-github-action@v1.16.0
+        uses: slackapi/slack-github-action@v1.18.0
         with:
           channel-id: "C0391T56PNX"
           payload: |
