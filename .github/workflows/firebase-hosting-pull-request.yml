@@ -50,7 +50,7 @@ jobs:
                       {
                         "type": "plain_text",
                         "text": "Pull request",
-                        "emoji": true,
+                        "emoji": true
                       }
                   }
                 ]
