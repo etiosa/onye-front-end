@@ -52,6 +52,30 @@ jobs:
                         "text": "Pull request",
                         "emoji": true
                       }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Who?:* ${{ github.event.pull_request.user.login }} *State:* ${{ github.event.pull_request.state }}"
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Preview URL:* <${{ steps.firebase_deploy.outputs.details_url }} | onye-preview-url>\n*Preview Expires:* ${{steps.firebase_deploy.outputs.expire_time}}"
+                      }
                   }
                 ]
             }
