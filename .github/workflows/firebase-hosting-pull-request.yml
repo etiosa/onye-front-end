@@ -74,7 +74,7 @@ jobs:
                     "text":
                       {
                         "type": "mrkdwn",
-                        "text": "*Preview URL:* <${{ steps.firebase_deploy.outputs.urls }}|onye-preview-url>\n*Preview Expires:*${{steps.firebase_deploy.outputs.expire_time}}"
+                        "text": "*Preview URL:* <${{ steps.firebase_deploy.outputs.details_url }} | onye-preview-url>\n*Preview Expires:* ${{steps.firebase_deploy.outputs.expire_time}}"
                       }
                   }
                 ]
