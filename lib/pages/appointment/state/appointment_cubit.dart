@@ -241,7 +241,7 @@ emit(state.copyWith(
   }
 
   Future<Response?> createAppointment(
-      {String? appointmentDateTime,
+      {String? dateTime,
       String? patientID,
       String? medicalId,
       String? token,
@@ -251,11 +251,11 @@ emit(state.copyWith(
       String? date,
       String? time,
       String? languagePreference}) async {
-    var dateTime =
+    var dateAndTime =
         DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!, true);
 
     Response? req = await _appointmentRepository.createAppointment(
-        date: dateTime.toIso8601String(),
+        date: dateAndTime.toIso8601String(),
         patientId: patientID,
         medicalId: medicalId,
         token: token,
@@ -300,7 +300,7 @@ emit(state.copyWith(
       languagePreference: languagePreference,
       typeOfVisit: typeOfVisit,
       reasonForVisit: reasonForVisit,
-      appointmentDateTime: dateTime.toIso8601String(),
+      dateTime: dateTime.toIso8601String(),
       token: token,
     );
 
