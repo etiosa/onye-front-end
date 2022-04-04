@@ -1,8 +1,8 @@
 import 'dart:convert';
 import "package:http/http.dart" as http;
-
+import "package:flutter_dotenv/flutter_dotenv.dart";
 class PatientRepositories {
-  static const String root = "https://api.onyedap.com/";
+  static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
@@ -85,7 +85,8 @@ class PatientRepositories {
     }
   }
 
-  Future<List<dynamic>> getRegistrations({String? token, String? queryParam}) async {
+  Future<List<dynamic>> getRegistrations(
+      {String? token, String? queryParam}) async {
     //1 Uri
     var uri = Uri.parse(root +
         'api/rest/v1/registration/withAppointment/search?from=2020-01-01T00:00&to=2024-01-01T00:00&zoneId=Africa/Lagos');
