@@ -1,10 +1,9 @@
 import 'dart:convert';
 import "package:http/http.dart" as http;
-
-//TODO:  Move the root url to environment variable
+import "package:flutter_dotenv/flutter_dotenv.dart";
 
 class DropDownRepositories {
-  static const String root = "http://localhost:8001/";
+  static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 

@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "http://localhost:8001/";
+  static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 

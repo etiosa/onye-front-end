@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:http/http.dart" as http;
 
 class RegistrationRepository {
-  static const String root = "http://localhost:8001/";
+  static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -54,11 +54,11 @@ class RegistrationRepository {
 
   Future<http.Response?> createRegistration(
       {String? token,
-        String? patientId,
-        String? medicalId,
-        String? appointmentId,
-        String? reasons,
-        String? typeOfVisit}) async {
+      String? patientId,
+      String? medicalId,
+      String? appointmentId,
+      String? reasons,
+      String? typeOfVisit}) async {
     var uri = Uri.parse(root + 'api/rest/v1/registration')
         .replace(queryParameters: <String, String>{
       'zoneId': 'Africa/Lagos',
@@ -86,27 +86,19 @@ class RegistrationRepository {
     }
   }
 
-
-
-
   Future<http.Response?> getPatientClinicalNote(
-      {String? token,
-   
-        String? id,
-        String? typeOfVisit}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/clinicalNote/')
-        .replace(queryParameters: <String, String>{
-          'zoneId': 'Africa/Lagos',
-          'id': id!
-          });
+      {String? token, String? id, String? typeOfVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/clinicalNote/').replace(
+        queryParameters: <String, String>{'zoneId': 'Africa/Lagos', 'id': id!});
 
     try {
-      http.Response response = await http.get(uri,
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": accept,
-            "Authorization": "Bearer $token",
-          },
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": accept,
+          "Authorization": "Bearer $token",
+        },
       );
 
       return response;
@@ -148,15 +140,4 @@ class RegistrationRepository {
       return null;
     }
   }
-
-
-
 }
-
-
-
-
-
-
-
-
