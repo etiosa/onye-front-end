@@ -21,9 +21,12 @@ jobs:
       - name: Install Dependecies
         run: :|
           npm install -g flutter-cli
-
+      - name: copy template file to env file
+        run: cp stage.env.template stage.env
+        continue-on-error: true
       - name: build flutter web
         run: flutter build web
+        continue-on-error: true
       - name: firebase Dependecies
         run: npm install -g firebase-tools
 
@@ -34,6 +37,7 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ONYE_DEVELOPMENT }}"
           projectId: onye-development
+        continue-on-error: true
       - name: Post to a Slack channel
         id: slack2
         uses: slackapi/slack-github-action@v1.18.0
