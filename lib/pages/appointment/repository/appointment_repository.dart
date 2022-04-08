@@ -265,7 +265,7 @@ class AppointmentRepository {
             "Authorization": "Bearer $token",
           },
           body: json.encode({
-            "appointmentDateTime": date,
+            "dateTime": date,
             "minDuration": 30,
             "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasons,
@@ -285,7 +285,7 @@ class AppointmentRepository {
     String? languagePreference,
     String? typeOfVisit,
     String? reasonForVisit,
-    String? appointmentDateTime,
+    String? dateTime,
     String? token,
   }) async {
     var uri = Uri.parse(root + 'api/rest/v1/appointment/$id')
@@ -304,7 +304,7 @@ class AppointmentRepository {
             "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasonForVisit,
             "languagePreference": languagePreference,
-            "appointmentDateTime": appointmentDateTime,
+            "dateTime": dateTime,
           }));
 
       return response;
@@ -359,8 +359,6 @@ class AppointmentRepository {
 
   Future<http.Response?> searchRegistrations(
       {String? token, String? searchParams, int? nextPage = 0}) async {
-    int pageNumber = 3;
-    print('search params: $searchParams');
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
@@ -370,6 +368,7 @@ class AppointmentRepository {
       'zoneId': 'Africa/Lagos',
       "page": "$nextPage"
     });
+
     try {
       http.Response response = await http.get(
         uri,
