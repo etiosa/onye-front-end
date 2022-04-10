@@ -272,7 +272,6 @@ emit(state.copyWith(
     String? noteText,
     String? token,
   }) async {
-    print(token);
     Response? response = await _appointmentRepository.updateClinicalNote(
       id: id,
       type: type,
@@ -319,6 +318,42 @@ emit(state.copyWith(
     return response;
   }
 
+  void setFromDate(String? argFromDate) {
+    final String fromDate = argFromDate!;
+    emit(state.copyWith(fromDate: fromDate));
+  }
+
+  String getFromDate() {
+    return state.fromDate;
+  }
+
+  void setFromTime(String? argFromTime) {
+    final String fromTime = argFromTime!;
+    emit(state.copyWith(fromTime: fromTime));
+  }
+
+  String getFromTime() {
+    return state.fromTime;
+  }
+
+  void setToDate(String? argToDate) {
+    final String toDate = argToDate!;
+    emit(state.copyWith(toDate: toDate));
+  }
+
+  String getToDate() {
+    return state.toDate;
+  }
+
+  void setToTime(String? argToTime) {
+    final String toTime = argToTime!;
+    emit(state.copyWith(toTime: toTime));
+  }
+
+  String getToTime() {
+    return state.toTime;
+  }
+
   void clearState() {
     emit(const AppointmentState());
   }
@@ -326,8 +361,6 @@ emit(state.copyWith(
 //TODO: move this to a different class
   void clearClinicalNoteState() {
     emit(state.copyWith(
-        clinicalNote: '',
-        clinicalNoteID: '',
-        clinicalNoteTitle: ''));
+        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
   }
 }

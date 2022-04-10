@@ -7,6 +7,7 @@ import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../components/util/Messages.dart';
+import '../../../components/util/date_time_picker.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -38,110 +39,153 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
-                  child: Text(
-                    'Registrations',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
+                    child: Text(
+                      'Registrations',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    width: 170,
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: ElevatedButton(
-                        autofocus: true,
-                        style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color.fromARGB(255, 56, 155, 152)),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      width: 170,
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: ElevatedButton(
+                          autofocus: true,
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0),
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color.fromARGB(255, 56, 155, 152)),
+                          ),
+                          child: const Text(
+                            'Create Registration',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                '/dashboard/appointment/createRegistration');
+                          },
                         ),
-                        child: const Text(
-                          'Create Registration',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              '/dashboard/appointment/createRegistration');
-                        },
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0, top: 10),
-            child: Text("Search",
-                style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
-              child: TextFormField(
-                onChanged: (search) =>
-                    context.read<AppointmentCubit>().setSearchParams(search),
-                obscureText: false,
-                autofocus: true,
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 205, 226, 226),
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                ),
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a valid query';
-                  } else {
-                    return null;
-                  }
-                },
+                ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              height: 50,
-              width: 100,
-              margin: const EdgeInsets.only(left: 15),
-              constraints: const BoxConstraints(maxWidth: 170),
-              child: ElevatedButton(
-                autofocus: true,
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 56, 155, 152)),
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0, top: 10),
+              child: Text("Search",
+                  style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
+                child: TextFormField(
+                  onChanged: (search) =>
+                      context.read<AppointmentCubit>().setSearchParams(search),
+                  obscureText: false,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 205, 226, 226),
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a valid query';
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
-                child: const Text(
-                  'Search',
-                  style: TextStyle(fontSize: 12),
-                ),
-                onPressed: () {
-                  context.read<AppointmentCubit>().searchRegistrations(
-                      token: context.read<LoginCubit>().state.homeToken,
-                      searchParams:
-                          context.read<AppointmentCubit>().state.searchParams);
-                },
               ),
             ),
-          ),
-          registrationBody(),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+              child: Row(children: [
+                const Text("From: "),
+                DatePickerField(
+                  label: 'Date',
+                  cubitSetMethod: context.read<AppointmentCubit>().setFromDate,
+                  cubitGetMethod: context.read<AppointmentCubit>().getFromDate,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                DateTimePickerField(
+                  label: 'Time',
+                  cubitSetMethod: context.read<AppointmentCubit>().setFromTime,
+                  cubitGetMethod: context.read<AppointmentCubit>().getFromTime,
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+              child: Row(children: [
+                const Text("To:      "),
+                DatePickerField(
+                  label: 'Date',
+                  cubitSetMethod: context.read<AppointmentCubit>().setToDate,
+                  cubitGetMethod: context.read<AppointmentCubit>().getToDate,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                DateTimePickerField(
+                  label: 'Time',
+                  cubitSetMethod: context.read<AppointmentCubit>().setToTime,
+                  cubitGetMethod: context.read<AppointmentCubit>().getToTime,
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: 50,
+                width: 100,
+                margin: const EdgeInsets.only(left: 15),
+                constraints: const BoxConstraints(maxWidth: 170),
+                child: ElevatedButton(
+                  autofocus: true,
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 56, 155, 152)),
+                  ),
+                  child: const Text(
+                    'Search',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  onPressed: () {
+                    context.read<AppointmentCubit>().searchRegistrations(
+                        token: context.read<LoginCubit>().state.homeToken,
+                        searchParams: context
+                            .read<AppointmentCubit>()
+                            .state
+                            .searchParams);
+                  },
+                ),
+              ),
+            ),
+            registrationBody(),
+          ],
+        ),
       ),
     );
   }
@@ -469,7 +513,8 @@ class Confirmation extends StatelessWidget {
             style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.all(
-                    (!(appointmentList[selectedIndex]['type'] == 'registration'))
+                    (!(appointmentList[selectedIndex]['type'] ==
+                            'registration'))
                         ? const Color.fromARGB(255, 56, 155, 152)
                         : Colors.grey),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -1013,7 +1058,8 @@ class RegisterPatient extends StatefulWidget {
 class _RegisterPatientState extends State<RegisterPatient> {
   @override
   Widget build(BuildContext context) {
-    if (widget.registrationList[widget.selectedIndex]['type'] == 'registration') {
+    if (widget.registrationList[widget.selectedIndex]['type'] ==
+        'registration') {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Confirmation(
