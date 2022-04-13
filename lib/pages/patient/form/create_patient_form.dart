@@ -755,7 +755,7 @@ class EmergencyContact extends StatelessWidget {
       ],
     );
   }
-
+  
   bool allEmergencyContactFieldsAreValid(BuildContext context) {
     if (context.read<PatientCubit>().state.emergencyContactName == null &&
         context.read<PatientCubit>().state.emergencyContactPhoneNumber ==

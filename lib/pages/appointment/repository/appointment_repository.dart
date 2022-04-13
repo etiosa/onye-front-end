@@ -259,7 +259,7 @@ class AppointmentRepository {
             "Authorization": "Bearer $token",
           },
           body: json.encode({
-            "appointmentDateTime": date,
+            "dateTime": date,
             "minDuration": 30,
             "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasons,
@@ -354,7 +354,6 @@ class AppointmentRepository {
   Future<http.Response?> searchRegistrations(
       {String? token, String? searchParams, int? nextPage = 0}) async {
     int pageNumber = 3;
-    print('search params: $searchParams');
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{

@@ -218,6 +218,8 @@ emit(state.copyWith(
     var body = json.decode(searchReponse!.body);
     var registrationsList = body['elements'];
     var totalPages = body['totalPages'];
+    print(registrationsList);
+
     emit(state.copyWith(
         registrationList: registrationsList, maxPageNumber: totalPages));
 
@@ -272,7 +274,6 @@ emit(state.copyWith(
     String? noteText,
     String? token,
   }) async {
-    print(token);
     Response? response = await _appointmentRepository.updateClinicalNote(
       id: id,
       type: type,
@@ -326,8 +327,6 @@ emit(state.copyWith(
 //TODO: move this to a different class
   void clearClinicalNoteState() {
     emit(state.copyWith(
-        clinicalNote: '',
-        clinicalNoteID: '',
-        clinicalNoteTitle: ''));
+        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
   }
 }

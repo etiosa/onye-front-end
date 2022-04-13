@@ -190,7 +190,6 @@ class _SubmitButton extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.loginStatus != LoginStatus.login,
       builder: (context, state) {
-        //TODO: move this to a welcome page and home page
       
          _authSession.getHomeToken()!.then((value) => {
                 if (value != '')

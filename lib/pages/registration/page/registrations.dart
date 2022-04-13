@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:onye_front_ened/Widgets/Loading.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
-import 'package:shimmer/shimmer.dart';
 
+import '../../../Widgets/HomepageHeader.dart';
+import '../../../Widgets/Pagination.dart';
 import '../../../components/util/Messages.dart';
 
 class Registration extends StatefulWidget {
@@ -45,46 +47,9 @@ class _RegistrationState extends State<Registration> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
-                  child: Text(
-                    'Registrations',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    width: 170,
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: ElevatedButton(
-                        autofocus: true,
-                        style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color.fromARGB(255, 56, 155, 152)),
-                        ),
-                        child: const Text(
-                          'Create Registration',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              '/dashboard/appointment/createRegistration');
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: HomepageHeader(),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 20.0, top: 10),
@@ -147,6 +112,7 @@ class _RegistrationState extends State<Registration> {
       ),
     );
   }
+  //
 
   Widget registrationBody() {
     const int heightOffset = 300;
@@ -157,52 +123,7 @@ class _RegistrationState extends State<Registration> {
           child: Column(
             children: [
               (const Appointment()),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (var index = 0;
-                      index <=
-                          context.read<AppointmentCubit>().state.maxPageNumber;
-                      index++)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            initPageSelected = index;
-                          });
-
-                          context.read<AppointmentCubit>().setNextPage(
-                              nextPage: index,
-                              token: context.read<LoginCubit>().state.homeToken,
-                              searchParams: context
-                                  .read<AppointmentCubit>()
-                                  .state
-                                  .searchParams);
-                        },
-                        child: Container(
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                                color: initPageSelected == index
-                                    ? const Color.fromARGB(255, 56, 155, 152)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(100)),
-                            child: Center(
-                                child: Text(
-                              "${index + 1}",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: initPageSelected == index
-                                      ? Colors.white
-                                      : const Color.fromARGB(
-                                          255, 56, 155, 152)),
-                            ))),
-                      ),
-                    )
-                ],
-              )
+              Pagination(initPageSelected: initPageSelected)
             ],
           ),
         );
@@ -210,6 +131,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 }
+
 
 class Appointment extends StatefulWidget {
   const Appointment({
@@ -235,57 +157,10 @@ class _AppointmentState extends State<Appointment> {
         }
 
         if (state.registrationList.isEmpty) {
-          return Container(
-              width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 1.8,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
-              child: Column(mainAxisSize: MainAxisSize.max, children: [
-                Expanded(
-                    child: Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
-                        enabled: true,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (_, __) => Padding(
-                            padding: const EdgeInsets.only(bottom: 1.0),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 1.0),
-                                ),
-                                Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: 10.0,
-                                      color: Colors.white,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 10.0,
-                                      color: Colors.white,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 10.0,
-                                      color: Colors.white,
-                                    ),
-                                  ],
-                                ))
-                              ],
-                            ),
-                          ),
-                        )))
-              ]));
+          return const Loading();
+         
         } else {
+          //need to move it to won container
           return Expanded(
             flex: 1,
             child: ListView.builder(
@@ -347,11 +222,10 @@ class _AppointmentState extends State<Appointment> {
                                     padding: const EdgeInsets.all(15.0),
                                     child: Text(
                                       (state.registrationList[index]
-                                              .containsKey(
-                                                  'appointmentDateTime'))
+                                              .containsKey('dateTime'))
                                           ? dateFormat.format(DateTime.parse(
                                               state.registrationList[index]
-                                                  ['appointmentDateTime']))
+                                                  ['dateTime']))
                                           : dateFormat.format(DateTime.parse(
                                               state.registrationList[index]
                                                   ['registrationDateTime'])),
@@ -522,8 +396,6 @@ class Confirmation extends StatelessWidget {
                   .getPatientClinicalNote(id: clincialNoteid, token: hometoken)
             }
         });
-    print(appointment);
-    print("appointment");
 
     return showDialog<String>(
       context: context,
@@ -602,7 +474,6 @@ class Confirmation extends StatelessWidget {
           TextButton(
               onPressed: () {
                 if (appointment.containsKey('clinicalNoteId')) {
-                  print("update");
                   var response =
                       context.read<AppointmentCubit>().updateClinicalNote(
                             token: homeToken,
@@ -655,8 +526,6 @@ class Confirmation extends StatelessWidget {
                           }
                       });
                 } else {
-                  print("create");
-
                   var response = context
                       .read<AppointmentCubit>()
                       .createClinicalNote(
@@ -680,7 +549,7 @@ class Confirmation extends StatelessWidget {
                   response.then((value) => {
                         if (value != null && value.statusCode == 201)
                           {
-                              context
+                            context
                                 .read<AppointmentCubit>()
                                 .clearClinicalNoteState(),
                             Messages.showMessage(
@@ -714,6 +583,9 @@ class Confirmation extends StatelessWidget {
     ];
   }
 }
+
+
+
 
 class ClinicalNoteTitleField extends StatefulWidget {
   ClinicalNoteTitleField({
@@ -913,7 +785,6 @@ class _DropDownState extends State<DropDown> {
               })
             }
           });
-      // print("fetch the current clincial note");
     } else {
       //check if the clincialnote state is not empty if its empty the clincial note
       if (context.read<AppointmentCubit>().state.clinicalNoteID.isNotEmpty) {

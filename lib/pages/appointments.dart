@@ -6,6 +6,7 @@ import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../Widgets/Loading.dart';
 import '../components/util/Messages.dart';
 import 'appointment/state/appointment_cubit.dart';
 
@@ -180,56 +181,7 @@ class _AppointmentState extends State<Appointment> {
         }
 
         if (state.appointmentList.isEmpty) {
-          return Container(
-              width: MediaQuery.of(context).size.width / 1.2,
-              height: MediaQuery.of(context).size.height / 1.8,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
-              child: Column(mainAxisSize: MainAxisSize.max, children: [
-                Expanded(
-                    child: Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
-                        enabled: true,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (_, __) => Padding(
-                            padding: const EdgeInsets.only(bottom: 1.0),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 48,
-                                  height: 48,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 1.0),
-                                ),
-                                Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: 10.0,
-                                      color: Colors.white,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 10.0,
-                                      color: Colors.white,
-                                    ),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 10.0,
-                                      color: Colors.white,
-                                    ),
-                                  ],
-                                ))
-                              ],
-                            ),
-                          ),
-                        )))
-              ]));
+          return const Loading();
         } else {
           return Expanded(
             flex: 1,
@@ -293,13 +245,13 @@ class _AppointmentState extends State<Appointment> {
                                     child: Text(
                                       dateFormat.format(DateTime.parse(
                                           state.appointmentList[index]
-                                              ['appointmentDateTime'])),
+                                              ['dateTime'])),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
                                       ),
                                     ),
-                                  ),
+                                  ), 
                                 ],
                               ),
                             ),
@@ -353,6 +305,8 @@ class _AppointmentState extends State<Appointment> {
     );
   }
 }
+
+
 
 class CancelAppointmentButton extends StatelessWidget {
   CancelAppointmentButton({Key? key, required this.id}) : super(key: key);
@@ -436,8 +390,8 @@ class RescheduleAppointmentButton extends StatelessWidget {
                 ))),
             onPressed: () {
               var dateFormat = DateFormat('yyyy-MM-dd');
-              String? date = dateFormat.format(DateTime.parse(appointment['appointmentDateTime']));
-              String? time = TimeOfDay.fromDateTime(DateTime.parse(appointment['appointmentDateTime'])).format(context);
+              String? date = dateFormat.format(DateTime.parse(appointment['dateTime']));
+              String? time = TimeOfDay.fromDateTime(DateTime.parse(appointment['dateTime'])).format(context);
 
               context.read<AppointmentCubit>().setAppointmentDate(date);
               context.read<AppointmentCubit>().setAppointmentTime(time);
@@ -701,6 +655,8 @@ class DateTimePickerField extends StatelessWidget {
   }
 }
 
+
+
 Future dateTimePicker(BuildContext context, String label) async {
   final newTime =
       await showTimePicker(context: context, initialTime: TimeOfDay.now());
@@ -741,7 +697,7 @@ class DatePickerField extends StatelessWidget {
                 color: const Color.fromARGB(255, 205, 226, 226),
                 child: Padding(
                   padding: const EdgeInsets.all(1.0),
-                  child: TextContent(
+                  child: LabelContent(
                     label: label,
                   ),
                 ),
@@ -754,8 +710,8 @@ class DatePickerField extends StatelessWidget {
   }
 }
 
-class TextContent extends StatelessWidget {
-  const TextContent({Key? key, required this.label}) : super(key: key);
+class LabelContent extends StatelessWidget {
+  const LabelContent({Key? key, required this.label}) : super(key: key);
   final String label;
 
   @override
@@ -796,31 +752,9 @@ Future datePicker(BuildContext context, String label) async {
   context.read<AppointmentCubit>().setAppointmentDate(formattedDate);
 }
 
-// ignore: must_be_immutable
-class AppointmentConfirmed extends StatelessWidget {
-  AppointmentConfirmed({
-    required this.appointmentList,
-    required this.selectedIndex,
-    Key? key,
-  }) : super(key: key);
-  List<dynamic> appointmentList;
-  int selectedIndex;
 
-  @override
-  Widget build(BuildContext context) {
-    if (!appointmentList[selectedIndex].containsKey("registrationDateTime")) {
-      return const Icon(
-        Icons.check_circle,
-        color: Colors.green,
-      );
-    } else {
-      return const Icon(
-        Icons.check_circle,
-        color: Colors.transparent,
-      );
-    }
-  }
-}
+
+
 
 class Confirmation extends StatelessWidget {
   Confirmation(
@@ -909,7 +843,7 @@ class CheckInPatient extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () {},
-            child: const Text('Create new New registeration')),
+            child: const Text('Create New registeration')),
       ),
     );
   }
