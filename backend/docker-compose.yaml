@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  arangodb:
+    image: ${ARANGODB_IMAGE:-arangodb:3.8.6}
+    container_name: arangodb
+    restart: always
+    stop_grace_period: 3s
+    env_file:
+      - .env
+    environment:
+      ARANGO_ROOT_PASSWORD: ${ARANGODB_PASSWORD:-password}
+    volumes:
+      - arangodb-volume:/var/lib/arangodb3
+      - arangodb-volume:/var/lib/arangodb3-apps
+    ports:
+      - ${ARANGODB_PORT:-8529}:8529
+    networks:
+      - onye-network
+
+  core-api:
+    image: onyeone/onyecore:latest
+    restart: always
+    stop_grace_period: 3s
+    env_file:
+      - .env
+    environment:
+      WAIT_HOSTS: ${ARANGODB_HOST:-arangodb}:${ARANGODB_PORT:-8529}
+      arangodb.hosts: ${ARANGODB_HOSTS:-arangodb}
+      arangodb.port: ${ARANGODB_PORT:-8529}
+      arangodb.user: ${ARANGODB_USER:-root}
+      arangodb.password: ${ARANGODB_PASSWORD:-password}
+      arangodb.database.name: ${ARANGODB_DATABASE:-core}
+    ports:
+      - "8001:8001"
+    networks:
+      - onye-network
+
+networks:
+  onye-network:
+    driver: bridge
+    external: true
+
+volumes:
+  arangodb-volume:
+    external: false

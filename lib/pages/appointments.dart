@@ -475,25 +475,28 @@ class RescheduleAppointmentButton extends StatelessWidget {
               ),
               TextButton(
                   onPressed: () {
-                    var response = context
-                        .read<AppointmentCubit>()
-                        .updateAppointment(
-                          id: appointment['id'],
-                          date:
-                              context.read<AppointmentCubit>().state.appointmentDate,
-                          time:
-                              context.read<AppointmentCubit>().state.appointmentTime,
-                          languagePreference: 'en',
-                          typeOfVisit: context
-                              .read<AppointmentCubit>()
-                              .state
-                              .typeOfVisit,
-                          reasonForVisit: context
-                              .read<AppointmentCubit>()
-                              .state
-                              .reasonForVisit,
-                          token: homeToken,
-                        );
+                    var response =
+                        context.read<AppointmentCubit>().updateAppointment(
+                              id: appointment['id'],
+                              date: context
+                                  .read<AppointmentCubit>()
+                                  .state
+                                  .appointmentDate,
+                              time: context
+                                  .read<AppointmentCubit>()
+                                  .state
+                                  .appointmentTime,
+                              languagePreference: 'en',
+                              typeOfVisit: context
+                                  .read<AppointmentCubit>()
+                                  .state
+                                  .typeOfVisit,
+                              reasonForVisit: context
+                                  .read<AppointmentCubit>()
+                                  .state
+                                  .reasonForVisit,
+                              token: homeToken,
+                            );
 
                     response.then((value) => {
                           if (value != null && value.statusCode == 202)
@@ -772,8 +775,7 @@ class Confirmation extends StatelessWidget {
         style: ButtonStyle(
             elevation: MaterialStateProperty.all(0),
             backgroundColor: MaterialStateProperty.all(
-                (appointmentList[selectedIndex]
-                        .containsKey("registrationDateTime"))
+                (appointmentList[selectedIndex]['type'] == 'registration')
                     ? const Color.fromARGB(255, 56, 155, 152)
                     : Colors.grey),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -781,7 +783,7 @@ class Confirmation extends StatelessWidget {
               borderRadius: BorderRadius.circular(5.0),
             ))),
         onPressed: () => {
-          (appointmentList[selectedIndex].containsKey("registrationDateTime"))
+          (appointmentList[selectedIndex]['type'] == 'registration')
               ? showDialogConfirmation(context)
               : null
         },
@@ -819,7 +821,7 @@ class CheckInPatient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!appointmentList[selectedIndex].containsKey("registrationDateTime")) {
+    if (!(appointmentList[selectedIndex]['type'] == 'registration')) {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Confirmation(

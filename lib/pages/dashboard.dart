@@ -164,7 +164,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     child: const Padding(
                       padding: EdgeInsets.only(top: 40.0, left: 20),
-                      child: Text('Create a Patient'),
+                      child: Text('Patients'),
                     ),
                   ),
                 ),

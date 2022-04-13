@@ -817,13 +817,12 @@ class _SubmitButton extends StatelessWidget {
             ),
             child: const Text('Submit'),
             onPressed: () async {
+              validator.clearErrors();
               if (formsAreValid()) {
                 var response = await context
                     .read<PatientCubit>()
                     .createNewPatient(
                         token: context.read<LoginCubit>().state.homeToken);
-
-                validator.clearErrors();
 
                 if (response != null && response.body.contains('errors')) {
                   dynamic errors = json.decode(response.body)['errors'];

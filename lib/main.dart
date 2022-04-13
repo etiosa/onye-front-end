@@ -20,7 +20,10 @@ import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart';
 import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 void main() async {
+  await dotenv.load(fileName: 'stage.env');
   runApp(const MyApp());
 }
 

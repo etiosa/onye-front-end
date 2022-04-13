@@ -9,6 +9,8 @@
 .history
 .svn/
 
+*.env
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -47,3 +49,6 @@ app.*.map.json
 
 # Firebase
 *.cache
+
+# Envirnonment variables
+stage.env

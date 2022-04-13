@@ -1,9 +1,9 @@
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:http/http.dart" as http;
 
 class AppointmentRepository {
-  static const String root = "http://localhost:8001/";
+  static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
@@ -65,12 +65,12 @@ class AppointmentRepository {
  */
 //TODO: move to patientCubit
   Future<http.Response?> searchPatients(
-      {String? searchParams, String? token, int? nextPage=0}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/patient/search')
-        .replace(queryParameters: <String, String>{
-      'query': searchParams!,
-      "page":"$nextPage"
-    });
+      {String? searchParams, String? token, int? nextPage = 0}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
+        queryParameters: <String, String>{
+          'query': searchParams!,
+          "page": "$nextPage"
+        });
 
     // http call
     try {
@@ -86,18 +86,24 @@ class AppointmentRepository {
     } catch (ee) {
       return null;
     }
-
-  
   }
 
-//TODO: move to DoctorCubit
+  //TODO: move to DoctorCubit
   Future<List<dynamic>> searchDoctors(
       {String? searchParams, String? token}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-        .replace(queryParameters: <String, String>{
-      'query': searchParams!,
-     
-    });
+    Uri uri;
+    if (searchParams != null && searchParams.isNotEmpty) {
+      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
+          .replace(queryParameters: <String, String>{
+        'type': 'DOCTOR',
+        'query': searchParams,
+      });
+    } else {
+      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
+          .replace(queryParameters: <String, String>{
+        'type': 'DOCTOR',
+      });
+    }
 
     http.Response response = await http.get(
       uri,
@@ -279,7 +285,7 @@ class AppointmentRepository {
     String? languagePreference,
     String? typeOfVisit,
     String? reasonForVisit,
-    String? appointmentDateTime,
+    String? dateTime,
     String? token,
   }) async {
     var uri = Uri.parse(root + 'api/rest/v1/appointment/$id')
@@ -298,7 +304,7 @@ class AppointmentRepository {
             "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasonForVisit,
             "languagePreference": languagePreference,
-            "appointmentDateTime": appointmentDateTime,
+            "dateTime": dateTime,
           }));
 
       return response;
@@ -363,6 +369,7 @@ class AppointmentRepository {
       'zoneId': 'Africa/Lagos',
       "page": "$nextPage"
     });
+
     try {
       http.Response response = await http.get(
         uri,

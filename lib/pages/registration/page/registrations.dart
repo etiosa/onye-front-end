@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -295,7 +293,7 @@ class AppointmentConfirmed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appointmentList[selectedIndex].containsKey('registrationDateTime')) {
+    if (appointmentList[selectedIndex]['type'] == 'registration') {
       return const Icon(
         Icons.check_circle,
         color: Colors.green,
@@ -328,8 +326,7 @@ class Confirmation extends StatelessWidget {
             style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.all(
-                    (appointmentList[selectedIndex]
-                            .containsKey('registrationDateTime'))
+                    (appointmentList[selectedIndex]['type'] == 'registration')
                         ? const Color.fromARGB(255, 56, 155, 152)
                         : Colors.grey),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -337,8 +334,7 @@ class Confirmation extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () => {
-              (appointmentList[selectedIndex]
-                      .containsKey('registrationDateTime'))
+              (appointmentList[selectedIndex]['type'] == 'registration')
                   ? showDialogConfirmation(
                       context, appointmentList[selectedIndex])
                   : null
@@ -353,8 +349,7 @@ class Confirmation extends StatelessWidget {
             style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.all(
-                    (!appointmentList[selectedIndex]
-                            .containsKey('registrationDateTime'))
+                    (!(appointmentList[selectedIndex]['type'] == 'registration'))
                         ? const Color.fromARGB(255, 56, 155, 152)
                         : Colors.grey),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -362,8 +357,7 @@ class Confirmation extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.0),
                 ))),
             onPressed: () => {
-              (!appointmentList[selectedIndex]
-                      .containsKey('registrationDateTime'))
+              (!(appointmentList[selectedIndex]['type'] == 'registration'))
                   ? showDialogConfirmation(
                       context, appointmentList[selectedIndex])
                   : null
@@ -611,6 +605,7 @@ class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
   }
 
   final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
@@ -670,6 +665,7 @@ class ClinicalNoteField extends StatefulWidget {
 
 class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
   String? _selectedText;
+
   // String t= context.read();
 
   final TextEditingController _controller = TextEditingController(text: '');
@@ -752,6 +748,7 @@ class DropDown extends StatefulWidget {
 
 class _DropDownState extends State<DropDown> {
   String? clinicalType;
+
   //
   String dropdownValue = 'CONSULTATION_NOTE';
   String? clinicalNoteId;
@@ -845,11 +842,11 @@ class _DropDownState extends State<DropDown> {
                   child: DropdownButton<String>(
                     dropdownColor: const Color.fromARGB(255, 205, 226, 226),
                     isExpanded: true,
-                    
+
                   value: state.clinicalNoteType.isEmpty &&
                             widget.registration.containsKey('clinicalNoteId')
                         ? _selectedText
-                        : state.clinicalNoteType,   
+                        : state.clinicalNoteType,
                     hint: const Text("Select Note Type"),
                     items: <String>[
                       'CONSULTATION_NOTE',
@@ -898,8 +895,7 @@ class RegisterPatient extends StatefulWidget {
 class _RegisterPatientState extends State<RegisterPatient> {
   @override
   Widget build(BuildContext context) {
-    if (widget.registrationList[widget.selectedIndex]
-        .containsKey('registrationDateTime')) {
+    if (widget.registrationList[widget.selectedIndex]['type'] == 'registration') {
       return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Confirmation(

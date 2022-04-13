@@ -8,18 +8,80 @@ jobs:
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
+      - name: Post to ONYE Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: "C0391T56PNX"
+          # For posting a simple plain text message
+          slack-message: "Front-end CI/CD Workflow Started on Pull Request..."
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       - uses: actions/checkout@v2
       - name: Install Dependecies
         run: :|
           npm install -g flutter-cli
-
+      - name: copy template file to env file
+        run: cp stage.env.template stage.env
+        continue-on-error: true
       - name: build flutter web
         run: flutter build web
+        continue-on-error: true
       - name: firebase Dependecies
         run: npm install -g firebase-tools
 
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Firebase Deploy
+        id: firebase_deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ONYE_DEVELOPMENT }}"
           projectId: onye-development
+        continue-on-error: true
+      - name: Post to a Slack channel
+        id: slack2
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: "C0391T56PNX"
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks":
+                [
+                  {
+                    "type": "header",
+                    "text":
+                      {
+                        "type": "plain_text",
+                        "text": "Pull request",
+                        "emoji": true
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Who?:* ${{ github.event.pull_request.user.login }} *State:* ${{ github.event.pull_request.state }}"
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Preview URL:* <${{ steps.firebase_deploy.outputs.details_url }} | onye-preview-url>\n*Preview Expires:* ${{steps.firebase_deploy.outputs.expire_time}}"
+                      }
+                  }
+                ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

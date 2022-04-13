@@ -9,7 +9,7 @@ class AppointmentState extends Equatable {
       {this.appointmentList = const [],
       this.patientsList = const [],
       this.searchParams = '',
-      this.appointmentDateTime = '',
+      this.dateTime = '',
       this.appointmentDate = '',
       this.appointmentTime = '',
       this.searchState = SEARCHSTATE.inital,
@@ -35,7 +35,7 @@ class AppointmentState extends Equatable {
   final List<dynamic> registrationList;
   final List<dynamic> patientsList;
   final String searchParams;
-  final String appointmentDateTime;
+  final String dateTime;
   final String appointmentDate;
   final String appointmentTime;
   final String selectedPatientId;
@@ -61,7 +61,7 @@ class AppointmentState extends Equatable {
         appointmentList,
         patientsList,
         searchParams,
-        appointmentDateTime,
+        dateTime,
         appointmentDate,
         appointmentTime,
         doctorsList,
@@ -93,7 +93,7 @@ class AppointmentState extends Equatable {
       List<dynamic>? patientsList,
       List<dynamic>? doctorsList,
       List<dynamic>? registrationList,
-      String? appointmentDateTime,
+      String? dateTime,
       String? appointmentTime,
       String? appointmentDate,
       String? selectedPatientId,
@@ -133,7 +133,7 @@ class AppointmentState extends Equatable {
         doctorsList: doctorsList ?? this.doctorsList,
         appointmentDate: appointmentDate ?? this.appointmentDate,
         appointmentTime: appointmentTime ?? this.appointmentTime,
-        appointmentDateTime: appointmentDateTime ?? this.appointmentDateTime,
+        dateTime: dateTime ?? this.dateTime,
         appointmentList: appointmentList ?? this.appointmentList,
         patientsList: patientsList ?? this.patientsList);
   }
