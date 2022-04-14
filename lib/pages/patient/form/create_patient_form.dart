@@ -29,6 +29,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     GlobalKey<FormState>(),
   ];
   final PatientFormValidator validator = PatientFormValidator();
+  final PageController _pageController = PageController();
 
   @override
   void initState() {
@@ -43,72 +44,136 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20.0, left: 20),
-              child: Text(
-                "Create patient record",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 1.2,
-                width: MediaQuery.of(context).size.width / 1.05,
-                child: Stepper(
-                  elevation: 0,
-                  type: StepperType.horizontal,
-                  currentStep: _index,
-                  onStepCancel: () {
-                    if (_index > 0) {
-                      setState(() {
-                        _index -= 1;
-                      });
-                    }
-                  },
-                  onStepContinue: () {
-                    if (_index < 2) {
-                      setState(() {
-                        _index += 1;
-                      });
-                    }
-                  },
-                  onStepTapped: (int index) {
-                    setState(() {
-                      _index = index;
-                    });
-                  },
-                  steps: <Step>[
-                    Step(
-                        state: StepState.editing,
-                        isActive: _index == 0,
-                        title: const Text('Basic info'),
-                        content: BasicInfoFormBody(
-                            formKey: _formKeys[0], validator: validator)),
-                    Step(
-                        state: StepState.editing,
-                        isActive: _index == 1,
-                        title: const Text('Contact info'),
-                        content: ContactInfoFormBody(
-                            formKey: _formKeys[1], validator: validator)),
-                    Step(
-                        state: StepState.complete,
-                        isActive: _index == 2,
-                        title: const Text('Additional info'),
-                        content: AdditionalInfoFormBody(
-                            formKeys: _formKeys, validator: validator)),
-                  ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 20.0, left: 20),
+                child: Text(
+                  "Create patient record",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height / 1.2,
+                  width: MediaQuery.of(context).size.width / 1.05,
+                  child: PageView(
+                    controller: _pageController,
+                    children: [
+                      SingleChildScrollView(
+                        child: BasicInfoFormBody(
+                            formKey: _formKeys[0], validator: validator),
+                      ),
+                      SingleChildScrollView(
+                        child: ContactInfoFormBody(
+                            formKey: _formKeys[1], validator: validator),
+                      ),
+                      SingleChildScrollView(
+                        child: AdditionalInfoFormBody(
+                            formKeys: _formKeys, validator: validator),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.grey[200],
+                      ),
+                      onPressed: () {
+                        _pageController.previousPage(
+                            curve: Curves.easeIn,
+                            duration: Duration(milliseconds: 300));
+                        print('${_pageController}');
+                      },
+                      child: const Text(
+                        'Back',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 5,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        _pageController.nextPage(
+                            curve: Curves.easeIn,
+                            duration: Duration(milliseconds: 300));
+                        print('${_pageController}');
+                      },
+                      child: const Text('Contiue')),
+                ],
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: SizedBox(
+              //     height: MediaQuery.of(context).size.height / 1.2,
+              //     width: MediaQuery.of(context).size.width / 1.05,
+              //     child: Stepper(
+              //       elevation: 0,
+              //       type: StepperType.horizontal,
+              //       currentStep: _index,
+              //       onStepCancel: () {
+              //         if (_index > 0) {
+              //           setState(() {
+              //             _index -= 1;
+              //           });
+              //         }
+              //       },
+              //       onStepContinue: () {
+              //         if (_index < 2) {
+              //           setState(() {
+              //             _index += 1;
+              //           });
+              //         }
+              //       },
+              //       onStepTapped: (int index) {
+              //         setState(() {
+              //           _index = index;
+              //         });
+              //       },
+              //       steps: <Step>[
+              //         Step(
+              //             state: StepState.editing,
+              //             isActive: _index == 0,
+              //             title: const Text('Basic info'),
+              //             content: BasicInfoFormBody(
+              //                 formKey: _formKeys[0], validator: validator)),
+              //         Step(
+              //             state: StepState.editing,
+              //             isActive: _index == 1,
+              //             title: const Text('Contact info'),
+              //             content: ContactInfoFormBody(
+              //                 formKey: _formKeys[1], validator: validator)),
+              //         Step(
+              //             state: StepState.complete,
+              //             isActive: _index == 2,
+              //             title: const Text('Additional info'),
+              //             content: AdditionalInfoFormBody(
+              //                 formKeys: _formKeys, validator: validator)),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );
