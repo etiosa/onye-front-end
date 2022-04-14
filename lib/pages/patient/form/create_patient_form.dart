@@ -957,7 +957,6 @@ class _SubmitButton extends StatelessWidget {
   bool formsAreValid() {
     bool isValid = true;
     for (var formKey in formKeys) {
-      print('formKey${formKeys.indexOf(formKey)}: ${formKey.currentState}');
       if (!formKey.currentState!.validate()) {
         isValid = false;
       }
