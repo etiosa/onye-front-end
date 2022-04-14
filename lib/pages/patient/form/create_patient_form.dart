@@ -100,7 +100,6 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                         _pageController.previousPage(
                             curve: Curves.easeIn,
                             duration: Duration(milliseconds: 300));
-                        print('${_pageController}');
                       },
                       child: const Text(
                         'Back',
@@ -112,11 +111,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                     width: MediaQuery.of(context).size.width / 5,
                   ),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color.fromARGB(255, 56, 155, 152),
+                      ),
                       onPressed: () {
                         _pageController.nextPage(
                             curve: Curves.easeIn,
                             duration: Duration(milliseconds: 300));
-                        print('${_pageController}');
                       },
                       child: const Text('Contiue')),
                 ],
@@ -956,6 +957,7 @@ class _SubmitButton extends StatelessWidget {
   bool formsAreValid() {
     bool isValid = true;
     for (var formKey in formKeys) {
+      print('formKey${formKeys.indexOf(formKey)}: ${formKey.currentState}');
       if (!formKey.currentState!.validate()) {
         isValid = false;
       }
