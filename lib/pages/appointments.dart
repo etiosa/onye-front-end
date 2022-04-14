@@ -418,17 +418,17 @@ class RescheduleAppointmentButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              DropDown(
+              AppointmentDropDown(
                   label: 'Language Preference',
                   initialValue: 'EN',
                   options: const ['EN']),
               const SizedBox(height: 25),
-              DropDown(
+              AppointmentDropDown(
                   label: 'Type of Visit',
                   initialValue: appointment['typeOfVisit'],
                   options: const ['Follow-up', 'Consultation']),
               const SizedBox(height: 25),
-              DropDown(
+              AppointmentDropDown(
                   label: 'Reason for Visit',
                   initialValue: appointment['reasonForVisit'],
                   options: const [
@@ -448,13 +448,13 @@ class RescheduleAppointmentButton extends StatelessWidget {
               ),
               Row(
                 children: const [
-                  DatePickerField(
+                  AppointmentDatePickerField(
                     label: 'Date',
                   ),
                   SizedBox(
                     width: 5,
                   ),
-                  DateTimePickerField(
+                  AppointmentDateTimePickerField(
                     label: 'Time',
                   ),
                 ],
@@ -536,8 +536,8 @@ class RescheduleAppointmentButton extends StatelessWidget {
   }
 }
 
-class DropDown extends StatefulWidget {
-  DropDown(
+class AppointmentDropDown extends StatefulWidget {
+  AppointmentDropDown(
       {Key? key, required this.label, required this.options, this.initialValue})
       : super(
           key: key,
@@ -547,10 +547,10 @@ class DropDown extends StatefulWidget {
   String? initialValue;
 
   @override
-  _DropDownState createState() => _DropDownState();
+  _AppointmentDropDownState createState() => _AppointmentDropDownState();
 }
 
-class _DropDownState extends State<DropDown> {
+class _AppointmentDropDownState extends State<AppointmentDropDown> {
   String? _selectedText;
 
   @override
@@ -616,8 +616,8 @@ class _DropDownState extends State<DropDown> {
   }
 }
 
-class DateTimePickerField extends StatelessWidget {
-  const DateTimePickerField({Key? key, required this.label}) : super(key: key);
+class AppointmentDateTimePickerField extends StatelessWidget {
+  const AppointmentDateTimePickerField({Key? key, required this.label}) : super(key: key);
   final String label;
 
   @override
@@ -670,8 +670,8 @@ Future dateTimePicker(BuildContext context, String label) async {
   context.read<AppointmentCubit>().setAppointmentTime(formatTime);
 }
 
-class DatePickerField extends StatelessWidget {
-  const DatePickerField({Key? key, required this.label}) : super(key: key);
+class AppointmentDatePickerField extends StatelessWidget {
+  const AppointmentDatePickerField({Key? key, required this.label}) : super(key: key);
   final String label;
 
   @override

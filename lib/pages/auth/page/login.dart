@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
 
@@ -190,46 +191,36 @@ class _SubmitButton extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.loginStatus != LoginStatus.login,
       builder: (context, state) {
-      
-         _authSession.getHomeToken()!.then((value) => {
-                if (value != '')
-                  {
-                    Messages.showMessage(
-                        const Icon(
-                          IconData(0xf635, fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
-                        ),
-                        'Login successful'),
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                      Navigator.of(context).pushNamed("/dashboard");
-                    })
-                  }
-              }); 
-        
-
-        return Container(
-          width: 250,
-          height: 60,
-          padding: const EdgeInsets.all(2),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: ElevatedButton(
-              autofocus: true,
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 56, 155, 152)),
-              ),
-              child: const Text('Login'),
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  context.read<LoginCubit>().login();
+        _authSession.getHomeToken()!.then((value) => {
+              if (value != '')
+                {
+                  Messages.showMessage(
+                      const Icon(
+                        IconData(0xf635, fontFamily: 'MaterialIcons'),
+                        color: Colors.green,
+                      ),
+                      'Login successful'),
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.of(context).pushNamed("/dashboard");
+                  })
                 }
-              },
-            ),
-          ),
+            });
+
+        return Button(
+          height: 60,
+          width: 250,
+          onPressed: () => login(context: context, formKey: formKey),
+          label: 'Login',
         );
       },
     );
+  }
+}
+
+void login(
+    {required BuildContext context,
+    required GlobalKey<FormState> formKey}) async {
+  if (formKey.currentState!.validate()) {
+    context.read<LoginCubit>().login();
   }
 }
