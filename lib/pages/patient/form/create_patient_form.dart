@@ -31,9 +31,15 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   final PatientFormValidator validator = PatientFormValidator();
   final PageController _pageController = PageController();
 
+  void nextPage() {
+    _pageController.nextPage(
+        curve: Curves.easeIn, duration: Duration(milliseconds: 300));
+  }
+
   @override
   void initState() {
     // TODO: implement initState
+    PageController _pageController = PageController();
     super.initState();
     if (context.read<LoginCubit>().state.homeToken.isEmpty) {
       //redirect to home
@@ -51,6 +57,19 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   @override
   Widget build(BuildContext context) {
+    var refToBasicInfo = BasicInfoFormBody(
+      formKey: _formKeys[0],
+      validator: validator,
+    );
+    var refToContactInfo = ContactInfoFormBody(
+      formKey: _formKeys[1],
+      validator: validator,
+    );
+    var refToAdditionalInfo = AdditionalInfoFormBody(
+      formKey: _formKeys[2],
+      validator: validator,
+    );
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,7 +102,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       ),
                       SingleChildScrollView(
                         child: AdditionalInfoFormBody(
-                            formKeys: _formKeys, validator: validator),
+                            formKey: _formKeys[2], validator: validator),
                       ),
                     ],
                   ),
@@ -97,9 +116,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                         primary: Colors.grey[200],
                       ),
                       onPressed: () {
-                        _pageController.previousPage(
-                            curve: Curves.easeIn,
-                            duration: Duration(milliseconds: 300));
+                        if (_pageController.page! > 0) {
+                          _pageController.previousPage(
+                              curve: Curves.easeIn,
+                              duration: Duration(milliseconds: 300));
+                        } else {
+                          Navigator.of(context).pop();
+                        }
                       },
                       child: const Text(
                         'Back',
@@ -108,71 +131,97 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                         ),
                       )),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width / 5,
+                    width: MediaQuery.of(context).size.width * .1,
                   ),
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color.fromARGB(255, 56, 155, 152),
-                      ),
-                      onPressed: () {
-                        _pageController.nextPage(
-                            curve: Curves.easeIn,
-                            duration: Duration(milliseconds: 300));
-                      },
-                      child: const Text('Contiue')),
+                    child: const Text('Save'),
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color.fromARGB(255, 56, 155, 152),
+                    ),
+                    onPressed: () async {
+                      if (_pageController.page == 0) {
+                        if (refToBasicInfo.formsAreValid()) {
+                          nextPage();
+                        }
+                      } else if (_pageController.page == 1) {
+                        if (refToContactInfo.formsAreValid()) {
+                          nextPage();
+                        }
+                      } else if (_pageController.page == 2) {
+                        if (refToAdditionalInfo.formsAreValid()) {
+                          var response = await context
+                              .read<PatientCubit>()
+                              .createNewPatient(
+                                  token: context
+                                      .read<LoginCubit>()
+                                      .state
+                                      .homeToken);
+
+                          if (response != null &&
+                              response.body.contains('errors')) {
+                            dynamic errors =
+                                json.decode(response.body)['errors'];
+                            String errorsJson = jsonEncode(errors);
+
+                            if (errorsJson.contains('phoneNumber')) {
+                              validator.phoneNumberError =
+                                  jsonDecode(errorsJson)['phoneNumber'];
+                            }
+                            if (errorsJson.contains('email')) {
+                              validator.emailError =
+                                  jsonDecode(errorsJson)['email'];
+                            }
+                          }
+
+                          if (response != null) {
+                            switch (response.statusCode) {
+                              case 201:
+                                context.read<PatientCubit>().clearState();
+                                Messages.showMessage(
+                                    const Icon(
+                                      IconData(0xf635,
+                                          fontFamily: 'MaterialIcons'),
+                                      color: Colors.green,
+                                    ),
+                                    'Patient created');
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const Dashboard())),
+                                    ModalRoute.withName('/dashboard'));
+                                break;
+                              case 400:
+                                Messages.showMessage(
+                                    const Icon(
+                                      IconData(0xe237,
+                                          fontFamily: 'MaterialIcons'),
+                                      color: Colors.red,
+                                    ),
+                                    'Could not create patient, invalid input');
+                                break;
+                              default:
+                                Messages.showMessage(
+                                    const Icon(
+                                      IconData(0xe237,
+                                          fontFamily: 'MaterialIcons'),
+                                      color: Colors.red,
+                                    ),
+                                    'Could not create patient');
+                            }
+                          } else {
+                            Messages.showMessage(
+                                const Icon(
+                                  IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                  color: Colors.red,
+                                ),
+                                'Could not create patient, invalid input');
+                          }
+                        }
+                      }
+                    },
+                  ),
                 ],
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: SizedBox(
-              //     height: MediaQuery.of(context).size.height / 1.2,
-              //     width: MediaQuery.of(context).size.width / 1.05,
-              //     child: Stepper(
-              //       elevation: 0,
-              //       type: StepperType.horizontal,
-              //       currentStep: _index,
-              //       onStepCancel: () {
-              //         if (_index > 0) {
-              //           setState(() {
-              //             _index -= 1;
-              //           });
-              //         }
-              //       },
-              //       onStepContinue: () {
-              //         if (_index < 2) {
-              //           setState(() {
-              //             _index += 1;
-              //           });
-              //         }
-              //       },
-              //       onStepTapped: (int index) {
-              //         setState(() {
-              //           _index = index;
-              //         });
-              //       },
-              //       steps: <Step>[
-              //         Step(
-              //             state: StepState.editing,
-              //             isActive: _index == 0,
-              //             title: const Text('Basic info'),
-              //             content: BasicInfoFormBody(
-              //                 formKey: _formKeys[0], validator: validator)),
-              //         Step(
-              //             state: StepState.editing,
-              //             isActive: _index == 1,
-              //             title: const Text('Contact info'),
-              //             content: ContactInfoFormBody(
-              //                 formKey: _formKeys[1], validator: validator)),
-              //         Step(
-              //             state: StepState.complete,
-              //             isActive: _index == 2,
-              //             title: const Text('Additional info'),
-              //             content: AdditionalInfoFormBody(
-              //                 formKeys: _formKeys, validator: validator)),
-              //       ],
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -203,6 +252,14 @@ class BasicInfoFormBody extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
+
+  bool formsAreValid() {
+    bool isValid = true;
+    if (!formKey.currentState!.validate()) {
+      isValid = false;
+    }
+    return isValid;
+  }
 
   @override
   State<BasicInfoFormBody> createState() =>
@@ -251,96 +308,105 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 
   @override
   Widget build(BuildContext context) {
+    Widget adjustableSpacer = SizedBox(
+      height: MediaQuery.of(context).size.height * .02,
+    );
     return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InputField(
-                      label: 'First Name',
-                      setValue: setFirstName,
-                      isRequired: true,
-                    ),
-                    const SizedBox(height: 10),
-                    InputField(
-                      label: 'Middle Name',
-                      setValue: setMiddleName,
-                      isRequired: false,
-                    ),
-                    const SizedBox(height: 10),
-                    InputField(
-                      label: 'Last Name',
-                      setValue: setLastName,
-                      isRequired: true,
-                    ),
-                    const SizedBox(height: 10),
-                    const DatePickerField(),
-                    const SizedBox(height: 10),
-                    DropDown(
-                      label: 'Gender',
-                      options: const ['MALE', 'FEMALE', 'OTHER'],
-                      setValue: setGender,
-                    ),
-                    const SizedBox(height: 10),
-                    DropDown(
-                      label: 'Religion',
-                      options: const [
-                        '  HINDUISM',
-                        'BUDDHISM',
-                        'JUDAISM',
-                        'CHRISTIANITY',
-                        'ISLAM',
-                        'OTHER',
+      return Center(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * .8,
+          child: Flex(
+            direction: Axis.vertical,
+            children: [
+              Expanded(
+                child: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        adjustableSpacer,
+                        InputField(
+                          label: 'First Name',
+                          setValue: setFirstName,
+                          isRequired: true,
+                        ),
+                        adjustableSpacer,
+                        InputField(
+                          label: 'Middle Name',
+                          setValue: setMiddleName,
+                          isRequired: false,
+                        ),
+                        adjustableSpacer,
+                        InputField(
+                          label: 'Last Name',
+                          setValue: setLastName,
+                          isRequired: true,
+                        ),
+                        adjustableSpacer,
+                        const DatePickerField(),
+                        adjustableSpacer,
+                        DropDown(
+                          label: 'Gender',
+                          options: const ['MALE', 'FEMALE', 'OTHER'],
+                          setValue: setGender,
+                        ),
+                        adjustableSpacer,
+                        DropDown(
+                          label: 'Religion',
+                          options: const [
+                            '  HINDUISM',
+                            'BUDDHISM',
+                            'JUDAISM',
+                            'CHRISTIANITY',
+                            'ISLAM',
+                            'OTHER',
+                          ],
+                          setValue: setReligion,
+                        ),
+                        adjustableSpacer,
+                        DropDown(
+                          label: 'Education Level',
+                          options: const [
+                            'NONE',
+                            'PRE_PRIMARY',
+                            'PRIMARY',
+                            'LOWER_SECONDARY',
+                            'UPPER_SECONDARY',
+                            'POST_SECONDARY',
+                            'SHORT_CYCLE_TERTIARY',
+                            'BACHELORS_DEGREE',
+                            'MASTERS_DEGREE',
+                            'DOCTORATE',
+                          ],
+                          setValue: setReligion,
+                        ),
+                        adjustableSpacer,
+                        DropDown(
+                          label: 'Ethnicity',
+                          options: const [
+                            'HAUSA',
+                            'YORUBA',
+                            'IJAW',
+                            'IGBO',
+                            'IBIBIO',
+                            'TIV',
+                            'FULANI',
+                            'KANURI',
+                            'OTHER',
+                          ],
+                          setValue: setEthnicity,
+                        ),
                       ],
-                      setValue: setReligion,
                     ),
-                    const SizedBox(height: 10),
-                    DropDown(
-                      label: 'Education Level',
-                      options: const [
-                        'NONE',
-                        'PRE_PRIMARY',
-                        'PRIMARY',
-                        'LOWER_SECONDARY',
-                        'UPPER_SECONDARY',
-                        'POST_SECONDARY',
-                        'SHORT_CYCLE_TERTIARY',
-                        'BACHELORS_DEGREE',
-                        'MASTERS_DEGREE',
-                        'DOCTORATE',
-                      ],
-                      setValue: setReligion,
-                    ),
-                    const SizedBox(height: 10),
-                    DropDown(
-                      label: 'Ethnicity',
-                      options: const [
-                        'HAUSA',
-                        'YORUBA',
-                        'IJAW',
-                        'IGBO',
-                        'IBIBIO',
-                        'TIV',
-                        'FULANI',
-                        'KANURI',
-                        'OTHER',
-                      ],
-                      setValue: setEthnicity,
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ]);
+            ],
+          ),
+        ),
+      );
     });
   }
 }
@@ -355,6 +421,14 @@ class ContactInfoFormBody extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
+
+  bool formsAreValid() {
+    bool isValid = true;
+    if (!formKey.currentState!.validate()) {
+      isValid = false;
+    }
+    return isValid;
+  }
 
   @override
   State<ContactInfoFormBody> createState() =>
@@ -415,24 +489,32 @@ class _ContactInfoFormBodyState extends State<ContactInfoFormBody> {
 class AdditionalInfoFormBody extends StatefulWidget {
   const AdditionalInfoFormBody({
     Key? key,
-    required this.formKeys,
+    required this.formKey,
     required this.validator,
   }) : super();
 
-  final List<GlobalKey<FormState>> formKeys;
+  final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
+
+  bool formsAreValid() {
+    bool isValid = true;
+    if (!formKey.currentState!.validate()) {
+      isValid = false;
+    }
+    return isValid;
+  }
 
   @override
   State<AdditionalInfoFormBody> createState() =>
-      _AdditionalInfoFormBodyState(formKeys: formKeys, validator: validator);
+      _AdditionalInfoFormBodyState(formKey: formKey, validator: validator);
 }
 
 class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
-  final List<GlobalKey<FormState>> formKeys;
+  final GlobalKey<FormState> formKey;
   final PatientFormValidator validator;
 
   _AdditionalInfoFormBodyState(
-      {required this.formKeys, required this.validator});
+      {required this.formKey, required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -444,14 +526,12 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Form(
-                key: formKeys[2],
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const EmergencyContact(),
-                    const SizedBox(height: 10),
-                    _SubmitButton(formKeys: formKeys, validator: validator)
                   ],
                 ),
               ),
@@ -644,57 +724,61 @@ class Address extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          width: 320,
-          child: TextFormField(
-            onChanged: (zipcode) =>
-                context.read<PatientCubit>().setZipCode(zipcode),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              hintText: "Zip code",
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
+        Row(
+          children: [
+            SizedBox(
+              width: 155,
+              child: TextFormField(
+                onChanged: (zipcode) =>
+                    context.read<PatientCubit>().setZipCode(zipcode),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  filled: true,
+                  hintText: "Zip code",
+                  fillColor: Color.fromARGB(255, 205, 226, 226),
+                  labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600),
+                ),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (!allAddressFieldsValid(context) &&
+                      value != null &&
+                      value.isEmpty) {
+                    return 'Zip code is required';
+                  }
+                  return null;
+                },
+              ),
             ),
-            autovalidateMode: AutovalidateMode.always,
-            validator: (value) {
-              if (!allAddressFieldsValid(context) &&
-                  value != null &&
-                  value.isEmpty) {
-                return 'Zip code is required to complete address';
-              }
-              return null;
-            },
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: 320,
-          child: TextFormField(
-            onChanged: (city) => context.read<PatientCubit>().setCity(city),
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(borderSide: BorderSide.none),
-              filled: true,
-              hintText: "City",
-              fillColor: Color.fromARGB(255, 205, 226, 226),
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600),
+            const SizedBox(width: 10),
+            SizedBox(
+              width: 155,
+              child: TextFormField(
+                onChanged: (city) => context.read<PatientCubit>().setCity(city),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  filled: true,
+                  hintText: "City",
+                  fillColor: Color.fromARGB(255, 205, 226, 226),
+                  labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600),
+                ),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (!allAddressFieldsValid(context) &&
+                      value != null &&
+                      value.isEmpty) {
+                    return 'City is required';
+                  }
+                  return null;
+                },
+              ),
             ),
-            autovalidateMode: AutovalidateMode.always,
-            validator: (value) {
-              if (!allAddressFieldsValid(context) &&
-                  value != null &&
-                  value.isEmpty) {
-                return 'City is required to complete address';
-              }
-              return null;
-            },
-          ),
+          ],
         ),
       ],
     );
@@ -784,7 +868,7 @@ class EmergencyContact extends StatelessWidget {
               if (!allEmergencyContactFieldsAreValid(context) &&
                   value != null &&
                   value.isEmpty) {
-                return 'Phone number is required to complete emergency contact';
+                return 'Phone number is required';
               }
               return null;
             },
@@ -812,7 +896,7 @@ class EmergencyContact extends StatelessWidget {
               if (!allEmergencyContactFieldsAreValid(context) &&
                   value != null &&
                   value.isEmpty) {
-                return 'Relationship is required to complete emergency contact';
+                return 'Relationship is required';
               }
               return null;
             },
