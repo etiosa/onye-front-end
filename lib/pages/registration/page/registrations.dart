@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Loading.dart';
 import 'package:onye_front_ened/Widgets/RegisterationCard.dart';
+import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -12,7 +13,9 @@ import 'package:onye_front_ened/session/authSession.dart';
 
 import '../../../Widgets/HomepageHeader.dart';
 import '../../../Widgets/Pagination.dart';
-import '../../../Widgets/Patient_Registration_Appointment_Card.dart';
+import '../../../components/clinicalNote/ClinicalNoteDropDown.dart';
+import '../../../components/clinicalNote/ClinicalNoteField.dart';
+import '../../../components/clinicalNote/ClinicalNoteTitleField .dart';
 import '../../../components/util/Messages.dart';
 
 class Registration extends StatefulWidget {
@@ -282,70 +285,6 @@ class AppointmentConfirmed extends StatelessWidget {
   }
 }
 
-//TODO: MOVE THIS
-/* class Confirmation extends StatelessWidget {
-  Confirmation(
-      {Key? key, required this.appointmentList, required this.selectedIndex})
-      : super(key: key);
-  List<dynamic> appointmentList;
-  int selectedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SizedBox(
-          width: 120,
-          height: 30,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(
-                    (appointmentList[selectedIndex]['type'] == 'registration')
-                        ? const Color.fromARGB(255, 56, 155, 152)
-                        : Colors.grey),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ))),
-            onPressed: () => {
-              (appointmentList[selectedIndex]['type'] == 'registration')
-                  ? showDialogConfirmation(
-                      context, appointmentList[selectedIndex])
-                  : null
-            },
-            child: const Text('clinical note'),
-          ),
-        ),
-        SizedBox(
-          width: 120,
-          height: 30,
-          child: ElevatedButton(
-            style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(
-                    (!(appointmentList[selectedIndex]['type'] ==
-                            'registration'))
-                        ? const Color.fromARGB(255, 56, 155, 152)
-                        : Colors.grey),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ))),
-            onPressed: () => {
-              (!(appointmentList[selectedIndex]['type'] == 'registration'))
-                  ? showDialogConfirmation(
-                      context, appointmentList[selectedIndex])
-                  : null
-            },
-            child: const Text('Register'),
-          ),
-        ),
-      ],
-    );
-  } */
-
 /*TODO:Move this to ClinicalNote */
 
 Future<String?> showDialogConfirmation(
@@ -364,7 +303,7 @@ Future<String?> showDialogConfirmation(
         if (appointment.containsKey('clinicalNoteId'))
           {
             context
-                .read<AppointmentCubit>()
+                .read<ClinicalnoteCubit>()
                 .getPatientClinicalNote(id: clincialNoteid, token: hometoken)
           }
       });
@@ -385,12 +324,15 @@ List<Widget> clinicalNoteForm(
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        DropDown(label: 'Note Type', registration: appointment, options: const [
-          'CONSULTATION_NOTE',
-          'DISCHARGE_SUMMARY_NOTE',
-          'PROCEDURE_NOTE',
-          'PROGRESS_NOTE',
-        ]),
+        ClinicalNoteDropDown(
+            label: 'Note Type',
+            registration: appointment,
+            options: const [
+              'CONSULTATION_NOTE',
+              'DISCHARGE_SUMMARY_NOTE',
+              'PROCEDURE_NOTE',
+              'PROGRESS_NOTE',
+            ]),
       ],
     ),
     Column(
@@ -434,6 +376,7 @@ List<Widget> clinicalNoteForm(
         TextButton(
           onPressed: () => {
             Navigator.pop(context, 'Cancel'),
+            context.read<ClinicalnoteCubit>().clearClinicalNoteState()
           },
           child: const Text('Cancel'),
         ),
@@ -447,8 +390,7 @@ List<Widget> clinicalNoteForm(
                     clinicalNoteId: appointment['clinicalNoteId'],
                     homeToken: homeToken,
                     context: context);
-
-                response!.then((value) => {
+                      response!.then((value) => {
                       if (value != null && value.statusCode == 202)
                         {
                           Messages.showMessage(
@@ -459,10 +401,10 @@ List<Widget> clinicalNoteForm(
                               'Clinical Note updated'),
                           //clearState after update
                           context
-                              .read<AppointmentCubit>()
+                              .read<ClinicalnoteCubit>()
                               .clearClinicalNoteState(),
                           context
-                              .read<AppointmentCubit>()
+                              .read<ClinicalnoteCubit>()
                               .getPatientClinicalNote(
                                   token: homeToken,
                                   id: appointment['clinicalNoteId']),
@@ -486,13 +428,10 @@ List<Widget> clinicalNoteForm(
                     homeToken: homeToken,
                     registerationId: appointment['id'],
                     medicalPersonnelId: context.read<LoginCubit>().state.id,
-                    note: context.read<AppointmentCubit>().state.clinicalNote,
-                    noteTitle: context
-                        .read<AppointmentCubit>()
-                        .state
-                        .clinicalNoteTitle,
+                    note: context.read<ClinicalnoteCubit>().state.text,
+                    noteTitle: context.read<ClinicalnoteCubit>().state.title,
                     clinicalNoteType:
-                        context.read<AppointmentCubit>().state.clinicalNoteType,
+                        context.read<ClinicalnoteCubit>().state.type,
                     context: context,
                     patientId: appointment['patient']['id']);
 
@@ -500,7 +439,7 @@ List<Widget> clinicalNoteForm(
                       if (value != null && value.statusCode == 201)
                         {
                           context
-                              .read<AppointmentCubit>()
+                              .read<ClinicalnoteCubit>()
                               .clearClinicalNoteState(),
                           Messages.showMessage(
                               const Icon(
@@ -537,12 +476,12 @@ Future<Response?>? updateClinicalNoteData(
     {required BuildContext context,
     required String homeToken,
     required String clinicalNoteId}) {
-  var response = context.read<AppointmentCubit>().updateClinicalNote(
+  var response = context.read<ClinicalnoteCubit>().updateClinicalNote(
         token: homeToken,
         id: clinicalNoteId,
-        type: context.read<AppointmentCubit>().state.clinicalNoteType,
-        noteText: context.read<AppointmentCubit>().state.clinicalNote,
-        title: context.read<AppointmentCubit>().state.clinicalNoteTitle,
+        type: context.read<ClinicalnoteCubit>().state.type,
+        noteText: context.read<ClinicalnoteCubit>().state.text,
+        title: context.read<ClinicalnoteCubit>().state.title,
       );
   return response;
 }
@@ -556,7 +495,7 @@ Future<Response?>? createClinicalNoteData(
     required String clinicalNoteType,
     required String patientId,
     required BuildContext context}) {
-  var response = context.read<AppointmentCubit>().createClinicalNote(
+  var response = context.read<ClinicalnoteCubit>().createClinicalNote(
       token: homeToken,
       registrationId: registerationId,
       medicalId: medicalPersonnelId,
@@ -565,271 +504,6 @@ Future<Response?>? createClinicalNoteData(
       clinicalNoteType: clinicalNoteType,
       patientId: patientId);
   return response;
-}
-
-//TODO: change this to clinical note component
-class ClinicalNoteTitleField extends StatefulWidget {
-  ClinicalNoteTitleField({
-    required this.appointment,
-    Key? key,
-  }) : super(key: key);
-  dynamic appointment;
-
-  @override
-  State<ClinicalNoteTitleField> createState() => _ClinicalNoteTitleFieldState();
-}
-
-class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
-  String? _selectedText;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _controller.text = context.read<AppointmentCubit>().state.clinicalNoteTitle;
-    _selectedText = context.read<AppointmentCubit>().state.clinicalNoteTitle;
-  }
-
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
-      if (state.clinicalNoteTitle.isNotEmpty &&
-          state.clinicalNoteTitle != _controller.text) {
-        _controller.text =
-            context.read<AppointmentCubit>().state.clinicalNoteTitle;
-      }
-      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Text(
-            "Title",
-            style: TextStyle(
-              color: Color.fromARGB(255, 56, 155, 152),
-            ),
-          ),
-        ),
-        TextFormField(
-          controller: _controller,
-          onChanged: (title) =>
-              context.read<AppointmentCubit>().setClinicalNoteTitle(title),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            filled: true,
-            fillColor: Color.fromARGB(255, 205, 226, 226),
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600),
-          ),
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              return 'Please enter a title';
-            }
-            return null;
-          },
-        ),
-      ]);
-    });
-  }
-}
-
-class ClinicalNoteField extends StatefulWidget {
-  ClinicalNoteField({
-    required this.appointment,
-    this.title,
-    Key? key,
-  }) : super(key: key);
-  dynamic appointment;
-  var title;
-
-  @override
-  State<ClinicalNoteField> createState() => _ClinicalNoteFieldState();
-}
-
-class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
-  String? _selectedText;
-
-  // String t= context.read();
-
-  final TextEditingController _controller = TextEditingController(text: '');
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _controller.text = context.read<AppointmentCubit>().state.clinicalNote;
-    _selectedText = context.read<AppointmentCubit>().state.clinicalNote;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-      builder: (context, state) {
-        if (state.clinicalNote.isNotEmpty &&
-            state.clinicalNote != _controller.text) {
-          _controller.text =
-              context.read<AppointmentCubit>().state.clinicalNote;
-        }
-        return (Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Text(
-                "Note",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 56, 155, 152),
-                ),
-              ),
-            ),
-            TextFormField(
-              controller: _controller,
-              maxLines: 7,
-              onChanged: (note) {
-                setState(() {
-                  _selectedText = note;
-                  context.read<AppointmentCubit>().setClinicalNote(note);
-                });
-              },
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(borderSide: BorderSide.none),
-                filled: true,
-                fillColor: Color.fromARGB(255, 205, 226, 226),
-                labelStyle: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600),
-              ),
-              validator: (String? value) {
-                if (value!.isEmpty) {
-                  return 'Please enter a note';
-                }
-                return null;
-              },
-            ),
-          ],
-        ));
-      },
-    );
-  }
-}
-
-class DropDown extends StatefulWidget {
-  DropDown(
-      {Key? key, required this.label, required this.options, this.registration})
-      : super(
-          key: key,
-        );
-  String label;
-  List<String> options;
-  dynamic registration;
-
-  @override
-  _DropDownState createState() => _DropDownState();
-}
-
-class _DropDownState extends State<DropDown> {
-  String? clinicalType;
-
-  //
-  String dropdownValue = 'CONSULTATION_NOTE';
-  String? clinicalNoteId;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    context.read<AppointmentCubit>().setClinicalNoteType(dropdownValue);
-  }
-
-  final AuthSession authsession = AuthSession();
-
-  @override
-  Widget build(BuildContext context) {
-    // run get clincial note // by check if  the current selected wiget has the clinicalNoted id
-    if (widget.registration.containsKey('clinicalNoteId')) {
-      clinicalNoteId = widget.registration['clinicalNoteId'];
-
-      authsession.getHomeToken()?.then((value) => {
-            {
-              context
-                  .read<AppointmentCubit>()
-                  .getPatientClinicalNote(id: clinicalNoteId, token: value)
-                  .then((value) {
-                context.read<AppointmentCubit>().setclinicalNoteID(
-                      clinicalNoteId!,
-                    );
-                //
-              })
-            }
-          });
-    } else {
-      //check if the clincialnote state is not empty if its empty the clincial note
-      if (context.read<AppointmentCubit>().state.clinicalNoteID.isNotEmpty) {
-        context.read<AppointmentCubit>().clearClinicalNoteState();
-      }
-    }
-
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-      builder: ((context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Text(widget.label),
-            ),
-            SizedBox(
-              height: 45,
-              width: 300,
-              child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  color: const Color.fromARGB(255, 205, 226, 226),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      hint: const Text("Select Note Type"),
-                      dropdownColor: const Color.fromARGB(255, 205, 226, 226),
-                      value: dropdownValue,
-                      icon: const Icon(Icons.arrow_downward),
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.deepPurpleAccent,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue!;
-                          context
-                              .read<AppointmentCubit>()
-                              .setClinicalNoteType(dropdownValue);
-                        });
-                      },
-                      items: <String>[
-                        'CONSULTATION_NOTE',
-                        'DISCHARGE_SUMMARY_NOTE',
-                        'PROCEDURE_NOTE',
-                        'PROGRESS_NOTE',
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  )),
-            ),
-          ],
-        );
-      }),
-    );
-  }
 }
 
 // ignore: must_be_immutable

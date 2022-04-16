@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
-
 part 'appointment_state.dart';
 
 class AppointmentCubit extends Cubit<AppointmentState> {
@@ -132,69 +130,6 @@ emit(state.copyWith(
     emit(state.copyWith(selectedPatientIndex: selectedIndex));
   }
 
-  void setClinicalNote(String? note) {
-    final String clinicalNote = note!;
-    emit(state.copyWith(clinicalNote: clinicalNote));
-  }
-
-  void setClinicalNoteTitle(String? title) {
-    final String clinicalNoteTitle = title!;
-    emit(state.copyWith(clinicalNoteTitle: clinicalNoteTitle));
-  }
-
-  void setClinicalNoteType(String? type) {
-    final String clinicalNoteType = type!;
-    emit(state.copyWith(clinicalNoteType: clinicalNoteType));
-  }
-
-  Future<Response?> createClinicalNote(
-      {String? token,
-      String? patientId,
-      String? medicalId,
-      String? title,
-      String? note,
-      String? registrationId,
-      String? clinicalNoteType}) async {
-    Response? req = await _appointmentRepository.createClinicalNote(
-        token: token,
-        patientId: patientId,
-        medicalId: medicalId,
-        note: note,
-        registerationId: registrationId,
-        clincialNoteType: clinicalNoteType,
-        title: title);
-
-    return req;
-  }
-
-
-
-  Future<Response?> getPatientClinicalNote({
-    String? token,
-    String? id,
-  }) async {
-    Response? req = await _appointmentRepository.getPatientClinicalNote(
-        token: token, id: id);
-    setPatientClinicalNote(req!);
-    return req;
-  }
-
-  void setPatientClinicalNote(Response req) async {
-    final body = jsonDecode(req.body);
-
-    emit(state.copyWith(
-        clinicalNote: body['text'],
-        clinicalNoteTitle: body['title'],
-        clinicalNoteType: body['type']));
-  }
-
-  void setclinicalNoteID(String clinicalNoteId) {
-    emit(state.copyWith(clinicalNoteID: clinicalNoteId));
-  }
-
-
-  
-
   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
     emit(state.copyWith(nextPage: nextPage));
     if (state.nextPage <= state.maxPageNumber) {
@@ -230,24 +165,6 @@ emit(state.copyWith(
         reasons: reasonForVisit);
 
     return req;
-  }
-
-  Future<Response?> updateClinicalNote({
-    String? id,
-    String? type,
-    String? title,
-    String? noteText,
-    String? token,
-  }) async {
-    Response? response = await _appointmentRepository.updateClinicalNote(
-      id: id,
-      type: type,
-      noteText: noteText,
-      title: title,
-      token: token,
-    );
-
-    return response;
   }
 
   Future<Response?> updateAppointment({
@@ -287,11 +204,5 @@ emit(state.copyWith(
 
   void clearState() {
     emit(const AppointmentState());
-  }
-
-//TODO: move this to a different class
-  void clearClinicalNoteState() {
-    emit(state.copyWith(
-        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
   }
 }

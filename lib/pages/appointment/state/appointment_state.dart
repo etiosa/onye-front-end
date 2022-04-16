@@ -24,12 +24,10 @@ class AppointmentState extends Equatable {
       this.registrationState = REGISTRATIONSTATE.inita,
       this.selectedAppointmentId = '',
       this.patientRegistered = false,
-      this.clinicalNote = '',
-      this.clinicalNoteTitle = '',
+ 
       this.maxPageNumber = 0,
       this.nextPage = 0,
-      this.clinicalNoteID='',
-      this.clinicalNoteType = ''});
+      });
 
   final List<dynamic> appointmentList;
   final List<dynamic> registrationList;
@@ -48,13 +46,9 @@ class AppointmentState extends Equatable {
   final int selectedMedicalIndex;
   final REGISTRATIONSTATE registrationState;
   final String selectedAppointmentId;
-  final String clinicalNoteTitle;
-  final String clinicalNote;
-  final String clinicalNoteType;
   final bool patientRegistered;
   final int maxPageNumber;
   final int nextPage;
-  final String clinicalNoteID;
 
   @override
   List<Object> get props => [
@@ -76,12 +70,10 @@ class AppointmentState extends Equatable {
         selectedAppointmentId,
         patientRegistered,
         registrationList,
-        clinicalNote,
-        clinicalNoteTitle,
-        clinicalNoteType,
+      
         maxPageNumber,
         nextPage,
-        clinicalNoteID
+      
       ];
 
   AppointmentState copyWith(
@@ -111,11 +103,7 @@ class AppointmentState extends Equatable {
       int? maxPageNumber}) {
     return AppointmentState(
         nextPage: nextPage ?? this.nextPage,
-        clinicalNoteID:clinicalNote??this.clinicalNoteID,
         maxPageNumber: maxPageNumber ?? this.maxPageNumber,
-        clinicalNoteType: clinicalNoteType ?? this.clinicalNoteType,
-        clinicalNote: clinicalNote ?? this.clinicalNote,
-        clinicalNoteTitle: clinicalNoteTitle ?? this.clinicalNoteTitle,
         patientRegistered: patientRegistered ?? this.patientRegistered,
         registrationList: registrationList ?? this.registrationList,
         typeOfVisit: typeOfVisit ?? this.typeOfVisit,
