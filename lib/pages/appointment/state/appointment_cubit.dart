@@ -167,6 +167,24 @@ emit(state.copyWith(
     return req;
   }
 
+/*   Future<Response?> updateClinicalNote({
+    String? id,
+    String? type,
+    String? title,
+    String? noteText,
+    String? token,
+  }) async {
+    Response? response = await _appointmentRepository.updateClinicalNote(
+      id: id,
+      type: type,
+      noteText: noteText,
+      title: title,
+      token: token,
+    );
+
+    return response;
+  }
+ */
   Future<Response?> updateAppointment({
     String? id,
     String? date,
@@ -202,7 +220,49 @@ emit(state.copyWith(
     return response;
   }
 
+  void setFromDate(String? argFromDate) {
+    final String fromDate = argFromDate!;
+    emit(state.copyWith(fromDate: fromDate));
+  }
+
+  String getFromDate() {
+    return state.fromDate;
+  }
+
+  void setFromTime(String? argFromTime) {
+    final String fromTime = argFromTime!;
+    emit(state.copyWith(fromTime: fromTime));
+  }
+
+  String getFromTime() {
+    return state.fromTime;
+  }
+
+  void setToDate(String? argToDate) {
+    final String toDate = argToDate!;
+    emit(state.copyWith(toDate: toDate));
+  }
+
+  String getToDate() {
+    return state.toDate;
+  }
+
+  void setToTime(String? argToTime) {
+    final String toTime = argToTime!;
+    emit(state.copyWith(toTime: toTime));
+  }
+
+  String getToTime() {
+    return state.toTime;
+  }
+
   void clearState() {
     emit(const AppointmentState());
+  }
+
+//TODO: move this to a different class
+  void clearClinicalNoteState() {
+    emit(state.copyWith(
+        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
   }
 }

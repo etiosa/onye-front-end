@@ -209,28 +209,7 @@ class _AppointmentState extends State<Appointment> {
           );
 
           /*  
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Text(
-                                      (state.registrationList[index]
-                                              .containsKey('dateTime'))
-                                          ? dateFormat.format(DateTime.parse(
-                                              state.registrationList[index]
-                                                  ['dateTime']))
-                                          : dateFormat.format(DateTime.parse(
-                                              state.registrationList[index]
-                                                  ['registrationDateTime'])),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                       
-                            
+                                
                             RegisterPatient(
                               registrationList: state.registrationList,
                               selectedIndex: index,
