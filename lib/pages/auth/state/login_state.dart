@@ -16,6 +16,7 @@ class LoginState extends Equatable {
       this.hospital = '',
       this.department = '',
       this.id = '',
+      this.role='',
       this.logoutstatus = LOGOUTSTATUS.init,
       this.loginStatus = LoginStatus.init});
 
@@ -30,6 +31,7 @@ class LoginState extends Equatable {
   final LOGOUTSTATUS logoutstatus;
   final String loginToken;
   final String id;
+  final String role;
   final LoginStatus loginStatus;
   @override
   // TODO: implement props
@@ -45,7 +47,8 @@ class LoginState extends Equatable {
         hospital,
         department,
         logoutstatus,
-        id
+        id,
+        role
       ];
 
   LoginState copywith(
@@ -60,8 +63,10 @@ class LoginState extends Equatable {
       String? hospital,
       LOGOUTSTATUS? logoutstatus,
       String? id,
+      String? role,
       LoginStatus? loginStatus}) {
     return LoginState(
+      role: role ?? this.role,
         id: id ?? this.id,
         logoutstatus: logoutstatus ?? this.logoutstatus,
         firstName: firstName ?? this.firstName,

@@ -61,6 +61,7 @@ class LoginCubit extends Cubit<LoginState> {
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         id: body['userInfo']['id'],
+        role: body['userInfo']['type'],
         department: body['userInfo']['facilityInfo']['department']));
   }
 

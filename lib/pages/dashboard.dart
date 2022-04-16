@@ -22,38 +22,36 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-     if (context.read<LoginCubit>().state.statusCode==400 ||
-        context.read<LoginCubit>().state.statusCode == 401 ) {
-     
+    if (context.read<LoginCubit>().state.statusCode == 400 ||
+        context.read<LoginCubit>().state.statusCode == 401) {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/login");
       });
-    }  
-      _authSession.getHomeToken()?.then((token) => {
-            if (token == '')
-              {
-                Messages.showMessage(
-                    const Icon(
-                      IconData(0xf635, fontFamily: 'MaterialIcons'),
-                      color: Colors.green,
-                    ),
-                    'please login'),
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
-                  Navigator.of(context).pushNamed("/login");
-                })
-              }
-            else
-              {
-                context.read<LoginCubit>().home(homeToken: token),
-                Messages.showMessage(
-                    const Icon(
-                      IconData(0xf635, fontFamily: 'MaterialIcons'),
-                      color: Colors.green,
-                    ),
-                    'Login successful')
-              }
-          });
-    
+    }
+    _authSession.getHomeToken()?.then((token) => {
+          if (token == '')
+            {
+              Messages.showMessage(
+                  const Icon(
+                    IconData(0xf635, fontFamily: 'MaterialIcons'),
+                    color: Colors.green,
+                  ),
+                  'please login'),
+              WidgetsBinding.instance?.addPostFrameCallback((_) {
+                Navigator.of(context).pushNamed("/login");
+              })
+            }
+          else
+            {
+              context.read<LoginCubit>().home(homeToken: token),
+              Messages.showMessage(
+                  const Icon(
+                    IconData(0xf635, fontFamily: 'MaterialIcons'),
+                    color: Colors.green,
+                  ),
+                  'Login successful')
+            }
+        });
 
     /*  ; */
   }
@@ -124,11 +122,6 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-
-
-
-
-
 class Logout extends StatelessWidget {
   const Logout({
     Key? key,
@@ -156,29 +149,14 @@ class Logout extends StatelessWidget {
                   }
               });
 
-         return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              width: 100,
+          return Button(
               height: 60,
-              padding: const EdgeInsets.all(2),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: ElevatedButton(
-                  autofocus: true,
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all(
-                        const Color.fromARGB(255, 56, 155, 152)),
-                  ),
-                  child: const Text('Logout'),
-                  onPressed: () async {
-                    context.read<LoginCubit>().logout();
-                  },
-                ),
-              ),
-            ),
-          );        });
+              width: 100,
+              label: "Logout",
+              onPressed: () async {
+                context.read<LoginCubit>().logout();
+              });
+
+        });
   }
 }
-

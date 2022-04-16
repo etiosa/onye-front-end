@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/Widgets/Button.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import 'package:onye_front_ened/components/util/functions.dart';
 
+import '../../../components/PatientDetails.dart';
 import '../../appointment/state/appointment_cubit.dart';
 import '../../auth/state/login_cubit.dart';
 
@@ -30,23 +32,8 @@ class _PatientsPageState extends State<PatientsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 30, right: 30),
-                height: 50,
-                width: 200,
-                color: const Color.fromARGB(255, 56, 155, 152),
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 56, 155, 152)),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed('/dashboard/registrationForm');
-                    },
-                    child: const Text('Create Patient')),
-              )
+               Button(height: 50, width: 200, label: 'Create Patient', onPressed: ()=>Navigator.of(context)
+                          .pushNamed('/dashboard/registrationForm'))
             ],
           ),
           SizedBox(
@@ -108,6 +95,7 @@ class _PatientsPageState extends State<PatientsPage> {
                     onPressed: () async {
                       authsession.getHomeToken()!.then((homeToken) {
                         if (homeToken != '') {
+                          //TODO: REMOVE SearchPatientds into cubit
                           context.read<AppointmentCubit>().searchPatients(
                               query: context.read<PatientCubit>().state.query,
                               token: homeToken);
@@ -129,71 +117,7 @@ class _PatientsPageState extends State<PatientsPage> {
   }
 }
 
-class PatientDetails extends StatelessWidget {
-  const PatientDetails({
-    this.dateOfBirth,
-    required this.patientFullName,
-    required this.patientNumber,
-    required this.patientId,
-    Key? key,
-  }) : super(key: key);
 
-  final String patientFullName;
-  final String? dateOfBirth;
-  final String patientNumber;
-  final String patientId;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () => {
-          /*   Navigator.of(context).pushNamed('/dashboard/patient/patientprofile') */
-        },
-        child: Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width / 1.05,
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(0, 1), // changes position
-            ), //BoxShadow
-          ]),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        patientFullName,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(dateOfBirth ?? '')
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text('Patient number'),
-                      const SizedBox(height: 20),
-                      Text(patientNumber)
-                    ],
-                  )
-                ]),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 //TODO: move this  to a widget foldder
 class PatientList extends StatefulWidget {
@@ -208,6 +132,7 @@ class PatientList extends StatefulWidget {
 class _PatientListState extends State<PatientList> {
     int? initPageSelected = 0;
 
+//TODO: reaplce the AppointmentCubit with PatientCubit
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(

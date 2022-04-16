@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../pages/appointment/state/appointment_cubit.dart';
 import '../pages/auth/state/login_cubit.dart';
-
 
 class SearchBar extends StatelessWidget {
   SearchBar({Key? key, required this.formIndex, required this.field})
@@ -14,6 +12,8 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fieldText = TextEditingController();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -26,6 +26,7 @@ class SearchBar extends StatelessWidget {
           height: 45,
           width: 320,
           child: TextFormField(
+            controller: fieldText,
             onChanged: (query) => {
               context.read<AppointmentCubit>().setSearchParams(query),
             },
@@ -34,13 +35,15 @@ class SearchBar extends StatelessWidget {
                 {
                   context.read<AppointmentCubit>().searchPatients(
                       query: query,
-                      token: context.read<LoginCubit>().state.homeToken)
+                      token: context.read<LoginCubit>().state.homeToken),
+                  fieldText.clear()
                 },
               if (field == 'Search doctor')
                 {
                   context.read<AppointmentCubit>().searchDoctors(
                       query: query,
-                      token: context.read<LoginCubit>().state.homeToken)
+                      token: context.read<LoginCubit>().state.homeToken),
+                  fieldText.clear()
                 },
             },
             decoration: const InputDecoration(
@@ -74,7 +77,7 @@ class SearchBar extends StatelessWidget {
                     const Color.fromARGB(255, 56, 155, 152)),
               ),
               child: const Text(
-                'Searchss',
+                'Search',
                 style: TextStyle(fontSize: 12),
               ),
               onPressed: () {
@@ -83,12 +86,14 @@ class SearchBar extends StatelessWidget {
                       query:
                           context.read<AppointmentCubit>().state.searchParams,
                       token: context.read<LoginCubit>().state.homeToken);
+                  fieldText.clear();
                 }
                 if (field == 'Search doctor') {
                   context.read<AppointmentCubit>().searchDoctors(
                       query:
                           context.read<AppointmentCubit>().state.searchParams,
                       token: context.read<LoginCubit>().state.homeToken);
+                  fieldText.clear();
                 }
               },
             ),

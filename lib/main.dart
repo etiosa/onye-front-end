@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
@@ -21,6 +19,8 @@ import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart'
 import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
+import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: 'stage.env');
@@ -36,10 +36,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthRepository _authRepository = AuthRepository();
-    final PatientRepositories _registerRepository =
-        PatientRepositories();
+    final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =
         AppointmentRepository();
+    final RegistrationRepository _registrationRepository =
+        RegistrationRepository();
 
     return RepositoryProvider(
         create: (_) => _authRepository,
@@ -47,11 +48,12 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => LoginCubit(_authRepository),
-               
             ),
             BlocProvider(
               create: (_) => PatientCubit(_registerRepository),
             ),
+            BlocProvider(
+                create: (_) => RegisterationCubit(_registrationRepository)),
             BlocProvider(
                 create: (_) => AppointmentCubit(_appointmentRepository))
           ],
@@ -64,7 +66,8 @@ class MyApp extends StatelessWidget {
                 '/dashboard/patient': (context) => const PatientsPage(),
                 '/login': (context) => const LoginPage(),
                 '/dashboard': (context) => const Dashboard(),
-                 '/dashboard/patient/patientprofile': (context) => const PatientProfile(),
+                '/dashboard/patient/patientprofile': (context) =>
+                    const PatientProfile(),
                 '/dashboard/checkin': (context) => const Registration(),
                 '/dashboard/appointment': (context) => const Appointments(),
                 '/dashboard/appointment/createAppointment': (context) =>

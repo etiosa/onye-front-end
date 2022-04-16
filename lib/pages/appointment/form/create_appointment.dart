@@ -265,6 +265,7 @@ Future<Response?>? createAppointmentData({required BuildContext context}) {
   return null;
 }
 
+// ignore: must_be_immutable
 class SearchPatientBody extends StatefulWidget {
   SearchPatientBody(
       {Key? key, required this.formIndex, required this.pageController})
