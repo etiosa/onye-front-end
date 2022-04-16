@@ -1,67 +1,49 @@
 import 'package:flutter/material.dart';
-class Pagination extends StatefulWidget {
-  const Pagination({
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/Widgets/RegisterationPagination.dart';
+import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
+
+import '../pages/appointment/state/appointment_cubit.dart';
+import '../pages/auth/state/login_cubit.dart';
+
+class Pagination extends StatelessWidget {
+  Pagination({
     Key? key,
     required this.initPageSelected,
-  }) : super(key: key);
+    required this.searchType,
+  }) : super(key: key) {
+    // RegisterationCubit
+  }
 
   final int? initPageSelected;
 
-  @override
-  State<Pagination> createState() => _PaginationState();
-}
+  /// @[SearchType]
+  /// Registration
+  /// OR
+  /// Appointment
+ 
+  String searchType;
 
-class _PaginationState extends State<Pagination> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-       /*  for (var index = 0;
-            index <= context.read<AppointmentCubit>().state.maxPageNumber;
-            index++)
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: InkWell(
-              onTap: () {
-                 setState(() {
-                  initPageSelected = index;
-                }); 
-
-                /   context.read<AppointmentCubit>().setNextPage(
-                    nextPage: index,
-                    token: context.read<LoginCubit>().state.homeToken,
-                    searchParams: context
-                        .read<AppointmentCubit>()
-                        .state
-                        .searchParams); 
-              },
-              child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                      color: widget.initPageSelected == index
-                          ? const Color.fromARGB(255, 56, 155, 152)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(100)),
-                  child: Center(
-                      child: Text(
-                    "${index + 1}",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: widget.initPageSelected == index
-                            ? Colors.white
-                            : const Color.fromARGB(255, 56, 155, 152)),
-                  ))),
-            ),
-          ) */
-      ],
-    );
+    // TODO: implement build
+    return RegisterationPagination(initPageSelected: initPageSelected);
   }
+
 }
+//search Type
+//during it construtor
+//return cubit based on type of search
+
+
+ 
+
 
 
 
 //need nextpage
 //the method
+
+//registeration pagination
+//appointment pagination
+//patient or doctor paginaition

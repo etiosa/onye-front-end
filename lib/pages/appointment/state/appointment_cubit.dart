@@ -167,24 +167,7 @@ emit(state.copyWith(
     return req;
   }
 
-/*   Future<Response?> updateClinicalNote({
-    String? id,
-    String? type,
-    String? title,
-    String? noteText,
-    String? token,
-  }) async {
-    Response? response = await _appointmentRepository.updateClinicalNote(
-      id: id,
-      type: type,
-      noteText: noteText,
-      title: title,
-      token: token,
-    );
 
-    return response;
-  }
- */
   Future<Response?> updateAppointment({
     String? id,
     String? date,

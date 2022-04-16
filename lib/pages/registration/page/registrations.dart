@@ -121,7 +121,14 @@ class _RegistrationState extends State<Registration> {
     return BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
         return Column(
-          children: const [Appointment()],
+          children:  [
+           const Appointment(),
+            Pagination(initPageSelected: 0, 
+               searchType:'Registration' ,
+            )
+            
+            ],
+            
         );
       },
     );
@@ -159,16 +166,16 @@ class _AppointmentState extends State<Appointment> {
 
           return Center(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height / 1.5,
+              height: MediaQuery.of(context).size.height / 1.6,
               width: MediaQuery.of(context).size.width < 600
                   ? double.infinity
                   : 600,
               child: ListView.builder(
                   itemCount: state.registrationList.length,
                   itemBuilder: ((context, index) {
-                    if (state.registrationList[index]['type'] ==
-                        'registration') {
+                  
                       return RegisterationCard(
+                        
                         addRegisteration: () => {
                           createRegistration(
                               token: context.read<LoginCubit>().state.homeToken,
@@ -197,13 +204,10 @@ class _AppointmentState extends State<Appointment> {
                             ['patientNumber'],
                         role: context.read<LoginCubit>().state.role,
                         appointmentId: state.registrationList[index]['id'],
+                        
                       );
-                    } else {
-                      return const SizedBox(
-                        height: 0,
-                        width: 0,
-                      );
-                    }
+                    
+                    
                   })),
             ),
           );
