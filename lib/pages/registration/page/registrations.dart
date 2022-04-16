@@ -174,15 +174,14 @@ class _AppointmentState extends State<Appointment> {
                               token: context.read<LoginCubit>().state.homeToken,
                               patientId: state.registrationList[index]
                                   ['patient']['id'],
-                              medicalPersonnelId: state.registrationList[index]
-                                  ['medicalPersonnel']['id'],
+                            
                               appointmentId: state.registrationList[index]
                                   ['id'],
                               reasons: state.registrationList[index]
                                   ['reasonForVisit'],
                               typeofVist: state.registrationList[index]
                                   ['typeOfVisit'],
-                              context: context)
+                              context: context) 
                         },
                         clinicalNote: () => {
                           showDialogConfirmation(
@@ -285,12 +284,8 @@ class AppointmentConfirmed extends StatelessWidget {
   }
 }
 
-/*TODO:Move this to ClinicalNote */
-
 Future<String?> showDialogConfirmation(
     BuildContext context, dynamic appointment) {
-  print("test");
-
   final _patientName = appointment['patient']['firstName'] +
       ' ' +
       appointment['patient']['lastName'];
@@ -390,7 +385,7 @@ List<Widget> clinicalNoteForm(
                     clinicalNoteId: appointment['clinicalNoteId'],
                     homeToken: homeToken,
                     context: context);
-                      response!.then((value) => {
+                response!.then((value) => {
                       if (value != null && value.statusCode == 202)
                         {
                           Messages.showMessage(
@@ -553,7 +548,6 @@ class _RegisterPatientState extends State<RegisterPatient> {
               createRegistration(
                   appointmentId: appointmentId,
                   token: token,
-                  medicalPersonnelId: medicalPersonnelId,
                   reasons: reasons,
                   typeofVist: typeofVist,
                   context: context,
@@ -565,7 +559,6 @@ class _RegisterPatientState extends State<RegisterPatient> {
 Future<Response?> createRegistration(
     {required String token,
     required String patientId,
-    required String medicalPersonnelId,
     required String appointmentId,
     required String reasons,
     required String typeofVist,
@@ -573,7 +566,6 @@ Future<Response?> createRegistration(
   var reponse = context.read<RegisterationCubit>().createRegistration(
       token: token,
       patientID: patientId,
-      medicalId: medicalPersonnelId,
       appointmentId: appointmentId,
       reasons: reasons,
       typeOfVisit: typeofVist);

@@ -241,10 +241,6 @@ class RegisterField extends StatelessWidget {
                                                   .read<LoginCubit>()
                                                   .state
                                                   .homeToken,
-                                              medicalId: context
-                                                  .read<RegisterationCubit>()
-                                                  .state
-                                                  .selectedMedicalPersonnelId,
                                               patientID: context
                                                   .read<RegisterationCubit>()
                                                   .state

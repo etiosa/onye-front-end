@@ -15,14 +15,12 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   Future<Response?> createRegistration(
       {String? token,
       String? patientID,
-      String? medicalId,
       String? appointmentId,
       String? reasons,
       String? typeOfVisit}) async {
     Response? req = await _registrationRepository.createRegistration(
         token: token,
         patientId: patientID,
-        medicalId: medicalId,
         appointmentId: appointmentId,
         reasons: reasons,
         typeOfVisit: typeOfVisit);
@@ -41,7 +39,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     var body = json.decode(searchReponse!.body);
     var registrationsList = body['elements'];
     var totalPages = body['totalPages'];
-    print(registrationsList);
     emit(state.copyWith(
         registrationList: registrationsList, maxPageNumber: totalPages));
 
@@ -65,7 +62,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     var totalPages = body['totalPages'];
 
     var patientsList = body['elements'];
-    print(patientsList);
     emit(state.copyWith(patientList: patientsList, maxPageNumber: totalPages));
   }
 

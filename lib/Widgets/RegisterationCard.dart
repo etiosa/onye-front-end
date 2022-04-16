@@ -59,7 +59,7 @@ class RegisterationCard extends StatelessWidget {
                 patientNumber: patientNumber,
                 date: date,
                 time: time),
-RegisterationButtons(type: type, role: role, addClincialNote: clinicalNote)
+RegisterationButtons(type: type, role: role, addClincialNote: clinicalNote, addRegisteration: addRegisteration, )
 
           ])),
     );
@@ -71,13 +71,13 @@ class RegisterationButtons extends StatelessWidget {
   final String type;
   final String role;
   Function addClincialNote;
-  // Function addRegisteration;
+  Function addRegisteration;
   RegisterationButtons(
       {Key? key,
       required this.type,
       required this.role,
-      required this.addClincialNote
-      // required this.addRegisteration,
+      required this.addClincialNote,
+       required this.addRegisteration,
       })
       : super(key: key);
 
@@ -99,7 +99,7 @@ class RegisterationButtons extends StatelessWidget {
                 redColor: 56,
                 label: "Register",
                 onPressed: () {
-                  // var reponse = addRegisteration();
+                   var reponse = addRegisteration();
                   //print(reponse);
                 }),
             Button(

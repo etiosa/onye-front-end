@@ -116,7 +116,6 @@ class RegistrationRepository {
   Future<http.Response?> createRegistration(
       {String? token,
       String? patientId,
-      String? medicalId,
       String? appointmentId,
       String? reasons,
       String? typeOfVisit}) async {
@@ -135,7 +134,6 @@ class RegistrationRepository {
           body: json.encode({
             "patientId": patientId,
             "appointmentId": appointmentId,
-            "medicalPersonnelId": medicalId,
             "typeOfVisit": typeOfVisit,
             "reasonForVisit": reasons,
             "languagePreference": "en"
