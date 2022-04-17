@@ -7,28 +7,33 @@ class RegistrationRepository {
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
-  Future<List<dynamic>> searchPatients(
-      {String? searchParams, String? token}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/patient/search')
-        .replace(queryParameters: <String, String>{
-      'query': searchParams!,
-    });
+ Future<http.Response?> searchPatients(
+      {String? searchParams, String? token, int? nextPage = 0}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
+        queryParameters: <String, String>{
+          'query': searchParams!,
+          "page": "$nextPage"
+        });
 
     // http call
-    http.Response response = await http.get(
-      uri,
-      headers: {
-        "Accept": accept,
-        "Content-Type": contentType,
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    var body = json.decode(response.body);
-    var patientsList = body['elements'];
-
-    return patientsList;
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Accept": accept,
+          "Content-Type": contentType,
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } catch (ee) {
+      return null;
+    }
   }
+
+
+
+
 
   Future<List<dynamic>> searchDoctors(
       {String? searchParams, String? token}) async {
@@ -52,39 +57,6 @@ class RegistrationRepository {
     return doctorsList;
   }
 
-  Future<http.Response?> createRegistration(
-      {String? token,
-      String? patientId,
-      String? medicalId,
-      String? appointmentId,
-      String? reasons,
-      String? typeOfVisit}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/registration')
-        .replace(queryParameters: <String, String>{
-      'zoneId': 'Africa/Lagos',
-    });
-
-    try {
-      http.Response response = await http.post(uri,
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": accept,
-            "Authorization": "Bearer $token",
-          },
-          body: json.encode({
-            "patientId": patientId,
-            "appointmentId": appointmentId,
-            "medicalPersonnelId": medicalId,
-            "typeOfVisit": typeOfVisit,
-            "reasonForVisit": reasons,
-            "languagePreference": "en"
-          }));
-
-      return response;
-    } catch (e) {
-      return null;
-    }
-  }
 
   Future<http.Response?> getPatientClinicalNote(
       {String? token, String? id, String? typeOfVisit}) async {
@@ -140,4 +112,70 @@ class RegistrationRepository {
       return null;
     }
   }
+
+  Future<http.Response?> createRegistration(
+      {String? token,
+      String? patientId,
+      String? appointmentId,
+      String? reasons,
+      String? typeOfVisit}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/registration')
+        .replace(queryParameters: <String, String>{
+      'zoneId': 'Africa/Lagos',
+    });
+
+    try {
+      http.Response response = await http.post(uri,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": accept,
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({
+            "patientId": patientId,
+            "appointmentId": appointmentId,
+            "typeOfVisit": typeOfVisit,
+            "reasonForVisit": reasons,
+            "languagePreference": "en"
+          }));
+
+      return response;
+    } catch (e) {
+      return null;
+    }
+  }
+
+
+
+  Future<http.Response?> searchRegistrations(
+      {String? token, String? searchParams, int? nextPage = 0}) async {
+    int pageNumber = 3;
+    var uri =
+        Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
+            .replace(queryParameters: <String, String>{
+      'from': '2020-01-01T00:00',
+      'to': '2024-01-01T00:00',
+      'query': searchParams ?? '',
+      'zoneId': 'Africa/Lagos',
+      "page": "$nextPage"
+    });
+
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } catch (err) {
+      return null;
+    }
+  }
+
+
+
+
 }

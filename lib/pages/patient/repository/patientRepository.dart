@@ -6,6 +6,8 @@ class PatientRepositories {
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
 
+  //TODO: use the patient model toJson
+  //fromJSon
   Future<http.Response?> createNewPatient(
       {String? firstName,
       String? middleName,

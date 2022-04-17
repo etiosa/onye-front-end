@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onye_front_ened/Widgets/Button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,31 +33,19 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 20, color: Color.fromARGB(255, 56, 155, 152)),
               ),
               const SizedBox(height: 100),
-              Container(
-                width: 200,
-                height: 70,
-                margin: const EdgeInsets.only(bottom: 120),
-                padding: const EdgeInsets.all(2),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: ElevatedButton(
-                    autofocus: true,
-                    style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 56, 155, 152)),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/login");
-                    },
-                    child: const Text('Login'),
-                  ),
-                ),
-              )
+              Button(
+                  height: 70,
+                  width: 200,
+                  label: 'Login',
+                  onPressed: () => Navigator.of(context).pushNamed("/login"))
             ],
           ),
         ),
       ),
     );
   }
+}
+
+void test({BuildContext? context}) async {
+  Navigator.of(context!).pushNamed("/login");
 }

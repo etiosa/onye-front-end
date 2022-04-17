@@ -1,6 +1,8 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+// ignore: must_be_immutable
 class InputField extends StatelessWidget {
   InputField(
       {Key? key,

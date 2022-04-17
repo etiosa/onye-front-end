@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
-
 part 'appointment_state.dart';
 
 class AppointmentCubit extends Cubit<AppointmentState> {
@@ -16,15 +14,15 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   ) : super(const AppointmentState());
 
   Future<void> searchAppointments({String? token, String? searchParams}) async {
-    emit(state.copyWith(searchState: SEARCHSTATE.inital));
+    emit(state.copyWith(searchState: REGSEARCHSTATE.inital));
 
     var appointments = await _appointmentRepository.searchAppointments(
         token: token, searchParams: state.searchParams);
     emit(state.copyWith(appointmentList: appointments));
     if (state.appointmentList.isEmpty) {
-      emit(state.copyWith(searchState: SEARCHSTATE.notFound));
+      emit(state.copyWith(searchState: REGSEARCHSTATE.notFound));
     } else {
-      emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
+      emit(state.copyWith(searchState: REGSEARCHSTATE.sucessful));
     }
   }
 
@@ -67,16 +65,16 @@ emit(state.copyWith(
 */
 
   void searchDoctors({String? query, String? token}) async {
-    emit(state.copyWith(searchState: SEARCHSTATE.startsearch));
+    emit(state.copyWith(searchState: REGSEARCHSTATE.startsearch));
     var doctors = await _appointmentRepository.searchDoctors(
         searchParams: query, token: token);
     if (doctors.isNotEmpty) {
       emit(state.copyWith(
-          doctorsList: doctors, searchState: SEARCHSTATE.sucessful));
+          doctorsList: doctors, searchState: REGSEARCHSTATE.sucessful));
     }
     if (doctors.isEmpty) {
       emit(state.copyWith(
-          doctorsList: doctors, searchState: SEARCHSTATE.notFound));
+          doctorsList: doctors, searchState: REGSEARCHSTATE.notFound));
     }
   }
 
@@ -132,102 +130,6 @@ emit(state.copyWith(
     emit(state.copyWith(selectedPatientIndex: selectedIndex));
   }
 
-  void setClinicalNote(String? note) {
-    final String clinicalNote = note!;
-    emit(state.copyWith(clinicalNote: clinicalNote));
-  }
-
-  void setClinicalNoteTitle(String? title) {
-    final String clinicalNoteTitle = title!;
-    emit(state.copyWith(clinicalNoteTitle: clinicalNoteTitle));
-  }
-
-  void setClinicalNoteType(String? type) {
-    final String clinicalNoteType = type!;
-    emit(state.copyWith(clinicalNoteType: clinicalNoteType));
-  }
-
-  Future<Response?> createClinicalNote(
-      {String? token,
-      String? patientId,
-      String? medicalId,
-      String? title,
-      String? note,
-      String? registrationId,
-      String? clinicalNoteType}) async {
-    Response? req = await _appointmentRepository.createClinicalNote(
-        token: token,
-        patientId: patientId,
-        medicalId: medicalId,
-        note: note,
-        registerationId: registrationId,
-        clincialNoteType: clinicalNoteType,
-        title: title);
-
-    return req;
-  }
-
-  Future<Response?> createRegistration(
-      {String? token,
-      String? patientID,
-      String? medicalId,
-      String? appointmentId,
-      String? reasons,
-      String? typeOfVisit}) async {
-    Response? req = await _appointmentRepository.createRegistration(
-        token: token,
-        patientId: patientID,
-        medicalId: medicalId,
-        appointmentId: appointmentId,
-        reasons: reasons,
-        typeOfVisit: typeOfVisit);
-    searchRegistrations(token: token);
-
-    return req;
-  }
-
-  Future<Response?> getPatientClinicalNote({
-    String? token,
-    String? id,
-  }) async {
-    Response? req = await _appointmentRepository.getPatientClinicalNote(
-        token: token, id: id);
-    setPatientClinicalNote(req!);
-    return req;
-  }
-
-  void setPatientClinicalNote(Response req) async {
-    final body = jsonDecode(req.body);
-
-    emit(state.copyWith(
-        clinicalNote: body['text'],
-        clinicalNoteTitle: body['title'],
-        clinicalNoteType: body['type']));
-  }
-
-  void setclinicalNoteID(String clinicalNoteId) {
-    emit(state.copyWith(clinicalNoteID: clinicalNoteId));
-  }
-
-  void searchRegistrations(
-      {String? token, String? searchParams, int? nextPage}) async {
-    emit(state.copyWith(searchState: SEARCHSTATE.inital));
-    var searchReponse = await _appointmentRepository.searchRegistrations(
-        token: token, searchParams: searchParams);
-
-    var body = json.decode(searchReponse!.body);
-    var registrationsList = body['elements'];
-    var totalPages = body['totalPages'];
-    emit(state.copyWith(
-        registrationList: registrationsList, maxPageNumber: totalPages));
-
-    if (state.registrationList.isEmpty) {
-      emit(state.copyWith(searchState: SEARCHSTATE.notFound));
-    } else {
-      emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
-    }
-  }
-
   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
     emit(state.copyWith(nextPage: nextPage));
     if (state.nextPage <= state.maxPageNumber) {
@@ -265,24 +167,6 @@ emit(state.copyWith(
     return req;
   }
 
-  Future<Response?> updateClinicalNote({
-    String? id,
-    String? type,
-    String? title,
-    String? noteText,
-    String? token,
-  }) async {
-    print(token);
-    Response? response = await _appointmentRepository.updateClinicalNote(
-      id: id,
-      type: type,
-      noteText: noteText,
-      title: title,
-      token: token,
-    );
-
-    return response;
-  }
 
   Future<Response?> updateAppointment({
     String? id,
@@ -319,6 +203,42 @@ emit(state.copyWith(
     return response;
   }
 
+  void setFromDate(String? argFromDate) {
+    final String fromDate = argFromDate!;
+    emit(state.copyWith(fromDate: fromDate));
+  }
+
+  String getFromDate() {
+    return state.fromDate;
+  }
+
+  void setFromTime(String? argFromTime) {
+    final String fromTime = argFromTime!;
+    emit(state.copyWith(fromTime: fromTime));
+  }
+
+  String getFromTime() {
+    return state.fromTime;
+  }
+
+  void setToDate(String? argToDate) {
+    final String toDate = argToDate!;
+    emit(state.copyWith(toDate: toDate));
+  }
+
+  String getToDate() {
+    return state.toDate;
+  }
+
+  void setToTime(String? argToTime) {
+    final String toTime = argToTime!;
+    emit(state.copyWith(toTime: toTime));
+  }
+
+  String getToTime() {
+    return state.toTime;
+  }
+
   void clearState() {
     emit(const AppointmentState());
   }
@@ -326,8 +246,6 @@ emit(state.copyWith(
 //TODO: move this to a different class
   void clearClinicalNoteState() {
     emit(state.copyWith(
-        clinicalNote: '',
-        clinicalNoteID: '',
-        clinicalNoteTitle: ''));
+        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
   }
 }

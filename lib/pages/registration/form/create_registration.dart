@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/registration/form/patient_list.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
 class CreateRegistration extends StatefulWidget {
   const CreateRegistration({Key? key, this.restorationId}) : super(key: key);
@@ -40,98 +43,104 @@ class _CreateRegistrationState extends State<CreateRegistration> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 25.0, left: 20),
-              child: Text(
-                "Create Registration",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 25.0, right: 200),
+                  child: Text(
+                    "Create Registration",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  children: [
-                    InkWell(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color.fromARGB(255, 26, 155, 152),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromARGB(255, 26, 155, 152),
+                          ),
+                          child: Center(
+                              child: Text(
+                            '${controller.initialPage + 1}',
+                            style: const TextStyle(color: Colors.white),
+                          )),
                         ),
-                        child: Center(
-                            child: Text(
-                          '${controller.initialPage + 1}',
-                          style: const TextStyle(color: Colors.white),
-                        )),
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('search patient'),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: currentPageIndex == 1
-                              ? const Color.fromARGB(255, 26, 155, 152)
-                              : const Color.fromARGB(255, 205, 226, 226),
-                        ),
-                        height: 30,
-                        width: 30,
-                        child: const Center(child: Text('2')),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('search patient'),
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('register'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 1.2,
-                width: MediaQuery.of(context).size.width / 1.05,
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  pageSnapping: true,
-                  controller: controller,
-                  children: <Widget>[
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SearchBar(
-                          formIndex: 0,
-                          field: 'Search patient',
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: currentPageIndex == 1
+                                ? const Color.fromARGB(255, 26, 155, 152)
+                                : const Color.fromARGB(255, 205, 226, 226),
+                          ),
+                          height: 30,
+                          width: 30,
+                          child: const Center(child: Text('2')),
                         ),
-                        const SizedBox(height: 20),
-                        SearchPatientBody(
-                          formIndex: 0,
-                          pageController: controller,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('register'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.2,
+                    width: MediaQuery.of(context).size.width / 1.05,
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      pageSnapping: true,
+                      controller: controller,
+                      children: <Widget>[
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            SearchBar(
+                              formIndex: 0,
+                              field: 'Search patient',
+                            ),
+                            const SizedBox(height: 20),
+                            SearchPatientBody(
+                              formIndex: 0,
+                              pageController: controller,
+                            ),
+                          ],
                         ),
+                        Register(formIndex: 1),
                       ],
                     ),
-                    Register(formIndex: 1),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -171,150 +180,157 @@ class RegisterField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  DropDown(label: 'Language Preference', options: const ['EN']),
-                  const SizedBox(height: 25),
-                  DropDown(
-                      label: 'Type of Visit',
-                      options: const ['Follow-up', 'Consultation']),
-                  const SizedBox(height: 25),
-                  DropDown(label: 'Reason for Visit', options: const [
-                    'Headache',
-                    'Follow-up',
-                    'Malaria',
-                    'Fever',
-                    'Injection',
-                    'Test Result',
-                    'Lab Test',
-                    'PUD',
-                    'Check Up',
-                    'Consultation'
-                  ]),
-                  const SizedBox(height: 25),
-                  Row(
+    return Center(
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 60,
-                          width: 80,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color.fromARGB(255, 56, 155, 152)),
-                              ),
-                              onPressed: () {
-                                if (context
-                                    .read<AppointmentCubit>()
-                                    .state
-                                    .selectedPatientId
-                                    .isNotEmpty) {
-                                  var response = context
-                                      .read<AppointmentCubit>()
-                                      .createRegistration(
-                                          token: context
-                                              .read<LoginCubit>()
-                                              .state
-                                              .homeToken,
-                                          medicalId: context
-                                              .read<AppointmentCubit>()
-                                              .state
-                                              .selectedMedicalPersonnelId,
-                                          patientID: context
-                                              .read<AppointmentCubit>()
-                                              .state
-                                              .selectedPatientId,
-                                          typeOfVisit: context
-                                              .read<AppointmentCubit>()
-                                              .state
-                                              .typeOfVisit,
-                                          reasons: context
-                                              .read<AppointmentCubit>()
-                                              .state
-                                              .reasonForVisit);
+                      const SizedBox(height: 10),
+                      DropDown(
+                          label: 'Language Preference', options: const ['EN']),
+                      const SizedBox(height: 25),
+                      DropDown(
+                          label: 'Type of Visit',
+                          options: const ['Follow-up', 'Consultation']),
+                      const SizedBox(height: 25),
+                      DropDown(label: 'Reason for Visit', options: const [
+                        'Headache',
+                        'Follow-up',
+                        'Malaria',
+                        'Fever',
+                        'Injection',
+                        'Test Result',
+                        'Lab Test',
+                        'PUD',
+                        'Check Up',
+                        'Consultation'
+                      ]),
+                      const SizedBox(height: 25),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 60,
+                              width: 80,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(0),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color.fromARGB(
+                                            255, 56, 155, 152)),
+                                  ),
+                                  onPressed: () {
+                                    if (context
+                                        .read<RegisterationCubit>()
+                                        .state
+                                        .selectedPatientId
+                                        .isNotEmpty) {
+                                      var response = context
+                                          .read<RegisterationCubit>()
+                                          .createRegistration(
+                                              token: context
+                                                  .read<LoginCubit>()
+                                                  .state
+                                                  .homeToken,
+                                              patientID: context
+                                                  .read<RegisterationCubit>()
+                                                  .state
+                                                  .selectedPatientId,
+                                              typeOfVisit: context
+                                                  .read<RegisterationCubit>()
+                                                  .state
+                                                  .typeOfVisit,
+                                              reasons: context
+                                                  .read<RegisterationCubit>()
+                                                  .state
+                                                  .reasonForVisit);
 
-                                  response.then((value) => {
-                                        if (value != null &&
-                                            value.statusCode == 201)
-                                          {
-                                            context
-                                                .read<AppointmentCubit>()
-                                                .clearState(),
-                                            Messages.showMessage(
-                                                const Icon(
-                                                  IconData(0xf635,
-                                                      fontFamily:
-                                                          'MaterialIcons'),
-                                                  color: Colors.green,
-                                                ),
-                                                'Registration created'),
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                                    MaterialPageRoute(
-                                                        builder: ((context) =>
-                                                            const Registration())),
-                                                    ModalRoute.withName(
-                                                        '/dashboard'))
-                                          }
-                                        else if (value != null &&
-                                            value.statusCode == 400)
-                                          {
-                                            Messages.showMessage(
-                                                const Icon(
-                                                  IconData(0xe237,
-                                                      fontFamily:
-                                                          'MaterialIcons'),
-                                                  color: Colors.red,
-                                                ),
-                                                'Could not create registration'),
-                                          }
-                                      });
-                                }
-                              },
-                              child: const Text('Submit')),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 60,
-                          width: 80,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color.fromARGB(255, 129, 175, 174)),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const Registration())),
-                                    ModalRoute.withName('/dashboard/checkin'));
-                              },
-                              child: const Text("Cancel")),
-                        ),
+                                      response.then((value) => {
+                                            if (value != null &&
+                                                value.statusCode == 201)
+                                              {
+                                                context
+                                                    .read<RegisterationCubit>()
+                                                    .clearState(),
+                                                Messages.showMessage(
+                                                    const Icon(
+                                                      IconData(0xf635,
+                                                          fontFamily:
+                                                              'MaterialIcons'),
+                                                      color: Colors.green,
+                                                    ),
+                                                    'Registration created'),
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                            builder: ((context) =>
+                                                                const Registration())),
+                                                        ModalRoute.withName(
+                                                            '/dashboard'))
+                                              }
+                                            else if (value != null &&
+                                                value.statusCode == 400)
+                                              {
+                                                Messages.showMessage(
+                                                    const Icon(
+                                                      IconData(0xe237,
+                                                          fontFamily:
+                                                              'MaterialIcons'),
+                                                      color: Colors.red,
+                                                    ),
+                                                    'Could not create registration'),
+                                              }
+                                          });
+                                    }
+                                  },
+                                  child: const Text('Submit')),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 60,
+                              width: 80,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(0),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        const Color.fromARGB(
+                                            255, 129, 175, 174)),
+                                  ),
+                                  onPressed: () {
+                                    context
+                                        .read<RegisterationCubit>()
+                                        .clearState();
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                const Registration())),
+                                        ModalRoute.withName(
+                                            '/dashboard/checkin'));
+                                  },
+                                  child: const Text("Cancel")),
+                            ),
+                          )
+                        ],
                       )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ]);
+          ]),
+    );
   }
 }
 
@@ -335,12 +351,17 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
+    return BlocBuilder<RegisterationCubit, RegistrationState>(
         builder: (context, state) {
       return
           //const SizedBox(height: 10),
+          Column(
+        children: [
           PatientList(
-        pageController: widget.pageController,
+            pageController: widget.pageController,
+          ),
+          Pagination(initPageSelected: 0, searchType: 'Patient')
+        ],
       );
     });
   }
@@ -354,6 +375,8 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fieldText = TextEditingController();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -363,22 +386,19 @@ class SearchBar extends StatelessWidget {
           child: Text(field),
         ),
         SizedBox(
-          height: 45,
+          height: 40,
           width: 320,
           child: TextFormField(
+            controller: fieldText,
+            onChanged: (query) => {
+              context.read<RegisterationCubit>().setSearchParams(query),
+            },
             onFieldSubmitted: (query) => {
-              if (field == 'Search patient')
-                {
-                  context.read<AppointmentCubit>().searchPatients(
-                      query: query,
-                      token: context.read<LoginCubit>().state.homeToken)
-                },
-              if (field == 'Search doctor')
-                {
-                  context.read<AppointmentCubit>().searchDoctors(
-                      query: query,
-                      token: context.read<LoginCubit>().state.homeToken)
-                },
+              context.read<RegisterationCubit>().setSearchParams(query),
+              context.read<RegisterationCubit>().searchPatients(
+                  query: query,
+                  token: context.read<LoginCubit>().state.homeToken),
+              fieldText.clear()
             },
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -397,6 +417,16 @@ class SearchBar extends StatelessWidget {
             },
           ),
         ),
+        Button(
+            height: 50,
+            width: 100,
+            label: 'Search',
+            onPressed: () {
+              context.read<RegisterationCubit>().searchPatients(
+                  query: context.read<RegisterationCubit>().state.searchParams,
+                  token: context.read<LoginCubit>().state.homeToken);
+              fieldText.clear();
+            })
       ],
     );
   }
@@ -449,13 +479,13 @@ class _DropDownState extends State<DropDown> {
                     _selectedText = val.toString();
                     if (widget.label == 'Type of Visit') {
                       context
-                          .read<AppointmentCubit>()
+                          .read<RegisterationCubit>()
                           .setTypeOfVisit(_selectedText);
                     }
 
                     if (widget.label == 'Reason for Visit') {
                       context
-                          .read<AppointmentCubit>()
+                          .read<RegisterationCubit>()
                           .setReasonForVisit(_selectedText);
                     }
                   });
@@ -466,126 +496,6 @@ class _DropDownState extends State<DropDown> {
         ),
       ],
     );
-  }
-}
-
-class PatientList extends StatefulWidget {
-  PatientList({
-    required this.pageController,
-    Key? key,
-  }) : super();
-  PageController pageController;
-
-  @override
-  State<PatientList> createState() => _PatientListState();
-}
-
-class _PatientListState extends State<PatientList> {
-  int selectedIndex = -1;
-  String selectedPatientId = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
-      if (state.patientsList.isEmpty) {
-        return (const Center(
-          child: SizedBox(
-            height: 70,
-            width: 180,
-            child: Card(
-              margin: EdgeInsets.only(top: 10),
-              child: Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text('No patient found'),
-              ),
-            ),
-          ),
-        ));
-      }
-      return Expanded(
-        flex: 1,
-        child: ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            itemCount: state.patientsList.length,
-            itemBuilder: (BuildContext context, index) {
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                    selectedPatientId = state.patientsList[index]['id'];
-
-                    context
-                        .read<AppointmentCubit>()
-                        .setPatientId(selectedPatientId);
-                    selectedIndex = index;
-                    widget.pageController.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeIn);
-                  });
-                },
-                child: Container(
-                  width: 50,
-                  height: 120,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: selectedIndex == index
-                        ? const Color.fromARGB(255, 26, 155, 152)
-                        : const Color.fromARGB(255, 248, 254, 254),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '  ${state.patientsList[index]['firstName']} ${state.patientsList[index]['middleName'] ?? ''} ${state.patientsList[index]['lastName']}',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: selectedIndex == index
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Text('patient number'),
-                            Text(
-                              '  ${state.patientsList[index]['patientNumber']} ',
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Text('phone number'),
-                            Text(
-                              '  ${state.patientsList[index]['phoneNumber']} ',
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-      );
-    });
   }
 }
 

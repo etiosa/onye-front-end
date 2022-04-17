@@ -117,10 +117,12 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       ),
                       onPressed: () {
                         if (_pageController.page! > 0) {
+
                           _pageController.previousPage(
                               curve: Curves.easeIn,
                               duration: Duration(milliseconds: 300));
                         } else {
+                         context.read<PatientCubit>().clearState();
                           Navigator.of(context).pop();
                         }
                       },
@@ -905,7 +907,7 @@ class EmergencyContact extends StatelessWidget {
       ],
     );
   }
-
+  
   bool allEmergencyContactFieldsAreValid(BuildContext context) {
     if (context.read<PatientCubit>().state.emergencyContactName == null &&
         context.read<PatientCubit>().state.emergencyContactPhoneNumber ==
