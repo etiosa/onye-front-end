@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/components/util/Messages.dart';
@@ -229,7 +230,7 @@ class RegisterField extends StatelessWidget {
                                             255, 56, 155, 152)),
                                   ),
                                   onPressed: () {
-                                if (context
+                                    if (context
                                         .read<RegisterationCubit>()
                                         .state
                                         .selectedPatientId
@@ -308,6 +309,9 @@ class RegisterField extends StatelessWidget {
                                             255, 129, 175, 174)),
                                   ),
                                   onPressed: () {
+                                    context
+                                        .read<RegisterationCubit>()
+                                        .clearState();
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: ((context) =>
@@ -347,12 +351,17 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
+    return BlocBuilder<RegisterationCubit, RegistrationState>(
         builder: (context, state) {
       return
           //const SizedBox(height: 10),
+          Column(
+        children: [
           PatientList(
-        pageController: widget.pageController,
+            pageController: widget.pageController,
+          ),
+          Pagination(initPageSelected: 0, searchType: 'Patient')
+        ],
       );
     });
   }

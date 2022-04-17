@@ -48,7 +48,7 @@ class _RegisterationPaginationState extends State<RegisterationPagination> {
                         nextPage: index,
                         token: context.read<LoginCubit>().state.homeToken,
                         searchParams:
-                            context.read<AppointmentCubit>().state.searchParams);
+                            context.read<RegisterationCubit>().state.searchParams);
                   },
                   child: Container(
                       height: 45,

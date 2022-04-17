@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import '../../../Widgets/SearchBar.dart';
@@ -287,9 +288,17 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
         builder: (context, state) {
       return
           //const SizedBox(height: 10),
-          PatientList(
+          Column(
+            children: [
+              PatientList(
         pageController: widget.pageController,
-      );
+      ),
+       Pagination(
+            initPageSelected: 0,
+            searchType: 'Patient',
+          )
+            ],
+          );
     });
   }
 }

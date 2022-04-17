@@ -162,6 +162,7 @@ class RegisterField extends StatelessWidget {
                                     const Color.fromARGB(255, 129, 175, 174)),
                               ),
                               onPressed: () {
+                                context.read<AppointmentCubit>().clearState();
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: ((context) =>

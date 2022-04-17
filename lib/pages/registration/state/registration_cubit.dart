@@ -62,7 +62,8 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     var totalPages = body['totalPages'];
 
     var patientsList = body['elements'];
-    emit(state.copyWith(patientList: patientsList, maxPageNumber: totalPages));
+    emit(state.copyWith(
+        patientList: patientsList, maxPatientPageNumber: totalPages));
   }
 
   void setNextPage({int? nextPage, String? token, String? searchParams}) async {

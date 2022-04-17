@@ -70,10 +70,9 @@ class _ClinicalNoteDropDownState extends State<ClinicalNoteDropDown> {
               padding: const EdgeInsets.all(1.0),
               child: Text(widget.label),
             ),
-            SizedBox(
-              height: 45,
-              width: 300,
-              child: Container(
+     
+            
+               Container(
                   padding: const EdgeInsets.all(10.0),
                   color: const Color.fromARGB(255, 205, 226, 226),
                   child: DropdownButtonHideUnderline(
@@ -109,7 +108,7 @@ class _ClinicalNoteDropDownState extends State<ClinicalNoteDropDown> {
                       }).toList(),
                     ),
                   )),
-            ),
+          
           ],
         );
       }),

@@ -13,8 +13,9 @@ class RegistrationState extends Equatable {
       this.reasonForVisit = '',
       this.nextPage = 0,
       this.maxPageNumber = 0,
-      this.selectedMedicalPersonnelId='',
-      this.selectedPatientId='',
+      this.selectedMedicalPersonnelId = '',
+      this.selectedPatientId = '',
+      this.maxPatientPageNumber=0,
       this.selectedPatientIndex = 0});
 
   final List<dynamic> registrationList;
@@ -25,6 +26,7 @@ class RegistrationState extends Equatable {
   final String searchParams;
   final int nextPage;
   final int maxPageNumber;
+  final int maxPatientPageNumber;
   final String selectedMedicalPersonnelId;
   final String selectedPatientId;
 
@@ -43,7 +45,8 @@ class RegistrationState extends Equatable {
         selectedMedicalPersonnelId,
         selectedPatientId,
         searchState,
-        nextPage
+        nextPage,
+        maxPatientPageNumber
       ];
 
   RegistrationState copyWith(
@@ -57,11 +60,14 @@ class RegistrationState extends Equatable {
       SEARCHSTATE? searchState,
       int? selectedPatientIndex,
       int? nextPage,
-    String? selectedMedicalPersonnelId,      
+       int? maxPatientPageNumber,
+      String? selectedMedicalPersonnelId,
       int? maxPageNumber}) {
     return RegistrationState(
-      selectedMedicalPersonnelId: selectedMedicalPersonnelId?? this.selectedMedicalPersonnelId,
-      selectedPatientId: selectedPatientId?? this.selectedPatientId,
+      maxPatientPageNumber: maxPatientPageNumber?? this.maxPatientPageNumber,
+        selectedMedicalPersonnelId:
+            selectedMedicalPersonnelId ?? this.selectedMedicalPersonnelId,
+        selectedPatientId: selectedPatientId ?? this.selectedPatientId,
         maxPageNumber: maxPageNumber ?? this.maxPageNumber,
         nextPage: nextPage ?? this.nextPage,
         patientList: patientList ?? this.patientList,

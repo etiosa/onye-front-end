@@ -8,7 +8,7 @@ class PatientCard extends StatelessWidget {
   String middleName;
   final String patientNumber;
   final String imageURl;
-  Function onTap;
+  Function? onTap;
 
   PatientCard({
     required this.firstName,
@@ -31,10 +31,10 @@ class PatientCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: (() {
-          onTap();
+          onTap!();
         }),
         child: Container(
-            height: 200,
+            height: 178,
             width:
                 MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
             color: const Color.fromARGB(255, 236, 246, 246),

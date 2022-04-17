@@ -116,26 +116,23 @@ class _RegistrationState extends State<Registration> {
   }
 
   //
-//TODO: move the pagination to the main scafolding bottom of the page
   Widget registrationBody() {
     return BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
         return Column(
-          children:  [
-           const Appointment(),
-            Pagination(initPageSelected: 0, 
-               searchType:'Registration' ,
+          children: [
+            const Appointment(),
+            Pagination(
+              initPageSelected: 0,
+              searchType: 'Registration',
             )
-            
-            ],
-            
+          ],
         );
       },
     );
   }
 }
 
-//TODO: change  use the regisetrationCubit here
 class Appointment extends StatefulWidget {
   const Appointment({
     Key? key,
@@ -162,8 +159,6 @@ class _AppointmentState extends State<Appointment> {
         if (state.registrationList.isEmpty) {
           return const Loading();
         } else {
-          //need to move it to won container
-
           return Center(
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 1.6,
@@ -173,58 +168,38 @@ class _AppointmentState extends State<Appointment> {
               child: ListView.builder(
                   itemCount: state.registrationList.length,
                   itemBuilder: ((context, index) {
-                  
-                      return RegisterationCard(
-                        
-                        addRegisteration: () => {
-                          createRegistration(
-                              token: context.read<LoginCubit>().state.homeToken,
-                              patientId: state.registrationList[index]
-                                  ['patient']['id'],
-                            
-                              appointmentId: state.registrationList[index]
-                                  ['id'],
-                              reasons: state.registrationList[index]
-                                  ['reasonForVisit'],
-                              typeofVist: state.registrationList[index]
-                                  ['typeOfVisit'],
-                              context: context) 
-                        },
-                        clinicalNote: () => {
-                          showDialogConfirmation(
-                              context, state.registrationList[index])
-                        },
-                        firstName: state.registrationList[index]['patient']
-                            ['firstName'],
-                        lastName: state.registrationList[index]['patient']
-                            ['lastName'],
-                        type: state.registrationList[index]['type'],
-                        dateTime: state.registrationList[index]['dateTime'],
-                        patientNumber: state.registrationList[index]['patient']
-                            ['patientNumber'],
-                        role: context.read<LoginCubit>().state.role,
-                        appointmentId: state.registrationList[index]['id'],
-                        
-                      );
-                    
-                    
+                    return RegisterationCard(
+                      addRegisteration: () => {
+                        showDialogCFeedback(
+                          context,
+                          token: context.read<LoginCubit>().state.homeToken,
+                          patientId: state.registrationList[index]['patient']
+                              ['id'],
+                          appointmentId: state.registrationList[index]['id'],
+                          reasons: state.registrationList[index]
+                              ['reasonForVisit'],
+                          typeofVist: state.registrationList[index]
+                              ['typeOfVisit'],
+                        )
+                      },
+                      clinicalNote: () => {
+                        showDialogConfirmation(
+                            context, state.registrationList[index])
+                      },
+                      firstName: state.registrationList[index]['patient']
+                          ['firstName'],
+                      lastName: state.registrationList[index]['patient']
+                          ['lastName'],
+                      type: state.registrationList[index]['type'],
+                      dateTime: state.registrationList[index]['dateTime'],
+                      patientNumber: state.registrationList[index]['patient']
+                          ['patientNumber'],
+                      role: context.read<LoginCubit>().state.role,
+                      appointmentId: state.registrationList[index]['id'],
+                    );
                   })),
             ),
           );
-
-          /*  
-                                
-                            RegisterPatient(
-                              registrationList: state.registrationList,
-                              selectedIndex: index,
-                            ),
-                          ],
-                        ), 
-                      ]),
-                    ),
-                  );
-                }),
-          ); */
         }
       },
     );
@@ -484,59 +459,38 @@ Future<Response?>? createClinicalNoteData(
   return response;
 }
 
-// ignore: must_be_immutable
-class RegisterPatient extends StatefulWidget {
-  RegisterPatient(
-      {Key? key, required this.registrationList, required this.selectedIndex})
-      : super(key: key);
-
-  List<dynamic> registrationList;
-  int selectedIndex;
-
-  @override
-  State<RegisterPatient> createState() => _RegisterPatientState();
-}
-
-class _RegisterPatientState extends State<RegisterPatient> {
-  late final String token = context.read<LoginCubit>().state.homeToken;
-
-  late final String patientId =
-      widget.registrationList[widget.selectedIndex]['patient']['id'];
-  late final String medicalPersonnelId =
-      widget.registrationList[widget.selectedIndex]['medicalPersonnel']['id'];
-  late final String appointmentId =
-      widget.registrationList[widget.selectedIndex]['id'];
-  late final String reasons =
-      widget.registrationList[widget.selectedIndex]['reasonForVisit'];
-  late final String typeofVist =
-      widget.registrationList[widget.selectedIndex]['typeOfVisit'];
-  @override
-  Widget build(BuildContext context) {
-    if (widget.registrationList[widget.selectedIndex]['type'] ==
-        'registration') {
-      return const Padding(
-          padding: EdgeInsets.all(10.0), child: Text("add clincical note"));
-
-      /*  Confirmation(
-            appointmentList: widget.registrationList,
-            selectedIndex: widget.selectedIndex,
-          )); */
-    }
-
-    return Button(
-        height: 30,
-        width: 120,
-        label: 'Register',
-        onPressed: () => {
-              createRegistration(
-                  appointmentId: appointmentId,
-                  token: token,
-                  reasons: reasons,
-                  typeofVist: typeofVist,
-                  context: context,
-                  patientId: patientId)
-            });
-  }
+Future<String?> showDialogCFeedback(
+  BuildContext context, {
+  required String token,
+  required String patientId,
+  required String appointmentId,
+  required String reasons,
+  required String typeofVist,
+}) {
+  return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+            content: const Text('Do you want to register this patient?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => {Navigator.pop(context, 'Cancel')},
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => {
+                  createRegistration(
+                      appointmentId: appointmentId,
+                      token: token,
+                      patientId: patientId,
+                      reasons: reasons,
+                      typeofVist: typeofVist,
+                      context: context),
+                  Navigator.pop(context, 'OK')
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ));
 }
 
 Future<Response?> createRegistration(

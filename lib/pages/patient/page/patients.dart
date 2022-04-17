@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/Pagination.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import 'package:onye_front_ened/components/util/functions.dart';
 
+import '../../../Widgets/PatientCard.dart';
 import '../../../components/PatientDetails.dart';
 import '../../appointment/state/appointment_cubit.dart';
 import '../../auth/state/login_cubit.dart';
+import '../../registration/state/registration_cubit.dart';
 
 class PatientsPage extends StatefulWidget {
   const PatientsPage({Key? key}) : super(key: key);
@@ -153,85 +156,42 @@ class _PatientListState extends State<PatientList> {
         ));
       }
 
-      return patientLists(state);
+      return Column(
+        children: [
+          patientLists(state),
+          Pagination(initPageSelected: initPageSelected, searchType: 'Patient')
+        ],
+      );
     });
   }
 
   Widget patientLists(AppointmentState state) {
-    const int heightOffset = 300;
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height - heightOffset,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                itemCount: state.patientsList.length,
-                itemBuilder: (BuildContext context, index) {
-                  return Stack(alignment: Alignment.topRight, children: [
-                    PatientDetails(
-                      patientId: state.patientsList[index]['id'],
-                      patientFullName: Functions.buildFullName(
-                        state.patientsList[index]['firstName'],
-                        state.patientsList[index]['middleName'],
-                        state.patientsList[index]['lastName'],
-                      ),
-                      dateOfBirth: state.patientsList[index]['dateOfBirth'],
-                      patientNumber: state.patientsList[index]['patientNumber'],
-                    ),
-                  ]);
-                }),
-          ),
-         Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              for (var index = 0;
-                  index < context.read<AppointmentCubit>().state.maxPageNumber;
-                  index++)
-                Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        initPageSelected = index;
-                      });
+      height: MediaQuery.of(context).size.height / 1.7,
+      width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+      child: ListView.builder(
+          // shrinkWrap: true,
 
-                      context.read<AppointmentCubit>().setPatientNextSearchIndex(
-                          nextPage: index,
-                          token: context.read<LoginCubit>().state.homeToken,
-                          searchParams: context
-                              .read<AppointmentCubit>()
-                              .state
-                              .searchParams);
-                    },
-                    child: Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                            color: initPageSelected == index
-                                ? const Color.fromARGB(255, 56, 155, 152)
-                                 :Colors.transparent,
-                            borderRadius: BorderRadius.circular(100)),
-                        child: Center(
-                            child: Text(
-                          "${index + 1}",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: initPageSelected == index
-                                   ?Colors.white
-                                  : const Color.fromARGB(255, 56, 155, 152)),
-                        ))),
-                  ),
-                )
-            ],
-          )
-        ],
-      ),
+          itemCount: state.patientsList.length,
+          itemBuilder: (BuildContext context, index) {
+            return PatientCard(
+                onTap: () {
+                
+                  context
+                      .read<RegisterationCubit>()
+                      .setPatientId(state.patientsList[index]['id']);
+                  context
+                      .read<RegisterationCubit>()
+                      .setSelectedMedicalPersonnelId(
+                          context.read<LoginCubit>().state.id);
+                },
+                firstName: state.patientsList[index]['firstName'],
+                lastName: state.patientsList[index]['lastName'],
+                dateOfBirth: state.patientsList[index]['dateOfBirth'],
+                patientNumber: state.patientsList[index]['patientNumber']);
+          }),
     );
   }
 }
+

@@ -101,9 +101,13 @@ class ClinicalnoteCubit extends Cubit<ClinicalnoteState> {
     return response;
   }
 
-//TODO: move this to a different class
   void clearClinicalNoteState() {
     emit(const ClinicalnoteState());
+  }
+
+  clearState(){
+    emit(const ClinicalnoteState());
+
   }
 }
 

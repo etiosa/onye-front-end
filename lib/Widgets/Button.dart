@@ -15,7 +15,7 @@ class Button extends StatelessWidget {
   int greenColor;
   int blackColor;
   bool setColor;
-  
+  bool isregsiter;
   /* int r,
   int g,
   int b */
@@ -33,6 +33,7 @@ class Button extends StatelessWidget {
     this.greenColor = 155,
     this.blackColor = 152,
     this.setColor = false,
+    this.isregsiter=false,
     Key? key,
   }) : super(key: key) {
     if (setColor) {
@@ -60,13 +61,12 @@ class Button extends StatelessWidget {
             autofocus: true,
             style: ButtonStyle(
               elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(
-                   Color.fromARGB(255, redColor ,greenColor, blackColor)),
+              backgroundColor:  MaterialStateProperty.all(
+                 isregsiter ==true?Colors.grey[700] : Color.fromARGB(255, redColor, greenColor, blackColor)),
             ),
             child: Text(label),
-            onPressed: () {
-              onPressed();
-            },
+            onPressed:  isregsiter ==true?null: ()=>onPressed()
+              
           ),
         ),
       ),

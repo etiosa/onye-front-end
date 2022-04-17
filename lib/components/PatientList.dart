@@ -1,9 +1,12 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onye_front_ened/Widgets/PatientCard.dart';
+import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
 import '../pages/appointment/state/appointment_cubit.dart';
- 
- class PatientList extends StatefulWidget {
+
+class PatientList extends StatefulWidget {
   PatientList({
     required this.pageController,
     Key? key,
@@ -37,7 +40,35 @@ class _PatientListState extends State<PatientList> {
           ),
         ));
       }
-      return Expanded(
+
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 1.8,
+        width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+        child: ListView.builder(
+            // shrinkWrap: true,
+
+            itemCount: state.patientsList.length,
+            itemBuilder: (BuildContext context, index) {
+              return PatientCard(
+                  onTap: () {
+                    context
+                        .read<RegisterationCubit>()
+                        .setPatientId(state.patientsList[index]['id']);
+                          widget.pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn);
+                    context
+                        .read<RegisterationCubit>()
+                        .setSelectedMedicalPersonnelId(
+                            context.read<LoginCubit>().state.id);
+                  },
+                  firstName: state.patientsList[index]['firstName'],
+                  lastName: state.patientsList[index]['lastName'],
+                  dateOfBirth: state.patientsList[index]['dateOfBirth'],
+                  patientNumber: state.patientsList[index]['patientNumber']);
+            }),
+      );
+      /* return Expanded(
         flex: 1,
         child: ListView.builder(
             shrinkWrap: true,
@@ -118,8 +149,38 @@ class _PatientListState extends State<PatientList> {
                 ),
               );
             }),
-      );
+      ); */
     });
   }
 }
  
+
+
+ /* 
+ 
+     return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.7,
+      width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+      child: ListView.builder(
+          // shrinkWrap: true,
+
+          itemCount: state.patientsList.length,
+          itemBuilder: (BuildContext context, index) {
+            return PatientCard(
+                onTap: () {
+                
+                  context
+                      .read<RegisterationCubit>()
+                      .setPatientId(state.patientsList[index]['id']);
+                  context
+                      .read<RegisterationCubit>()
+                      .setSelectedMedicalPersonnelId(
+                          context.read<LoginCubit>().state.id);
+                },
+                firstName: state.patientsList[index]['firstName'],
+                lastName: state.patientsList[index]['lastName'],
+                dateOfBirth: state.patientsList[index]['dateOfBirth'],
+                patientNumber: state.patientsList[index]['patientNumber']);
+          }),
+    )
+ */
