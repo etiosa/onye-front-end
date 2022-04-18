@@ -92,26 +92,23 @@ class LoginCubit extends Cubit<LoginState> {
     // ignore: non_constant_identifier_names
     final PatientCubit _aptCubit = PatientCubit(_registrationRepositories);
 
-    //clear all the state
-    _appCubit.clearState();
-    _regubit.clearState();
-    _clinCubit.clearState();
-    _aptCubit.clearState();
-    clearState();
+  
 
     final response = await _authRepository.signout(token: homeToken);
 
     final logout = await _authSession.removeHomeToken();
     if (logout) {
+      //clear all the state
+      _appCubit.clearState();
       _regubit.clearState();
-      emit(state.copywith(
-          loginStatus: LoginStatus.logout,
-          logoutstatus: LOGOUTSTATUS.sucessful));
-    } else {
+      _clinCubit.clearState();
+      _aptCubit.clearState();
+      clearState();
       emit(state.copywith(
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
     }
+    print("Unable to logout");
   }
 
   void clearState() {
