@@ -244,8 +244,8 @@ emit(state.copyWith(
   }
 
 //TODO: move this to a different class
-  void clearClinicalNoteState() {
+  /* void clearClinicalNoteState() {
     emit(state.copyWith(
         clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
-  }
+  } */
 }
