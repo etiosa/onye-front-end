@@ -108,15 +108,10 @@ class RegisterationButtons extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Button(
-                height: 50,
-                width: 130,
-                setColor: true,
-                blackColor: 152,
-                greenColor: 155,
-                redColor: 56,
-                label: "Register",
-                onPressed: () {}),
+              RegisterButton(
+              addRegisteration: addRegisteration,
+              type: type,
+            ),
           ],
         ),
       );
