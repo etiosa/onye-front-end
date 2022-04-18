@@ -97,6 +97,7 @@ class LoginCubit extends Cubit<LoginState> {
     _regubit.clearState();
     _clinCubit.clearState();
     _aptCubit.clearState();
+    clearState();
 
     final response = await _authRepository.signout(token: homeToken);
 
@@ -111,5 +112,9 @@ class LoginCubit extends Cubit<LoginState> {
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
     }
+  }
+
+  void clearState() {
+    emit(const LoginState());
   }
 }
