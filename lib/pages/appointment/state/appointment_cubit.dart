@@ -50,19 +50,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     }
   }
 
-/*   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
-    emit(state.copyWith(nextPage: nextPage));
-    if (state.nextPage <= state.maxPageNumber) {
-      //call search
-      var searchReponse = await _appointmentRepository.searchRegistrations(
-          token: token, searchParams: searchParams, nextPage: state.nextPage);
-      var body = json.decode(searchReponse!.body);
-          var registrationsList = body['elements'];
-emit(state.copyWith(
-          registrationList: registrationsList));
-    }
-  }
-*/
 
   void searchDoctors({String? query, String? token}) async {
     emit(state.copyWith(searchState: REGSEARCHSTATE.startsearch));
@@ -243,9 +230,5 @@ emit(state.copyWith(
     emit(const AppointmentState());
   }
 
-//TODO: move this to a different class
-  /* void clearClinicalNoteState() {
-    emit(state.copyWith(
-        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
-  } */
+
 }
