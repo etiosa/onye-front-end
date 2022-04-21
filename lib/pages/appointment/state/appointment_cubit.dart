@@ -16,19 +16,25 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   Future<void> searchAppointments({String? token, String? searchParams}) async {
     emit(state.copyWith(searchState: REGSEARCHSTATE.inital));
 
-    var appointments = await _appointmentRepository.searchAppointments(
+    var appointmentsReponse = await _appointmentRepository.searchAppointments(
         token: token, searchParams: state.searchParams);
-    emit(state.copyWith(appointmentList: appointments));
+    var appointmentReponseBody = json.decode(appointmentsReponse!.body);
+    var appointmentList = appointmentReponseBody['elements'];
+    var totalPages = appointmentReponseBody['totalPages'];
+
+    emit(state.copyWith(
+        appointmentList: appointmentList, maxPageNumber: totalPages));
     if (state.appointmentList.isEmpty) {
       emit(state.copyWith(searchState: REGSEARCHSTATE.notFound));
     } else {
+     // print(state.maxPageNumber);
       emit(state.copyWith(searchState: REGSEARCHSTATE.sucessful));
     }
   }
 
   //TODO: separate this method
 
-  void searchPatients({String? query, String? token, int? nextPage}) async {
+/*   void searchPatients({String? query, String? token, int? nextPage}) async {
     var searchResponse = await _appointmentRepository.searchPatients(
         searchParams: query, token: token);
     var body = json.decode(searchResponse!.body);
@@ -37,7 +43,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     var patientsList = body['elements'];
     emit(state.copyWith(patientsList: patientsList, maxPageNumber: totalPages));
   }
-
+ */
   void setPatientNextSearchIndex(
       {int? nextPage, String? token, String? searchParams}) async {
     if (state.nextPage <= state.maxPageNumber) {
@@ -50,21 +56,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     }
   }
 
-/*   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
-    emit(state.copyWith(nextPage: nextPage));
-    if (state.nextPage <= state.maxPageNumber) {
-      //call search
-      var searchReponse = await _appointmentRepository.searchRegistrations(
-          token: token, searchParams: searchParams, nextPage: state.nextPage);
-      var body = json.decode(searchReponse!.body);
-          var registrationsList = body['elements'];
-emit(state.copyWith(
-          registrationList: registrationsList));
-    }
-  }
-*/
-
-  void searchDoctors({String? query, String? token}) async {
+/*   void searchDoctors({String? query, String? token}) async {
     emit(state.copyWith(searchState: REGSEARCHSTATE.startsearch));
     var doctors = await _appointmentRepository.searchDoctors(
         searchParams: query, token: token);
@@ -76,7 +68,7 @@ emit(state.copyWith(
       emit(state.copyWith(
           doctorsList: doctors, searchState: REGSEARCHSTATE.notFound));
     }
-  }
+  } */
 
   void setSelectedMedicalPersonnelId(String? argSelectedId) {
     final String selectedId = argSelectedId!;
@@ -134,11 +126,11 @@ emit(state.copyWith(
     emit(state.copyWith(nextPage: nextPage));
     if (state.nextPage <= state.maxPageNumber) {
       //call search
-      var searchResponse = await _appointmentRepository.searchRegistrations(
+      var searchResponse = await _appointmentRepository.searchAppointments(
           token: token, searchParams: searchParams, nextPage: state.nextPage);
       var body = json.decode(searchResponse!.body);
-      var registrationsList = body['elements'];
-      emit(state.copyWith(registrationList: registrationsList));
+      var appointmentList = body['elements'];
+      emit(state.copyWith(appointmentList: appointmentList));
     }
   }
 
@@ -166,7 +158,6 @@ emit(state.copyWith(
 
     return req;
   }
-
 
   Future<Response?> updateAppointment({
     String? id,
@@ -242,10 +233,4 @@ emit(state.copyWith(
   void clearState() {
     emit(const AppointmentState());
   }
-
-//TODO: move this to a different class
-  /* void clearClinicalNoteState() {
-    emit(state.copyWith(
-        clinicalNote: '', clinicalNoteID: '', clinicalNoteTitle: ''));
-  } */
 }

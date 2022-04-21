@@ -1,16 +1,16 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 
-class PatientCard extends StatelessWidget {
-  final String firstName;
-  final String lastName;
-  final String dateOfBirth;
-  String middleName;
-  final String patientNumber;
-  final String imageURl;
+class GenericCard extends StatelessWidget {
+  final String? firstName;
+  final String? lastName;
+  final String? dateOfBirth;
+  String?middleName;
+  final String? patientNumber;
+  final String? imageURl;
   Function? onTap;
 
-  PatientCard({
+  GenericCard({
     required this.firstName,
     required this.lastName,
     required this.dateOfBirth,
@@ -20,7 +20,7 @@ class PatientCard extends StatelessWidget {
     required this.onTap,
     Key? key,
   }) : super(key: key) {
-    if (middleName.isEmpty || middleName == '') {
+    if (middleName!.isEmpty || middleName == '') {
       middleName = '';
     }
   }
@@ -94,7 +94,7 @@ class PatientCard extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(dateOfBirth,
+                          Text(dateOfBirth!,
                               style: const TextStyle(
                                   fontFamily: 'poppins',
                                   fontSize: 15,
@@ -104,7 +104,7 @@ class PatientCard extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 50.0),
-                      child: Text(patientNumber,
+                      child: Text(patientNumber!,
                           style: const TextStyle(
                               fontFamily: 'poppins',
                               fontSize: 15,

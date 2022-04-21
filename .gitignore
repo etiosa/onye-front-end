@@ -10,6 +10,7 @@
 .svn/
 
 *.env
+stage.env
 
 # IntelliJ related
 *.iml

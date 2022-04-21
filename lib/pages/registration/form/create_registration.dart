@@ -9,6 +9,8 @@ import 'package:onye_front_ened/pages/registration/form/patient_list.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
+import '../../patient/state/patient_cubit.dart';
+
 class CreateRegistration extends StatefulWidget {
   const CreateRegistration({Key? key, this.restorationId}) : super(key: key);
 
@@ -334,6 +336,7 @@ class RegisterField extends StatelessWidget {
   }
 }
 
+//TODO: REPLACE REGISTERATION WITH PATIENTCUBIT
 class SearchPatientBody extends StatefulWidget {
   SearchPatientBody(
       {Key? key, required this.formIndex, required this.pageController})
@@ -351,16 +354,17 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-        builder: (context, state) {
-      return
-          //const SizedBox(height: 10),
-          Column(
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
+      print(state.maxPageNumber);
+      return Column(
         children: [
           PatientList(
             pageController: widget.pageController,
           ),
-          Pagination(initPageSelected: 0, searchType: 'Patient')
+          Pagination(
+            maxPageCounter: context.read<PatientCubit>().state.maxPageNumber,
+            typeofSearch: 'patient',
+          )
         ],
       );
     });
@@ -391,12 +395,13 @@ class SearchBar extends StatelessWidget {
           child: TextFormField(
             controller: fieldText,
             onChanged: (query) => {
-              context.read<RegisterationCubit>().setSearchParams(query),
+              context.read<PatientCubit>().setSearchParams(query),
             },
             onFieldSubmitted: (query) => {
-              context.read<RegisterationCubit>().setSearchParams(query),
-              context.read<RegisterationCubit>().searchPatients(
+              context.read<PatientCubit>().setSearchParams(query),
+              context.read<PatientCubit>().searchPatients(
                   query: query,
+                  nextPage: 0,
                   token: context.read<LoginCubit>().state.homeToken),
               fieldText.clear()
             },
@@ -422,8 +427,8 @@ class SearchBar extends StatelessWidget {
             width: 100,
             label: 'Search',
             onPressed: () {
-              context.read<RegisterationCubit>().searchPatients(
-                  query: context.read<RegisterationCubit>().state.searchParams,
+              context.read<PatientCubit>().searchPatients(
+                  query: context.read<PatientCubit>().state.searchParams,
                   token: context.read<LoginCubit>().state.homeToken);
               fieldText.clear();
             })

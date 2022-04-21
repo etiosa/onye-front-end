@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/Pagination.dart';
-import 'package:onye_front_ened/Widgets/PatientCard.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 
-import '../pages/appointment/state/appointment_cubit.dart';
+import '../Widgets/GenericCard.dart';
+import '../Widgets/Pagination.dart';
+import '../pages/doctor/state/doctor_cubit_cubit.dart';
 
 class DoctorList extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
@@ -24,8 +24,7 @@ class _DoctorListState extends State<DoctorList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
+    return BlocBuilder<DoctorCubit, DoctorState>(builder: (context, state) {
       if (state.doctorsList.isEmpty) {
         return (const Center(
           child: SizedBox(
@@ -43,17 +42,17 @@ class _DoctorListState extends State<DoctorList> {
       }
       return Column(
         children: [
-          DoctorLists(
+        
+           DoctorLists(
             widget: widget,
             state: state,
           ),
-           Pagination(
-            initPageSelected: 0,
-            searchType: 'Patient',
+          Pagination(
+            maxPageCounter: context.read<DoctorCubit>().state.maxDoctorPageNumber,
+            typeofSearch: 'doctor',
           ) 
         ],
       );
-
     });
   }
 }
@@ -75,17 +74,14 @@ class DoctorLists extends StatelessWidget {
 
           itemCount: state.doctorsList.length,
           itemBuilder: (BuildContext context, index) {
-            print(index);
-            return PatientCard(
+            //rename it to GenericCard
+            return GenericCard(
                 onTap: () {
-                  context
-                      .read<AppointmentCubit>()
-                      .setPatientId(state.patientsList[index]['id']);
                   widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn);
-                  context
-                      .read<AppointmentCubit>()
+                     context
+                      .read<DoctorCubit>()
                       .setSelectedMedicalPersonnelId(
                           context.read<LoginCubit>().state.id);
                 },

@@ -57,11 +57,10 @@ class RegisterationCubit extends Cubit<RegistrationState> {
 
   void searchPatients({String? query, String? token, int? nextPage}) async {
     var searchResponse = await _registrationRepository.searchPatients(
-        searchParams: query, token: token);
+        searchParams: query, token: token, nextPage: 0);
     var body = json.decode(searchResponse!.body);
     var totalPages = body['totalPages'];
-
-    var patientsList = body['elements'];
+     var patientsList = body['elements'];
     emit(state.copyWith(
         patientList: patientsList, maxPatientPageNumber: totalPages));
   }

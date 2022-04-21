@@ -123,9 +123,11 @@ class _RegistrationState extends State<Registration> {
           children: [
             const Appointment(),
             Pagination(
-              initPageSelected: 0,
-              searchType: 'Registration',
-            )
+                maxPageCounter:
+                    context.read<RegisterationCubit>().state.maxPageNumber,
+                typeofSearch: 'registration',
+               
+               )
           ],
         );
       },

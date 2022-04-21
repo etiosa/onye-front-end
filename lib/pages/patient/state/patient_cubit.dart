@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
@@ -7,9 +9,9 @@ import 'package:onye_front_ened/pages/schedule/cubit/schedule_cubit.dart';
 part 'patient_state.dart';
 
 class PatientCubit extends Cubit<PatientState> {
-  final PatientRepositories _registrationRepositories;
+  final PatientRepositories _patientRepositories;
 
-  PatientCubit(this._registrationRepositories)
+  PatientCubit(this._patientRepositories)
       : super(const PatientState(
           dateOfBirth: '',
           gender: '',
@@ -113,8 +115,13 @@ class PatientCubit extends Cubit<PatientState> {
     emit(state.copyWith(zipCode: zipcode));
   }
 
-  Future<Response?> createNewPatient({String? token}) async {
+  void setSearchParams(String? argSearchParams) {
+    final String searchParams = argSearchParams!;
 
+    emit(state.copyWith(searchParams: searchParams));
+  }
+
+  Future<Response?> createNewPatient({String? token}) async {
     String? dateOfBirth;
     if (state.dateOfBirth != null && state.dateOfBirth!.isEmpty) {
       dateOfBirth = null;
@@ -122,7 +129,7 @@ class PatientCubit extends Cubit<PatientState> {
       dateOfBirth = state.dateOfBirth;
     }
 
-    Response? response = await _registrationRepositories.createNewPatient(
+    Response? response = await _patientRepositories.createNewPatient(
         token: token,
         firstName: state.firstName?.trim(),
         middleName: state.middleName?.trim(),
@@ -141,7 +148,8 @@ class PatientCubit extends Cubit<PatientState> {
         ethnicity: state.ethnicity,
         emergencyContactName: state.emergencyContactName?.trim(),
         emergencyContactPhoneNumber: state.emergencyContactPhoneNumber?.trim(),
-        emergencyContactRelationship: state.emergencyContactRelationship?.trim(),
+        emergencyContactRelationship:
+            state.emergencyContactRelationship?.trim(),
         countryCode: 'NG');
 
     return response;
@@ -155,5 +163,31 @@ class PatientCubit extends Cubit<PatientState> {
       educationLevel: '',
       ethnicity: '',
     ));
+  }
+
+  void searchPatients({String? query, String? token, int? nextPage}) async {
+    var searchResponse = await _patientRepositories.searchPatients(
+        searchParams: query, token: token, nextPage: nextPage);
+    var body = json.decode(searchResponse!.body);
+    var totalPages = body['totalPages'];
+    var patientsList = body['elements'];
+    emit(state.copyWith(patientsList: patientsList, maxPageNumber: totalPages));
+  }
+
+  void setPatientId(String? argSelectedId) {
+    final String selectedId = argSelectedId!;
+    emit(state.copyWith(selectedPatientId: selectedId));
+  }
+
+  void setNextPage({int? nextPage, String? token, String? searchParams}) async {
+    emit(state.copyWith(nextPage: nextPage));
+    if (state.nextPage <= state.maxPageNumber) {
+      //call search
+      var searchResponse = await _patientRepositories.searchPatients(
+          token: token, searchParams: searchParams, nextPage: state.nextPage);
+      var body = json.decode(searchResponse!.body);
+      var patientsList = body['elements'];
+      emit(state.copyWith(patientsList: patientsList));
+    }
   }
 }

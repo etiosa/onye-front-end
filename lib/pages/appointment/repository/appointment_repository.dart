@@ -7,11 +7,12 @@ class AppointmentRepository {
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
-  Future<List<dynamic>> searchAppointments(
+  Future<http.Response?> searchAppointments(
       {String? searchParams,
       String? startDateTime,
       String? endDateTime,
       String? token,
+      int? nextPage=0,
       String? zoneId}) async {
     var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
         .replace(queryParameters: <String, String>{
@@ -19,9 +20,10 @@ class AppointmentRepository {
       'to': '2024-01-01T00:00',
       'query': searchParams!,
       'zoneId': 'Africa/Lagos',
+        "page": "$nextPage"
+
     });
 
-    // http call
     http.Response response = await http.get(
       uri,
       headers: {
@@ -30,39 +32,9 @@ class AppointmentRepository {
         "Authorization": "Bearer $token",
       },
     );
-    var body = json.decode(response.body);
-    var appointmentList = body['elements'];
-
-    return appointmentList;
+    return response;
   }
 
-/*   Future<http.Response?> searchRegistrations(
-      {String? token, String? searchParams, int? nextPage = 0}) async {
-    int pageNumber = 3;
-    var uri =
-        Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
-            .replace(queryParameters: <String, String>{
-      'from': '2020-01-01T00:00',
-      'to': '2024-01-01T00:00',
-      'query': searchParams!,
-      'zoneId': 'Africa/Lagos',
-      "page": "$nextPage"
-    });
-    try {
-      http.Response response = await http.get(
-        uri,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      );
-      return response;
-    } catch (err) {
-      return null;
-    }
-  }
- */
 //TODO: move to patientCubit
   Future<http.Response?> searchPatients(
       {String? searchParams, String? token, int? nextPage = 0}) async {
@@ -88,36 +60,6 @@ class AppointmentRepository {
     }
   }
 
-  Future<List<dynamic>> searchDoctors(
-      {String? searchParams, String? token}) async {
-    Uri uri;
-    if (searchParams != null && searchParams.isNotEmpty) {
-      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-          .replace(queryParameters: <String, String>{
-        /*  'type': 'DOCTOR', */
-        'query': searchParams,
-      });
-    } else {
-      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-          .replace(queryParameters: <String, String>{
-        /*      'type': 'DOCTOR', */
-      });
-    }
-
-    http.Response response = await http.get(
-      uri,
-      headers: {
-        "Accept": accept,
-        "Content-Type": contentType,
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    var body = json.decode(response.body);
-    var doctorsList = body['elements'];
-
-    return doctorsList;
-  }
 
   Future<http.Response?> createRegistration(
       {String? token,

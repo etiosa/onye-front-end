@@ -5,11 +5,8 @@ import 'package:onye_front_ened/Widgets/Pagination.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
-import 'package:onye_front_ened/components/util/functions.dart';
 
-import '../../../Widgets/PatientCard.dart';
-import '../../../components/PatientDetails.dart';
-import '../../appointment/state/appointment_cubit.dart';
+import '../../../Widgets/GenericCard.dart';
 import '../../auth/state/login_cubit.dart';
 import '../../registration/state/registration_cubit.dart';
 
@@ -35,8 +32,12 @@ class _PatientsPageState extends State<PatientsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-               Button(height: 50, width: 200, label: 'Create Patient', onPressed: ()=>Navigator.of(context)
-                          .pushNamed('/dashboard/registrationForm'))
+              Button(
+                  height: 50,
+                  width: 200,
+                  label: 'Create Patient',
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed('/dashboard/registrationForm'))
             ],
           ),
           SizedBox(
@@ -68,8 +69,8 @@ class _PatientsPageState extends State<PatientsPage> {
                     authsession.getHomeToken()!.then((homeToken) {
                       if (homeToken != '') {
                         context
-                            .read<AppointmentCubit>()
-                            .searchPatients(query: query, token: homeToken);
+                            .read<PatientCubit>()
+                            .searchPatients(query: query, token: homeToken, nextPage: 0);
                       }
                     })
                   },
@@ -99,7 +100,7 @@ class _PatientsPageState extends State<PatientsPage> {
                       authsession.getHomeToken()!.then((homeToken) {
                         if (homeToken != '') {
                           //TODO: REMOVE SearchPatientds into cubit
-                          context.read<AppointmentCubit>().searchPatients(
+                          context.read<PatientCubit>().searchPatients(
                               query: context.read<PatientCubit>().state.query,
                               token: homeToken);
                         }
@@ -120,8 +121,6 @@ class _PatientsPageState extends State<PatientsPage> {
   }
 }
 
-
-
 //TODO: move this  to a widget foldder
 class PatientList extends StatefulWidget {
   const PatientList({
@@ -133,13 +132,12 @@ class PatientList extends StatefulWidget {
 }
 
 class _PatientListState extends State<PatientList> {
-    int? initPageSelected = 0;
+  int? initPageSelected = 0;
 
 //TODO: reaplce the AppointmentCubit with PatientCubit
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       if (state.patientsList.isEmpty) {
         return (const Center(
           child: SizedBox(
@@ -159,14 +157,17 @@ class _PatientListState extends State<PatientList> {
       return Column(
         children: [
           patientLists(state),
-          Pagination(initPageSelected: initPageSelected, searchType: 'Patient')
+          // Pagination(initPageSelected: initPageSelected, searchType: 'Patient')
+              Pagination(
+              maxPageCounter:
+                  context.read<PatientCubit>().state.maxPageNumber,
+              typeofSearch: 'patient',)
         ],
       );
     });
   }
 
-  Widget patientLists(AppointmentState state) {
-
+  Widget patientLists(PatientState state) {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.7,
       width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
@@ -175,11 +176,10 @@ class _PatientListState extends State<PatientList> {
 
           itemCount: state.patientsList.length,
           itemBuilder: (BuildContext context, index) {
-            return PatientCard(
+            return GenericCard(
                 onTap: () {
-                
                   context
-                      .read<RegisterationCubit>()
+                      .read<PatientCubit>()
                       .setPatientId(state.patientsList[index]['id']);
                   context
                       .read<RegisterationCubit>()
@@ -194,4 +194,3 @@ class _PatientListState extends State<PatientList> {
     );
   }
 }
-

@@ -532,8 +532,8 @@ class _AdditionalInfoFormBodyState extends State<AdditionalInfoFormBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const EmergencyContact(),
+                  children: const [
+                    EmergencyContact(),
                   ],
                 ),
               ),

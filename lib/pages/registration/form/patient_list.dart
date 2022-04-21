@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/PatientCard.dart';
+import 'package:onye_front_ened/Widgets/GenericCard.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
 import '../../appointment/state/appointment_cubit.dart';
+import '../../doctor/state/doctor_cubit_cubit.dart';
+import '../../patient/state/patient_cubit.dart';
 
 class PatientList extends StatefulWidget {
   PatientList({
@@ -23,9 +25,9 @@ class _PatientListState extends State<PatientList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
+    return BlocBuilder<PatientCubit, PatientState>(
         builder: (context, state) {
-      if (state.patientList.isEmpty) {
+      if (state.patientsList.isEmpty) {
         return (const Center(
           child: SizedBox(
             height: 70,
@@ -41,29 +43,29 @@ class _PatientListState extends State<PatientList> {
         ));
       }
       return SizedBox(
-        height: MediaQuery.of(context).size.height / 1.8,
+        height: MediaQuery.of(context).size.height / 1.9,
         width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
         child: ListView.builder(
             // shrinkWrap: true,
 
-            itemCount: state.patientList.length,
+            itemCount: state.patientsList.length,
             itemBuilder: (BuildContext context, index) {
-              return PatientCard(
+              return GenericCard(
                   onTap: () {
                     widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn);
                     context
                         .read<RegisterationCubit>()
-                        .setPatientId(state.patientList[index]['id']);
+                        .setPatientId(state.patientsList[index]['id']);
                     context
-                        .read<RegisterationCubit>()
+                        .read<DoctorCubit>()
                         .setSelectedMedicalPersonnelId(context.read<LoginCubit>().state.id);
                   },
-                  firstName: state.patientList[index]['firstName'],
-                  lastName: state.patientList[index]['lastName'],
-                  dateOfBirth: state.patientList[index]['dateOfBirth'],
-                  patientNumber: state.patientList[index]['patientNumber']);
+                  firstName: state.patientsList[index]['firstName'],
+                  lastName: state.patientsList[index]['lastName'],
+                  dateOfBirth: state.patientsList[index]['dateOfBirth'],
+                  patientNumber: state.patientsList[index]['patientNumber']);
             }),
       );
       
