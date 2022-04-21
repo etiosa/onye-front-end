@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import '../../../Widgets/SearchBar.dart';
 import '../../../components/DoctorList.dart';
 import '../../../components/PatientList.dart';
+import '../../doctor/state/doctor_cubit_cubit.dart';
 import 'register_form_view.dart';
 
 class CreateAppointment extends StatefulWidget {
@@ -247,17 +249,17 @@ class TextContent extends StatelessWidget {
 
 Future<Response?>? createAppointmentData({required BuildContext context}) {
   if (context
-          .read<AppointmentCubit>()
+          .read<DoctorCubit>()
           .state
           .selectedMedicalPersonnelId
           .isNotEmpty &&
-      context.read<AppointmentCubit>().state.selectedPatientId.isNotEmpty) {
+      context.read<PatientCubit>().state.selectedPatientId.isNotEmpty) {
     var response = context.read<AppointmentCubit>().createAppointment(
         date: context.read<AppointmentCubit>().state.appointmentDate,
         time: context.read<AppointmentCubit>().state.appointmentTime,
-        patientID: context.read<AppointmentCubit>().state.selectedPatientId,
+        patientID: context.read<PatientCubit>().state.selectedPatientId,
         medicalId:
-            context.read<AppointmentCubit>().state.selectedMedicalPersonnelId,
+            context.read<DoctorCubit>().state.selectedMedicalPersonnelId,
         token: context.read<LoginCubit>().state.homeToken,
         reasonForVisit: context.read<AppointmentCubit>().state.reasonForVisit,
         typeOfVisit: context.read<AppointmentCubit>().state.typeOfVisit);
@@ -284,21 +286,22 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
+    return BlocBuilder<PatientCubit, PatientState>(
         builder: (context, state) {
       return
           //const SizedBox(height: 10),
           Column(
-            children: [
-              PatientList(
-        pageController: widget.pageController,
-      ),
-       Pagination(
-            initPageSelected: 0,
-            searchType: 'Patient',
-          )
-            ],
-          );
+        children: [
+          PatientList(
+            pageController: widget.pageController,
+          ),
+          Pagination(
+            typeofSearch: 'patient', maxPageCounter: context.read<PatientCubit>().state.maxPageNumber
+            
+           ,
+          ) 
+        ],
+      );
     });
   }
 }

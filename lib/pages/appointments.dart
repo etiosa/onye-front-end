@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/RescheduleAppointmentButton.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
 
 import '../Widgets/AppointmentCard.dart';
 import '../Widgets/Loading.dart';
-import 'appointment/state/appointment_cubit.dart';
-import 'appointment/state/appointment_cubit.dart';
 import 'appointment/state/appointment_cubit.dart';
 
 class Appointments extends StatefulWidget {
@@ -24,7 +22,6 @@ class Appointments extends StatefulWidget {
 class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (context.read<LoginCubit>().state.homeToken.isEmpty) {
       //redirect to home
@@ -41,6 +38,7 @@ class _AppointmentsState extends State<Appointments> {
   @override
   Widget build(BuildContext context) {
     final fieldText = TextEditingController();
+    int initPageSelected = 0;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -58,15 +56,16 @@ class _AppointmentsState extends State<Appointments> {
                     padding: EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
                     child: Text(
                       'Appointment',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Button(
                       height: 50,
                       width: 170,
                       label: 'Create Appointment',
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed('/dashboard/appointment/createAppointment'))
+                      onPressed: () => Navigator.of(context).pushNamed(
+                          '/dashboard/appointment/createAppointment'))
                 ],
               ),
             ),
@@ -112,24 +111,27 @@ class _AppointmentsState extends State<Appointments> {
                           context.read<AppointmentCubit>().state.searchParams);
                   fieldText.clear();
                 }),
-            registrationBody(),
+            registrationBody(nextPageCounter: initPageSelected),
           ],
         ),
       ),
     );
   }
 
-  Widget registrationBody() {
-    return Column(
-      children: [
-        (const 
-        Appointment()),
-          Pagination(
-          initPageSelected: 0,
-          searchType: 'Appointment',
-        )
-            
-      ],
+  Widget registrationBody({required int nextPageCounter}) {
+    return BlocBuilder<AppointmentCubit, AppointmentState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            (const Appointment()),
+            Pagination(
+              maxPageCounter:
+                  context.read<AppointmentCubit>().state.maxPageNumber,
+              typeofSearch: 'appointment',
+            )
+          ],
+        );
+      },
     );
   }
 }

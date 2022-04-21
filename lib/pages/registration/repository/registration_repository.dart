@@ -35,28 +35,6 @@ class RegistrationRepository {
 
 
 
-  Future<List<dynamic>> searchDoctors(
-      {String? searchParams, String? token}) async {
-    var uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-        .replace(queryParameters: <String, String>{
-      'query': searchParams!,
-    });
-
-    http.Response response = await http.get(
-      uri,
-      headers: {
-        "Accept": accept,
-        "Content-Type": contentType,
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    var body = json.decode(response.body);
-    var doctorsList = body['elements'];
-
-    return doctorsList;
-  }
-
 
   Future<http.Response?> getPatientClinicalNote(
       {String? token, String? id, String? typeOfVisit}) async {
@@ -149,7 +127,6 @@ class RegistrationRepository {
 
   Future<http.Response?> searchRegistrations(
       {String? token, String? searchParams, int? nextPage = 0}) async {
-    int pageNumber = 3;
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{

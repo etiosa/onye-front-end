@@ -36,9 +36,13 @@ class PatientState extends Equatable {
       this.query = '',
       this.searchState = REGISTERATIONSEARCHSTATE.inital,
       this.createdPatientData = const {},
+      this.patientsList = const [],
+      this.selectedPatientId = '',
+      this.maxPageNumber = 0,
+      this.nextPage = 0,
+      this.searchParams='',
       this.registrationFormState = RegistrationFormState.init});
 
-//selcted value
   final String? firstName;
   final String? middleName;
   final String? lastName;
@@ -65,6 +69,11 @@ class PatientState extends Equatable {
   final dynamic createdPatientData;
   final RegistrationFormState registrationFormState;
   final String? emergencyContactPhoneNumber;
+  final List<dynamic> patientsList;
+  final String selectedPatientId;
+  final int maxPageNumber;
+  final int nextPage;
+  final String searchParams;
 
   @override
   List<Object?> get props => [
@@ -91,7 +100,12 @@ class PatientState extends Equatable {
         contactPreference,
         createdPatientData,
         searchState,
-        query
+        query,
+        patientsList,
+        selectedPatientId,
+        maxPageNumber,
+        nextPage,
+        searchParams
       ];
 
   PatientState copyWith(
@@ -105,6 +119,7 @@ class PatientState extends Equatable {
       String? educationLevel,
       String? email,
       String? ethnicity,
+      int? nextPage,
       REGISTERATIONSEARCHSTATE? searchState,
       String? toke,
       String? emergencyContactName,
@@ -121,9 +136,18 @@ class PatientState extends Equatable {
       String? city,
       Map<String, dynamic>? allOptions,
       RegistrationFormState? registrationFormState,
-      String? contactPreferences}) {
+      String? contactPreferences,
+      List<dynamic>? patientsList,
+      String? selectedPatientId,
+      String? searchParams,
+      int? maxPageNumber}) {
     return PatientState(
         token: toke ?? token,
+        searchParams:searchParams??this.searchParams,
+        nextPage: nextPage ?? this.nextPage,
+        maxPageNumber: maxPageNumber ?? this.maxPageNumber,
+        selectedPatientId: selectedPatientId ?? this.selectedPatientId,
+        patientsList: patientsList ?? this.patientsList,
         query: query ?? this.query,
         searchState: searchState ?? this.searchState,
         createdPatientData: createdPatientData ?? this.createdPatientData,

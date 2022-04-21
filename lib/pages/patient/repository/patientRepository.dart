@@ -8,6 +8,10 @@ class PatientRepositories {
 
   //TODO: use the patient model toJson
   //fromJSon
+  //TODO: LOOK INTO BLOCK TO BLOCK COMMUNICATION
+  //FOR LOGIN AND AUTHSTATE
+  //CONNECTION
+  //USE THAT FOR HOME AND LOGIN STATE
   Future<http.Response?> createNewPatient(
       {String? firstName,
       String? middleName,
@@ -124,4 +128,31 @@ class PatientRepositories {
       return body['token'];
     }
   }
+
+  Future<http.Response?> searchPatients(
+      {String? searchParams, String? token, int? nextPage = 0}) async {
+    var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
+        queryParameters: <String, String>{
+          'query': searchParams!,
+          "page": "$nextPage"
+        });
+
+    // http call
+    try {
+      http.Response response = await http.get(
+        uri,
+        headers: {
+          "Accept": accept,
+          "Content-Type": contentType,
+          "Authorization": "Bearer $token",
+        },
+      );
+      return response;
+    } catch (ee) {
+      return null;
+    }
+  }
+
+  
+
 }

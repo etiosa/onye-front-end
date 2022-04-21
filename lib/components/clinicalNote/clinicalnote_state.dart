@@ -8,7 +8,8 @@ class ClinicalnoteState extends Equatable {
       this.patientId = '',
       this.text = '',
       this.title = '',
-      this.clinicalNoteID='',
+      this.clinicalNoteID = '',
+      this.errorMessage='',
       this.type = ''});
 
   final String type;
@@ -17,9 +18,10 @@ class ClinicalnoteState extends Equatable {
   final String title;
   final String text;
   final String clinicalNoteID;
-
+  final String errorMessage;
   @override
-  List<Object> get props => [type, patientId, medicalPersonnelId, title, text, clinicalNoteID];
+  List<Object> get props =>
+      [errorMessage,  type, patientId, medicalPersonnelId, title, text, clinicalNoteID];
 
   ClinicalnoteState copyWith(
       {String? type,
@@ -27,12 +29,14 @@ class ClinicalnoteState extends Equatable {
       String? medicalId,
       String? title,
       String? clinicalNoteId,
+      String? errorMessage,
       String? text}) {
     return ClinicalnoteState(
+      errorMessage: errorMessage?? this.errorMessage,
         type: type ?? this.type,
         title: title ?? this.title,
         text: text ?? this.text,
-        clinicalNoteID: clinicalNoteId?? clinicalNoteID,
+        clinicalNoteID: clinicalNoteId ?? clinicalNoteID,
         medicalPersonnelId: medicalId ?? medicalPersonnelId,
         patientId: patientId ?? this.patientId);
   }

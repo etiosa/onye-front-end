@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
+import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
+import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
 import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/patient/page/PatientProfile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
         RegistrationRepository();
     final ClinicalNoteRepository _clinicalNoteRepository =
         ClinicalNoteRepository();
+    final DoctorRepository _doctorRepository = DoctorRepository();
 
     return RepositoryProvider(
         create: (_) => _authRepository,
@@ -61,7 +64,8 @@ class MyApp extends StatelessWidget {
                 create: (_) => RegisterationCubit(_registrationRepository)),
             BlocProvider(
                 create: (_) => AppointmentCubit(_appointmentRepository)),
-                  BlocProvider(
+            BlocProvider(create: (_) => DoctorCubit(_doctorRepository)),
+            BlocProvider(
                 create: (_) => ClinicalnoteCubit(_clinicalNoteRepository)),
           ],
           child: OKToast(
