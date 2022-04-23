@@ -1,0 +1,87 @@
+# This is a workflow is based on the firebase-hosting-preview workflow changed to push to live
+
+name: Deploy to Firebase Hosting live site on Dev branch merge
+on:
+  push:
+    branches: [ development ]
+
+jobs:
+  build_and_preview:
+    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to ONYE Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: "C0391T56PNX"
+          # For posting a simple plain text message
+          slack-message: "Front-end CI/CD Workflow Started on Development branch merge..."
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Install Dependecies
+        run: :|
+          npm install -g flutter-cli
+      - name: copy template file to env file
+        run: cp stage.env.template stage.env
+      - name: build flutter web
+        run: flutter build web
+      - name: firebase Dependecies
+        run: npm install -g firebase-tools
+
+      - name: Firebase Deploy
+        id: firebase_deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_ONYE_DEVELOPMENT }}"
+          channelId: live
+          projectId: onye-development
+      - name: Post to a Slack channel
+        id: slack2
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: "C0391T56PNX"
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks":
+                [
+                  {
+                    "type": "header",
+                    "text":
+                      {
+                        "type": "plain_text",
+                        "text": "Push request to development branch",
+                        "emoji": true
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Who?:* ${{ github.event.push.sender.login }}"
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.push.repository.html_url || github.event.head_commit.url }}"
+                      }
+                  },
+                  {
+                    "type": "section",
+                    "text":
+                      {
+                        "type": "mrkdwn",
+                        "text": "*Onye Web App:* <${{ steps.firebase_deploy.outputs.details_url }} | onye-live-url>"
+                      }
+                  }
+                ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
