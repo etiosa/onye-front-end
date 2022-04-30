@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart';
-import 'package:onye_front_ened/pages/schedule/cubit/schedule_cubit.dart';
 
 part 'patient_state.dart';
 

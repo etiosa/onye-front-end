@@ -15,7 +15,9 @@ class RegistrationState extends Equatable {
       this.maxPageNumber = 0,
       this.selectedMedicalPersonnelId = '',
       this.selectedPatientId = '',
-      this.maxPatientPageNumber=0,
+      this.registrationError = '',
+      this.maxPatientPageNumber = 0,
+      this.registerState= REGISTRATIONSTATE.init,
       this.selectedPatientIndex = 0});
 
   final List<dynamic> registrationList;
@@ -29,8 +31,9 @@ class RegistrationState extends Equatable {
   final int maxPatientPageNumber;
   final String selectedMedicalPersonnelId;
   final String selectedPatientId;
-
+  final String registrationError;
   final SEARCHSTATE searchState;
+  final REGISTRATIONSTATE registerState;
 
   @override
   // TODO: implement props
@@ -46,7 +49,9 @@ class RegistrationState extends Equatable {
         selectedPatientId,
         searchState,
         nextPage,
-        maxPatientPageNumber
+        maxPatientPageNumber,
+        registrationError,
+        registerState
       ];
 
   RegistrationState copyWith(
@@ -54,17 +59,20 @@ class RegistrationState extends Equatable {
       List<dynamic>? registrationList,
       List<dynamic>? patientList,
       String? selectedPatientId,
-      REGISTRATIONSTATE? registrationState,
+      REGISTRATIONSTATE?  registerState,
       String? typeOfVisit,
       String? reasonForVisit,
       SEARCHSTATE? searchState,
       int? selectedPatientIndex,
+      String? registrationError,
       int? nextPage,
-       int? maxPatientPageNumber,
+      int? maxPatientPageNumber,
       String? selectedMedicalPersonnelId,
       int? maxPageNumber}) {
     return RegistrationState(
-      maxPatientPageNumber: maxPatientPageNumber?? this.maxPatientPageNumber,
+      registerState:  registerState ?? this.registerState,
+        registrationError: registrationError ?? this.registrationError,
+        maxPatientPageNumber: maxPatientPageNumber ?? this.maxPatientPageNumber,
         selectedMedicalPersonnelId:
             selectedMedicalPersonnelId ?? this.selectedMedicalPersonnelId,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,

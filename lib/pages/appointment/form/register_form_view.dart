@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
 import '../../../components/DropDown.dart';
-import '../../../components/util/Messages.dart';
+import '../../../components/util/Modal.dart';
 import '../../appointments.dart';
 import 'create_appointment.dart';
 
@@ -117,14 +117,14 @@ class RegisterField extends StatelessWidget {
                                           context
                                               .read<AppointmentCubit>()
                                               .clearState(),
-                                          Messages.showMessage(
+                                         /*  Messages.showMessage(
                                               const Icon(
                                                 IconData(0xf635,
                                                     fontFamily:
                                                         'MaterialIcons'),
                                                 color: Colors.green,
                                               ),
-                                              'Appointment created'),
+                                              'Appointment created'), */
                                           Navigator.of(context)
                                               .pushAndRemoveUntil(
                                                   MaterialPageRoute(
@@ -136,14 +136,14 @@ class RegisterField extends StatelessWidget {
                                       else if (value != null &&
                                           value.statusCode == 400)
                                         {
-                                          Messages.showMessage(
+                                       /*    Messages.showMessage(
                                               const Icon(
                                                 IconData(0xe237,
                                                     fontFamily:
                                                         'MaterialIcons'),
                                                 color: Colors.red,
                                               ),
-                                              'Could not create appointment'),
+                                              'Could not create appointment'), */
                                         }
                                     });
                               },

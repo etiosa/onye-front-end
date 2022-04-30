@@ -25,12 +25,12 @@ services:
     env_file:
       - .env
     environment:
-      WAIT_HOSTS: ${ARANGODB_HOST:-arangodb}:${ARANGODB_PORT:-8529}
-      arangodb.hosts: ${ARANGODB_HOSTS:-arangodb}
-      arangodb.port: ${ARANGODB_PORT:-8529}
-      arangodb.user: ${ARANGODB_USER:-root}
-      arangodb.password: ${ARANGODB_PASSWORD:-password}
-      arangodb.database.name: ${ARANGODB_DATABASE:-core}
+     WAIT_HOSTS: ${ARANGODB_HOST:-arangodb}:${ARANGODB_PORT:-8529}
+     ARANGODB_HOST: ${ARANGODB_HOST:-arangodb}
+     ARANGODB_PORT: ${ARANGODB_PORT:-8529}
+     ARANGODB_USER: ${ARANGODB_USER:-root}
+     ARANGODB_PASSWORD: ${ARANGODB_PASSWORD:-password}
+     ARANGODB_DATABASE_NAME: ${ARANGODB_DATABASE:-core}
     ports:
       - "8001:8001"
     networks:

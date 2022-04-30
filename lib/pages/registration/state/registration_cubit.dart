@@ -18,15 +18,38 @@ class RegisterationCubit extends Cubit<RegistrationState> {
       String? appointmentId,
       String? reasons,
       String? typeOfVisit}) async {
+    //
+    emit(state.copyWith(registerState: REGISTRATIONSTATE.inprogress));
     Response? req = await _registrationRepository.createRegistration(
         token: token,
         patientId: patientID,
         appointmentId: appointmentId,
         reasons: reasons,
         typeOfVisit: typeOfVisit);
-    searchRegistrations(token: token);
+
+    //handle error here
+    var body = json.decode(req!.body);
+
+    if (req.statusCode != 201) {
+      emit(state.copyWith(
+          registrationError: body['message'],
+          registerState: REGISTRATIONSTATE.failed));
+    } else {
+      emit(state.copyWith(registerState: REGISTRATIONSTATE.sucessful));
+    }
+
+    //Update the state after the register..we get back a payload from the API
+    //searchRegistrations(token: token);
 
     return req;
+  }
+
+  void setRegisterState() {
+    emit(state.copyWith(registerState: REGISTRATIONSTATE.init));
+  }
+
+  void setRegistrationError({String? registrationError}) {
+    emit(state.copyWith(registrationError: registrationError));
   }
 
   void searchRegistrations(
@@ -60,7 +83,7 @@ class RegisterationCubit extends Cubit<RegistrationState> {
         searchParams: query, token: token, nextPage: 0);
     var body = json.decode(searchResponse!.body);
     var totalPages = body['totalPages'];
-     var patientsList = body['elements'];
+    var patientsList = body['elements'];
     emit(state.copyWith(
         patientList: patientsList, maxPatientPageNumber: totalPages));
   }

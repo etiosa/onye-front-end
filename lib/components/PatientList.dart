@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/GenericCard.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
@@ -62,7 +62,7 @@ class _PatientListState extends State<PatientList> {
                     context
                         .read<DoctorCubit>()
                         .setSelectedMedicalPersonnelId(
-                            context.read<LoginCubit>().state.id);
+                            context.read<LoginBloc>().state.id);
                   },
                   firstName: state.patientsList[index]['firstName'],
                   lastName: state.patientsList[index]['lastName'],

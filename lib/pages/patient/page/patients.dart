@@ -7,7 +7,7 @@ import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
 import '../../../Widgets/GenericCard.dart';
-import '../../auth/state/login_cubit.dart';
+import '../../auth/state/login_bloc.dart';
 import '../../registration/state/registration_cubit.dart';
 
 class PatientsPage extends StatefulWidget {
@@ -184,7 +184,7 @@ class _PatientListState extends State<PatientList> {
                   context
                       .read<RegisterationCubit>()
                       .setSelectedMedicalPersonnelId(
-                          context.read<LoginCubit>().state.id);
+                          context.read<LoginBloc>().state.id);
                 },
                 firstName: state.patientsList[index]['firstName'],
                 lastName: state.patientsList[index]['lastName'],

@@ -5,9 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Loading.dart';
 import 'package:onye_front_ened/Widgets/RegisterationCard.dart';
+import 'package:onye_front_ened/bloc/onye_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+import 'package:onye_front_ened/components/util/Modal.dart';
+import 'package:onye_front_ened/pages/Welcome.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
@@ -16,7 +19,6 @@ import '../../../Widgets/Pagination.dart';
 import '../../../components/clinicalNote/ClinicalNoteDropDown.dart';
 import '../../../components/clinicalNote/ClinicalNoteField.dart';
 import '../../../components/clinicalNote/ClinicalNoteTitleField .dart';
-import '../../../components/util/Messages.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -29,18 +31,20 @@ class _RegistrationState extends State<Registration> {
   @override
   void initState() {
     // TODO: implement initState
+    print("called again?");
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    /*    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
+      print("token is empty? redirect");
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Navigator.of(context).pushNamed("/login");
+        //  Navigator.of(context).pop();
       });
     }
-    if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
+    if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context.read<RegisterationCubit>().searchRegistrations(
-          token: context.read<LoginCubit>().state.homeToken,
+          token: context.read<LoginBloc>().state.homeToken,
           searchParams: context.read<AppointmentCubit>().state.searchParams);
-    }
+    } */
   }
 
   int? initPageSelected = 0;
@@ -101,13 +105,14 @@ class _RegistrationState extends State<Registration> {
                 label: "Search",
                 onPressed: () {
                   context.read<RegisterationCubit>().searchRegistrations(
-                      token: context.read<LoginCubit>().state.homeToken,
+                      token: context.read<LoginBloc>().state.homeToken,
                       searchParams: context
                           .read<RegisterationCubit>()
                           .state
                           .searchParams);
                   fieldText.clear();
                 }),
+            // const Appointment(),
             registrationBody(),
           ],
         ),
@@ -123,11 +128,10 @@ class _RegistrationState extends State<Registration> {
           children: [
             const Appointment(),
             Pagination(
-                maxPageCounter:
-                    context.read<RegisterationCubit>().state.maxPageNumber,
-                typeofSearch: 'registration',
-               
-               )
+              maxPageCounter:
+                  context.read<RegisterationCubit>().state.maxPageNumber,
+              typeofSearch: 'registration',
+            )
           ],
         );
       },
@@ -146,64 +150,183 @@ class Appointment extends StatefulWidget {
 
 class _AppointmentState extends State<Appointment> {
   var dateFormat = DateFormat('MM/dd/yyyy hh:mm a');
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RegisterationCubit, RegistrationState>(
+      listener: (context, state) {
+        print(state.registerState);
+        if (state.registerState == REGISTRATIONSTATE.failed) {
+          Modal(
+              inclueAction: true,
+              actionButtons: TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    context.read<RegisterationCubit>().setRegisterState();
+                  }),
+              context: context,
+              modalType: 'failed',
+              modalBody: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Text(state.registrationError),
+                  const SizedBox(height: 20),
+                  const Icon(
+                    Icons.error,
+                    color: Colors.redAccent,
+                    size: 100,
+                  )
+                ],
+              ),
+              progressDetails: state.registrationError);
+        }
+        if (state.registerState == REGISTRATIONSTATE.inprogress) {
+          Modal(
+              context: context,
+              modalType: '',
+              inclueAction: false,
+              modalBody: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('Registering In Progress'),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.grey[500],
+                        strokeWidth: 4,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Color.fromARGB(255, 56, 155, 152)),
+                      )),
+                ],
+              ),
+              progressDetails: 'Registering In Progress');
+        }
+        if (state.registerState == REGISTRATIONSTATE.sucessful) {
+          Modal(
+              context: context,
+              modalType: '',
+              inclueAction: true,
+              actionButtons: TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    context.read<RegisterationCubit>().setRegisterState();
+                  }),
+              modalBody: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text('Sucessful register a patient'),
+                  SizedBox(height: 30),
+                  Icon(
+                    Icons.check,
+                    size: 100,
+                    color: Color.fromARGB(255, 56, 155, 152),
+                  )
+                ],
+              ),
+              progressDetails: 'Sucessful register a patient');
+        }
+      },
+      child: BlocBuilder<RegisterationCubit, RegistrationState>(
+        builder: (context, state) {
+          print("build register widget");
+          if (state.registrationList.isEmpty) {
+            return const Loading();
+          } else {
+            return Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 1.6,
+                width: MediaQuery.of(context).size.width < 600
+                    ? double.infinity
+                    : 600,
+                child: ListView.builder(
+                    itemCount: state.registrationList.length,
+                    itemBuilder: ((context, index) {
+                      return RegisterationCard(
+                        addRegisteration: () => {
+                          Modal(
+                              context: context,
+                              modalType: 'Unkown',
+                              inclueAction: true,
+                              actionButtons: RegisterButton(
+                                state: state,
+                                index: index,
+                              ),
+                              modalBody: const Text(
+                                  'Do you want to register this patient?'),
+                              progressDetails:
+                                  'Do you want to register this patient?'),
+                        },
+                        clinicalNote: () => {
+                          showDialogConfirmation(
+                              context, state.registrationList[index])
+                        },
+                        firstName: state.registrationList[index]['patient']
+                            ['firstName'],
+                        lastName: state.registrationList[index]['patient']
+                            ['lastName'],
+                        type: state.registrationList[index]['type'],
+                        dateTime: state.registrationList[index]['dateTime'],
+                        patientNumber: state.registrationList[index]['patient']
+                            ['patientNumber'],
+                        role: context.read<LoginBloc>().state.role,
+                        appointmentId: state.registrationList[index]['id'],
+                      );
+                    })),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class RegisterButton extends StatelessWidget {
+  final dynamic state;
+  final int index;
+  const RegisterButton({Key? key, required this.state, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-      builder: (context, state) {
-        if (state.searchState == SEARCHSTATE.notFound) {
-          return (const Center(
-              child: Card(
-            child: Text('Not found'),
-          )));
-        }
-
-        if (state.registrationList.isEmpty) {
-          return const Loading();
-        } else {
-          return Center(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height / 1.6,
-              width: MediaQuery.of(context).size.width < 600
-                  ? double.infinity
-                  : 600,
-              child: ListView.builder(
-                  itemCount: state.registrationList.length,
-                  itemBuilder: ((context, index) {
-                    return RegisterationCard(
-                      addRegisteration: () => {
-                        showDialogCFeedback(
-                          context,
-                          token: context.read<LoginCubit>().state.homeToken,
-                          patientId: state.registrationList[index]['patient']
-                              ['id'],
-                          appointmentId: state.registrationList[index]['id'],
-                          reasons: state.registrationList[index]
-                              ['reasonForVisit'],
-                          typeofVist: state.registrationList[index]
-                              ['typeOfVisit'],
-                        )
-                      },
-                      clinicalNote: () => {
-                        showDialogConfirmation(
-                            context, state.registrationList[index])
-                      },
-                      firstName: state.registrationList[index]['patient']
-                          ['firstName'],
-                      lastName: state.registrationList[index]['patient']
-                          ['lastName'],
-                      type: state.registrationList[index]['type'],
-                      dateTime: state.registrationList[index]['dateTime'],
-                      patientNumber: state.registrationList[index]['patient']
-                          ['patientNumber'],
-                      role: context.read<LoginCubit>().state.role,
-                      appointmentId: state.registrationList[index]['id'],
-                    );
-                  })),
-            ),
-          );
-        }
-      },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+          onPressed: () => {Navigator.pop(context, false)},
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => {
+            createRegistration(
+                token: context.read<LoginBloc>().state.homeToken,
+                patientId: state.registrationList[index]['patient']['id'],
+                appointmentId: state.registrationList[index]['id'],
+                reasons: state.registrationList[index]['reasonForVisit'],
+                typeofVist: state.registrationList[index]['typeOfVisit'],
+                context: context),
+            Navigator.pop(context, false)
+          },
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }
@@ -305,8 +428,9 @@ List<Widget> clinicalNoteForm(
         TextFormField(
           readOnly: true,
           initialValue: _patientName,
-          onChanged: (username) =>
-              context.read<LoginCubit>().setUserName(username),
+          onChanged: (username) {
+           context.read<LoginBloc>().add(LoginUserNameChanged(username));
+          },
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -348,12 +472,12 @@ List<Widget> clinicalNoteForm(
                 response!.then((value) => {
                       if (value != null && value.statusCode == 202)
                         {
-                          Messages.showMessage(
+                          /*   Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
                               ),
-                              'Clinical Note updated'),
+                              'Clinical Note updated'), */
                           //clearState after update
                           context
                               .read<ClinicalnoteCubit>()
@@ -370,19 +494,19 @@ List<Widget> clinicalNoteForm(
                         }
                       else if (value != null && value.statusCode == 400)
                         {
-                          Messages.showMessage(
+                          /*  Messages.showMessage(
                               const Icon(
                                 IconData(0xe237, fontFamily: 'MaterialIcons'),
                                 color: Colors.red,
                               ),
-                              'Could not update Clinical Note'),
+                              'Could not update Clinical Note'), */
                         }
                     });
               } else {
                 var response = createClinicalNoteData(
                     homeToken: homeToken,
                     registerationId: appointment['id'],
-                    medicalPersonnelId: context.read<LoginCubit>().state.id,
+                    medicalPersonnelId: context.read<LoginBloc>().state.id,
                     note: context.read<ClinicalnoteCubit>().state.text,
                     noteTitle: context.read<ClinicalnoteCubit>().state.title,
                     clinicalNoteType:
@@ -396,12 +520,12 @@ List<Widget> clinicalNoteForm(
                           context
                               .read<ClinicalnoteCubit>()
                               .clearClinicalNoteState(),
-                          Messages.showMessage(
+                          /*      Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
                               ),
-                              'Clinical Note created'),
+                              'Clinical Note created'), */
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: ((context) => const Registration())),
@@ -409,12 +533,12 @@ List<Widget> clinicalNoteForm(
                         }
                       else if (value != null && value.statusCode == 400)
                         {
-                          Messages.showMessage(
+                          /*  Messages.showMessage(
                               const Icon(
                                 IconData(0xe237, fontFamily: 'MaterialIcons'),
                                 color: Colors.red,
                               ),
-                              'Could not create Clinical Note'),
+                              'Could not create Clinical Note'), */
                         }
                     });
               }

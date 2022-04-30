@@ -6,7 +6,7 @@ import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/RescheduleAppointmentButton.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/AppointmentCard.dart';
 import '../Widgets/Loading.dart';
@@ -23,16 +23,16 @@ class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+  /*   if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/login");
       });
     }
-    if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
+    if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context.read<AppointmentCubit>().searchAppointments(
-          token: context.read<LoginCubit>().state.homeToken);
-    }
+          token: context.read<LoginBloc>().state.homeToken);
+    } */
   }
 
   @override
@@ -106,7 +106,7 @@ class _AppointmentsState extends State<Appointments> {
                 label: 'Search',
                 onPressed: () {
                   context.read<AppointmentCubit>().searchAppointments(
-                      token: context.read<LoginCubit>().state.homeToken,
+                      token: context.read<LoginBloc>().state.homeToken,
                       searchParams:
                           context.read<AppointmentCubit>().state.searchParams);
                   fieldText.clear();
@@ -186,7 +186,7 @@ class _AppointmentState extends State<Appointment> {
                       dateTime: state.appointmentList[index]['dateTime'],
                       patientNumber: state.appointmentList[index]['patient']
                           ['patientNumber'],
-                      role: context.read<LoginCubit>().state.role,
+                      role: context.read<LoginBloc>().state.role,
                       button: RescheduleAppointmentButton(
                           appointment: state.appointmentList[index]),
                     );

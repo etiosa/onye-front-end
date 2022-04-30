@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
 import '../Widgets/Button.dart';
 import '../components/DashboardMenuItem.dart';
 import '../components/DashboardProfile.dart';
-import '../components/util/Messages.dart';
+import '../components/util/Modal.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -21,44 +21,14 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     // TODO: implement initState
+    //call the home again for now
     super.initState();
-    if (context.read<LoginCubit>().state.statusCode == 400 ||
-        context.read<LoginCubit>().state.statusCode == 401) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Navigator.of(context).pushNamed("/login");
-      });
-    }
-    _authSession.getHomeToken()?.then((token) => {
-          if (token == '')
-            {
-              Messages.showMessage(
-                  const Icon(
-                    IconData(0xf635, fontFamily: 'MaterialIcons'),
-                    color: Colors.green,
-                  ),
-                  'please login'),
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                Navigator.of(context).pushNamed("/login");
-              })
-            }
-          else
-            {
-              context.read<LoginCubit>().home(homeToken: token),
-              Messages.showMessage(
-                  const Icon(
-                    IconData(0xf635, fontFamily: 'MaterialIcons'),
-                    color: Colors.green,
-                  ),
-                  'Login successful')
-            }
-        });
-
-    /*  ; */
   }
 
 //TODO: Change the Button Structure to GridView
   @override
   Widget build(BuildContext context) {
+    print("twice");
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 247, 253, 253),
@@ -74,7 +44,7 @@ class _DashboardState extends State<Dashboard> {
                     bottom: 1.0,
                     left: MediaQuery.of(context).size.width / 9),
                 child: const Text(
-                  "Good afternoon",
+                  "Good afternoon", //take the user syste, current time ....base on that display greeting
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 ),
               ),
@@ -113,7 +83,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                 ),
-              ),
+              ), 
             ],
           ),
         ),
@@ -129,34 +99,44 @@ class Logout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-        buildWhen: (previous, current) =>
-            current.loginStatus != previous.loginStatus,
-        builder: (context, state) {
-          final _authSession = AuthSession();
-          _authSession.getHomeToken()!.then((value) => {
-                if (value == '')
-                  {
-                    Messages.showMessage(
+    ///return BlocBuilder<LoginBloc, LoginState>(
+    // buildWhen: (previous, current) =>
+    //  current.loginStatus != previous.loginStatus,
+    //  builder: (context, state) {
+    final _authSession = AuthSession();
+    _authSession.getHomeToken()!.then((value) => {
+          if (value == '')
+            {
+              // Navigator.of(context).pop(),
+              print("auth session is emopty"),
+              /*    Messages.showMessage(
                         const Icon(
                           IconData(0xf635, fontFamily: 'MaterialIcons'),
                           color: Colors.green,
                         ),
-                        'Logout successful'),
+                        Navigator.of(context).pushNamed("/login");
+                /*         'Logout successful from dashboard'), */
                     WidgetsBinding.instance?.addPostFrameCallback((_) {
                       Navigator.of(context).pushNamed("/login");
-                    })
-                  }
-              });
-
-          return Button(
-              height: 60,
-              width: 100,
-              label: "Logout",
-              onPressed: () async {
-                context.read<LoginCubit>().logout();
-              });
-
+                    }) */
+            }
         });
+
+    return Button(
+        height: 60,
+        width: 100,
+        label: "Logout",
+        onPressed: () async {
+          logout(context);
+        });
+    // });
   }
+}
+
+void logout(BuildContext context) async {
+  print("logot");
+  context.read<LoginBloc>().add(LogOut());
+  WidgetsBinding.instance?.addPostFrameCallback((_) {
+    Navigator.popAndPushNamed(context, '/login');
+  });
 }

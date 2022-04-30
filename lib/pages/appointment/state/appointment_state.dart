@@ -1,7 +1,7 @@
 part of 'appointment_cubit.dart';
 
 enum REGSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
-enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
+enum APPOINTMENTSTATE { inita, sucessful, inprogress, failed }
 
 //TODO create modal later
 class AppointmentState extends Equatable {
@@ -21,7 +21,7 @@ class AppointmentState extends Equatable {
       this.typeOfVisit = '',
       this.selectedMedicalIndex = 0,
       this.selectedPatientIndex = 2,
-      this.registrationState = REGISTRATIONSTATE.inita,
+      this.registrationState = APPOINTMENTSTATE.inita,
       this.selectedAppointmentId = '',
       this.patientRegistered = false,
  
@@ -47,7 +47,7 @@ class AppointmentState extends Equatable {
   final String reasonForVisit;
   final int selectedPatientIndex;
   final int selectedMedicalIndex;
-  final REGISTRATIONSTATE registrationState;
+  final APPOINTMENTSTATE registrationState;
   final String selectedAppointmentId;
   final bool patientRegistered;
   final int maxPageNumber;
@@ -100,7 +100,7 @@ class AppointmentState extends Equatable {
     String? appointmentDate,
     String? selectedPatientId,
     String? selectedMedicalPersonnelId,
-    REGISTRATIONSTATE? registrationState,
+    APPOINTMENTSTATE? registrationState,
     bool? patientRegistered,
     String? typeOfVisit,
     String? reasonForVisit,

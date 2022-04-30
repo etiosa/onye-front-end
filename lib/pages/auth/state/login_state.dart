@@ -1,6 +1,6 @@
-part of 'login_cubit.dart';
+part of 'login_bloc.dart';
 
-enum LoginStatus { login, failed, unknown, logout, init }
+enum LoginStatus { login, failed, unknown, logout, init, inprogress }
 enum LOGOUTSTATUS { sucessful, failed, unknown, init }
 
 @immutable
@@ -16,7 +16,8 @@ class LoginState extends Equatable {
       this.hospital = '',
       this.department = '',
       this.id = '',
-      this.role='',
+      this.role = '',
+      this.inProgressModal=false,
       this.logoutstatus = LOGOUTSTATUS.init,
       this.loginStatus = LoginStatus.init});
 
@@ -32,6 +33,7 @@ class LoginState extends Equatable {
   final String loginToken;
   final String id;
   final String role;
+  final bool inProgressModal;
   final LoginStatus loginStatus;
   @override
   // TODO: implement props
@@ -48,7 +50,8 @@ class LoginState extends Equatable {
         department,
         logoutstatus,
         id,
-        role
+        role,
+        inProgressModal
       ];
 
   LoginState copywith(
@@ -63,10 +66,12 @@ class LoginState extends Equatable {
       String? hospital,
       LOGOUTSTATUS? logoutstatus,
       String? id,
+      bool? inProgressModal,
       String? role,
       LoginStatus? loginStatus}) {
     return LoginState(
-      role: role ?? this.role,
+      inProgressModal: inProgressModal??this.inProgressModal,
+        role: role ?? this.role,
         id: id ?? this.id,
         logoutstatus: logoutstatus ?? this.logoutstatus,
         firstName: firstName ?? this.firstName,

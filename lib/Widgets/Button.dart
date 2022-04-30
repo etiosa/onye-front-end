@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../pages/auth/state/login_cubit.dart';
+import '../pages/auth/state/login_bloc.dart';
 
 class Button extends StatelessWidget {
   String label;

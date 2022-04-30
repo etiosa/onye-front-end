@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import '../../../Widgets/SearchBar.dart';
 import '../../../components/DoctorList.dart';
@@ -29,7 +29,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
   @override
   void initState() {
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
@@ -260,7 +260,7 @@ Future<Response?>? createAppointmentData({required BuildContext context}) {
         patientID: context.read<PatientCubit>().state.selectedPatientId,
         medicalId:
             context.read<DoctorCubit>().state.selectedMedicalPersonnelId,
-        token: context.read<LoginCubit>().state.homeToken,
+        token: context.read<LoginBloc>().state.homeToken,
         reasonForVisit: context.read<AppointmentCubit>().state.reasonForVisit,
         typeOfVisit: context.read<AppointmentCubit>().state.typeOfVisit);
     return response;

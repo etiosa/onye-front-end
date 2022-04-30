@@ -8,6 +8,7 @@ import 'package:onye_front_ened/components/repository/clinical_note_repository.d
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
+import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -17,8 +18,23 @@ import "package:http/http.dart" as http;
 import '../../patient/repository/patientRepository.dart';
 
 part 'login_state.dart';
+part "login_event.dart";
 
-class LoginCubit extends Cubit<LoginState> {
+/* 
+class OnyeBloc extends Bloc<OnyeEvent, OnyeState> {
+  OnyeBloc() : super(OnyeInitial()) {
+    on<FetchDatas>((event, emit) {
+      emit(OnyeLoaded());
+      // TODO: implement event handler
+    });
+  }
+}
+
+
+
+*/
+
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
   // ignore: unused_field
   final AuthRepository _authRepository;
   final PatientRepositories _registerRepository = PatientRepositories();
@@ -31,43 +47,86 @@ class LoginCubit extends Cubit<LoginState> {
 
   final _authSession = AuthSession();
 
-  LoginCubit(this._authRepository) : super(const LoginState());
+  LoginBloc(this._authRepository) : super(const LoginState()) {
+    on<LoginPasswordChanged>(_onPasswordChanged); //on map the event
+    on<LoginUserNameChanged>(_onUserNameChanged);
+    on<Login>(_login);
+    on<LogOut>(_logout);
+    on<LoginModalReset>(_resetModal);
+  }
 
-  void setPassword(String? argpassword) {
-    final String password = argpassword!;
+  void _resetModal(
+    LoginModalReset event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copywith(inProgressModal: false));
+  }
+
+  void _onPasswordChanged(
+    LoginPasswordChanged event,
+    Emitter<LoginState> emit,
+  ) {
+    final password = event.password;
     emit(state.copywith(password: password));
   }
 
-  void setUserName(String? arguserName) {
-    final String userName = arguserName!;
-    emit(state.copywith(userName: userName));
+/*   void setPassword(String? argpassword) {
+    final String password = argpassword!;
+    emit(state.copywith(password: password));
+  }
+ */
+
+  void _onUserNameChanged(
+      LoginUserNameChanged event, Emitter<LoginState> emit) {
+    final username = event.username;
+
+    emit(state.copywith(userName: username));
   }
 
-//TODO: move this to model class later
-  void login() async {
-    final http.Response? response = await _authRepository.signIn(
-        username: state.userName, password: state.password);
-    final body = jsonDecode(response!.body);
-    final token = body['token'];
-    final statusCode = response.statusCode;
-    emit(state.copywith(loginToken: token, statusCode: statusCode));
-    home(homeToken: state.loginToken);
+/* TODO: CHANGED to userModal*/
+  void _login(Login event, Emitter<LoginState> emit) async {
+    emit(state.copywith(loginStatus: LoginStatus.inprogress, inProgressModal: true));
+
+    try {
+      final http.Response? response = await _authRepository.signIn(
+          username: state.userName, password: state.password);
+      final body = jsonDecode(response!.body);
+      final sucess = body['success'];
+      final statusCode = response.statusCode;
+      if (sucess) {
+        final token = body['token'];
+        emit(state.copywith(loginStatus: LoginStatus.login, loginToken: token,
+        inProgressModal: false
+        ));
+        home(homeToken: state.loginToken);
+      } else {
+        emit(state.copywith(loginStatus: LoginStatus.failed,inProgressModal: false));
+      }
+    } catch (err) {
+      emit(state.copywith(loginStatus: LoginStatus.unknown,inProgressModal: false));
+    }
   }
+
 
   void home({String? homeToken}) async {
     final http.Response? response =
         await _authRepository.home(token: homeToken);
-
     final body = jsonDecode(response!.body);
     final statusCode = response.statusCode;
     final token = body['token'];
 
-    setLoginData(token, body);
-    _authSession.saveHomeToken(homeToken: token).then((value) => emit(
-        state.copywith(
-            statusCode: statusCode,
-            loginStatus: LoginStatus.login,
-            logoutstatus: LOGOUTSTATUS.init)));
+    if (statusCode == 200) {
+      setLoginData(token, body);
+      //authsession is done in background
+      //so I can emit the state here  if its 200
+      //we have login
+
+      _authSession.saveHomeToken(homeToken: token).then((value) => emit(
+          state.copywith(
+              statusCode: statusCode,
+              loginStatus: LoginStatus.login,
+              logoutstatus: LOGOUTSTATUS.init)));
+    }
   }
 
   void setLoginData(String token, body) {
@@ -81,7 +140,7 @@ class LoginCubit extends Cubit<LoginState> {
         department: body['userInfo']['facilityInfo']['department']));
   }
 
-  void logout({String? token}) async {
+  void _logout(LogOut event, Emitter<LoginState> emit) async {
     final homeToken = await _authSession.getHomeToken();
 
     final RegisterationCubit _regubit =
@@ -91,8 +150,6 @@ class LoginCubit extends Cubit<LoginState> {
         ClinicalnoteCubit(_clinicalNoteRepository);
     // ignore: non_constant_identifier_names
     final PatientCubit _aptCubit = PatientCubit(_registrationRepositories);
-
-  
 
     final response = await _authRepository.signout(token: homeToken);
 
@@ -107,9 +164,11 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copywith(
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
+    } else {
+      print("Unable to logout");
     }
-    print("Unable to logout");
   }
+
 
   void clearState() {
     emit(const LoginState());

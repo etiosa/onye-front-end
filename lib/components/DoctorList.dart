@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/GenericCard.dart';
 import '../Widgets/Pagination.dart';
@@ -83,7 +83,7 @@ class DoctorLists extends StatelessWidget {
                      context
                       .read<DoctorCubit>()
                       .setSelectedMedicalPersonnelId(
-                          context.read<LoginCubit>().state.id);
+                          context.read<LoginBloc>().state.id);
                 },
                 firstName: state.doctorsList[index]['firstName'],
                 lastName: state.doctorsList[index]['lastName'],

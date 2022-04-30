@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+
+ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:onye_front_ened/bloc/onye_bloc.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
@@ -9,7 +11,7 @@ import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/patient/page/PatientProfile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/auth/page/login.dart';
@@ -55,7 +57,11 @@ class MyApp extends StatelessWidget {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (_) => LoginCubit(_authRepository),
+              create: (_) => LoginBloc(_authRepository),
+              
+            ),
+             BlocProvider(
+              create: (_) => OnyeBloc()
             ),
             BlocProvider(
               create: (_) => PatientCubit(_registerRepository),
@@ -72,6 +78,7 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Onye',
+              
               routes: {
                 '/': (context) => const HomePage(),
                 '/dashboard/patient': (context) => const PatientsPage(),
@@ -93,4 +100,4 @@ class MyApp extends StatelessWidget {
           ),
         ));
   }
-}
+}  

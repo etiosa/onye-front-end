@@ -31,4 +31,8 @@ class AuthSession {
 
     return bool;
   }
+
+
+
+  //dashboardprofile session here
 }
