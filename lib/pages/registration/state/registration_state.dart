@@ -2,6 +2,7 @@ part of 'registration_cubit.dart';
 
 enum REGISTRATIONSTATE { init, sucessful, inprogress, failed }
 enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
+enum REGISTERSTATELOAD { init, loading, loaded, failed }
 
 class RegistrationState extends Equatable {
   const RegistrationState(
@@ -17,7 +18,8 @@ class RegistrationState extends Equatable {
       this.selectedPatientId = '',
       this.registrationError = '',
       this.maxPatientPageNumber = 0,
-      this.registerState= REGISTRATIONSTATE.init,
+      this.registerstateload=REGISTERSTATELOAD.init,
+      this.registerState = REGISTRATIONSTATE.init,
       this.selectedPatientIndex = 0});
 
   final List<dynamic> registrationList;
@@ -33,6 +35,7 @@ class RegistrationState extends Equatable {
   final String selectedPatientId;
   final String registrationError;
   final SEARCHSTATE searchState;
+  final REGISTERSTATELOAD registerstateload;
   final REGISTRATIONSTATE registerState;
 
   @override
@@ -51,15 +54,17 @@ class RegistrationState extends Equatable {
         nextPage,
         maxPatientPageNumber,
         registrationError,
-        registerState
+        registerState,
+        registerstateload
       ];
 
   RegistrationState copyWith(
       {String? searchParams,
+      REGISTERSTATELOAD? regLoad,
       List<dynamic>? registrationList,
       List<dynamic>? patientList,
       String? selectedPatientId,
-      REGISTRATIONSTATE?  registerState,
+      REGISTRATIONSTATE? registerState,
       String? typeOfVisit,
       String? reasonForVisit,
       SEARCHSTATE? searchState,
@@ -70,7 +75,8 @@ class RegistrationState extends Equatable {
       String? selectedMedicalPersonnelId,
       int? maxPageNumber}) {
     return RegistrationState(
-      registerState:  registerState ?? this.registerState,
+      registerstateload: regLoad?? registerstateload,
+        registerState: registerState ?? this.registerState,
         registrationError: registrationError ?? this.registrationError,
         maxPatientPageNumber: maxPatientPageNumber ?? this.maxPatientPageNumber,
         selectedMedicalPersonnelId:

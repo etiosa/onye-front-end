@@ -85,7 +85,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
 /* TODO: CHANGED to userModal*/
   void _login(Login event, Emitter<LoginState> emit) async {
-    emit(state.copywith(loginStatus: LoginStatus.inprogress, inProgressModal: true));
+    emit(state.copywith(
+        loginStatus: LoginStatus.inprogress, inProgressModal: true));
 
     try {
       final http.Response? response = await _authRepository.signIn(
@@ -93,20 +94,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final body = jsonDecode(response!.body);
       final sucess = body['success'];
       final statusCode = response.statusCode;
+      emit(state.copywith(canLogin: sucess));
       if (sucess) {
         final token = body['token'];
-        emit(state.copywith(loginStatus: LoginStatus.login, loginToken: token,
-        inProgressModal: false
-        ));
+        emit(state.copywith(
+            loginStatus: LoginStatus.login,
+            loginToken: token,
+            inProgressModal: false));
         home(homeToken: state.loginToken);
       } else {
-        emit(state.copywith(loginStatus: LoginStatus.failed,inProgressModal: false));
+        emit(state.copywith(
+            loginStatus: LoginStatus.failed, inProgressModal: false));
       }
     } catch (err) {
-      emit(state.copywith(loginStatus: LoginStatus.unknown,inProgressModal: false));
+      emit(state.copywith(
+          loginStatus: LoginStatus.unknown, inProgressModal: false));
     }
   }
-
 
   void home({String? homeToken}) async {
     final http.Response? response =
@@ -168,7 +172,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("Unable to logout");
     }
   }
-
 
   void clearState() {
     emit(const LoginState());

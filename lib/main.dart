@@ -1,5 +1,4 @@
-
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/bloc/onye_bloc.dart';
@@ -42,6 +41,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+  
+    //print(t1.test);
     final AuthRepository _authRepository = AuthRepository();
     final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =
@@ -58,11 +59,8 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => LoginBloc(_authRepository),
-              
             ),
-             BlocProvider(
-              create: (_) => OnyeBloc()
-            ),
+            BlocProvider(create: (_) => OnyeBloc()),
             BlocProvider(
               create: (_) => PatientCubit(_registerRepository),
             ),
@@ -78,7 +76,6 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Onye',
-              
               routes: {
                 '/': (context) => const HomePage(),
                 '/dashboard/patient': (context) => const PatientsPage(),
@@ -100,4 +97,4 @@ class MyApp extends StatelessWidget {
           ),
         ));
   }
-}  
+}

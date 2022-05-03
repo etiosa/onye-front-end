@@ -55,6 +55,7 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   void searchRegistrations(
       {String? token, String? searchParams, int? nextPage}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
+    emit(state.copyWith(regLoad: REGISTERSTATELOAD.loading));
 
     var searchReponse = await _registrationRepository.searchRegistrations(
         token: token, searchParams: searchParams);
@@ -67,8 +68,10 @@ class RegisterationCubit extends Cubit<RegistrationState> {
 
     if (state.registrationList.isEmpty) {
       emit(state.copyWith(searchState: SEARCHSTATE.notFound));
+      emit(state.copyWith(regLoad: REGISTERSTATELOAD.failed));
     } else {
       emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
+      emit(state.copyWith(regLoad: REGISTERSTATELOAD.loaded));
     }
   }
 
@@ -89,14 +92,19 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   }
 
   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
-    emit(state.copyWith(nextPage: nextPage));
+    emit(
+        state.copyWith(nextPage: nextPage, regLoad: REGISTERSTATELOAD.loading));
     if (state.nextPage <= state.maxPageNumber) {
       //call search
       var searchResponse = await _registrationRepository.searchRegistrations(
           token: token, searchParams: searchParams, nextPage: state.nextPage);
       var body = json.decode(searchResponse!.body);
       var registrationsList = body['elements'];
-      emit(state.copyWith(registrationList: registrationsList));
+       emit(state.copyWith(registrationList: registrationsList));
+      if (state.registrationList.isNotEmpty) {
+          emit(state.copyWith(regLoad: REGISTERSTATELOAD.loaded));
+         
+      }
     }
   }
 

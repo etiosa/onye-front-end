@@ -48,19 +48,18 @@ class AppointmentCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
           height: 250,
-          width:
-              MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+          width:MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
           color: const Color.fromARGB(255, 236, 246, 246),
           child: Column(children: [
-            PatientAppointmentRegistrationCard(
+             PatientAppointmentRegistrationCard(
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
                 patientNumber: patientNumber,
                 date: date,
-                time: time),
+                time: time), 
             AppointmentButtons(
-                appointmentId: appointmentId, button: button,)
+                appointmentId: appointmentId, button: button,) 
           ])),
     );
   }

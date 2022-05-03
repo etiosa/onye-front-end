@@ -16,7 +16,7 @@ void Modal(
   showDialog(
       barrierColor: const Color.fromARGB(10, 0, 0, 0),
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           elevation: 0,

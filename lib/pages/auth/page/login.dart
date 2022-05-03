@@ -1,9 +1,7 @@
-import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/Widgets/Feedback.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 
@@ -37,7 +35,8 @@ class _LoginPageState extends State<LoginPage> {
               listenWhen: ((previous, current) =>
                   previous.loginStatus != current.loginStatus),
               listener: (context, state) {
-                if (state.loginStatus == LoginStatus.login) {
+                //if we canLogin..move to the next page.
+                if (state.canLogin) {
                   WidgetsBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/dashboard");
@@ -103,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
                       progressDetails: "username/password is incorrect");
                 }
                 if (state.loginStatus == LoginStatus.unknown) {
-                  print("login unknow");
                   Modal(
                       context: context,
                       modalType: 'Unkown',

@@ -31,7 +31,6 @@ class _RegistrationState extends State<Registration> {
   @override
   void initState() {
     // TODO: implement initState
-    print("called again?");
     super.initState();
     /*    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       print("token is empty? redirect");
@@ -154,7 +153,6 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterationCubit, RegistrationState>(
       listener: (context, state) {
-        print(state.registerState);
         if (state.registerState == REGISTRATIONSTATE.failed) {
           Modal(
               inclueAction: true,
@@ -245,56 +243,79 @@ class _AppointmentState extends State<Appointment> {
       },
       child: BlocBuilder<RegisterationCubit, RegistrationState>(
         builder: (context, state) {
-          print("build register widget");
-          if (state.registrationList.isEmpty) {
+          //we want to return different widget based on the state
+
+          if (state.registerstateload == REGISTERSTATELOAD.failed) {
+            return const Center(
+              child: Text("No result, please try again"),
+            );
+          }
+
+          if (state.registerstateload == REGISTERSTATELOAD.loading) {
             return const Loading();
-          } else {
+          }
+          if (state.registerstateload == REGISTERSTATELOAD.loaded) {
             return Center(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height / 1.6,
                 width: MediaQuery.of(context).size.width < 600
                     ? double.infinity
                     : 600,
-                child: ListView.builder(
-                    itemCount: state.registrationList.length,
-                    itemBuilder: ((context, index) {
-                      return RegisterationCard(
-                        addRegisteration: () => {
-                          Modal(
-                              context: context,
-                              modalType: 'Unkown',
-                              inclueAction: true,
-                              actionButtons: RegisterButton(
-                                state: state,
-                                index: index,
-                              ),
-                              modalBody: const Text(
-                                  'Do you want to register this patient?'),
-                              progressDetails:
-                                  'Do you want to register this patient?'),
-                        },
-                        clinicalNote: () => {
-                          showDialogConfirmation(
-                              context, state.registrationList[index])
-                        },
-                        firstName: state.registrationList[index]['patient']
-                            ['firstName'],
-                        lastName: state.registrationList[index]['patient']
-                            ['lastName'],
-                        type: state.registrationList[index]['type'],
-                        dateTime: state.registrationList[index]['dateTime'],
-                        patientNumber: state.registrationList[index]['patient']
-                            ['patientNumber'],
-                        role: context.read<LoginBloc>().state.role,
-                        appointmentId: state.registrationList[index]['id'],
-                      );
-                    })),
+                child: RegistersList(
+                  state: state,
+                ),
               ),
             );
           }
+          return const Loading();
+
+        
         },
       ),
     );
+  }
+}
+
+class RegistersList extends StatelessWidget {
+  dynamic state;
+  RegistersList({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: state.registrationList.length,
+        itemBuilder: ((context, index) {
+          return RegisterationCard(
+            key: Key(state.registrationList[index]['id']),
+            addRegisteration: () => {
+              Modal(
+                  context: context,
+                  modalType: 'Unkown',
+                  inclueAction: true,
+                  actionButtons: RegisterButton(
+                    state: state,
+                    index: index,
+                  ),
+                  modalBody:
+                      const Text('Do you want to register this patient?'),
+                  progressDetails: 'Do you want to register this patient?'),
+            },
+            clinicalNote: () => {
+              showDialogConfirmation(context, state.registrationList[index])
+            },
+            firstName: state.registrationList[index]['patient']['firstName'],
+            lastName: state.registrationList[index]['patient']['lastName'],
+            type: state.registrationList[index]['type'],
+            dateTime: state.registrationList[index]['dateTime'],
+            patientNumber: state.registrationList[index]['patient']
+                ['patientNumber'],
+            role: context.read<LoginBloc>().state.role,
+            appointmentId: state.registrationList[index]['id'],
+          );
+        }));
   }
 }
 
@@ -429,7 +450,7 @@ List<Widget> clinicalNoteForm(
           readOnly: true,
           initialValue: _patientName,
           onChanged: (username) {
-           context.read<LoginBloc>().add(LoginUserNameChanged(username));
+            context.read<LoginBloc>().add(LoginUserNameChanged(username));
           },
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -443,6 +464,7 @@ List<Widget> clinicalNoteForm(
         ),
       ],
     ),
+    //Move the clinicalNote to it's full screen/it's own screen/page
     ClinicalNoteTitleField(
       appointment: appointment,
     ),

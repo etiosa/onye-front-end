@@ -17,7 +17,8 @@ class LoginState extends Equatable {
       this.department = '',
       this.id = '',
       this.role = '',
-      this.inProgressModal=false,
+      this.canLogin=false,
+      this.inProgressModal = false,
       this.logoutstatus = LOGOUTSTATUS.init,
       this.loginStatus = LoginStatus.init});
 
@@ -35,6 +36,7 @@ class LoginState extends Equatable {
   final String role;
   final bool inProgressModal;
   final LoginStatus loginStatus;
+  final bool canLogin;
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -51,7 +53,8 @@ class LoginState extends Equatable {
         logoutstatus,
         id,
         role,
-        inProgressModal
+        inProgressModal,
+        canLogin
       ];
 
   LoginState copywith(
@@ -68,11 +71,13 @@ class LoginState extends Equatable {
       String? id,
       bool? inProgressModal,
       String? role,
+      bool? canLogin,
       LoginStatus? loginStatus}) {
     return LoginState(
-      inProgressModal: inProgressModal??this.inProgressModal,
+        inProgressModal: inProgressModal ?? this.inProgressModal,
         role: role ?? this.role,
         id: id ?? this.id,
+        canLogin: canLogin??this.canLogin,
         logoutstatus: logoutstatus ?? this.logoutstatus,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,

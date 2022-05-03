@@ -8,8 +8,8 @@ import '../../appointments.dart';
 import 'create_appointment.dart';
 
 class Register extends StatefulWidget {
-  Register({Key? key, required this.formIndex}) : super(key: key);
-  int formIndex;
+ const  Register({Key? key, required this.formIndex}) : super(key: key);
+  final int formIndex;
 
   @override
   State<Register> createState() => _RegisterState();
@@ -20,10 +20,104 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentCubit, AppointmentState>(
-        builder: (context, state) {
-      return RegisterField(formKey: _formKey, widget: widget);
-    });
+    return BlocListener<AppointmentCubit, AppointmentState>(
+        listener: (context, state) {
+          if (state.appointmentState == APPOINTMENTSTATE.inprogress) {
+            Modal(
+                context: context,
+                modalType: '',
+                inclueAction: false,
+                modalBody: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text('Appointment In Progress'),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator.adaptive(
+                          backgroundColor: Colors.grey[500],
+                          strokeWidth: 4,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Color.fromARGB(255, 56, 155, 152)),
+                        )),
+                  ],
+                ),
+                progressDetails: 'Appointment In Progress');
+          }
+
+          if (state.appointmentState == APPOINTMENTSTATE.sucessful) {
+            Modal(
+                context: context,
+                modalType: '',
+                inclueAction: true,
+                actionButtons: TextButton(
+                    child: const Text('Close'),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                      context.read<AppointmentCubit>().setAppointmentState();
+                      context.read<AppointmentCubit>().clearState();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: ((context) => const Appointments())),
+                          ModalRoute.withName('/dashboard'));
+                    }),
+                modalBody: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('appointment created'),
+                    SizedBox(height: 30),
+                    Icon(
+                      Icons.check,
+                      size: 100,
+                      color: Color.fromARGB(255, 56, 155, 152),
+                    )
+                  ],
+                ),
+                progressDetails: 'appointment created');
+          }
+
+          if (state.appointmentState == APPOINTMENTSTATE.failed) {
+            Modal(
+                inclueAction: true,
+                actionButtons: TextButton(
+                    child: const Text('Close'),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                      context.read<AppointmentCubit>().setAppointmentState();
+                    }),
+                context: context,
+                modalType: 'failed',
+                modalBody: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Text(state.appointmentError),
+                    const SizedBox(height: 20),
+                    const Icon(
+                      Icons.error,
+                      color: Colors.redAccent,
+                      size: 100,
+                    )
+                  ],
+                ),
+                progressDetails: state.appointmentError);
+          }
+        },
+        child: RegisterField(formKey: _formKey, widget: widget));
   }
 }
 
@@ -107,45 +201,7 @@ class RegisterField extends StatelessWidget {
                                     const Color.fromARGB(255, 56, 155, 152)),
                               ),
                               onPressed: () {
-                                var response =
-                                    createAppointmentData(context: context);
-
-                                response?.then((value) => {
-                                      if (value != null &&
-                                          value.statusCode == 201)
-                                        {
-                                          context
-                                              .read<AppointmentCubit>()
-                                              .clearState(),
-                                         /*  Messages.showMessage(
-                                              const Icon(
-                                                IconData(0xf635,
-                                                    fontFamily:
-                                                        'MaterialIcons'),
-                                                color: Colors.green,
-                                              ),
-                                              'Appointment created'), */
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: ((context) =>
-                                                          const Appointments())),
-                                                  ModalRoute.withName(
-                                                      '/dashboard'))
-                                        }
-                                      else if (value != null &&
-                                          value.statusCode == 400)
-                                        {
-                                       /*    Messages.showMessage(
-                                              const Icon(
-                                                IconData(0xe237,
-                                                    fontFamily:
-                                                        'MaterialIcons'),
-                                                color: Colors.red,
-                                              ),
-                                              'Could not create appointment'), */
-                                        }
-                                    });
+                              createAppointmentData(context: context);
                               },
                               child: const Text('Submit')),
                         ),
