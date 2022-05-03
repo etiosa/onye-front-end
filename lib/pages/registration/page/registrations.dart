@@ -5,11 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Loading.dart';
 import 'package:onye_front_ened/Widgets/RegisterationCard.dart';
-import 'package:onye_front_ened/bloc/onye_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
-import 'package:onye_front_ened/pages/Welcome.dart';
-import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
@@ -38,12 +35,12 @@ class _RegistrationState extends State<Registration> {
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         //  Navigator.of(context).pop();
       });
-    }
+    }*/
     if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context.read<RegisterationCubit>().searchRegistrations(
           token: context.read<LoginBloc>().state.homeToken,
-          searchParams: context.read<AppointmentCubit>().state.searchParams);
-    } */
+          searchParams: context.read<RegisterationCubit>().state.searchParams);
+    }
   }
 
   int? initPageSelected = 0;
@@ -98,13 +95,86 @@ class _RegistrationState extends State<Registration> {
                 ),
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+              child: Text(
+                " Start Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text("Time"),
+                    ),
+                    Time(
+                      rangeLabel: 'start',
+                    ),
+                  ],
+                ),
+                 Date(rangeDate: 'start',),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+              child: Text(
+                "End Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text("Time"),
+                    ),
+                    Time(
+                      rangeLabel: 'end',
+                    ),
+                  ],
+                ),
+               Date(rangeDate: 'end',),
+              ],
+            ),
+
             Button(
                 height: 50,
                 width: 100,
                 label: "Search",
                 onPressed: () {
+                  //  DateTime myDatetime = DateTime.parse("2018-07-10 12:04:35");
+                  var startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+                      context.read<RegisterationCubit>().state.registrationDate +
+                          " " +
+                          context
+                              .read<RegisterationCubit>()
+                              .state
+                              .registrationTime,
+                      true);
+
+                  var enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+                      context.read<RegisterationCubit>().state.registrationEndDate +
+                          " " +
+                          context.read<RegisterationCubit>().state.registrationEndTime,
+                      true);
                   context.read<RegisterationCubit>().searchRegistrations(
                       token: context.read<LoginBloc>().state.homeToken,
+                      startDateTime: startdateTime.toIso8601String(),
+                      endDateTime: enddateTime.toIso8601String(),
+                  
                       searchParams: context
                           .read<RegisterationCubit>()
                           .state
@@ -135,6 +205,96 @@ class _RegistrationState extends State<Registration> {
         );
       },
     );
+  }
+}
+
+class Time extends StatelessWidget {
+  String rangeLabel;
+  Time({Key? key, required this.rangeLabel}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterationCubit, RegistrationState>(
+        builder: ((context, state) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+        child: InkWell(
+          onTap: (() {
+            dateTimePicker(context, rangeLabel);
+          }),
+          child: Container(
+            color: const Color.fromARGB(255, 205, 226, 226),
+            constraints: const BoxConstraints(maxWidth: 150, maxHeight: 40),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                child: Center(
+                  child: Text( rangeLabel=='start'? state.registrationTime: state.registrationEndTime,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'poppins',
+                          fontSize: 15)),
+                ),
+                width: 600,
+                height: 500,
+              ),
+            ),
+          ),
+        ),
+      );
+    }));
+  }
+}
+
+class Date extends StatelessWidget {
+  String rangeDate;
+   Date({Key? key, required this.rangeDate}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterationCubit, RegistrationState>(
+        builder: ((context, state) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
+            child: Text("Date"),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+            child: InkWell(
+              onTap: (() {
+                datePicker(context, rangeDate);
+              }),
+              child: Container(
+                color: const Color.fromARGB(255, 205, 226, 226),
+                constraints: const BoxConstraints(maxWidth: 150, maxHeight: 40),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Center(
+                        child: Text( rangeDate=="start"?
+                          state.registrationDate: state.registrationEndDate,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'poppins',
+                              fontSize: 15),
+                        ),
+                      ),
+                    ),
+                    width: 600,
+                    height: 500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }));
   }
 }
 
@@ -268,8 +428,6 @@ class _AppointmentState extends State<Appointment> {
             );
           }
           return const Loading();
-
-        
         },
       ),
     );
@@ -570,6 +728,43 @@ List<Widget> clinicalNoteForm(
       ],
     ),
   ];
+}
+
+Future dateTimePicker(BuildContext context, String? timedateRange) async {
+  final newTime =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (newTime == null) return;
+
+  String formatTime = newTime.format(context);
+
+  if (timedateRange == 'end') {
+    context.read<RegisterationCubit>().setRegistrationEndTime(formatTime);
+  }
+  if (timedateRange == 'start') {
+    context.read<RegisterationCubit>().setRegistrationTime(formatTime);
+  }
+}
+
+Future datePicker(BuildContext context, String dateRange) async {
+  var dateFormat = DateFormat('yyyy-MM-dd');
+
+  final initDate = DateTime.now();
+  final newDate = await showDatePicker(
+      context: context,
+      initialDate: initDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(DateTime.now().year + 5));
+
+  String formattedDate = dateFormat.format(newDate!);
+
+  // ignore: unnecessary_null_comparison
+  if (newDate == null) return;
+  if (dateRange == 'start') {
+    context.read<RegisterationCubit>().setRegistrationDate(formattedDate);
+  }
+  if (dateRange == 'end') {
+    context.read<RegisterationCubit>().setRegistrationEndDate(formattedDate);
+  }
 }
 
 //TODO:ClinicalNote Function moved to ClinicalNote component

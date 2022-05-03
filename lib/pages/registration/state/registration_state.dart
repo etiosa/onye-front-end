@@ -18,8 +18,12 @@ class RegistrationState extends Equatable {
       this.selectedPatientId = '',
       this.registrationError = '',
       this.maxPatientPageNumber = 0,
-      this.registerstateload=REGISTERSTATELOAD.init,
+      this.registerstateload = REGISTERSTATELOAD.init,
       this.registerState = REGISTRATIONSTATE.init,
+      this.registrationDate = '',
+      this.registrationTime = '',
+      this.registrationEndDate='',
+      this.registrationEndTime='',
       this.selectedPatientIndex = 0});
 
   final List<dynamic> registrationList;
@@ -37,7 +41,10 @@ class RegistrationState extends Equatable {
   final SEARCHSTATE searchState;
   final REGISTERSTATELOAD registerstateload;
   final REGISTRATIONSTATE registerState;
-
+  final String registrationTime;
+  final String registrationDate;
+  final String registrationEndDate;
+  final String registrationEndTime;
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -55,11 +62,19 @@ class RegistrationState extends Equatable {
         maxPatientPageNumber,
         registrationError,
         registerState,
-        registerstateload
+        registerstateload,
+        registrationTime,
+        registrationDate,
+        registrationEndDate,
+        registrationEndTime
       ];
 
   RegistrationState copyWith(
       {String? searchParams,
+      String? registrationEndDate,
+      String? registrationEndTime,
+      String? registrationDate,
+      String? registrationTime,
       REGISTERSTATELOAD? regLoad,
       List<dynamic>? registrationList,
       List<dynamic>? patientList,
@@ -75,7 +90,11 @@ class RegistrationState extends Equatable {
       String? selectedMedicalPersonnelId,
       int? maxPageNumber}) {
     return RegistrationState(
-      registerstateload: regLoad?? registerstateload,
+        registrationEndDate: registrationEndDate?? this.registrationEndDate,
+        registrationEndTime: registrationEndTime?? this.registrationEndTime,
+        registrationDate: registrationDate ?? this.registrationDate,
+        registrationTime: registrationTime ?? this.registrationTime,
+        registerstateload: regLoad ?? registerstateload,
         registerState: registerState ?? this.registerState,
         registrationError: registrationError ?? this.registrationError,
         maxPatientPageNumber: maxPatientPageNumber ?? this.maxPatientPageNumber,

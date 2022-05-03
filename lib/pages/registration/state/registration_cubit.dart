@@ -44,6 +44,26 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     return req;
   }
 
+  void setRegistrationDate(String? registrationDate) {
+    emit(state.copyWith(registrationDate: registrationDate!));
+
+  }
+
+    void setRegistrationTime(String? registrationTime) {
+    emit(state.copyWith(registrationTime: registrationTime!));
+  }
+
+
+  void setRegistrationEndTime(String? registrationTime) {
+    emit(state.copyWith(registrationEndTime: registrationTime!));
+  }
+
+
+  void setRegistrationEndDate(String? registrationDate) {
+    emit(state.copyWith(registrationEndDate: registrationDate!));
+  }
+
+
   void setRegisterState() {
     emit(state.copyWith(registerState: REGISTRATIONSTATE.init));
   }
@@ -53,12 +73,14 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   }
 
   void searchRegistrations(
-      {String? token, String? searchParams, int? nextPage}) async {
+      {String? token, String? searchParams, int? nextPage, String?startDateTime, String? endDateTime}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
     emit(state.copyWith(regLoad: REGISTERSTATELOAD.loading));
 
     var searchReponse = await _registrationRepository.searchRegistrations(
-        token: token, searchParams: searchParams);
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+      token: token, searchParams: searchParams);
 
     var body = json.decode(searchReponse!.body);
     var registrationsList = body['elements'];
@@ -100,10 +122,9 @@ class RegisterationCubit extends Cubit<RegistrationState> {
           token: token, searchParams: searchParams, nextPage: state.nextPage);
       var body = json.decode(searchResponse!.body);
       var registrationsList = body['elements'];
-       emit(state.copyWith(registrationList: registrationsList));
+      emit(state.copyWith(registrationList: registrationsList));
       if (state.registrationList.isNotEmpty) {
-          emit(state.copyWith(regLoad: REGISTERSTATELOAD.loaded));
-         
+        emit(state.copyWith(regLoad: REGISTERSTATELOAD.loaded));
       }
     }
   }

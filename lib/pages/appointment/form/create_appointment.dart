@@ -129,7 +129,8 @@ class DateTimePickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        return (Column(
+        return (
+          Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

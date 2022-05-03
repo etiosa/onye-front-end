@@ -68,9 +68,8 @@ class _PatientsPageState extends State<PatientsPage> {
                   onFieldSubmitted: (query) => {
                     authsession.getHomeToken()!.then((homeToken) {
                       if (homeToken != '') {
-                        context
-                            .read<PatientCubit>()
-                            .searchPatients(query: query, token: homeToken, nextPage: 0);
+                        context.read<PatientCubit>().searchPatients(
+                            query: query, token: homeToken, nextPage: 0);
                       }
                     })
                   },
@@ -158,10 +157,10 @@ class _PatientListState extends State<PatientList> {
         children: [
           patientLists(state),
           // Pagination(initPageSelected: initPageSelected, searchType: 'Patient')
-              Pagination(
-              maxPageCounter:
-                  context.read<PatientCubit>().state.maxPageNumber,
-              typeofSearch: 'patient',)
+          Pagination(
+            maxPageCounter: context.read<PatientCubit>().state.maxPageNumber,
+            typeofSearch: 'patient',
+          )
         ],
       );
     });

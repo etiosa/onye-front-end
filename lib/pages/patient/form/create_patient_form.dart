@@ -33,7 +33,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   void nextPage() {
     _pageController.nextPage(
-        curve: Curves.easeIn, duration: Duration(milliseconds: 300));
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   @override
@@ -415,6 +415,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 
 //TODO: Refactor later
 class ContactInfoFormBody extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const ContactInfoFormBody({
     Key? key,
     required this.formKey,
