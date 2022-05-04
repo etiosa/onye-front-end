@@ -8,7 +8,6 @@ import 'package:onye_front_ened/components/repository/clinical_note_repository.d
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
-import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -19,20 +18,6 @@ import '../../patient/repository/patientRepository.dart';
 
 part 'login_state.dart';
 part "login_event.dart";
-
-/* 
-class OnyeBloc extends Bloc<OnyeEvent, OnyeState> {
-  OnyeBloc() : super(OnyeInitial()) {
-    on<FetchDatas>((event, emit) {
-      emit(OnyeLoaded());
-      // TODO: implement event handler
-    });
-  }
-}
-
-
-
-*/
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   // ignore: unused_field
@@ -53,6 +38,48 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<Login>(_login);
     on<LogOut>(_logout);
     on<LoginModalReset>(_resetModal);
+    on<BetContract>(_setContract);
+    on<AcceptBetaContract>(_acceptBetaContract);
+  }
+
+  void _setContract(BetContract event, Emitter<LoginState> emit) async {
+    emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.loading));
+    try {
+      var licenseResponse =
+          await _authRepository.getLicenseAgreement(token: event.token);
+      final body = jsonDecode(licenseResponse!.body);
+      final license = body['licenseAgreement'];
+      final statusCode = licenseResponse.statusCode;
+      if (statusCode != 200) {
+        emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.failed));
+      } else {
+        emit(state.copywith(
+            fetchingcontract: FETCHINGCONTRACT.loaded, betaContract: license));
+      }
+    } catch (err) {
+      emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.unknown));
+    }
+  }
+
+  void _acceptBetaContract(
+      AcceptBetaContract event, Emitter<LoginState> emit) async {
+    emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.inprogress));
+
+    try {
+      var acceptContractResponse = await _authRepository.acceptContract(
+          token: event.token, userId: event.userId);
+
+      final statsCode = acceptContractResponse?.statusCode;
+      if (statsCode == 204) {
+        emit(state.copywith(
+            acceptcontractstatus: ACCEPTCONTRACTSTATUS.accept,
+            isContractAccept: true));
+      } else {
+        emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.failed));
+      }
+    } catch (err) {
+      emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.unkown));
+    }
   }
 
   void _resetModal(
@@ -69,12 +96,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final password = event.password;
     emit(state.copywith(password: password));
   }
-
-/*   void setPassword(String? argpassword) {
-    final String password = argpassword!;
-    emit(state.copywith(password: password));
-  }
- */
 
   void _onUserNameChanged(
       LoginUserNameChanged event, Emitter<LoginState> emit) {
@@ -124,6 +145,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       //authsession is done in background
       //so I can emit the state here  if its 200
       //we have login
+      emit(state.copywith(
+        loginStatus: LoginStatus.home,
+        homeToken: token,
+      ));
 
       _authSession.saveHomeToken(homeToken: token).then((value) => emit(
           state.copywith(
@@ -135,11 +160,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void setLoginData(String token, body) {
     return emit(state.copywith(
-        homeTokenS: token,
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         id: body['userInfo']['id'],
+        userId: body['userInfo']['userId'],
         role: body['userInfo']['type'],
         department: body['userInfo']['facilityInfo']['department']));
   }

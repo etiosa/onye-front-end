@@ -14,10 +14,14 @@ class AppointmentRepository {
       String? token,
       int? nextPage=0,
       String? zoneId}) async {
+    var startDateFormat = startDateTime?.split('.')[0];
+    var endDateFormat = endDateTime?.split('.')[0];
+
     var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
         .replace(queryParameters: <String, String>{
-      'from': '2020-01-01T00:00',
-      'to': '2024-01-01T00:00',
+     
+     'from': startDateFormat ?? '2020-01-01T00:00',
+      'to': endDateFormat ?? '2024-01-01T00:00',
       'query': searchParams!,
       'zoneId': 'Africa/Lagos',
         "page": "$nextPage"

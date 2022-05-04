@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
@@ -36,11 +35,18 @@ class _LoginPageState extends State<LoginPage> {
                   previous.loginStatus != current.loginStatus),
               listener: (context, state) {
                 //if we canLogin..move to the next page.
-                if (state.canLogin) {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                if (state.loginStatus == LoginStatus.home) {
+                
+                 
+                  context
+                      .read<LoginBloc>()
+                      .add(BetContract(token: state.homeToken));
+
+                       WidgetsBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed("/dashboard");
-                  });
+                    Navigator.of(context).pushNamed("/beta-contract");
+                  }); 
+                     
                 }
 
                 if (state.loginStatus == LoginStatus.inprogress) {

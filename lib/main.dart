@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
+import 'package:onye_front_ened/pages/Eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
@@ -89,8 +90,9 @@ class MyApp extends StatelessWidget {
                     const CreateRegistration(),
                 '/dashboard/registrationForm': (context) =>
                     const CreatePatientForm(),
-                'dashboard/patient': (context) => const PatientsPage(),
-                /*  '/dashboard/checkin/intake': (context) => const IntakeForm() */
+                  '/beta-contract': (context) => const Eula(),
+
+              
               },
             ),
           ),

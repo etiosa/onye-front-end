@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
+import 'package:onye_front_ened/components/Date.dart';
+import 'package:onye_front_ened/components/Time.dart';
 import 'package:onye_front_ened/pages/appointment/RescheduleAppointmentButton.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
@@ -100,6 +102,69 @@ class _AppointmentsState extends State<Appointments> {
                 ),
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+              child: Text(
+                " Start Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text("Time"),
+                    ),
+                    Time(
+                      rangeLabel: 'start',
+                      type: 'appointment',
+                    ),
+                  ],
+                ),
+                Date(
+                  rangeDate: 'start',
+                  type: 'appointment',
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+              child: Text(
+                "End Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text("Time"),
+                    ),
+                    Time(
+                      rangeLabel: 'end',
+                      type: 'appointment',
+                    ),
+                  ],
+                ),
+                Date(
+                  rangeDate: 'end',
+                  type: 'appointment',
+                ),
+              ],
+            ),
+
             Button(
                 height: 50,
                 width: 100,

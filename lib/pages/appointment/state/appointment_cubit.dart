@@ -13,12 +13,16 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     this._appointmentRepository,
   ) : super(const AppointmentState());
 
-  Future<void> searchAppointments({String? token, String? searchParams}) async {
+  Future<void> searchAppointments({String? token, String? searchParams, String? startDateTime,
+      String? endDateTime
+  }) async {
     emit(state.copyWith(
         searchState: REGSEARCHSTATE.inital,
         appointmentloadState: APPOINTMENTLOADSTATE.loading));
 
     var appointmentsReponse = await _appointmentRepository.searchAppointments(
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
         token: token, searchParams: state.searchParams);
     var appointmentReponseBody = json.decode(appointmentsReponse!.body);
     var appointmentList = appointmentReponseBody['elements'];

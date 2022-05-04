@@ -46,23 +46,20 @@ class RegisterationCubit extends Cubit<RegistrationState> {
 
   void setRegistrationDate(String? registrationDate) {
     emit(state.copyWith(registrationDate: registrationDate!));
-
   }
 
-    void setRegistrationTime(String? registrationTime) {
+  void setRegistrationTime(String? registrationTime) {
+    print("setRegistrationTime(");
     emit(state.copyWith(registrationTime: registrationTime!));
   }
-
 
   void setRegistrationEndTime(String? registrationTime) {
     emit(state.copyWith(registrationEndTime: registrationTime!));
   }
 
-
   void setRegistrationEndDate(String? registrationDate) {
     emit(state.copyWith(registrationEndDate: registrationDate!));
   }
-
 
   void setRegisterState() {
     emit(state.copyWith(registerState: REGISTRATIONSTATE.init));
@@ -73,14 +70,24 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   }
 
   void searchRegistrations(
-      {String? token, String? searchParams, int? nextPage, String?startDateTime, String? endDateTime}) async {
+      {String? token,
+      String? searchParams,
+      int? nextPage,
+      String? startDateTime,
+      String? endDateTime}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
-    emit(state.copyWith(regLoad: REGISTERSTATELOAD.loading));
+    emit(state.copyWith(
+        regLoad: REGISTERSTATELOAD.loading,
+        registrationEndDate: '',
+        registrationEndTime: '',
+        registrationTime: '',
+        registrationDate: ''));
 
     var searchReponse = await _registrationRepository.searchRegistrations(
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
-      token: token, searchParams: searchParams);
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        token: token,
+        searchParams: searchParams);
 
     var body = json.decode(searchReponse!.body);
     var registrationsList = body['elements'];

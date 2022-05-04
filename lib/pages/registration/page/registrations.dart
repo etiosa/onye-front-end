@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/Widgets/Loading.dart';
+import 'package:onye_front_ened/Widgets/GenericLoadingContainer.dart';
 import 'package:onye_front_ened/Widgets/RegisterationCard.dart';
+import 'package:onye_front_ened/components/Date.dart';
+import 'package:onye_front_ened/components/Time.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
@@ -44,7 +46,9 @@ class _RegistrationState extends State<Registration> {
   }
 
   int? initPageSelected = 0;
-
+//TODO: MOVE THE TIME AND DATE
+//TODO: fix the date and time feedback
+//
   @override
   Widget build(BuildContext context) {
     final fieldText = TextEditingController();
@@ -52,250 +56,184 @@ class _RegistrationState extends State<Registration> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: HomepageHeader(),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, top: 10),
-              child: Text("Search",
-                  style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
-            ),
-            Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-                child: Container(
-                  constraints:
-                      const BoxConstraints(maxWidth: 550, maxHeight: 40),
-                  child: TextFormField(
-                    controller: fieldText,
-                    onChanged: (search) => context
-                        .read<RegisterationCubit>()
-                        .setSearchParams(search),
-                    obscureText: false,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 205, 226, 226),
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: HomepageHeader(),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(right: 300.0, top: 10),
+                  child: Text("Search",
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 10, bottom: 10),
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 420, maxHeight: 35),
+                    child: TextFormField(
+                      controller: fieldText,
+                      onChanged: (search) => context
+                          .read<RegisterationCubit>()
+                          .setSearchParams(search),
+                      obscureText: false,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 205, 226, 226),
+                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                      ),
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a valid query';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter a valid query';
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
                 ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
-              child: Text(
-                " Start Date",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: Text("Time"),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+                  child: Text(
+                    " Start Date",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Time(
-                      rangeLabel: 'start',
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text("Time"),
+                        ),
+                        Time(
+                          rangeLabel: 'start',
+                          type: 'registeration',
+                        ),
+                      ],
+                    ),
+                    Date(
+                      rangeDate: 'start',
+                      type: 'registeration',
                     ),
                   ],
                 ),
-                 Date(rangeDate: 'start',),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
-              child: Text(
-                "End Date",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: Text("Time"),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+                  child: Text(
+                    "End Date",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Time(
-                      rangeLabel: 'end',
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text("Time"),
+                        ),
+                        Time(
+                          rangeLabel: 'end',
+                          type: 'registeration',
+                        ),
+                      ],
+                    ),
+                    Date(
+                      rangeDate: 'end',
+                      type: 'registeration',
                     ),
                   ],
                 ),
-               Date(rangeDate: 'end',),
+                Center(
+                  child: Button(
+                      height: 50,
+                      width: 100,
+                      label: "Search",
+                      onPressed: () {
+                        searchDateTimeFilter(context);
+                        fieldText.clear();
+                      }),
+                ),
               ],
             ),
-
-            Button(
-                height: 50,
-                width: 100,
-                label: "Search",
-                onPressed: () {
-                  //  DateTime myDatetime = DateTime.parse("2018-07-10 12:04:35");
-                  var startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
-                      context.read<RegisterationCubit>().state.registrationDate +
-                          " " +
-                          context
-                              .read<RegisterationCubit>()
-                              .state
-                              .registrationTime,
-                      true);
-
-                  var enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
-                      context.read<RegisterationCubit>().state.registrationEndDate +
-                          " " +
-                          context.read<RegisterationCubit>().state.registrationEndTime,
-                      true);
-                  context.read<RegisterationCubit>().searchRegistrations(
-                      token: context.read<LoginBloc>().state.homeToken,
-                      startDateTime: startdateTime.toIso8601String(),
-                      endDateTime: enddateTime.toIso8601String(),
-                  
-                      searchParams: context
-                          .read<RegisterationCubit>()
-                          .state
-                          .searchParams);
-                  fieldText.clear();
-                }),
-            // const Appointment(),
-            registrationBody(),
+            //registrationBody(),
+            const Body(),
+            const Footer()
           ],
         ),
       ),
     );
   }
+}
 
-  //
-  Widget registrationBody() {
+class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
-        return Column(
-          children: [
-            const Appointment(),
-            Pagination(
-              maxPageCounter:
-                  context.read<RegisterationCubit>().state.maxPageNumber,
-              typeofSearch: 'registration',
-            )
-          ],
+        return const Appointment();
+      },
+    );
+  }
+}
+
+class Footer extends StatelessWidget {
+  const Footer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterationCubit, RegistrationState>(
+      builder: (context, state) {
+        return Pagination(
+          maxPageCounter:
+              context.read<RegisterationCubit>().state.maxPageNumber,
+          typeofSearch: 'registration',
         );
       },
     );
   }
 }
 
-class Time extends StatelessWidget {
-  String rangeLabel;
-  Time({Key? key, required this.rangeLabel}) : super(key: key);
+void searchDateTimeFilter(BuildContext context) {
+  var startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+      context.read<RegisterationCubit>().state.registrationDate +
+          " " +
+          context.read<RegisterationCubit>().state.registrationTime,
+      true);
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-        builder: ((context, state) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-        child: InkWell(
-          onTap: (() {
-            dateTimePicker(context, rangeLabel);
-          }),
-          child: Container(
-            color: const Color.fromARGB(255, 205, 226, 226),
-            constraints: const BoxConstraints(maxWidth: 150, maxHeight: 40),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                child: Center(
-                  child: Text( rangeLabel=='start'? state.registrationTime: state.registrationEndTime,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'poppins',
-                          fontSize: 15)),
-                ),
-                width: 600,
-                height: 500,
-              ),
-            ),
-          ),
-        ),
-      );
-    }));
-  }
-}
-
-class Date extends StatelessWidget {
-  String rangeDate;
-   Date({Key? key, required this.rangeDate}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-        builder: ((context, state) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text("Date"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-            child: InkWell(
-              onTap: (() {
-                datePicker(context, rangeDate);
-              }),
-              child: Container(
-                color: const Color.fromARGB(255, 205, 226, 226),
-                constraints: const BoxConstraints(maxWidth: 150, maxHeight: 40),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Center(
-                        child: Text( rangeDate=="start"?
-                          state.registrationDate: state.registrationEndDate,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'poppins',
-                              fontSize: 15),
-                        ),
-                      ),
-                    ),
-                    width: 600,
-                    height: 500,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }));
-  }
+  var enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+      context.read<RegisterationCubit>().state.registrationEndDate +
+          " " +
+          context.read<RegisterationCubit>().state.registrationEndTime,
+      true);
+  context.read<RegisterationCubit>().searchRegistrations(
+      token: context.read<LoginBloc>().state.homeToken,
+      startDateTime: startdateTime.toIso8601String(),
+      endDateTime: enddateTime.toIso8601String(),
+      searchParams: context.read<RegisterationCubit>().state.searchParams);
 }
 
 class Appointment extends StatefulWidget {
@@ -403,8 +341,6 @@ class _AppointmentState extends State<Appointment> {
       },
       child: BlocBuilder<RegisterationCubit, RegistrationState>(
         builder: (context, state) {
-          //we want to return different widget based on the state
-
           if (state.registerstateload == REGISTERSTATELOAD.failed) {
             return const Center(
               child: Text("No result, please try again"),
@@ -412,22 +348,32 @@ class _AppointmentState extends State<Appointment> {
           }
 
           if (state.registerstateload == REGISTERSTATELOAD.loading) {
-            return const Loading();
-          }
-          if (state.registerstateload == REGISTERSTATELOAD.loaded) {
-            return Center(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 1.6,
-                width: MediaQuery.of(context).size.width < 600
-                    ? double.infinity
-                    : 600,
-                child: RegistersList(
-                  state: state,
-                ),
-              ),
+            return Column(
+              children: [
+                for (var index = 0; index <= 20; index++)
+                  const GenericLoadingContainer(height: 100, width: 500),
+              ],
             );
           }
-          return const Loading();
+          if (state.registerstateload == REGISTERSTATELOAD.loaded) {
+            return Column(
+              children: [
+                for (var index = 0;
+                    index <= state.registrationList.length - 1;
+                    index++)
+                  RegisterList(
+                    index: index,
+                    state: state,
+                  )
+              ],
+            );
+          }
+          return Column(
+            children: [
+              for (var index = 0; index <= 20; index++)
+                const GenericLoadingContainer(height: 100, width: 500),
+            ],
+          );
         },
       ),
     );
@@ -435,45 +381,87 @@ class _AppointmentState extends State<Appointment> {
 }
 
 class RegistersList extends StatelessWidget {
-  dynamic state;
-  RegistersList({
+  final dynamic state;
+  const RegistersList({
     Key? key,
     required this.state,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: state.registrationList.length,
-        itemBuilder: ((context, index) {
-          return RegisterationCard(
-            key: Key(state.registrationList[index]['id']),
-            addRegisteration: () => {
-              Modal(
-                  context: context,
-                  modalType: 'Unkown',
-                  inclueAction: true,
-                  actionButtons: RegisterButton(
-                    state: state,
-                    index: index,
-                  ),
-                  modalBody:
-                      const Text('Do you want to register this patient?'),
-                  progressDetails: 'Do you want to register this patient?'),
-            },
-            clinicalNote: () => {
-              showDialogConfirmation(context, state.registrationList[index])
-            },
-            firstName: state.registrationList[index]['patient']['firstName'],
-            lastName: state.registrationList[index]['patient']['lastName'],
-            type: state.registrationList[index]['type'],
-            dateTime: state.registrationList[index]['dateTime'],
-            patientNumber: state.registrationList[index]['patient']
-                ['patientNumber'],
-            role: context.read<LoginBloc>().state.role,
-            appointmentId: state.registrationList[index]['id'],
-          );
-        }));
+    return Expanded(
+      child: Column(
+        children: [
+          for (var index = 0;
+              index <= state.registrationList.length - 1;
+              index++)
+            RegisterationCard(
+              key: Key(state.registrationList[index]['id']),
+              addRegisteration: () => {
+                Modal(
+                    context: context,
+                    modalType: 'Unkown',
+                    inclueAction: true,
+                    actionButtons: RegisterButton(
+                      state: state,
+                      index: index,
+                    ),
+                    modalBody:
+                        const Text('Do you want to register this patient?'),
+                    progressDetails: 'Do you want to register this patient?'),
+              },
+              clinicalNote: () => {
+                showDialogConfirmation(context, state.registrationList[index])
+              },
+              firstName: state.registrationList[index]['patient']['firstName'],
+              lastName: state.registrationList[index]['patient']['lastName'],
+              type: state.registrationList[index]['type'],
+              dateTime: state.registrationList[index]['dateTime'],
+              patientNumber: state.registrationList[index]['patient']
+                  ['patientNumber'],
+              role: context.read<LoginBloc>().state.role,
+              appointmentId: state.registrationList[index]['id'],
+            )
+        ],
+      ),
+    );
+
+
+  }
+}
+
+class RegisterList extends StatelessWidget {
+  final dynamic state;
+  final int index;
+  const RegisterList({Key? key, required this.index, required this.state})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RegisterationCard(
+      key: Key(state.registrationList[index]['id']),
+      addRegisteration: () => {
+        Modal(
+            context: context,
+            modalType: 'Unkown',
+            inclueAction: true,
+            actionButtons: RegisterButton(
+              state: state,
+              index: index,
+            ),
+            modalBody: const Text('Do you want to register this patient?'),
+            progressDetails: 'Do you want to register this patient?'),
+      },
+      clinicalNote: () =>
+          {showDialogConfirmation(context, state.registrationList[index])},
+      firstName: state.registrationList[index]['patient']['firstName'],
+      lastName: state.registrationList[index]['patient']['lastName'],
+      type: state.registrationList[index]['type'],
+      dateTime: state.registrationList[index]['dateTime'],
+      patientNumber: state.registrationList[index]['patient']['patientNumber'],
+      role: context.read<LoginBloc>().state.role,
+      appointmentId: state.registrationList[index]['id'],
+    );
   }
 }
 
