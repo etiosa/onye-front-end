@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../components/util/Messages.dart';
+import '../components/util/Modal.dart';
 import '../pages/appointment/state/appointment_cubit.dart';
 import '../pages/appointments.dart';
-import '../pages/auth/state/login_cubit.dart';
+import '../pages/auth/state/login_bloc.dart';
 import 'Button.dart';
 import 'Patient_appointment_registeration_Card.dart';
 
@@ -48,19 +48,18 @@ class AppointmentCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
           height: 250,
-          width:
-              MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+          width:MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
           color: const Color.fromARGB(255, 236, 246, 246),
           child: Column(children: [
-            PatientAppointmentRegistrationCard(
+             PatientAppointmentRegistrationCard(
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
                 patientNumber: patientNumber,
                 date: date,
-                time: time),
+                time: time), 
             AppointmentButtons(
-                appointmentId: appointmentId, button: button,)
+                appointmentId: appointmentId, button: button,) 
           ])),
     );
   }
@@ -95,18 +94,18 @@ class AppointmentButtons extends StatelessWidget {
             onPressed: () {
               var response = context.read<AppointmentCubit>().cancelAppointment(
                     id: appointmentId,
-                    token: context.read<LoginCubit>().state.homeToken,
+                    token: context.read<LoginBloc>().state.homeToken,
                   );
 
               response.then((value) => {
                     if (value != null && value.statusCode == 200)
                       {
-                        Messages.showMessage(
+                     /*    Messages.showMessage(
                             const Icon(
                               IconData(0xf635, fontFamily: 'MaterialIcons'),
                               color: Colors.green,
                             ),
-                            'Appointment cancelled'),
+                            'Appointment cancelled'), */
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: ((context) => const Appointments())),
@@ -114,12 +113,12 @@ class AppointmentButtons extends StatelessWidget {
                       }
                     else if (value != null && value.statusCode == 400)
                       {
-                        Messages.showMessage(
+                       /*  Messages.showMessage(
                             const Icon(
                               IconData(0xe237, fontFamily: 'MaterialIcons'),
                               color: Colors.red,
                             ),
-                            'Could not cancel appointment'),
+                            'Could not cancel appointment'), */
                       }
                   });
             },

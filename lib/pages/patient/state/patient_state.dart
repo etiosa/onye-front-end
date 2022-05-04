@@ -1,6 +1,6 @@
 part of 'patient_cubit.dart';
 
-enum REGISTERATIONSEARCHSTATE {
+enum PATIENTSEARCHSTATE {
   inital,
   sucessful,
   error,
@@ -34,14 +34,14 @@ class PatientState extends Equatable {
       this.contactPreference,
       this.token = '',
       this.query = '',
-      this.searchState = REGISTERATIONSEARCHSTATE.inital,
+      this.searchState = PATIENTSEARCHSTATE.inital,
       this.createdPatientData = const {},
       this.patientsList = const [],
       this.selectedPatientId = '',
       this.maxPageNumber = 0,
       this.nextPage = 0,
       this.searchParams='',
-      this.registrationFormState = RegistrationFormState.init});
+      /* this.registrationFormState = RegistrationFormState.init */});
 
   final String? firstName;
   final String? middleName;
@@ -52,7 +52,7 @@ class PatientState extends Equatable {
   final String? educationLevel;
   final String? phoneNumber;
   final String? email;
-  final REGISTERATIONSEARCHSTATE searchState;
+  final PATIENTSEARCHSTATE searchState;
   final String? token;
   final String? contactPreferences;
   final String? addressLine1;
@@ -67,8 +67,8 @@ class PatientState extends Equatable {
   final List<dynamic> appointmentList;
   final Map<String, dynamic> allOptions;
   final dynamic createdPatientData;
-  final RegistrationFormState registrationFormState;
-  final String? emergencyContactPhoneNumber;
+/*   final RegistrationFormState registrationFormState;
+ */  final String? emergencyContactPhoneNumber;
   final List<dynamic> patientsList;
   final String selectedPatientId;
   final int maxPageNumber;
@@ -120,7 +120,7 @@ class PatientState extends Equatable {
       String? email,
       String? ethnicity,
       int? nextPage,
-      REGISTERATIONSEARCHSTATE? searchState,
+      PATIENTSEARCHSTATE? searchState,
       String? toke,
       String? emergencyContactName,
       String? emergencyContactPhoneNumber,
@@ -135,8 +135,8 @@ class PatientState extends Equatable {
       String? emergencyContactRelationship,
       String? city,
       Map<String, dynamic>? allOptions,
-      RegistrationFormState? registrationFormState,
-      String? contactPreferences,
+/*       RegistrationFormState? registrationFormState,
+ */      String? contactPreferences,
       List<dynamic>? patientsList,
       String? selectedPatientId,
       String? searchParams,
@@ -173,8 +173,8 @@ class PatientState extends Equatable {
         emergencyContactPhoneNumber:
             emergencyContactPhoneNumber ?? this.emergencyContactPhoneNumber,
         appointmentList: appointmentList ?? this.appointmentList,
-        registrationFormState:
-            registrationFormState ?? this.registrationFormState,
+      /*   registrationFormState:
+            registrationFormState ?? this.registrationFormState, */
         city: city ?? this.city);
   }
 }

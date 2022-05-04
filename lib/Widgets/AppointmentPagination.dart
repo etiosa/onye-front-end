@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../pages/appointment/state/appointment_cubit.dart';
-import '../pages/auth/state/login_cubit.dart';
+import '../pages/auth/state/login_bloc.dart';
 
 class AppointmentPagination extends StatefulWidget {
   AppointmentPagination({
@@ -46,7 +46,7 @@ class _AppointmentPaginationState extends State<AppointmentPagination> {
 
                   context.read<AppointmentCubit>().setNextPage(
                       nextPage: index,
-                      token: context.read<LoginCubit>().state.homeToken,
+                      token: context.read<LoginBloc>().state.homeToken,
                       searchParams:
                           context.read<AppointmentCubit>().state.searchParams);
                 },

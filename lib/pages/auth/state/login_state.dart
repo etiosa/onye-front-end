@@ -1,7 +1,9 @@
-part of 'login_cubit.dart';
+part of 'login_bloc.dart';
 
-enum LoginStatus { login, failed, unknown, logout, init }
+enum LoginStatus { login, failed, unknown, logout, init, inprogress, home }
 enum LOGOUTSTATUS { sucessful, failed, unknown, init }
+enum FETCHINGCONTRACT { init, loading, failed, unknown, loaded }
+enum ACCEPTCONTRACTSTATUS { init, inprogress, accept, failed, unkown }
 
 @immutable
 class LoginState extends Equatable {
@@ -16,8 +18,15 @@ class LoginState extends Equatable {
       this.hospital = '',
       this.department = '',
       this.id = '',
-      this.role='',
+      this.role = '',
+      this.canLogin = false,
+      this.inProgressModal = false,
+      this.betaContract = '',
+      this.isContractAccept = false,
+      this.acceptcontractstatus = ACCEPTCONTRACTSTATUS.init,
+      this.fetchContract = FETCHINGCONTRACT.init,
       this.logoutstatus = LOGOUTSTATUS.init,
+      this.userId='',
       this.loginStatus = LoginStatus.init});
 
   final String userName;
@@ -32,7 +41,14 @@ class LoginState extends Equatable {
   final String loginToken;
   final String id;
   final String role;
+  final bool inProgressModal;
   final LoginStatus loginStatus;
+  final bool canLogin;
+  final String betaContract;
+  final bool isContractAccept;
+  final FETCHINGCONTRACT fetchContract;
+  final String userId;
+  final ACCEPTCONTRACTSTATUS acceptcontractstatus;
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -48,32 +64,53 @@ class LoginState extends Equatable {
         department,
         logoutstatus,
         id,
-        role
+        role,
+        inProgressModal,
+        canLogin,
+        betaContract,
+        isContractAccept,
+        fetchContract,
+        acceptcontractstatus,
+        userId
       ];
 
   LoginState copywith(
       {String? userName,
       String? password,
       int? statusCode,
-      String? homeTokenS,
+      String? userId,
+      String? homeToken,
       String? loginToken,
       String? firstName,
       String? lastName,
       String? department,
       String? hospital,
+      ACCEPTCONTRACTSTATUS? acceptcontractstatus,
+      FETCHINGCONTRACT? fetchingcontract,
+      String? betaContract,
+      bool? isContractAccept,
       LOGOUTSTATUS? logoutstatus,
       String? id,
+      bool? inProgressModal,
       String? role,
+      bool? canLogin,
       LoginStatus? loginStatus}) {
     return LoginState(
-      role: role ?? this.role,
+      userId: userId?? this.userId,
+        acceptcontractstatus: acceptcontractstatus ?? this.acceptcontractstatus,
+        fetchContract: fetchingcontract ?? fetchContract,
+        betaContract: betaContract ?? this.betaContract,
+        isContractAccept: isContractAccept ?? this.isContractAccept,
+        inProgressModal: inProgressModal ?? this.inProgressModal,
+        role: role ?? this.role,
         id: id ?? this.id,
+        canLogin: canLogin ?? this.canLogin,
         logoutstatus: logoutstatus ?? this.logoutstatus,
         firstName: firstName ?? this.firstName,
         lastName: lastName ?? this.lastName,
         department: department ?? this.department,
         hospital: hospital ?? this.hospital,
-        homeToken: homeTokenS ?? homeToken,
+        homeToken: homeToken ?? this.homeToken,
         loginToken: loginToken ?? this.loginToken,
         userName: userName ?? this.userName,
         password: password ?? this.password,

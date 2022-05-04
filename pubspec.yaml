@@ -46,6 +46,7 @@ dependencies:
   hydrated_bloc: ^8.0.0
   shared_preferences: ^2.0.13
   flutter_dotenv: ^5.0.2
+  flutter_markdown: ^0.6.10
 
 dev_dependencies:
   flutter_test:

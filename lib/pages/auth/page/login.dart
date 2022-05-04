@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
+import 'package:onye_front_ened/components/util/Modal.dart';
 
 import '../../../session/authSession.dart';
 
@@ -30,21 +30,132 @@ class _LoginPageState extends State<LoginPage> {
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: const Color.fromARGB(255, 247, 253, 253),
-            body: Container(
-              margin: const EdgeInsets.only(top: 70),
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _LoginText(),
-                      const SizedBox(
-                        height: 20,
+            body: BlocListener<LoginBloc, LoginState>(
+              listenWhen: ((previous, current) =>
+                  previous.loginStatus != current.loginStatus),
+              listener: (context, state) {
+                //if we canLogin..move to the next page.
+                if (state.loginStatus == LoginStatus.home) {
+                
+                 
+                  context
+                      .read<LoginBloc>()
+                      .add(BetContract(token: state.homeToken));
+
+                       WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed("/beta-contract");
+                  }); 
+                     
+                }
+
+                if (state.loginStatus == LoginStatus.inprogress) {
+                  Modal(
+                      context: context,
+                      modalType: '',
+                      inclueAction: false,
+                      modalBody: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text('Login In Progress'),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator.adaptive(
+                                backgroundColor: Colors.grey[500],
+                                strokeWidth: 4,
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                    Color.fromARGB(255, 56, 155, 152)),
+                              )),
+                        ],
                       ),
-                      Stack(children: [
-                        _formSection(),
-                      ]),
-                    ],
+                      progressDetails: 'progrss');
+                }
+                if (state.loginStatus == LoginStatus.failed) {
+                  Modal(
+                      inclueAction: true,
+                      actionButtons: TextButton(
+                          child: const Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                          }),
+                      context: context,
+                      modalType: 'failed',
+                      modalBody: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Text("username/password is incorrect"),
+                          SizedBox(height: 20),
+                          Icon(
+                            Icons.error,
+                            color: Colors.redAccent,
+                            size: 100,
+                          )
+                        ],
+                      ),
+                      progressDetails: "username/password is incorrect");
+                }
+                if (state.loginStatus == LoginStatus.unknown) {
+                  Modal(
+                      context: context,
+                      modalType: 'Unkown',
+                      inclueAction: true,
+                      actionButtons: TextButton(
+                          child: const Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                          }),
+                      modalBody: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Text('Please enter a valid username/password'),
+                          SizedBox(height: 20),
+                          Icon(
+                            Icons.dangerous,
+                            color: Colors.redAccent,
+                            size: 100,
+                          )
+                        ],
+                      ),
+                      progressDetails:
+                          'Please enter a valid username/password');
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 70),
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _LoginText(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Stack(children: [
+                          _formSection(),
+                        ]),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -118,7 +229,7 @@ class _Username extends StatelessWidget {
         ),
         TextFormField(
           onChanged: (username) =>
-              context.read<LoginCubit>().setUserName(username),
+              context.read<LoginBloc>().add(LoginUserNameChanged(username)),
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -158,7 +269,7 @@ class _Password extends StatelessWidget {
         ),
         TextFormField(
           onChanged: (password) =>
-              context.read<LoginCubit>().setPassword(password),
+              context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
           autofocus: true,
           decoration: const InputDecoration(
@@ -187,33 +298,14 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) =>
-          previous.loginStatus != LoginStatus.login,
-      builder: (context, state) {
-        _authSession.getHomeToken()!.then((value) => {
-              if (value != '')
-                {
-                  Messages.showMessage(
-                      const Icon(
-                        IconData(0xf635, fontFamily: 'MaterialIcons'),
-                        color: Colors.green,
-                      ),
-                      'Login successful'),
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context).pushNamed("/dashboard");
-                  })
-                }
-            });
-
-        return Button(
-          height: 60,
-          width: 250,
-          onPressed: () => login(context: context, formKey: formKey),
-          label: 'Login',
-        );
-      },
-    );
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Button(
+        height: 60,
+        width: 250,
+        onPressed: () => login(context: context, formKey: formKey),
+        label: 'Login',
+      );
+    });
   }
 }
 
@@ -221,6 +313,6 @@ void login(
     {required BuildContext context,
     required GlobalKey<FormState> formKey}) async {
   if (formKey.currentState!.validate()) {
-    context.read<LoginCubit>().login();
+    context.read<LoginBloc>().add(const Login());
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
+import 'package:onye_front_ened/pages/Eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
@@ -9,7 +10,7 @@ import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/patient/page/PatientProfile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/auth/page/login.dart';
@@ -40,6 +41,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+  
+    //print(t1.test);
     final AuthRepository _authRepository = AuthRepository();
     final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =
@@ -55,7 +58,7 @@ class MyApp extends StatelessWidget {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (_) => LoginCubit(_authRepository),
+              create: (_) => LoginBloc(_authRepository),
             ),
             BlocProvider(
               create: (_) => PatientCubit(_registerRepository),
@@ -87,7 +90,9 @@ class MyApp extends StatelessWidget {
                     const CreateRegistration(),
                 '/dashboard/registrationForm': (context) =>
                     const CreatePatientForm(),
-                'dashboard/patient': (context) => const PatientsPage()
+                  '/beta-contract': (context) => const Eula(),
+
+              
               },
             ),
           ),

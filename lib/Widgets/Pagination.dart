@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
-import '../pages/auth/state/login_cubit.dart';
+import '../pages/auth/state/login_bloc.dart';
 import '../pages/doctor/state/doctor_cubit_cubit.dart';
 import '../pages/patient/state/patient_cubit.dart';
 import '../pages/registration/state/registration_cubit.dart';
@@ -85,7 +85,7 @@ Function setPageFunctionType(
       return () => {
             context.read<AppointmentCubit>().setNextPage(
                 nextPage: index,
-                token: context.read<LoginCubit>().state.homeToken,
+                token: context.read<LoginBloc>().state.homeToken,
                 searchParams:
                     context.read<AppointmentCubit>().state.searchParams)
           };
@@ -93,7 +93,7 @@ Function setPageFunctionType(
       return () => {
             context.read<RegisterationCubit>().setNextPage(
                 nextPage: index,
-                token: context.read<LoginCubit>().state.homeToken,
+                token: context.read<LoginBloc>().state.homeToken,
                 searchParams:
                     context.read<RegisterationCubit>().state.searchParams)
           };
@@ -102,14 +102,14 @@ Function setPageFunctionType(
       return () => {
             context.read<PatientCubit>().setNextPage(
                 nextPage: index,
-                token: context.read<LoginCubit>().state.homeToken,
+                token: context.read<LoginBloc>().state.homeToken,
                 searchParams: context.read<DoctorCubit>().state.searchParams)
           };
     case 'doctor':
       return () => {
             context.read<DoctorCubit>().setNextPage(
                 nextPage: index,
-                token: context.read<LoginCubit>().state.homeToken,
+                token: context.read<LoginBloc>().state.homeToken,
                 searchParams:
                     context.read<RegisterationCubit>().state.searchParams)
           };

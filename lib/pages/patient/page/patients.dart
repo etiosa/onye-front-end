@@ -7,7 +7,7 @@ import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
 import '../../../Widgets/GenericCard.dart';
-import '../../auth/state/login_cubit.dart';
+import '../../auth/state/login_bloc.dart';
 import '../../registration/state/registration_cubit.dart';
 
 class PatientsPage extends StatefulWidget {
@@ -68,9 +68,8 @@ class _PatientsPageState extends State<PatientsPage> {
                   onFieldSubmitted: (query) => {
                     authsession.getHomeToken()!.then((homeToken) {
                       if (homeToken != '') {
-                        context
-                            .read<PatientCubit>()
-                            .searchPatients(query: query, token: homeToken, nextPage: 0);
+                        context.read<PatientCubit>().searchPatients(
+                            query: query, token: homeToken, nextPage: 0);
                       }
                     })
                   },
@@ -158,10 +157,10 @@ class _PatientListState extends State<PatientList> {
         children: [
           patientLists(state),
           // Pagination(initPageSelected: initPageSelected, searchType: 'Patient')
-              Pagination(
-              maxPageCounter:
-                  context.read<PatientCubit>().state.maxPageNumber,
-              typeofSearch: 'patient',)
+          Pagination(
+            maxPageCounter: context.read<PatientCubit>().state.maxPageNumber,
+            typeofSearch: 'patient',
+          )
         ],
       );
     });
@@ -184,7 +183,7 @@ class _PatientListState extends State<PatientList> {
                   context
                       .read<RegisterationCubit>()
                       .setSelectedMedicalPersonnelId(
-                          context.read<LoginCubit>().state.id);
+                          context.read<LoginBloc>().state.id);
                 },
                 firstName: state.patientsList[index]['firstName'],
                 lastName: state.patientsList[index]['lastName'],

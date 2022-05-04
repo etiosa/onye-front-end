@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
+import 'package:onye_front_ened/components/Date.dart';
+import 'package:onye_front_ened/components/Time.dart';
 import 'package:onye_front_ened/pages/appointment/RescheduleAppointmentButton.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/AppointmentCard.dart';
 import '../Widgets/Loading.dart';
@@ -23,15 +24,16 @@ class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    /*   if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/login");
       });
-    }
-    if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
-      context.read<AppointmentCubit>().searchAppointments(
-          token: context.read<LoginCubit>().state.homeToken);
+    }*/
+    if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
+      context
+          .read<AppointmentCubit>()
+          .searchAppointments(token: context.read<LoginBloc>().state.homeToken);
     }
   }
 
@@ -100,13 +102,76 @@ class _AppointmentsState extends State<Appointments> {
                 ),
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+              child: Text(
+                " Start Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text("Time"),
+                    ),
+                    Time(
+                      rangeLabel: 'start',
+                      type: 'appointment',
+                    ),
+                  ],
+                ),
+                Date(
+                  rangeDate: 'start',
+                  type: 'appointment',
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+              child: Text(
+                "End Date",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Text("Time"),
+                    ),
+                    Time(
+                      rangeLabel: 'end',
+                      type: 'appointment',
+                    ),
+                  ],
+                ),
+                Date(
+                  rangeDate: 'end',
+                  type: 'appointment',
+                ),
+              ],
+            ),
+
             Button(
                 height: 50,
                 width: 100,
                 label: 'Search',
                 onPressed: () {
                   context.read<AppointmentCubit>().searchAppointments(
-                      token: context.read<LoginCubit>().state.homeToken,
+                      token: context.read<LoginBloc>().state.homeToken,
                       searchParams:
                           context.read<AppointmentCubit>().state.searchParams);
                   fieldText.clear();
@@ -152,54 +217,59 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        if (state.searchState == REGSEARCHSTATE.notFound) {
-          return (const Center(
-            child: SizedBox(
-                height: 50,
-                width: 200,
-                child: Card(
-                    child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text('NOT FOUND'),
-                ))),
-          ));
-        }
-
-        if (state.appointmentList.isEmpty) {
-          return const Loading();
-        } else {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height / 1.6,
-            width:
-                MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
-            child: ListView.builder(
-                itemCount: state.appointmentList.length,
-                itemBuilder: ((context, index) {
-                  if (state.appointmentList[index]['type'] == 'appointment') {
-                    return AppointmentCard(
-                      appointmentId: state.appointmentList[index]['id'],
-                      firstName: state.appointmentList[index]['patient']
-                          ['firstName'],
-                      lastName: state.appointmentList[index]['patient']
-                          ['lastName'],
-                      type: state.appointmentList[index]['type'],
-                      dateTime: state.appointmentList[index]['dateTime'],
-                      patientNumber: state.appointmentList[index]['patient']
-                          ['patientNumber'],
-                      role: context.read<LoginCubit>().state.role,
-                      button: RescheduleAppointmentButton(
-                          appointment: state.appointmentList[index]),
-                    );
-                  } else {
-                    return const SizedBox(
-                      height: 0,
-                      width: 0,
-                    );
-                  }
-                })),
+        if (state.apploadState == APPOINTMENTLOADSTATE.failed) {
+          return const Center(
+            child: Text("No result, please try again"),
           );
         }
+
+        if (state.apploadState == APPOINTMENTLOADSTATE.loading) {
+          return const Loading();
+        }
+        if (state.apploadState == APPOINTMENTLOADSTATE.loaded) {
+          return AppointmentsList(
+            state: state,
+          );
+        }
+        return const Loading();
       },
+    );
+  }
+}
+
+class AppointmentsList extends StatelessWidget {
+  final dynamic state;
+  const AppointmentsList({Key? key, required this.state}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.6,
+      width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+      child: ListView.builder(
+          itemCount: state.appointmentList.length,
+          itemBuilder: ((context, index) {
+            if (state.appointmentList[index]['type'] == 'appointment') {
+              return AppointmentCard(
+                key: Key(state.appointmentList[index]['id']),
+                appointmentId: state.appointmentList[index]['id'],
+                firstName: state.appointmentList[index]['patient']['firstName'],
+                lastName: state.appointmentList[index]['patient']['lastName'],
+                type: state.appointmentList[index]['type'],
+                dateTime: state.appointmentList[index]['dateTime'],
+                patientNumber: state.appointmentList[index]['patient']
+                    ['patientNumber'],
+                role: context.read<LoginBloc>().state.role,
+                button: RescheduleAppointmentButton(
+                    appointment: state.appointmentList[index]),
+              );
+            } else {
+              return const SizedBox(
+                height: 0,
+                width: 0,
+              );
+            }
+          })),
     );
   }
 }

@@ -30,7 +30,7 @@ class Loading extends StatelessWidget {
                             height: 48,
                           ),
                           const Padding(
-                            padding: EdgeInsets.only(bottom: 1.0),
+                            padding: EdgeInsets.only(bottom: 20.0),
                           ),
                           Expanded(
                               child: Column(
@@ -38,19 +38,10 @@ class Loading extends StatelessWidget {
                             children: [
                               Container(
                                 width: double.infinity,
-                                height: 10.0,
+                                height: 50.0,
                                 color: Colors.white,
                               ),
-                              Container(
-                                width: double.infinity,
-                                height: 10.0,
-                                color: Colors.white,
-                              ),
-                              Container(
-                                width: double.infinity,
-                                height: 10.0,
-                                color: Colors.white,
-                              ),
+                        
                             ],
                           ))
                         ],

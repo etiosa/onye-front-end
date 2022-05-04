@@ -5,7 +5,7 @@ import 'package:onye_front_ened/pages/appointment/AppointmentDatePickerField.dar
 import 'package:onye_front_ened/pages/appointment/AppointmentDropDown.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
-import '../../components/util/Messages.dart';
+import '../../components/util/Modal.dart';
 import '../../session/authSession.dart';
 import '../AppointmentDateTimePickerField.dart';
 import '../appointments.dart';
@@ -149,13 +149,13 @@ class RescheduleAppointmentButton extends StatelessWidget {
                           if (value != null && value.statusCode == 202)
                             {
                               context.read<AppointmentCubit>().clearState(),
-                              Messages.showMessage(
+                              /* Messages.showMessage(
                                   const Icon(
                                     IconData(0xf635,
                                         fontFamily: 'MaterialIcons'),
                                     color: Colors.green,
                                   ),
-                                  'Appointment updated'),
+                                  'Appointment updated'), */
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: ((context) =>
@@ -164,13 +164,13 @@ class RescheduleAppointmentButton extends StatelessWidget {
                             }
                           else if (value != null && value.statusCode == 400)
                             {
-                              Messages.showMessage(
+                             /*  Messages.showMessage(
                                   const Icon(
                                     IconData(0xe237,
                                         fontFamily: 'MaterialIcons'),
                                     color: Colors.red,
                                   ),
-                                  'Could not update appointment'),
+                                  'Could not update appointment'), */
                             }
                         });
                   },

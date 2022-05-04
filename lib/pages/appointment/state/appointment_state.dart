@@ -1,7 +1,8 @@
 part of 'appointment_cubit.dart';
 
 enum REGSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
-enum REGISTRATIONSTATE { inita, sucessful, inprogress, failed }
+enum APPOINTMENTSTATE { inita, sucessful, inprogress, failed }
+enum APPOINTMENTLOADSTATE { init, loading, loaded, failed }
 
 //TODO create modal later
 class AppointmentState extends Equatable {
@@ -21,15 +22,16 @@ class AppointmentState extends Equatable {
       this.typeOfVisit = '',
       this.selectedMedicalIndex = 0,
       this.selectedPatientIndex = 2,
-      this.registrationState = REGISTRATIONSTATE.inita,
+      this.appointmentState = APPOINTMENTSTATE.inita,
       this.selectedAppointmentId = '',
       this.patientRegistered = false,
- 
       this.maxPageNumber = 0,
       this.nextPage = 0,
       this.fromDate = '',
       this.fromTime = '',
       this.toDate = '',
+      this.appointmentError = '',
+      this.apploadState=APPOINTMENTLOADSTATE.init,
       this.toTime = ''});
 
   final List<dynamic> appointmentList;
@@ -47,7 +49,7 @@ class AppointmentState extends Equatable {
   final String reasonForVisit;
   final int selectedPatientIndex;
   final int selectedMedicalIndex;
-  final REGISTRATIONSTATE registrationState;
+  final APPOINTMENTSTATE appointmentState;
   final String selectedAppointmentId;
   final bool patientRegistered;
   final int maxPageNumber;
@@ -56,6 +58,8 @@ class AppointmentState extends Equatable {
   final String fromTime;
   final String toDate;
   final String toTime;
+  final APPOINTMENTLOADSTATE apploadState;
+  final String appointmentError;
 
   @override
   List<Object> get props => [
@@ -73,57 +77,60 @@ class AppointmentState extends Equatable {
         reasonForVisit,
         selectedMedicalIndex,
         selectedMedicalIndex,
-        registrationState,
+        appointmentState,
         selectedAppointmentId,
         patientRegistered,
         registrationList,
-      
         maxPageNumber,
         nextPage,
         fromDate,
         fromTime,
         toDate,
         toTime,
+        apploadState,
+        appointmentError
       ];
 
-  AppointmentState copyWith({
-    String? searchParams,
-    String? clinicalNoteTitle,
-    String? clinicalNote,
-    String? clinicalNoteID,
-    List<dynamic>? appointmentList,
-    List<dynamic>? patientsList,
-    List<dynamic>? doctorsList,
-    List<dynamic>? registrationList,
-    String? dateTime,
-    String? appointmentTime,
-    String? appointmentDate,
-    String? selectedPatientId,
-    String? selectedMedicalPersonnelId,
-    REGISTRATIONSTATE? registrationState,
-    bool? patientRegistered,
-    String? typeOfVisit,
-    String? reasonForVisit,
-    int? selectedPatientIndex,
-    int? selectedMedicalIndex,
-    String? selectedAppointmentId,
-    String? clinicalNoteType,
-    int? nextPage,
-    int? maxPageNumber,
-    String? fromDate,
-    String? fromTime,
-    String? toDate,
-    String? toTime, 
-    REGSEARCHSTATE? searchState
-
-  }) {
+  AppointmentState copyWith(
+      {String? searchParams,
+      APPOINTMENTLOADSTATE? appointmentloadState,
+      String? appointmenterror,
+      String? clinicalNoteTitle,
+      String? clinicalNote,
+      String? clinicalNoteID,
+      List<dynamic>? appointmentList,
+      List<dynamic>? patientsList,
+      List<dynamic>? doctorsList,
+      List<dynamic>? registrationList,
+      String? dateTime,
+      String? appointmentTime,
+      String? appointmentDate,
+      String? selectedPatientId,
+      String? selectedMedicalPersonnelId,
+      APPOINTMENTSTATE? appointmentstate,
+      bool? patientRegistered,
+      String? typeOfVisit,
+      String? reasonForVisit,
+      int? selectedPatientIndex,
+      int? selectedMedicalIndex,
+      String? selectedAppointmentId,
+      String? clinicalNoteType,
+      int? nextPage,
+      int? maxPageNumber,
+      String? fromDate,
+      String? fromTime,
+      String? toDate,
+      String? toTime,
+      REGSEARCHSTATE? searchState}) {
     return AppointmentState(
+      apploadState: appointmentloadState?? apploadState,
+      appointmentError: appointmenterror ?? appointmentError,
       nextPage: nextPage ?? this.nextPage,
       maxPageNumber: maxPageNumber ?? this.maxPageNumber,
       patientRegistered: patientRegistered ?? this.patientRegistered,
       registrationList: registrationList ?? this.registrationList,
       typeOfVisit: typeOfVisit ?? this.typeOfVisit,
-      registrationState: registrationState ?? this.registrationState,
+      appointmentState: appointmentstate ?? appointmentState,
       reasonForVisit: reasonForVisit ?? this.reasonForVisit,
       selectedMedicalIndex: selectedMedicalIndex ?? this.selectedMedicalIndex,
       selectedPatientIndex: selectedPatientIndex ?? this.selectedPatientIndex,

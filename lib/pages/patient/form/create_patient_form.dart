@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:onye_front_ened/Widgets/DropDown.dart';
 import 'package:onye_front_ened/Widgets/InputField.dart';
-import 'package:onye_front_ened/components/util/Messages.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/components/util/Modal.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
@@ -33,7 +33,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   void nextPage() {
     _pageController.nextPage(
-        curve: Curves.easeIn, duration: Duration(milliseconds: 300));
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   @override
@@ -41,7 +41,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     // TODO: implement initState
     PageController _pageController = PageController();
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/dashboard");
@@ -155,7 +155,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                               .read<PatientCubit>()
                               .createNewPatient(
                                   token: context
-                                      .read<LoginCubit>()
+                                      .read<LoginBloc>()
                                       .state
                                       .homeToken);
 
@@ -179,13 +179,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                             switch (response.statusCode) {
                               case 201:
                                 context.read<PatientCubit>().clearState();
-                                Messages.showMessage(
+                             /*    Messages.showMessage(
                                     const Icon(
                                       IconData(0xf635,
                                           fontFamily: 'MaterialIcons'),
                                       color: Colors.green,
                                     ),
-                                    'Patient created');
+                                    'Patient created'); */
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: ((context) =>
@@ -193,30 +193,30 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                                     ModalRoute.withName('/dashboard'));
                                 break;
                               case 400:
-                                Messages.showMessage(
+                             /*    Messages.showMessage(
                                     const Icon(
                                       IconData(0xe237,
                                           fontFamily: 'MaterialIcons'),
                                       color: Colors.red,
                                     ),
-                                    'Could not create patient, invalid input');
+                                    'Could not create patient, invalid input'); */
                                 break;
                               default:
-                                Messages.showMessage(
+                              /*   Messages.showMessage(
                                     const Icon(
                                       IconData(0xe237,
                                           fontFamily: 'MaterialIcons'),
                                       color: Colors.red,
                                     ),
-                                    'Could not create patient');
+                                    'Could not create patient'); */
                             }
                           } else {
-                            Messages.showMessage(
+                           /*  Messages.showMessage(
                                 const Icon(
                                   IconData(0xe237, fontFamily: 'MaterialIcons'),
                                   color: Colors.red,
                                 ),
-                                'Could not create patient, invalid input');
+                                'Could not create patient, invalid input'); */
                           }
                         }
                       }
@@ -415,6 +415,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
 
 //TODO: Refactor later
 class ContactInfoFormBody extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const ContactInfoFormBody({
     Key? key,
     required this.formKey,
@@ -974,7 +975,7 @@ class _SubmitButton extends StatelessWidget {
                 var response = await context
                     .read<PatientCubit>()
                     .createNewPatient(
-                        token: context.read<LoginCubit>().state.homeToken);
+                        token: context.read<LoginBloc>().state.homeToken);
 
                 if (response != null && response.body.contains('errors')) {
                   dynamic errors = json.decode(response.body)['errors'];
@@ -995,12 +996,12 @@ class _SubmitButton extends StatelessWidget {
                   switch (response.statusCode) {
                     case 201:
                       context.read<PatientCubit>().clearState();
-                      Messages.showMessage(
+                      /* Messages.showMessage(
                           const Icon(
                             IconData(0xf635, fontFamily: 'MaterialIcons'),
                             color: Colors.green,
                           ),
-                          'Patient created');
+                          'Patient created'); */
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: ((context) => const Dashboard())),
@@ -1008,30 +1009,30 @@ class _SubmitButton extends StatelessWidget {
                       break;
                     case 400:
                       if (!valid) {
-                        Messages.showMessage(
+                      /*   Messages.showMessage(
                             const Icon(
                               IconData(0xe237, fontFamily: 'MaterialIcons'),
                               color: Colors.red,
                             ),
-                            'Could not create patient, invalid input');
+                            'Could not create patient, invalid input'); */
                       }
                       break;
                     default:
-                      Messages.showMessage(
+                   /*    Messages.showMessage(
                           const Icon(
                             IconData(0xe237, fontFamily: 'MaterialIcons'),
                             color: Colors.red,
                           ),
-                          'Could not create patient');
+                          'Could not create patient'); */
                   }
                 }
               } else {
-                Messages.showMessage(
+               /*  Messages.showMessage(
                     const Icon(
                       IconData(0xe237, fontFamily: 'MaterialIcons'),
                       color: Colors.red,
                     ),
-                    'Could not create patient, invalid input');
+                    'Could not create patient, invalid input'); */
               }
             },
           ),

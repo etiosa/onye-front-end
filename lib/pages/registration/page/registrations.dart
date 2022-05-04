@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/Widgets/Loading.dart';
+import 'package:onye_front_ened/Widgets/GenericLoadingContainer.dart';
 import 'package:onye_front_ened/Widgets/RegisterationCard.dart';
+import 'package:onye_front_ened/components/Date.dart';
+import 'package:onye_front_ened/components/Time.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
-import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
+import 'package:onye_front_ened/components/util/Modal.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
@@ -16,7 +18,6 @@ import '../../../Widgets/Pagination.dart';
 import '../../../components/clinicalNote/ClinicalNoteDropDown.dart';
 import '../../../components/clinicalNote/ClinicalNoteField.dart';
 import '../../../components/clinicalNote/ClinicalNoteTitleField .dart';
-import '../../../components/util/Messages.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -30,21 +31,24 @@ class _RegistrationState extends State<Registration> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    /*    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
+      print("token is empty? redirect");
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Navigator.of(context).pushNamed("/login");
+        //  Navigator.of(context).pop();
       });
-    }
-    if (context.read<LoginCubit>().state.homeToken.isNotEmpty) {
+    }*/
+    if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context.read<RegisterationCubit>().searchRegistrations(
-          token: context.read<LoginCubit>().state.homeToken,
-          searchParams: context.read<AppointmentCubit>().state.searchParams);
+          token: context.read<LoginBloc>().state.homeToken,
+          searchParams: context.read<RegisterationCubit>().state.searchParams);
     }
   }
 
   int? initPageSelected = 0;
-
+//TODO: MOVE THE TIME AND DATE
+//TODO: fix the date and time feedback
+//
   @override
   Widget build(BuildContext context) {
     final fieldText = TextEditingController();
@@ -52,87 +56,184 @@ class _RegistrationState extends State<Registration> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: HomepageHeader(),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, top: 10),
-              child: Text("Search",
-                  style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
-            ),
-            Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-                child: Container(
-                  constraints:
-                      const BoxConstraints(maxWidth: 550, maxHeight: 40),
-                  child: TextFormField(
-                    controller: fieldText,
-                    onChanged: (search) => context
-                        .read<RegisterationCubit>()
-                        .setSearchParams(search),
-                    obscureText: false,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 205, 226, 226),
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: HomepageHeader(),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(right: 300.0, top: 10),
+                  child: Text("Search",
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 10, bottom: 10),
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 420, maxHeight: 35),
+                    child: TextFormField(
+                      controller: fieldText,
+                      onChanged: (search) => context
+                          .read<RegisterationCubit>()
+                          .setSearchParams(search),
+                      obscureText: false,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 205, 226, 226),
+                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                      ),
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter a valid query';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter a valid query';
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
                 ),
-              ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+                  child: Text(
+                    " Start Date",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text("Time"),
+                        ),
+                        Time(
+                          rangeLabel: 'start',
+                          type: 'registeration',
+                        ),
+                      ],
+                    ),
+                    Date(
+                      rangeDate: 'start',
+                      type: 'registeration',
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+                  child: Text(
+                    "End Date",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Text("Time"),
+                        ),
+                        Time(
+                          rangeLabel: 'end',
+                          type: 'registeration',
+                        ),
+                      ],
+                    ),
+                    Date(
+                      rangeDate: 'end',
+                      type: 'registeration',
+                    ),
+                  ],
+                ),
+                Center(
+                  child: Button(
+                      height: 50,
+                      width: 100,
+                      label: "Search",
+                      onPressed: () {
+                        searchDateTimeFilter(context);
+                        fieldText.clear();
+                      }),
+                ),
+              ],
             ),
-            Button(
-                height: 50,
-                width: 100,
-                label: "Search",
-                onPressed: () {
-                  context.read<RegisterationCubit>().searchRegistrations(
-                      token: context.read<LoginCubit>().state.homeToken,
-                      searchParams: context
-                          .read<RegisterationCubit>()
-                          .state
-                          .searchParams);
-                  fieldText.clear();
-                }),
-            registrationBody(),
+            //registrationBody(),
+            const Body(),
+            const Footer()
           ],
         ),
       ),
     );
   }
+}
 
-  //
-  Widget registrationBody() {
+class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
-        return Column(
-          children: [
-            const Appointment(),
-            Pagination(
-                maxPageCounter:
-                    context.read<RegisterationCubit>().state.maxPageNumber,
-                typeofSearch: 'registration',
-               
-               )
-          ],
+        return const Appointment();
+      },
+    );
+  }
+}
+
+class Footer extends StatelessWidget {
+  const Footer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterationCubit, RegistrationState>(
+      builder: (context, state) {
+        return Pagination(
+          maxPageCounter:
+              context.read<RegisterationCubit>().state.maxPageNumber,
+          typeofSearch: 'registration',
         );
       },
     );
   }
+}
+
+void searchDateTimeFilter(BuildContext context) {
+  var startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+      context.read<RegisterationCubit>().state.registrationDate +
+          " " +
+          context.read<RegisterationCubit>().state.registrationTime,
+      true);
+
+  var enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+      context.read<RegisterationCubit>().state.registrationEndDate +
+          " " +
+          context.read<RegisterationCubit>().state.registrationEndTime,
+      true);
+  context.read<RegisterationCubit>().searchRegistrations(
+      token: context.read<LoginBloc>().state.homeToken,
+      startDateTime: startdateTime.toIso8601String(),
+      endDateTime: enddateTime.toIso8601String(),
+      searchParams: context.read<RegisterationCubit>().state.searchParams);
 }
 
 class Appointment extends StatefulWidget {
@@ -146,64 +247,253 @@ class Appointment extends StatefulWidget {
 
 class _AppointmentState extends State<Appointment> {
   var dateFormat = DateFormat('MM/dd/yyyy hh:mm a');
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RegisterationCubit, RegistrationState>(
+      listener: (context, state) {
+        if (state.registerState == REGISTRATIONSTATE.failed) {
+          Modal(
+              inclueAction: true,
+              actionButtons: TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    context.read<RegisterationCubit>().setRegisterState();
+                  }),
+              context: context,
+              modalType: 'failed',
+              modalBody: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Text(state.registrationError),
+                  const SizedBox(height: 20),
+                  const Icon(
+                    Icons.error,
+                    color: Colors.redAccent,
+                    size: 100,
+                  )
+                ],
+              ),
+              progressDetails: state.registrationError);
+        }
+        if (state.registerState == REGISTRATIONSTATE.inprogress) {
+          Modal(
+              context: context,
+              modalType: '',
+              inclueAction: false,
+              modalBody: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('Registering In Progress'),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.grey[500],
+                        strokeWidth: 4,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Color.fromARGB(255, 56, 155, 152)),
+                      )),
+                ],
+              ),
+              progressDetails: 'Registering In Progress');
+        }
+        if (state.registerState == REGISTRATIONSTATE.sucessful) {
+          Modal(
+              context: context,
+              modalType: '',
+              inclueAction: true,
+              actionButtons: TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    context.read<RegisterationCubit>().setRegisterState();
+                  }),
+              modalBody: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text('Sucessful register a patient'),
+                  SizedBox(height: 30),
+                  Icon(
+                    Icons.check,
+                    size: 100,
+                    color: Color.fromARGB(255, 56, 155, 152),
+                  )
+                ],
+              ),
+              progressDetails: 'Sucessful register a patient');
+        }
+      },
+      child: BlocBuilder<RegisterationCubit, RegistrationState>(
+        builder: (context, state) {
+          if (state.registerstateload == REGISTERSTATELOAD.failed) {
+            return const Center(
+              child: Text("No result, please try again"),
+            );
+          }
+
+          if (state.registerstateload == REGISTERSTATELOAD.loading) {
+            return Column(
+              children: [
+                for (var index = 0; index <= 20; index++)
+                  const GenericLoadingContainer(height: 100, width: 500),
+              ],
+            );
+          }
+          if (state.registerstateload == REGISTERSTATELOAD.loaded) {
+            return Column(
+              children: [
+                for (var index = 0;
+                    index <= state.registrationList.length - 1;
+                    index++)
+                  RegisterList(
+                    index: index,
+                    state: state,
+                  )
+              ],
+            );
+          }
+          return Column(
+            children: [
+              for (var index = 0; index <= 20; index++)
+                const GenericLoadingContainer(height: 100, width: 500),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class RegistersList extends StatelessWidget {
+  final dynamic state;
+  const RegistersList({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-      builder: (context, state) {
-        if (state.searchState == SEARCHSTATE.notFound) {
-          return (const Center(
-              child: Card(
-            child: Text('Not found'),
-          )));
-        }
+    return Expanded(
+      child: Column(
+        children: [
+          for (var index = 0;
+              index <= state.registrationList.length - 1;
+              index++)
+            RegisterationCard(
+              key: Key(state.registrationList[index]['id']),
+              addRegisteration: () => {
+                Modal(
+                    context: context,
+                    modalType: 'Unkown',
+                    inclueAction: true,
+                    actionButtons: RegisterButton(
+                      state: state,
+                      index: index,
+                    ),
+                    modalBody:
+                        const Text('Do you want to register this patient?'),
+                    progressDetails: 'Do you want to register this patient?'),
+              },
+              clinicalNote: () => {
+                showDialogConfirmation(context, state.registrationList[index])
+              },
+              firstName: state.registrationList[index]['patient']['firstName'],
+              lastName: state.registrationList[index]['patient']['lastName'],
+              type: state.registrationList[index]['type'],
+              dateTime: state.registrationList[index]['dateTime'],
+              patientNumber: state.registrationList[index]['patient']
+                  ['patientNumber'],
+              role: context.read<LoginBloc>().state.role,
+              appointmentId: state.registrationList[index]['id'],
+            )
+        ],
+      ),
+    );
 
-        if (state.registrationList.isEmpty) {
-          return const Loading();
-        } else {
-          return Center(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height / 1.6,
-              width: MediaQuery.of(context).size.width < 600
-                  ? double.infinity
-                  : 600,
-              child: ListView.builder(
-                  itemCount: state.registrationList.length,
-                  itemBuilder: ((context, index) {
-                    return RegisterationCard(
-                      addRegisteration: () => {
-                        showDialogCFeedback(
-                          context,
-                          token: context.read<LoginCubit>().state.homeToken,
-                          patientId: state.registrationList[index]['patient']
-                              ['id'],
-                          appointmentId: state.registrationList[index]['id'],
-                          reasons: state.registrationList[index]
-                              ['reasonForVisit'],
-                          typeofVist: state.registrationList[index]
-                              ['typeOfVisit'],
-                        )
-                      },
-                      clinicalNote: () => {
-                        showDialogConfirmation(
-                            context, state.registrationList[index])
-                      },
-                      firstName: state.registrationList[index]['patient']
-                          ['firstName'],
-                      lastName: state.registrationList[index]['patient']
-                          ['lastName'],
-                      type: state.registrationList[index]['type'],
-                      dateTime: state.registrationList[index]['dateTime'],
-                      patientNumber: state.registrationList[index]['patient']
-                          ['patientNumber'],
-                      role: context.read<LoginCubit>().state.role,
-                      appointmentId: state.registrationList[index]['id'],
-                    );
-                  })),
+
+  }
+}
+
+class RegisterList extends StatelessWidget {
+  final dynamic state;
+  final int index;
+  const RegisterList({Key? key, required this.index, required this.state})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RegisterationCard(
+      key: Key(state.registrationList[index]['id']),
+      addRegisteration: () => {
+        Modal(
+            context: context,
+            modalType: 'Unkown',
+            inclueAction: true,
+            actionButtons: RegisterButton(
+              state: state,
+              index: index,
             ),
-          );
-        }
+            modalBody: const Text('Do you want to register this patient?'),
+            progressDetails: 'Do you want to register this patient?'),
       },
+      clinicalNote: () =>
+          {showDialogConfirmation(context, state.registrationList[index])},
+      firstName: state.registrationList[index]['patient']['firstName'],
+      lastName: state.registrationList[index]['patient']['lastName'],
+      type: state.registrationList[index]['type'],
+      dateTime: state.registrationList[index]['dateTime'],
+      patientNumber: state.registrationList[index]['patient']['patientNumber'],
+      role: context.read<LoginBloc>().state.role,
+      appointmentId: state.registrationList[index]['id'],
+    );
+  }
+}
+
+class RegisterButton extends StatelessWidget {
+  final dynamic state;
+  final int index;
+  const RegisterButton({Key? key, required this.state, required this.index})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+          onPressed: () => {Navigator.pop(context, false)},
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => {
+            createRegistration(
+                token: context.read<LoginBloc>().state.homeToken,
+                patientId: state.registrationList[index]['patient']['id'],
+                appointmentId: state.registrationList[index]['id'],
+                reasons: state.registrationList[index]['reasonForVisit'],
+                typeofVist: state.registrationList[index]['typeOfVisit'],
+                context: context),
+            Navigator.pop(context, false)
+          },
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }
@@ -305,8 +595,9 @@ List<Widget> clinicalNoteForm(
         TextFormField(
           readOnly: true,
           initialValue: _patientName,
-          onChanged: (username) =>
-              context.read<LoginCubit>().setUserName(username),
+          onChanged: (username) {
+            context.read<LoginBloc>().add(LoginUserNameChanged(username));
+          },
           decoration: const InputDecoration(
             border: OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
@@ -319,6 +610,7 @@ List<Widget> clinicalNoteForm(
         ),
       ],
     ),
+    //Move the clinicalNote to it's full screen/it's own screen/page
     ClinicalNoteTitleField(
       appointment: appointment,
     ),
@@ -348,12 +640,12 @@ List<Widget> clinicalNoteForm(
                 response!.then((value) => {
                       if (value != null && value.statusCode == 202)
                         {
-                          Messages.showMessage(
+                          /*   Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
                               ),
-                              'Clinical Note updated'),
+                              'Clinical Note updated'), */
                           //clearState after update
                           context
                               .read<ClinicalnoteCubit>()
@@ -370,19 +662,19 @@ List<Widget> clinicalNoteForm(
                         }
                       else if (value != null && value.statusCode == 400)
                         {
-                          Messages.showMessage(
+                          /*  Messages.showMessage(
                               const Icon(
                                 IconData(0xe237, fontFamily: 'MaterialIcons'),
                                 color: Colors.red,
                               ),
-                              'Could not update Clinical Note'),
+                              'Could not update Clinical Note'), */
                         }
                     });
               } else {
                 var response = createClinicalNoteData(
                     homeToken: homeToken,
                     registerationId: appointment['id'],
-                    medicalPersonnelId: context.read<LoginCubit>().state.id,
+                    medicalPersonnelId: context.read<LoginBloc>().state.id,
                     note: context.read<ClinicalnoteCubit>().state.text,
                     noteTitle: context.read<ClinicalnoteCubit>().state.title,
                     clinicalNoteType:
@@ -396,12 +688,12 @@ List<Widget> clinicalNoteForm(
                           context
                               .read<ClinicalnoteCubit>()
                               .clearClinicalNoteState(),
-                          Messages.showMessage(
+                          /*      Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
                               ),
-                              'Clinical Note created'),
+                              'Clinical Note created'), */
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: ((context) => const Registration())),
@@ -409,12 +701,12 @@ List<Widget> clinicalNoteForm(
                         }
                       else if (value != null && value.statusCode == 400)
                         {
-                          Messages.showMessage(
+                          /*  Messages.showMessage(
                               const Icon(
                                 IconData(0xe237, fontFamily: 'MaterialIcons'),
                                 color: Colors.red,
                               ),
-                              'Could not create Clinical Note'),
+                              'Could not create Clinical Note'), */
                         }
                     });
               }
@@ -424,6 +716,43 @@ List<Widget> clinicalNoteForm(
       ],
     ),
   ];
+}
+
+Future dateTimePicker(BuildContext context, String? timedateRange) async {
+  final newTime =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (newTime == null) return;
+
+  String formatTime = newTime.format(context);
+
+  if (timedateRange == 'end') {
+    context.read<RegisterationCubit>().setRegistrationEndTime(formatTime);
+  }
+  if (timedateRange == 'start') {
+    context.read<RegisterationCubit>().setRegistrationTime(formatTime);
+  }
+}
+
+Future datePicker(BuildContext context, String dateRange) async {
+  var dateFormat = DateFormat('yyyy-MM-dd');
+
+  final initDate = DateTime.now();
+  final newDate = await showDatePicker(
+      context: context,
+      initialDate: initDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(DateTime.now().year + 5));
+
+  String formattedDate = dateFormat.format(newDate!);
+
+  // ignore: unnecessary_null_comparison
+  if (newDate == null) return;
+  if (dateRange == 'start') {
+    context.read<RegisterationCubit>().setRegistrationDate(formattedDate);
+  }
+  if (dateRange == 'end') {
+    context.read<RegisterationCubit>().setRegistrationEndDate(formattedDate);
+  }
 }
 
 //TODO:ClinicalNote Function moved to ClinicalNote component

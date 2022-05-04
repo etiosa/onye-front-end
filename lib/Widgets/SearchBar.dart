@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../pages/appointment/state/appointment_cubit.dart';
-import '../pages/auth/state/login_cubit.dart';
+import '../pages/auth/state/login_bloc.dart';
 import '../pages/doctor/state/doctor_cubit_cubit.dart';
 import '../pages/patient/state/patient_cubit.dart';
 
@@ -50,7 +50,7 @@ class SearchBar extends StatelessWidget {
                   context.read<PatientCubit>().searchPatients(
                       query: query,
                       nextPage: 0,
-                      token: context.read<LoginCubit>().state.homeToken),
+                      token: context.read<LoginBloc>().state.homeToken),
                   fieldText.clear()
                 },
               if (field == 'Search doctor')
@@ -58,7 +58,7 @@ class SearchBar extends StatelessWidget {
                   /*   context.read<DoctorCubit>().searchDoctors(
                       query: query,
                       nextPage: 0,
-                      token: context.read<LoginCubit>().state.homeToken), */
+                      token: context.read<LoginBloc>().state.homeToken), */
                   fieldText.clear()
                 },
             },
@@ -102,14 +102,14 @@ class SearchBar extends StatelessWidget {
                       query:
                           context.read<AppointmentCubit>().state.searchParams,
                       nextPage: 0,
-                      token: context.read<LoginCubit>().state.homeToken);
+                      token: context.read<LoginBloc>().state.homeToken);
                   fieldText.clear();
                 }
                 if (field == 'Search doctor') {
                    context.read<DoctorCubit>().searchDoctors(
                       query: context.read<DoctorCubit>().state.searchParams,
                       nextPage: 0,
-                      token: context.read<LoginCubit>().state.homeToken); 
+                      token: context.read<LoginBloc>().state.homeToken); 
                   fieldText.clear();
                 }
               },

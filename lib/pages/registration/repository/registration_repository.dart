@@ -7,7 +7,7 @@ class RegistrationRepository {
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
- Future<http.Response?> searchPatients(
+  Future<http.Response?> searchPatients(
       {String? searchParams, String? token, int? nextPage = 0}) async {
     var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
         queryParameters: <String, String>{
@@ -30,11 +30,6 @@ class RegistrationRepository {
       return null;
     }
   }
-
-
-
-
-
 
   Future<http.Response?> getPatientClinicalNote(
       {String? token, String? id, String? typeOfVisit}) async {
@@ -123,15 +118,19 @@ class RegistrationRepository {
     }
   }
 
-
-
   Future<http.Response?> searchRegistrations(
-      {String? token, String? searchParams, int? nextPage = 0}) async {
+      {String? token,
+      String? searchParams,
+      int? nextPage = 0,
+      String? endDateTime,
+      String? startDateTime}) async {
+    var startDateFormat = startDateTime?.split('.')[0];
+    var endDateFormat = endDateTime?.split('.')[0];
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
-      'from': '2020-01-01T00:00',
-      'to': '2024-01-01T00:00',
+      'from': startDateFormat ?? '2020-01-01T00:00',
+      'to': endDateFormat ??'2024-01-01T00:00',
       'query': searchParams ?? '',
       'zoneId': 'Africa/Lagos',
       "page": "$nextPage"
@@ -151,8 +150,4 @@ class RegistrationRepository {
       return null;
     }
   }
-
-
-
-
 }

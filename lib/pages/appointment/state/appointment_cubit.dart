@@ -13,10 +13,16 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     this._appointmentRepository,
   ) : super(const AppointmentState());
 
-  Future<void> searchAppointments({String? token, String? searchParams}) async {
-    emit(state.copyWith(searchState: REGSEARCHSTATE.inital));
+  Future<void> searchAppointments({String? token, String? searchParams, String? startDateTime,
+      String? endDateTime
+  }) async {
+    emit(state.copyWith(
+        searchState: REGSEARCHSTATE.inital,
+        appointmentloadState: APPOINTMENTLOADSTATE.loading));
 
     var appointmentsReponse = await _appointmentRepository.searchAppointments(
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
         token: token, searchParams: state.searchParams);
     var appointmentReponseBody = json.decode(appointmentsReponse!.body);
     var appointmentList = appointmentReponseBody['elements'];
@@ -26,9 +32,12 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         appointmentList: appointmentList, maxPageNumber: totalPages));
     if (state.appointmentList.isEmpty) {
       emit(state.copyWith(searchState: REGSEARCHSTATE.notFound));
+      emit(state.copyWith(appointmentloadState: APPOINTMENTLOADSTATE.failed));
     } else {
-     // print(state.maxPageNumber);
-      emit(state.copyWith(searchState: REGSEARCHSTATE.sucessful));
+      // print(state.maxPageNumber);
+      emit(state.copyWith(
+          searchState: REGSEARCHSTATE.sucessful,
+          appointmentloadState: APPOINTMENTLOADSTATE.loaded));
     }
   }
 
@@ -55,20 +64,6 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       emit(state.copyWith(patientsList: patientsList));
     }
   }
-
-/*   void searchDoctors({String? query, String? token}) async {
-    emit(state.copyWith(searchState: REGSEARCHSTATE.startsearch));
-    var doctors = await _appointmentRepository.searchDoctors(
-        searchParams: query, token: token);
-    if (doctors.isNotEmpty) {
-      emit(state.copyWith(
-          doctorsList: doctors, searchState: REGSEARCHSTATE.sucessful));
-    }
-    if (doctors.isEmpty) {
-      emit(state.copyWith(
-          doctorsList: doctors, searchState: REGSEARCHSTATE.notFound));
-    }
-  } */
 
   void setSelectedMedicalPersonnelId(String? argSelectedId) {
     final String selectedId = argSelectedId!;
@@ -123,7 +118,9 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
-    emit(state.copyWith(nextPage: nextPage));
+    emit(state.copyWith(
+        nextPage: nextPage,
+        appointmentloadState: APPOINTMENTLOADSTATE.loading));
     if (state.nextPage <= state.maxPageNumber) {
       //call search
       var searchResponse = await _appointmentRepository.searchAppointments(
@@ -131,6 +128,9 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       var body = json.decode(searchResponse!.body);
       var appointmentList = body['elements'];
       emit(state.copyWith(appointmentList: appointmentList));
+      if (state.appointmentList.isNotEmpty) {
+        emit(state.copyWith(appointmentloadState: APPOINTMENTLOADSTATE.loaded));
+      }
     }
   }
 
@@ -147,7 +147,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       String? languagePreference}) async {
     var dateAndTime =
         DateFormat('yyyy-MM-dd h:mm aa').parse(date! + " " + time!, true);
-
+    //deal with empty string
+    emit(state.copyWith(appointmentstate: APPOINTMENTSTATE.inprogress));
     Response? req = await _appointmentRepository.createAppointment(
         date: dateAndTime.toIso8601String(),
         patientId: patientID,
@@ -155,6 +156,16 @@ class AppointmentCubit extends Cubit<AppointmentState> {
         token: token,
         typeOfVisit: typeOfVisit,
         reasons: reasonForVisit);
+
+    var body = json.decode(req!.body);
+
+    if (req.statusCode != 201) {
+      emit(state.copyWith(
+          appointmentstate: APPOINTMENTSTATE.failed,
+          appointmenterror: body['message']));
+    } else {
+      emit(state.copyWith(appointmentstate: APPOINTMENTSTATE.sucessful));
+    }
 
     return req;
   }
@@ -199,6 +210,10 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     emit(state.copyWith(fromDate: fromDate));
   }
 
+  void setAppointmentState() {
+    emit(state.copyWith(appointmentstate: APPOINTMENTSTATE.inita));
+  }
+
   String getFromDate() {
     return state.fromDate;
   }
@@ -232,5 +247,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
 
   void clearState() {
     emit(const AppointmentState());
+  }
+
+  void clearAppointmentField() {
+    emit(state.copyWith(
+      typeOfVisit: '',
+      reasonForVisit: '',
+      appointmentTime: '',
+    ));
   }
 }

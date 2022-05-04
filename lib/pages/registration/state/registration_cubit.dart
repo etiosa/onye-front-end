@@ -18,23 +18,76 @@ class RegisterationCubit extends Cubit<RegistrationState> {
       String? appointmentId,
       String? reasons,
       String? typeOfVisit}) async {
+    //
+    emit(state.copyWith(registerState: REGISTRATIONSTATE.inprogress));
     Response? req = await _registrationRepository.createRegistration(
         token: token,
         patientId: patientID,
         appointmentId: appointmentId,
         reasons: reasons,
         typeOfVisit: typeOfVisit);
-    searchRegistrations(token: token);
+
+    //handle error here
+    var body = json.decode(req!.body);
+
+    if (req.statusCode != 201) {
+      emit(state.copyWith(
+          registrationError: body['message'],
+          registerState: REGISTRATIONSTATE.failed));
+    } else {
+      emit(state.copyWith(registerState: REGISTRATIONSTATE.sucessful));
+    }
+
+    //Update the state after the register..we get back a payload from the API
+    //searchRegistrations(token: token);
 
     return req;
   }
 
+  void setRegistrationDate(String? registrationDate) {
+    emit(state.copyWith(registrationDate: registrationDate!));
+  }
+
+  void setRegistrationTime(String? registrationTime) {
+    print("setRegistrationTime(");
+    emit(state.copyWith(registrationTime: registrationTime!));
+  }
+
+  void setRegistrationEndTime(String? registrationTime) {
+    emit(state.copyWith(registrationEndTime: registrationTime!));
+  }
+
+  void setRegistrationEndDate(String? registrationDate) {
+    emit(state.copyWith(registrationEndDate: registrationDate!));
+  }
+
+  void setRegisterState() {
+    emit(state.copyWith(registerState: REGISTRATIONSTATE.init));
+  }
+
+  void setRegistrationError({String? registrationError}) {
+    emit(state.copyWith(registrationError: registrationError));
+  }
+
   void searchRegistrations(
-      {String? token, String? searchParams, int? nextPage}) async {
+      {String? token,
+      String? searchParams,
+      int? nextPage,
+      String? startDateTime,
+      String? endDateTime}) async {
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
+    emit(state.copyWith(
+        regLoad: REGISTERSTATELOAD.loading,
+        registrationEndDate: '',
+        registrationEndTime: '',
+        registrationTime: '',
+        registrationDate: ''));
 
     var searchReponse = await _registrationRepository.searchRegistrations(
-        token: token, searchParams: searchParams);
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        token: token,
+        searchParams: searchParams);
 
     var body = json.decode(searchReponse!.body);
     var registrationsList = body['elements'];
@@ -44,8 +97,10 @@ class RegisterationCubit extends Cubit<RegistrationState> {
 
     if (state.registrationList.isEmpty) {
       emit(state.copyWith(searchState: SEARCHSTATE.notFound));
+      emit(state.copyWith(regLoad: REGISTERSTATELOAD.failed));
     } else {
       emit(state.copyWith(searchState: SEARCHSTATE.sucessful));
+      emit(state.copyWith(regLoad: REGISTERSTATELOAD.loaded));
     }
   }
 
@@ -60,13 +115,14 @@ class RegisterationCubit extends Cubit<RegistrationState> {
         searchParams: query, token: token, nextPage: 0);
     var body = json.decode(searchResponse!.body);
     var totalPages = body['totalPages'];
-     var patientsList = body['elements'];
+    var patientsList = body['elements'];
     emit(state.copyWith(
         patientList: patientsList, maxPatientPageNumber: totalPages));
   }
 
   void setNextPage({int? nextPage, String? token, String? searchParams}) async {
-    emit(state.copyWith(nextPage: nextPage));
+    emit(
+        state.copyWith(nextPage: nextPage, regLoad: REGISTERSTATELOAD.loading));
     if (state.nextPage <= state.maxPageNumber) {
       //call search
       var searchResponse = await _registrationRepository.searchRegistrations(
@@ -74,6 +130,9 @@ class RegisterationCubit extends Cubit<RegistrationState> {
       var body = json.decode(searchResponse!.body);
       var registrationsList = body['elements'];
       emit(state.copyWith(registrationList: registrationsList));
+      if (state.registrationList.isNotEmpty) {
+        emit(state.copyWith(regLoad: REGISTERSTATELOAD.loaded));
+      }
     }
   }
 

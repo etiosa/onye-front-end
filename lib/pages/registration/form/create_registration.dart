@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/Widgets/Pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
-import 'package:onye_front_ened/pages/auth/state/login_cubit.dart';
-import 'package:onye_front_ened/components/util/Messages.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
+import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/registration/form/patient_list.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -30,7 +30,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (context.read<LoginCubit>().state.homeToken.isEmpty) {
+    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
@@ -241,7 +241,7 @@ class RegisterField extends StatelessWidget {
                                           .read<RegisterationCubit>()
                                           .createRegistration(
                                               token: context
-                                                  .read<LoginCubit>()
+                                                  .read<LoginBloc>()
                                                   .state
                                                   .homeToken,
                                               patientID: context
@@ -264,14 +264,14 @@ class RegisterField extends StatelessWidget {
                                                 context
                                                     .read<RegisterationCubit>()
                                                     .clearState(),
-                                                Messages.showMessage(
+                                            /*     Messages.showMessage(
                                                     const Icon(
                                                       IconData(0xf635,
                                                           fontFamily:
                                                               'MaterialIcons'),
                                                       color: Colors.green,
                                                     ),
-                                                    'Registration created'),
+                                                    'Registration created'), */
                                                 Navigator.of(context)
                                                     .pushAndRemoveUntil(
                                                         MaterialPageRoute(
@@ -283,14 +283,14 @@ class RegisterField extends StatelessWidget {
                                             else if (value != null &&
                                                 value.statusCode == 400)
                                               {
-                                                Messages.showMessage(
+                                             /*    Messages.showMessage(
                                                     const Icon(
                                                       IconData(0xe237,
                                                           fontFamily:
                                                               'MaterialIcons'),
                                                       color: Colors.red,
                                                     ),
-                                                    'Could not create registration'),
+                                                    'Could not create registration'), */
                                               }
                                           });
                                     }
@@ -402,7 +402,7 @@ class SearchBar extends StatelessWidget {
               context.read<PatientCubit>().searchPatients(
                   query: query,
                   nextPage: 0,
-                  token: context.read<LoginCubit>().state.homeToken),
+                  token: context.read<LoginBloc>().state.homeToken),
               fieldText.clear()
             },
             decoration: const InputDecoration(
@@ -429,7 +429,7 @@ class SearchBar extends StatelessWidget {
             onPressed: () {
               context.read<PatientCubit>().searchPatients(
                   query: context.read<PatientCubit>().state.searchParams,
-                  token: context.read<LoginCubit>().state.homeToken);
+                  token: context.read<LoginBloc>().state.homeToken);
               fieldText.clear();
             })
       ],
