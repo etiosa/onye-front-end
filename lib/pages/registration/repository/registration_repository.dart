@@ -9,7 +9,6 @@ class RegistrationRepository {
 
   Future<http.Response?> searchPatients(
       {String? searchParams, String? token, int? nextPage = 0}) async {
-    print(nextPage);
     var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
         queryParameters: <String, String>{
           'query': searchParams!,
@@ -125,8 +124,8 @@ class RegistrationRepository {
       int? nextPage = 0,
       String? endDateTime,
       String? startDateTime}) async {
-    var startDateFormat = startDateTime?.split('.')[0];
-    var endDateFormat = endDateTime?.split('.')[0];
+    var startDateFormat = startDateTime??startDateTime?.split('.')[0];
+    var endDateFormat = endDateTime??endDateTime?.split('.')[0];
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
