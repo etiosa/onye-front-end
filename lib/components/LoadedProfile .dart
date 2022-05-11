@@ -108,17 +108,14 @@ class LoadedProfile extends StatelessWidget {
   String getDay(BuildContext context) {
     int currentTime = context.read<LoginBloc>().state.currentDate;
     if (currentTime <= 0 && currentTime <= 11) {
-      print('Morning');
       return 'Good Morning';
     }
 
     if (currentTime >= 12 && currentTime <= 18) {
-      print("aftertNoon");
       return "Good Afternoon";
     }
 
     if (currentTime > 18 && currentTime <= 24) {
-      print("evening");
       return "Good Evening";
     }
          return "Good Evening";
