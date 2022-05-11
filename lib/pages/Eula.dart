@@ -202,7 +202,7 @@ class Contract extends StatelessWidget {
                 shrinkWrap: true,
               ),
               Button(
-                  height: 100,
+                  height: 50,
                   width: 200,
                   label: 'Accept',
                   onPressed: () {

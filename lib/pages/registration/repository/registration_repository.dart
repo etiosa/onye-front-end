@@ -9,10 +9,11 @@ class RegistrationRepository {
 
   Future<http.Response?> searchPatients(
       {String? searchParams, String? token, int? nextPage = 0}) async {
+    print(nextPage);
     var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
         queryParameters: <String, String>{
           'query': searchParams!,
-          "page": "$nextPage"
+          "page":  "$nextPage"
         });
 
     // http call
@@ -130,7 +131,7 @@ class RegistrationRepository {
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
       'from': startDateFormat ?? '2020-01-01T00:00',
-      'to': endDateFormat ??'2024-01-01T00:00',
+      'to': endDateFormat ?? '2024-01-01T00:00',
       'query': searchParams ?? '',
       'zoneId': 'Africa/Lagos',
       "page": "$nextPage"
