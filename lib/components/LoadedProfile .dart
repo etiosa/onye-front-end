@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/Button.dart';
 import 'package:onye_front_ened/components/util/DesktopMenu.dart';
 import 'package:onye_front_ened/components/util/MobileDashboardMenu.dart';
+
+import '../pages/auth/state/login_bloc.dart';
 
 class LoadedProfile extends StatelessWidget {
   const LoadedProfile({
     Key? key,
   }) : super(key: key);
+
+/* 
+    print(DateTime.now().toLocal().hour);
+    print(DateTime.now().toLocal().minute);
+    var currentTime = DateTime.now().toLocal().hour;
+    print(currentTime);
+    if (currentTime <= 0 && currentTime <= 11) {
+      print('Morning');
+    }
+
+    if (currentTime >= 12 && currentTime <= 18) {
+      print("aftertNoon");
+    }
+
+    if (currentTime > 18 && currentTime <= 24) {
+      print("evening");
+    }
+
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +53,39 @@ class LoadedProfile extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Good Morning',
+                getDay(context),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize:
                         MediaQuery.of(context).size.width >= 730 ? 50 : 20),
               ),
-              const Text(
-                'Doctor Joe',
-                style: TextStyle(fontSize: 17, fontFamily: 'poppins'),
+              const SizedBox(
+                height: 10,
               ),
-              const Text(
-                "Surgert",
-                style: TextStyle(color: Color.fromARGB(255, 115, 109, 109)),
+              Text(
+                '${context.read<LoginBloc>().state.firstName} ${context.read<LoginBloc>().state.lastName}',
+                style: const TextStyle(fontSize: 17, fontFamily: 'poppins'),
               ),
-              const Text(
-                "Hopistal",
-                style: TextStyle(color: Color.fromARGB(255, 115, 109, 109)),
-              )
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                context.read<LoginBloc>().state.specialty.toLowerCase(),
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontFamily: 'poppins',
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                context.read<LoginBloc>().state.hospital,
+                style: const TextStyle(
+                    fontFamily: 'poppins',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600),
+              ),
             ],
           ),
         ),
@@ -66,5 +103,26 @@ class LoadedProfile extends StatelessWidget {
             : const DesktopMenu(),
       ],
     );
+  }
+
+  String getDay(BuildContext context) {
+    int currentTime = context.read<LoginBloc>().state.currentDate;
+    if (currentTime <= 0 && currentTime <= 11) {
+      print('Morning');
+      return 'Good Morning';
+    }
+
+    if (currentTime >= 12 && currentTime <= 18) {
+      print("aftertNoon");
+      return "Good Afternoon";
+    }
+
+    if (currentTime > 18 && currentTime <= 24) {
+      print("evening");
+      return "Good Evening";
+    }
+         return "Good Evening";
+
+
   }
 }

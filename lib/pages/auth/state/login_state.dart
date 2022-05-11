@@ -26,7 +26,9 @@ class LoginState extends Equatable {
       this.acceptcontractstatus = ACCEPTCONTRACTSTATUS.init,
       this.fetchContract = FETCHINGCONTRACT.init,
       this.logoutstatus = LOGOUTSTATUS.init,
-      this.userId='',
+      this.userId = '',
+      this.specialty = '',
+      this.currentDate=0,
       this.loginStatus = LoginStatus.init});
 
   final String userName;
@@ -48,7 +50,9 @@ class LoginState extends Equatable {
   final bool isContractAccept;
   final FETCHINGCONTRACT fetchContract;
   final String userId;
+  final String specialty;
   final ACCEPTCONTRACTSTATUS acceptcontractstatus;
+  final int currentDate;
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -71,7 +75,9 @@ class LoginState extends Equatable {
         isContractAccept,
         fetchContract,
         acceptcontractstatus,
-        userId
+        userId,
+        specialty,
+        currentDate
       ];
 
   LoginState copywith(
@@ -93,10 +99,14 @@ class LoginState extends Equatable {
       String? id,
       bool? inProgressModal,
       String? role,
+      String? specialty,
       bool? canLogin,
+      int? currentDate,
       LoginStatus? loginStatus}) {
     return LoginState(
-      userId: userId?? this.userId,
+      currentDate: currentDate?? this.currentDate,
+        specialty: specialty ?? this.specialty,
+        userId: userId ?? this.userId,
         acceptcontractstatus: acceptcontractstatus ?? this.acceptcontractstatus,
         fetchContract: fetchingcontract ?? fetchContract,
         betaContract: betaContract ?? this.betaContract,

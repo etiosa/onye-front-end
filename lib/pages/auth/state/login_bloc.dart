@@ -164,8 +164,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         id: body['userInfo']['id'],
+        isContractAccept:body['userInfo']['acceptedEula'],
         userId: body['userInfo']['userId'],
+        specialty:body['userInfo']['specialty'],
         role: body['userInfo']['type'],
+        currentDate: DateTime.now().hour,
+
         department: body['userInfo']['facilityInfo']['department']));
   }
 
