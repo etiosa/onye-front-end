@@ -101,6 +101,7 @@ class _PatientsPageState extends State<PatientsPage> {
                           //TODO: REMOVE SearchPatientds into cubit
                           context.read<PatientCubit>().searchPatients(
                               query: context.read<PatientCubit>().state.query,
+                              nextPage: 0,
                               token: homeToken);
                         }
                       });
