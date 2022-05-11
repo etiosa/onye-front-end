@@ -36,7 +36,7 @@ class _DashboardState extends State<Dashboard> {
           builder: (context, state) {
             if (state.loginStatus == LoginStatus.login) {
               //LOAD the  login profile
-              return LoadedProfile();
+              return const LoadedProfile();
             } else {
               return Center(
                 child: SizedBox(

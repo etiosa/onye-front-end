@@ -36,17 +36,14 @@ class _LoginPageState extends State<LoginPage> {
               listener: (context, state) {
                 //if we canLogin..move to the next page.
                 if (state.loginStatus == LoginStatus.home) {
-                
-                 
                   context
                       .read<LoginBloc>()
                       .add(BetContract(token: state.homeToken));
 
-                       WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/beta-contract");
-                  }); 
-                     
+                  });
                 }
 
                 if (state.loginStatus == LoginStatus.inprogress) {

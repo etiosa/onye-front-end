@@ -10,6 +10,7 @@ import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/AppointmentCard.dart';
+import '../Widgets/GenericLoadingContainer.dart';
 import '../Widgets/Loading.dart';
 import 'appointment/state/appointment_cubit.dart';
 
@@ -164,7 +165,6 @@ class _AppointmentsState extends State<Appointments> {
                 ),
               ],
             ),
-
             Button(
                 height: 50,
                 width: 100,
@@ -224,16 +224,61 @@ class _AppointmentState extends State<Appointment> {
         }
 
         if (state.apploadState == APPOINTMENTLOADSTATE.loading) {
-          return const Loading();
-        }
-        if (state.apploadState == APPOINTMENTLOADSTATE.loaded) {
-          return AppointmentsList(
-            state: state,
+          return Column(
+            children: [
+              for (var index = 0; index <= 20; index++)
+                const GenericLoadingContainer(height: 100, width: 500),
+            ],
           );
         }
-        return const Loading();
+        if (state.apploadState == APPOINTMENTLOADSTATE.loaded) {
+          return Column(
+            children: [
+              for (var index = 0;
+                  index < state.appointmentList.length - 1;
+                  index++)
+                AppointmentList(index: index, state: state)
+            ],
+          );
+        }
+        return Column(
+          children: [
+            for (var index = 0; index <= 20; index++)
+              const GenericLoadingContainer(height: 100, width: 500),
+          ],
+        );
       },
     );
+  }
+}
+
+class AppointmentList extends StatelessWidget {
+  final dynamic state;
+  final int index;
+  const AppointmentList({Key? key, required this.index, required this.state})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.appointmentList[index]['type'] == 'appointment') {
+      return AppointmentCard(
+        key: Key(state.appointmentList[index]['id']),
+        appointmentId: state.appointmentList[index]['id'],
+        firstName: state.appointmentList[index]['patient']['firstName'],
+        lastName: state.appointmentList[index]['patient']['lastName'],
+        type: state.appointmentList[index]['type'],
+        dateTime: state.appointmentList[index]['dateTime'],
+        patientNumber: state.appointmentList[index]['patient']['patientNumber'],
+        role: context.read<LoginBloc>().state.role,
+        button: RescheduleAppointmentButton(
+            appointment: state.appointmentList[index]),
+      );
+    } else {
+      return const SizedBox(
+        height: 0,
+        width: 0,
+      );
+    }
   }
 }
 

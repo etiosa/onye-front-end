@@ -428,6 +428,7 @@ class SearchBar extends StatelessWidget {
             label: 'Search',
             onPressed: () {
               context.read<PatientCubit>().searchPatients(
+                nextPage: 0,
                   query: context.read<PatientCubit>().state.searchParams,
                   token: context.read<LoginBloc>().state.homeToken);
               fieldText.clear();
