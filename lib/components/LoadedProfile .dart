@@ -118,8 +118,6 @@ class LoadedProfile extends StatelessWidget {
     if (currentTime > 18 && currentTime <= 24) {
       return "Good Evening";
     }
-         return "Good Evening";
-
-
+    return "Good Evening";
   }
 }
