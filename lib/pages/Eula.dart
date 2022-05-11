@@ -34,7 +34,6 @@ class Contract extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-      print(state.acceptcontractstatus);
 
       if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.inprogress) {
         Modal(
