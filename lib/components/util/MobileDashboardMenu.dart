@@ -115,13 +115,14 @@ class MobileDashboardMenu extends StatelessWidget {
                 ),
               ),
               InkWell(
+                onTap: null,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
                     height: 120,
                     width: 160,
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 56, 155, 152),
+                      color: const Color.fromARGB(255, 117, 134, 134),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
