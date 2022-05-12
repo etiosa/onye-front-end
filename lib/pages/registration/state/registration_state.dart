@@ -20,10 +20,11 @@ class RegistrationState extends Equatable {
       this.maxPatientPageNumber = 0,
       this.registerstateload = REGISTERSTATELOAD.init,
       this.registerState = REGISTRATIONSTATE.init,
-      this.registrationDate = '',
-      this.registrationTime = '',
-      this.registrationEndDate='',
-      this.registrationEndTime='',
+      this.registrationStartDate = '',
+      this.registrationStartTime = '',
+      this.registrationEndDate = '',
+      this.registrationEndTime = '',
+      this.type='',
       this.selectedPatientIndex = 0});
 
   final List<dynamic> registrationList;
@@ -33,6 +34,7 @@ class RegistrationState extends Equatable {
   final int selectedPatientIndex;
   final String searchParams;
   final int nextPage;
+  final String type;
   final int maxPageNumber;
   final int maxPatientPageNumber;
   final String selectedMedicalPersonnelId;
@@ -41,8 +43,8 @@ class RegistrationState extends Equatable {
   final SEARCHSTATE searchState;
   final REGISTERSTATELOAD registerstateload;
   final REGISTRATIONSTATE registerState;
-  final String registrationTime;
-  final String registrationDate;
+  final String registrationStartTime;
+  final String registrationStartDate;
   final String registrationEndDate;
   final String registrationEndTime;
   @override
@@ -63,18 +65,19 @@ class RegistrationState extends Equatable {
         registrationError,
         registerState,
         registerstateload,
-        registrationTime,
-        registrationDate,
+        registrationStartTime,
+        registrationStartDate,
         registrationEndDate,
-        registrationEndTime
+        registrationEndTime,
+        type
       ];
 
   RegistrationState copyWith(
       {String? searchParams,
       String? registrationEndDate,
       String? registrationEndTime,
-      String? registrationDate,
-      String? registrationTime,
+      String? registrationStartDate,
+      String? registrationStartTime,
       REGISTERSTATELOAD? regLoad,
       List<dynamic>? registrationList,
       List<dynamic>? patientList,
@@ -86,14 +89,16 @@ class RegistrationState extends Equatable {
       int? selectedPatientIndex,
       String? registrationError,
       int? nextPage,
+      String? type,
       int? maxPatientPageNumber,
       String? selectedMedicalPersonnelId,
       int? maxPageNumber}) {
     return RegistrationState(
-        registrationEndDate: registrationEndDate?? this.registrationEndDate,
-        registrationEndTime: registrationEndTime?? this.registrationEndTime,
-        registrationDate: registrationDate ?? this.registrationDate,
-        registrationTime: registrationTime ?? this.registrationTime,
+      type: type??this.type,
+        registrationEndDate: registrationEndDate ?? this.registrationEndDate,
+        registrationEndTime: registrationEndTime ?? this.registrationEndTime,
+        registrationStartDate: registrationStartDate ?? this.registrationStartDate,
+        registrationStartTime: registrationStartTime ?? this.registrationStartTime,
         registerstateload: regLoad ?? registerstateload,
         registerState: registerState ?? this.registerState,
         registrationError: registrationError ?? this.registrationError,

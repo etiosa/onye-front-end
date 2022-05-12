@@ -12,7 +12,7 @@ class RegistrationRepository {
     var uri = Uri.parse(root + 'api/rest/v1/patient/search').replace(
         queryParameters: <String, String>{
           'query': searchParams!,
-          "page":  "$nextPage"
+          "page": "$nextPage"
         });
 
     // http call
@@ -124,9 +124,12 @@ class RegistrationRepository {
       int? nextPage = 0,
       String? endDateTime,
       String? startDateTime}) async {
-    var startDateFormat = startDateTime??startDateTime?.split('.')[0];
-    var endDateFormat = endDateTime??endDateTime?.split('.')[0];
-    var uri =
+
+    var startDateFormat =  startDateTime?.split('.')[0];
+    var endDateFormat =  endDateTime?.split('.')[0];
+ 
+
+     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{
       'from': startDateFormat ?? '2020-01-01T00:00',
@@ -148,6 +151,6 @@ class RegistrationRepository {
       return response;
     } catch (err) {
       return null;
-    }
+    } 
   }
 }

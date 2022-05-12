@@ -12,39 +12,75 @@ class Time extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-        builder: ((context, state) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-        child: InkWell(
-          onTap: (() {
-            dateTimePicker(
-                context: context, timedateRange: rangeLabel, type: type);
-          }),
-          child: Container(
-            color: const Color.fromARGB(255, 205, 226, 226),
-            constraints: const BoxConstraints(maxWidth: 150, maxHeight: 35),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                child: Center(
-                  child: Text(
-                      rangeLabel == 'start'
-                          ? state.registrationTime
-                          : state.registrationEndTime,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'poppins',
-                          fontSize: 15)),
+    if (type == 'registeration') {
+      return BlocBuilder<RegisterationCubit, RegistrationState>(
+          builder: ((context, state) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+          child: InkWell(
+            onTap: (() {
+              dateTimePicker(
+                  context: context, timedateRange: rangeLabel, type: type);
+            }),
+            child: Container(
+              color: const Color.fromARGB(255, 205, 226, 226),
+              constraints: const BoxConstraints(maxWidth: 150, maxHeight: 35),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  child: Center(
+                    child: Text(
+                        rangeLabel == 'start'
+                            ? state.registrationStartTime
+                            : state.registrationEndTime,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'poppins',
+                            fontSize: 15)),
+                  ),
+                  width: 600,
+                  height: 500,
                 ),
-                width: 600,
-                height: 500,
               ),
             ),
           ),
-        ),
-      );
-    }));
+        );
+      }));
+    } else {
+      return BlocBuilder<AppointmentCubit, AppointmentState>(
+          builder: ((context, state) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+          child: InkWell(
+            onTap: (() {
+              dateTimePicker(
+                  context: context, timedateRange: rangeLabel, type: type);
+            }),
+            child: Container(
+              color: const Color.fromARGB(255, 205, 226, 226),
+              constraints: const BoxConstraints(maxWidth: 150, maxHeight: 35),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  child: Center(
+                    child: Text(
+                        rangeLabel == 'start'
+                            ? state.fromTime
+                            : state.toTime,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'poppins',
+                            fontSize: 15)),
+                  ),
+                  width: 600,
+                  height: 500,
+                ),
+              ),
+            ),
+          ),
+        );
+      }));
+    }
   }
 }
 
@@ -57,7 +93,7 @@ Future dateTimePicker(
   if (newTime == null) return;
 
   String formatTime = newTime.format(context);
-  
+
   switch (type) {
     case 'registeration':
       if (timedateRange == 'end') {
@@ -67,7 +103,7 @@ Future dateTimePicker(
       if (timedateRange == 'start') {
         context.read<RegisterationCubit>().setRegistrationTime(formatTime);
         print("start");
-        print(context.read<RegisterationCubit>().state.registrationTime);
+        print(context.read<RegisterationCubit>().state.registrationStartTime);
       }
       break;
     case 'appointment':

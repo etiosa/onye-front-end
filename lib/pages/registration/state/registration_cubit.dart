@@ -29,13 +29,16 @@ class RegisterationCubit extends Cubit<RegistrationState> {
 
     //handle error here
     var body = json.decode(req!.body);
+    var type = body['type'];
+    print(type);
 
     if (req.statusCode != 201) {
       emit(state.copyWith(
           registrationError: body['message'],
           registerState: REGISTRATIONSTATE.failed));
     } else {
-      emit(state.copyWith(registerState: REGISTRATIONSTATE.sucessful));
+      emit(state.copyWith(
+          registerState: REGISTRATIONSTATE.sucessful, type: body['type']));
     }
 
     //Update the state after the register..we get back a payload from the API
@@ -45,12 +48,12 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   }
 
   void setRegistrationDate(String? registrationDate) {
-    emit(state.copyWith(registrationDate: registrationDate!));
+    emit(state.copyWith(registrationStartDate: registrationDate!));
   }
 
   void setRegistrationTime(String? registrationTime) {
     print("setRegistrationTime(");
-    emit(state.copyWith(registrationTime: registrationTime!));
+    emit(state.copyWith(registrationStartTime: registrationTime!));
   }
 
   void setRegistrationEndTime(String? registrationTime) {
@@ -75,13 +78,15 @@ class RegisterationCubit extends Cubit<RegistrationState> {
       int? nextPage,
       String? startDateTime,
       String? endDateTime}) async {
+
+        
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
     emit(state.copyWith(
         regLoad: REGISTERSTATELOAD.loading,
         registrationEndDate: '',
         registrationEndTime: '',
-        registrationTime: '',
-        registrationDate: ''));
+        registrationStartTime: '',
+        registrationStartDate: ''));
 
     var searchReponse = await _registrationRepository.searchRegistrations(
         startDateTime: startDateTime,
@@ -93,7 +98,7 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     var registrationsList = body['elements'];
     var totalPages = body['totalPages'];
     emit(state.copyWith(
-        registrationList: registrationsList, maxPageNumber: totalPages));
+        registrationList: registrationsList, maxPageNumber: totalPages, ));
 
     if (state.registrationList.isEmpty) {
       emit(state.copyWith(searchState: SEARCHSTATE.notFound));

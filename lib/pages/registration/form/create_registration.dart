@@ -355,7 +355,6 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
-      print(state.maxPageNumber);
       return Column(
         children: [
           PatientList(

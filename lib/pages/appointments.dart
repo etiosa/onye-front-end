@@ -11,7 +11,6 @@ import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/AppointmentCard.dart';
 import '../Widgets/GenericLoadingContainer.dart';
-import '../Widgets/Loading.dart';
 import 'appointment/state/appointment_cubit.dart';
 
 class Appointments extends StatefulWidget {
@@ -172,8 +171,10 @@ class _AppointmentsState extends State<Appointments> {
                 onPressed: () {
                   context.read<AppointmentCubit>().searchAppointments(
                       token: context.read<LoginBloc>().state.homeToken,
+                     // startDateTime: context.read<AppointmentCubit>().state.ti,
                       searchParams:
                           context.read<AppointmentCubit>().state.searchParams);
+                          
                   fieldText.clear();
                 }),
             registrationBody(nextPageCounter: initPageSelected),
