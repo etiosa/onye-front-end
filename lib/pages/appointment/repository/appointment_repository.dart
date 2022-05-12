@@ -14,10 +14,8 @@ class AppointmentRepository {
       String? token,
       int? nextPage = 0,
       String? zoneId}) async {
-    var startDateFormat = startDateTime ?? startDateTime?.split('.')[0];
-    var endDateFormat = endDateTime ?? endDateTime?.split('.')[0];
-    print(startDateTime);
-    print(endDateTime);
+    var startDateFormat = startDateTime?.split('.')[0];
+    var endDateFormat = endDateTime?.split('.')[0];
 
     var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
         .replace(queryParameters: <String, String>{

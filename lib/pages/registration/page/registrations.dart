@@ -47,9 +47,7 @@ class _RegistrationState extends State<Registration> {
   }
 
   int? initPageSelected = 0;
-//TODO: MOVE THE TIME AND DATE
-//TODO: fix the date and time feedback
-//
+
   @override
   Widget build(BuildContext context) {
     final fieldText = TextEditingController();
@@ -59,8 +57,6 @@ class _RegistrationState extends State<Registration> {
         child: Column(
           children: [
             Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Padding(
                   padding: EdgeInsets.all(8.0),
@@ -170,7 +166,25 @@ class _RegistrationState extends State<Registration> {
                       width: 100,
                       label: "Search",
                       onPressed: () {
-                        searchDateTimeFilter(context);
+                        searchDateTimeFilter(
+                          context: context,
+                          startDate: context
+                              .read<RegisterationCubit>()
+                              .state
+                              .registrationStartDate,
+                          startTime: context
+                              .read<RegisterationCubit>()
+                              .state
+                              .registrationStartTime,
+                          endDate: context
+                              .read<RegisterationCubit>()
+                              .state
+                              .registrationEndDate,
+                          endTime: context
+                              .read<RegisterationCubit>()
+                              .state
+                              .registrationEndTime,
+                        );
                         fieldText.clear();
                       }),
                 ),
@@ -218,28 +232,22 @@ class Footer extends StatelessWidget {
   }
 }
 
-void searchDateTimeFilter(BuildContext context) {
+void searchDateTimeFilter({
+  required BuildContext context,
+  String? startDate,
+  String? startTime,
+  String? endDate,
+  String? endTime,
+}) {
   DateTime? startdateTime;
   DateTime? enddateTime;
-  if (context.read<RegisterationCubit>().state.registrationStartDate.trim() !=
-          '' &&
-      context.read<RegisterationCubit>().state.registrationStartTime.trim() !=
-          '') {
-    startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
-        context.read<RegisterationCubit>().state.registrationStartDate +
-            " " +
-            context.read<RegisterationCubit>().state.registrationStartTime,
-        true);
+  if (startDate!.trim() != '' && startTime!.trim() != '') {
+    startdateTime = DateFormat('yyyy-MM-dd h:mm aa')
+        .parse(startDate + " " + startTime, true);
   }
-  if (context.read<RegisterationCubit>().state.registrationEndDate.trim() !=
-          '' &&
-      context.read<RegisterationCubit>().state.registrationEndTime.trim() !=
-          '') {
-    enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
-        context.read<RegisterationCubit>().state.registrationEndDate +
-            " " +
-            context.read<RegisterationCubit>().state.registrationEndTime,
-        true);
+  if (endDate!.trim() != '' && endTime!.trim() != '') {
+    enddateTime =
+        DateFormat('yyyy-MM-dd h:mm aa').parse(endDate + " " + endTime);
   }
 
   context.read<RegisterationCubit>().searchRegistrations(
