@@ -11,29 +11,9 @@ class LoadedProfile extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-/* 
-    print(DateTime.now().toLocal().hour);
-    print(DateTime.now().toLocal().minute);
-    var currentTime = DateTime.now().toLocal().hour;
-    print(currentTime);
-    if (currentTime <= 0 && currentTime <= 11) {
-      print('Morning');
-    }
-
-    if (currentTime >= 12 && currentTime <= 18) {
-      print("aftertNoon");
-    }
-
-    if (currentTime > 18 && currentTime <= 24) {
-      print("evening");
-    }
-
-*/
-
   @override
   Widget build(BuildContext context) {
     return Column(
-      //mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Button(
@@ -50,7 +30,6 @@ class LoadedProfile extends StatelessWidget {
               : const EdgeInsets.only(left: 20, top: 50),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 getDay(context),
