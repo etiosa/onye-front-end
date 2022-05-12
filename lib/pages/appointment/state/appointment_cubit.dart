@@ -13,17 +13,24 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     this._appointmentRepository,
   ) : super(const AppointmentState());
 
-  Future<void> searchAppointments({String? token, String? searchParams, String? startDateTime,
-      String? endDateTime
-  }) async {
+  Future<void> searchAppointments(
+      {String? token,
+      String? searchParams,
+      String? startDateTime,
+      String? endDateTime}) async {
     emit(state.copyWith(
         searchState: REGSEARCHSTATE.inital,
+        toDate: '',
+        toTime: '',
+        fromDate: '',
+        fromTime: '',
         appointmentloadState: APPOINTMENTLOADSTATE.loading));
 
     var appointmentsReponse = await _appointmentRepository.searchAppointments(
-      startDateTime: startDateTime,
-      endDateTime: endDateTime,
-        token: token, searchParams: state.searchParams);
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        token: token,
+        searchParams: state.searchParams);
     var appointmentReponseBody = json.decode(appointmentsReponse!.body);
     var appointmentList = appointmentReponseBody['elements'];
     var totalPages = appointmentReponseBody['totalPages'];
@@ -34,25 +41,12 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       emit(state.copyWith(searchState: REGSEARCHSTATE.notFound));
       emit(state.copyWith(appointmentloadState: APPOINTMENTLOADSTATE.failed));
     } else {
-      // print(state.maxPageNumber);
       emit(state.copyWith(
           searchState: REGSEARCHSTATE.sucessful,
           appointmentloadState: APPOINTMENTLOADSTATE.loaded));
     }
   }
 
-  //TODO: separate this method
-
-/*   void searchPatients({String? query, String? token, int? nextPage}) async {
-    var searchResponse = await _appointmentRepository.searchPatients(
-        searchParams: query, token: token);
-    var body = json.decode(searchResponse!.body);
-    var totalPages = body['totalPages'];
-
-    var patientsList = body['elements'];
-    emit(state.copyWith(patientsList: patientsList, maxPageNumber: totalPages));
-  }
- */
   void setPatientNextSearchIndex(
       {int? nextPage, String? token, String? searchParams}) async {
     if (state.nextPage <= state.maxPageNumber) {

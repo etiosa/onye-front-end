@@ -169,12 +169,15 @@ class _AppointmentsState extends State<Appointments> {
                 width: 100,
                 label: 'Search',
                 onPressed: () {
-                  context.read<AppointmentCubit>().searchAppointments(
-                      token: context.read<LoginBloc>().state.homeToken,
-                     // startDateTime: context.read<AppointmentCubit>().state.ti,
-                      searchParams:
-                          context.read<AppointmentCubit>().state.searchParams);
-                          
+                  searchAppointments(
+                      context: context,
+                      startDate:
+                          context.read<AppointmentCubit>().state.fromDate,
+                      startTime:
+                          context.read<AppointmentCubit>().state.fromTime,
+                      endDate: context.read<AppointmentCubit>().state.toDate,
+                      endTime: context.read<AppointmentCubit>().state.toTime);
+
                   fieldText.clear();
                 }),
             registrationBody(nextPageCounter: initPageSelected),
@@ -199,6 +202,31 @@ class _AppointmentsState extends State<Appointments> {
         );
       },
     );
+  }
+
+  void searchAppointments(
+      {required BuildContext context,
+      String? startDate,
+      String? startTime,
+      String? endDate,
+      String? endTime}) {
+    DateTime? startdateTime;
+    DateTime? enddateTime;
+
+    if (startDate!.trim() != '' && startTime!.trim() != '') {
+      startdateTime = DateFormat('yyyy-MM-dd h:mm aa')
+          .parse(startDate + " " + startTime, true);
+    }
+    if (endDate!.trim() != '' && endTime!.trim() != '') {
+      enddateTime =
+          DateFormat('yyyy-MM-dd h:mm aa').parse(endDate + " " + endTime);
+    }
+
+    context.read<AppointmentCubit>().searchAppointments(
+        token: context.read<LoginBloc>().state.homeToken,
+        startDateTime: startdateTime?.toIso8601String(),
+        endDateTime: enddateTime?.toIso8601String(),
+        searchParams: context.read<AppointmentCubit>().state.searchParams);
   }
 }
 
