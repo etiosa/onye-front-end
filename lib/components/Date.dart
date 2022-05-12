@@ -13,51 +13,104 @@ class Date extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterationCubit, RegistrationState>(
-        builder: ((context, state) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text("Date"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-            child: InkWell(
-              onTap: (() {
-                datePicker(context, rangeDate, type);
-              }),
-              child: Container(
-                color: const Color.fromARGB(255, 205, 226, 226),
-                constraints: const BoxConstraints(maxWidth: 150, maxHeight: 35),
-                child: Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Center(
-                        child: Text(
-                          rangeDate == "start"
-                              ? state.registrationDate
-                              : state.registrationEndDate,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'poppins',
-                              fontSize: 15),
+
+    if(type== 'registeration'){
+      return BlocBuilder<RegisterationCubit, RegistrationState>(
+          builder: ((context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text("Date"),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+              child: InkWell(
+                onTap: (() {
+                  datePicker(context, rangeDate, type);
+                }),
+                child: Container(
+                  color: const Color.fromARGB(255, 205, 226, 226),
+                  constraints:
+                      const BoxConstraints(maxWidth: 150, maxHeight: 35),
+                  child: Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Center(
+                          child: Text(
+                            rangeDate == "start"
+                                ? state.registrationStartDate
+                                : state.registrationEndDate,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'poppins',
+                                fontSize: 15),
+                          ),
                         ),
                       ),
+                      width: 600,
+                      height: 500,
                     ),
-                    width: 600,
-                    height: 500,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    }));
+          ],
+        );
+      }));
+    }
+    else {
+       return BlocBuilder<AppointmentCubit, AppointmentState>(
+          builder: ((context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Text("Date"),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
+              child: InkWell(
+                onTap: (() {
+                  datePicker(context, rangeDate, type);
+                }),
+                child: Container(
+                  color: const Color.fromARGB(255, 205, 226, 226),
+                  constraints:
+                      const BoxConstraints(maxWidth: 150, maxHeight: 35),
+                  child: Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Center(
+                          child: Text(
+                            rangeDate == "start"
+                                ? state.fromDate
+                                : state.toDate,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'poppins',
+                                fontSize: 15),
+                          ),
+                        ),
+                      ),
+                      width: 600,
+                      height: 500,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }));
+    }
+   
   }
 }
 
@@ -79,7 +132,7 @@ Future datePicker(BuildContext context, String dateRange, String type) async {
     case 'registeration':
       if (dateRange == 'start') {
         context.read<RegisterationCubit>().setRegistrationDate(formattedDate);
-        print(context.read<RegisterationCubit>().state.registrationDate);
+        print(context.read<RegisterationCubit>().state.registrationStartDate);
       }
       if (dateRange == 'end') {
         context
@@ -89,10 +142,10 @@ Future datePicker(BuildContext context, String dateRange, String type) async {
       break;
     case 'appointment':
       if (dateRange == 'start') {
-        context.read<AppointmentCubit>().setFromTime(formattedDate);
+        context.read<AppointmentCubit>().setFromDate(formattedDate);
       }
       if (dateRange == 'end') {
-        context.read<AppointmentCubit>().setToTime(formattedDate);
+        context.read<AppointmentCubit>().setToDate(formattedDate);
       }
       break;
   }

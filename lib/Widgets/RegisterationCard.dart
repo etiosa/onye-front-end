@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../pages/registration/state/registration_cubit.dart';
 import 'Patient_appointment_registeration_Card.dart';
 
 import 'Button.dart';
@@ -108,7 +110,7 @@ class RegisterationButtons extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-              RegisterButton(
+            RegisterButton(
               addRegisteration: addRegisteration,
               type: type,
             ),
@@ -120,7 +122,7 @@ class RegisterationButtons extends StatelessWidget {
 }
 
 class RegisterButton extends StatelessWidget {
-  const RegisterButton({
+  RegisterButton({
     Key? key,
     required this.type,
     required this.addRegisteration,
@@ -131,8 +133,44 @@ class RegisterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isregister = type == 'registration';
-    return Button(
+      bool isregister = type == 'registration';
+    return BlocListener<RegisterationCubit, RegistrationState>(
+      listener: ((context, state) {
+
+          if(state.type =='registration' ){
+            isregister = true;
+
+          }
+
+      }),
+      child:BlocBuilder<RegisterationCubit, RegistrationState>(builder: (context, state) {
+      return (Button(
+            height: 50,
+            width: 130,
+            setColor: true,
+            blackColor: 152,
+            greenColor: 155,
+            redColor: 56,
+            isregsiter: isregister,
+            label: "Register",
+            onPressed: () {
+              var reponse = addRegisteration();
+              //print(reponse);
+            }));
+
+      },)
+      
+      
+     /*   (context, state) {
+      
+
+       
+      }, */
+    );
+
+    // bool isregister = type == 'registration';
+
+    /*  Button(
         height: 50,
         width: 130,
         setColor: true,
@@ -144,7 +182,7 @@ class RegisterButton extends StatelessWidget {
         onPressed: () {
           var reponse = addRegisteration();
           //print(reponse);
-        });
+        }); */
   }
 }
 

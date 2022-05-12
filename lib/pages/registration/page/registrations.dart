@@ -40,7 +40,7 @@ class _RegistrationState extends State<Registration> {
     }*/
     if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context.read<RegisterationCubit>().searchRegistrations(
-        nextPage: 0,
+          nextPage: 0,
           token: context.read<LoginBloc>().state.homeToken,
           searchParams: context.read<RegisterationCubit>().state.searchParams);
     }
@@ -219,21 +219,33 @@ class Footer extends StatelessWidget {
 }
 
 void searchDateTimeFilter(BuildContext context) {
-  var startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
-      context.read<RegisterationCubit>().state.registrationDate +
-          " " +
-          context.read<RegisterationCubit>().state.registrationTime,
-      true);
+  DateTime? startdateTime;
+  DateTime? enddateTime;
+  if (context.read<RegisterationCubit>().state.registrationStartDate.trim() !=
+          '' &&
+      context.read<RegisterationCubit>().state.registrationStartTime.trim() !=
+          '') {
+    startdateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+        context.read<RegisterationCubit>().state.registrationStartDate +
+            " " +
+            context.read<RegisterationCubit>().state.registrationStartTime,
+        true);
+  }
+  if (context.read<RegisterationCubit>().state.registrationEndDate.trim() !=
+          '' &&
+      context.read<RegisterationCubit>().state.registrationEndTime.trim() !=
+          '') {
+    enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
+        context.read<RegisterationCubit>().state.registrationEndDate +
+            " " +
+            context.read<RegisterationCubit>().state.registrationEndTime,
+        true);
+  }
 
-  var enddateTime = DateFormat('yyyy-MM-dd h:mm aa').parse(
-      context.read<RegisterationCubit>().state.registrationEndDate +
-          " " +
-          context.read<RegisterationCubit>().state.registrationEndTime,
-      true);
   context.read<RegisterationCubit>().searchRegistrations(
       token: context.read<LoginBloc>().state.homeToken,
-      startDateTime: startdateTime.toIso8601String(),
-      endDateTime: enddateTime.toIso8601String(),
+      startDateTime: startdateTime?.toIso8601String(),
+      endDateTime: enddateTime?.toIso8601String(),
       searchParams: context.read<RegisterationCubit>().state.searchParams);
 }
 
@@ -482,6 +494,7 @@ class RegisterButton extends StatelessWidget {
         TextButton(
           onPressed: () => {
             createRegistration(
+                index: index,
                 token: context.read<LoginBloc>().state.homeToken,
                 patientId: state.registrationList[index]['patient']['id'],
                 appointmentId: state.registrationList[index]['id'],
@@ -494,42 +507,6 @@ class RegisterButton extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class RegisterationList extends StatelessWidget {
-  final String type;
-  const RegisterationList({Key? key, required this.type}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-// ignore: must_be_immutable
-class AppointmentConfirmed extends StatelessWidget {
-  AppointmentConfirmed({
-    required this.appointmentList,
-    required this.selectedIndex,
-    Key? key,
-  }) : super(key: key);
-  List<dynamic> appointmentList;
-  int selectedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    if (appointmentList[selectedIndex]['type'] == 'registration') {
-      return const Icon(
-        Icons.check_circle,
-        color: Colors.green,
-      );
-    } else {
-      return const Icon(
-        Icons.check_circle,
-        color: Colors.transparent,
-      );
-    }
   }
 }
 
@@ -789,14 +766,13 @@ Future<Response?>? createClinicalNoteData(
   return response;
 }
 
-Future<String?> showDialogCFeedback(
-  BuildContext context, {
-  required String token,
-  required String patientId,
-  required String appointmentId,
-  required String reasons,
-  required String typeofVist,
-}) {
+Future<String?> showDialogCFeedback(BuildContext context,
+    {required String token,
+    required String patientId,
+    required String appointmentId,
+    required String reasons,
+    required String typeofVist,
+    required int index}) {
   return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -809,6 +785,7 @@ Future<String?> showDialogCFeedback(
               TextButton(
                 onPressed: () => {
                   createRegistration(
+                      index: index,
                       appointmentId: appointmentId,
                       token: token,
                       patientId: patientId,
@@ -825,6 +802,7 @@ Future<String?> showDialogCFeedback(
 
 Future<Response?> createRegistration(
     {required String token,
+    required int index,
     required String patientId,
     required String appointmentId,
     required String reasons,

@@ -12,21 +12,20 @@ class AppointmentRepository {
       String? startDateTime,
       String? endDateTime,
       String? token,
-      int? nextPage=0,
+      int? nextPage = 0,
       String? zoneId}) async {
-    
-    var startDateFormat = startDateTime?? startDateTime?.split('.')[0];
-    var endDateFormat = endDateTime??endDateTime?.split('.')[0];
+    var startDateFormat = startDateTime ?? startDateTime?.split('.')[0];
+    var endDateFormat = endDateTime ?? endDateTime?.split('.')[0];
+    print(startDateTime);
+    print(endDateTime);
 
     var uri = Uri.parse(root + 'api/rest/v1/appointment/search')
         .replace(queryParameters: <String, String>{
-     
-     'from': startDateFormat ?? '2020-01-01T00:00',
+      'from': startDateFormat ?? '2020-01-01T00:00',
       'to': endDateFormat ?? '2024-01-01T00:00',
       'query': searchParams!,
       'zoneId': 'Africa/Lagos',
-        "page": "$nextPage"
-
+      "page": "$nextPage"
     });
 
     http.Response response = await http.get(
@@ -64,7 +63,6 @@ class AppointmentRepository {
       return null;
     }
   }
-
 
   Future<http.Response?> createRegistration(
       {String? token,
