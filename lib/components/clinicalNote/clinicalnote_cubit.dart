@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
-import 'package:onye_front_ened/models/ClinicalNoteModel.dart';
 
 part 'clinicalnote_state.dart';
 
@@ -66,17 +65,32 @@ class ClinicalnoteCubit extends Cubit<ClinicalnoteState> {
     String? token,
     String? id,
   }) async {
-    Response? req = await _clinicalNoteRepository.getPatientClinicalNote(
-        token: token, id: id);
-    setPatientClinicalNote(req!);
-    return req;
+    emit(state.copyWith(loadclinicalnote: LOADCLINICALNOTE.loading));
+
+    try {
+      Response? req = await _clinicalNoteRepository.getPatientClinicalNote(
+          token: token, id: id);
+            
+
+      if (req?.statusCode == 200) {
+          print("  GET patient cubit ${state.loadclinicalnote}");
+        setPatientClinicalNote(req!);
+        return req;
+      }
+    } catch (err) {
+      emit(state.copyWith(loadclinicalnote: LOADCLINICALNOTE.error));
+    }
+    return null;
   }
 
   void setPatientClinicalNote(Response req) async {
     final body = jsonDecode(req.body);
 
     emit(state.copyWith(
-        text: body['text'], title: body['title'], type: body['type']));
+        loadclinicalnote: LOADCLINICALNOTE.loaded,
+        text: body['text'],
+        title: body['title'],
+        type: body['type']));
   }
 
   void setclinicalNoteID(String clinicalNoteId) {
@@ -105,9 +119,8 @@ class ClinicalnoteCubit extends Cubit<ClinicalnoteState> {
     emit(const ClinicalnoteState());
   }
 
-  clearState(){
+  clearState() {
     emit(const ClinicalnoteState());
-
   }
 }
 

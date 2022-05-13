@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
 
 class ClinicalNoteTitleField extends StatefulWidget {
-  ClinicalNoteTitleField({
+  const ClinicalNoteTitleField({
     required this.appointment,
     Key? key,
   }) : super(key: key);
-  dynamic appointment;
+ final  dynamic appointment;
 
   @override
   State<ClinicalNoteTitleField> createState() => _ClinicalNoteTitleFieldState();

@@ -7,9 +7,6 @@ class ClinicalNoteRepository {
   static const String contentType = "application/json";
   static const String accept = "application/json";
 
-
-
-
   Future<http.Response?> createClinicalNote(
       {String? token,
       String? patientId,
@@ -45,9 +42,9 @@ class ClinicalNoteRepository {
     }
   }
 
-
   Future<http.Response?> getPatientClinicalNote(
       {String? token, String? id, String? typeOfVisit}) async {
+    print("getPatientClinicalNote");
     var uri = Uri.parse(root + 'api/rest/v1/clinicalNote/$id');
 
     try {

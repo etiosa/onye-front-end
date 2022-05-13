@@ -28,7 +28,7 @@ class LoginState extends Equatable {
       this.logoutstatus = LOGOUTSTATUS.init,
       this.userId = '',
       this.specialty = '',
-      this.currentDate=0,
+      this.currentDate = 0,
       this.loginStatus = LoginStatus.init});
 
   final String userName;
@@ -104,7 +104,7 @@ class LoginState extends Equatable {
       int? currentDate,
       LoginStatus? loginStatus}) {
     return LoginState(
-      currentDate: currentDate?? this.currentDate,
+        currentDate: currentDate ?? this.currentDate,
         specialty: specialty ?? this.specialty,
         userId: userId ?? this.userId,
         acceptcontractstatus: acceptcontractstatus ?? this.acceptcontractstatus,

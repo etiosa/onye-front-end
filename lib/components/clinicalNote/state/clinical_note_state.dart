@@ -1,20 +1,14 @@
-part of 'clinicalnote_cubit.dart';
+part of 'clinical_note_bloc.dart';
 
-enum CLINCIALNOTESTATE { init, inprogress, saved, created, error }
-
-enum LOADCLINICALNOTE { init, inprogress, loaded, loading, error }
-
-class ClinicalnoteState extends Equatable {
-  const ClinicalnoteState(
+class ClinicalNoteState extends Equatable {
+  const ClinicalNoteState(
       {this.medicalPersonnelId = '',
       this.patientId = '',
       this.text = '',
       this.title = '',
       this.clinicalNoteID = '',
       this.errorMessage = '',
-      this.loadclinicalnote=LOADCLINICALNOTE.init,
       this.type = ''});
-
   final String type;
   final String patientId;
   final String medicalPersonnelId;
@@ -22,7 +16,6 @@ class ClinicalnoteState extends Equatable {
   final String text;
   final String clinicalNoteID;
   final String errorMessage;
-  final LOADCLINICALNOTE loadclinicalnote;
   @override
   List<Object> get props => [
         errorMessage,
@@ -33,18 +26,15 @@ class ClinicalnoteState extends Equatable {
         text,
         clinicalNoteID
       ];
-
-  ClinicalnoteState copyWith(
+  ClinicalNoteState copyWith(
       {String? type,
       String? patientId,
       String? medicalId,
       String? title,
       String? clinicalNoteId,
       String? errorMessage,
-      LOADCLINICALNOTE? loadclinicalnote,
       String? text}) {
-    return ClinicalnoteState(
-      loadclinicalnote: loadclinicalnote ?? this.loadclinicalnote,
+    return ClinicalNoteState(
         errorMessage: errorMessage ?? this.errorMessage,
         type: type ?? this.type,
         title: title ?? this.title,
