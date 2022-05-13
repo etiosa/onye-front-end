@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+
+import '../../pages/auth/state/login_bloc.dart';
 class ClinicalNoteField extends StatefulWidget {
   ClinicalNoteField({
     required this.appointment,
@@ -50,6 +52,7 @@ class _ClinicalNoteFieldState extends State<ClinicalNoteField> {
               ),
             ),
             TextFormField(
+              readOnly: context.read<LoginBloc>().state.role != 'DOCTOR',
               controller: _controller,
               maxLines: 7,
               onChanged: (note) {

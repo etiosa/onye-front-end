@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
 class ClinicalNoteDropDown extends StatefulWidget {
@@ -29,8 +30,6 @@ class _ClinicalNoteDropDownState extends State<ClinicalNoteDropDown> {
     // TODO: implement initState
     super.initState();
 
-  
-
     context.read<ClinicalnoteCubit>().setClinicalNoteType(dropdownValue);
   }
 
@@ -41,7 +40,6 @@ class _ClinicalNoteDropDownState extends State<ClinicalNoteDropDown> {
     return BlocListener<ClinicalnoteCubit, ClinicalnoteState>(
       listener: (context, state) {
         if (context.read<ClinicalnoteCubit>().state.type.isNotEmpty) {
-          print("set the type now");
           dropdownValue = context.read<ClinicalnoteCubit>().state.type;
         }
       },
@@ -72,14 +70,17 @@ class _ClinicalNoteDropDownState extends State<ClinicalNoteDropDown> {
                         height: 2,
                         color: Colors.deepPurpleAccent,
                       ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue!;
-                          context
-                              .read<ClinicalnoteCubit>()
-                              .setClinicalNoteType(dropdownValue);
-                        });
-                      },
+                      onChanged:
+                          context.read<LoginBloc>().state.role == 'DOCTOR'
+                              ? (String? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                    context
+                                        .read<ClinicalnoteCubit>()
+                                        .setClinicalNoteType(dropdownValue);
+                                  });
+                                }
+                              : null,
                       items: <String>[
                         'CONSULTATION_NOTE',
                         'DISCHARGE_SUMMARY_NOTE',

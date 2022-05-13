@@ -547,15 +547,12 @@ Future<String?> clinicalNotePopUp(
       builder: (BuildContext context) {
         return BlocBuilder<ClinicalnoteCubit, ClinicalnoteState>(
           builder: (context, state) {
-            print(state.loadclinicalnote);
             if (state.loadclinicalnote == LOADCLINICALNOTE.loading) {
-              //  print("Loading");
               return const AlertDialog(
                 content: Text('Loading'),
               );
             }
             if (state.loadclinicalnote == LOADCLINICALNOTE.loaded) {
-              // print("loaded");
               return AlertDialog(
                 content: const Text('Add clinical Note'),
                 actions: clinicalNoteForm(
@@ -724,8 +721,7 @@ List<Widget> clinicalNoteForm(
                     });
               }
             },
-            child: Text(
-                appointment.containsKey('clinicalNoteId') ? 'save' : 'add')),
+            child: context.read<LoginBloc>().state.role== 'DOCTOR'? Text(appointment.containsKey('clinicalNoteId') ? 'save' : 'add'): Text('')),
       ],
     ),
   ];
