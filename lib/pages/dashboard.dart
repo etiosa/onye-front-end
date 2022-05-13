@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/session/authSession.dart';
-
-import '../Widgets/Button.dart';
 import '../components/LoadedProfile .dart';
 
 class Dashboard extends StatefulWidget {
@@ -24,8 +22,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
   }
 
-  //call the appointment later after I am finished with everything else
-  //eula last
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,50 +57,4 @@ class _DashboardState extends State<Dashboard> {
 }
 
 
-class Logout extends StatelessWidget {
-  const Logout({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    ///return BlocBuilder<LoginBloc, LoginState>(
-    // buildWhen: (previous, current) =>
-    //  current.loginStatus != previous.loginStatus,
-    //  builder: (context, state) {
-    final _authSession = AuthSession();
-    _authSession.getHomeToken()!.then((value) => {
-          if (value == '')
-            {
-              // Navigator.of(context).pop(),
-              print("auth session is emopty"),
-              /*    Messages.showMessage(
-                        const Icon(
-                          IconData(0xf635, fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
-                        ),
-                        Navigator.of(context).pushNamed("/login");
-                /*         'Logout successful from dashboard'), */
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                      Navigator.of(context).pushNamed("/login");
-                    }) */
-            }
-        });
-
-    return Button(
-        height: 60,
-        width: 100,
-        label: "Logout",
-        onPressed: () async {
-          logout(context);
-        });
-    // });
-  }
-}
-
-void logout(BuildContext context) async {
-  context.read<LoginBloc>().add(LogOut());
-  WidgetsBinding.instance?.addPostFrameCallback((_) {
-    Navigator.popAndPushNamed(context, '/login');
-  });
-}
