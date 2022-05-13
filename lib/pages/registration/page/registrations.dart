@@ -537,16 +537,42 @@ Future<String?> showDialogConfirmation(
           }
       });
 
-  return showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      content: const Text('Add clinical Note'),
-      actions:
-          clinicalNoteForm(appointment, _patientName, context, '', hometoken),
-    ),
-  );
+  return clinicalNotePopUp(context, appointment, _patientName, hometoken);
 }
 
+Future<String?> clinicalNotePopUp(
+    BuildContext context, appointment, _patientName, hometoken) {
+  return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<ClinicalnoteCubit, ClinicalnoteState>(
+          builder: (context, state) {
+            print(state.loadclinicalnote);
+            if (state.loadclinicalnote == LOADCLINICALNOTE.loading) {
+              //  print("Loading");
+              return const AlertDialog(
+                content: Text('Loading'),
+              );
+            }
+            if (state.loadclinicalnote == LOADCLINICALNOTE.loaded) {
+              // print("loaded");
+              return AlertDialog(
+                content: const Text('Add clinical Note'),
+                actions: clinicalNoteForm(
+                    appointment, _patientName, context, '', hometoken),
+              );
+            }
+            return AlertDialog(
+              content: const Text('Add clinical Note'),
+              actions: clinicalNoteForm(
+                  appointment, _patientName, context, '', hometoken),
+            );
+          },
+        );
+      });
+}
+
+//TODO: changed this to a wiget of it's own
 List<Widget> clinicalNoteForm(
     appointment, _patientName, BuildContext context, String? note, homeToken) {
   return <Widget>[
@@ -563,6 +589,9 @@ List<Widget> clinicalNoteForm(
               'PROGRESS_NOTE',
             ]),
       ],
+    ),
+    const SizedBox(
+      height: 20,
     ),
     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -606,8 +635,8 @@ List<Widget> clinicalNoteForm(
       children: [
         TextButton(
           onPressed: () => {
+            context.read<ClinicalnoteCubit>().clearClinicalNoteState(),
             Navigator.pop(context, 'Cancel'),
-            context.read<ClinicalnoteCubit>().clearClinicalNoteState()
           },
           child: const Text('Cancel'),
         ),
@@ -624,7 +653,7 @@ List<Widget> clinicalNoteForm(
                 response!.then((value) => {
                       if (value != null && value.statusCode == 202)
                         {
-                          /*   Messages.showMessage(
+                           /* Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
