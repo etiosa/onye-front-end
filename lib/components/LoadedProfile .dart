@@ -19,7 +19,9 @@ class LoadedProfile extends StatelessWidget {
         Button(
           height: 40,
           label: 'Logout',
-          onPressed: () {},
+          onPressed: () async {
+            logout(context);
+          },
           width: 100,
         ),
         Padding(
@@ -86,6 +88,7 @@ class LoadedProfile extends StatelessWidget {
 
   String getDay(BuildContext context) {
     int currentTime = context.read<LoginBloc>().state.currentDate;
+    print("${currentTime}");
     if (currentTime <= 0 && currentTime <= 11) {
       return 'Good Morning';
     }
@@ -99,4 +102,11 @@ class LoadedProfile extends StatelessWidget {
     }
     return "Good Evening";
   }
+}
+
+void logout(BuildContext context) async {
+  context.read<LoginBloc>().add(LogOut());
+  WidgetsBinding.instance?.addPostFrameCallback((_) {
+    Navigator.popAndPushNamed(context, '/login');
+  });
 }
