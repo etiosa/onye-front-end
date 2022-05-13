@@ -11,7 +11,6 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-//TODO: need to replace this with Ssimmger
 class _DashboardState extends State<Dashboard> {
   final _authSession = AuthSession();
 
@@ -22,8 +21,6 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,7 +29,6 @@ class _DashboardState extends State<Dashboard> {
         body: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             if (state.loginStatus == LoginStatus.login) {
-              //LOAD the  login profile
               return const LoadedProfile();
             } else {
               return Center(
@@ -55,6 +51,3 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
-
-
-
