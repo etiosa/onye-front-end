@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 class ClinicalNoteTitleField extends StatefulWidget {
   const ClinicalNoteTitleField({
@@ -46,6 +47,7 @@ class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
         ),
         TextFormField(
           controller: _controller,
+          readOnly: context.read<LoginBloc>().state.role != 'DOCTOR',
           onChanged: (title) =>
               context.read<ClinicalnoteCubit>().setClinicalNoteTitle(title),
           decoration: const InputDecoration(

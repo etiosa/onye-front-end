@@ -721,8 +721,7 @@ List<Widget> clinicalNoteForm(
                     });
               }
             },
-            child: Text(
-                appointment.containsKey('clinicalNoteId') ? 'save' : 'add')),
+            child: context.read<LoginBloc>().state.role== 'DOCTOR'? Text(appointment.containsKey('clinicalNoteId') ? 'save' : 'add'): const SizedBox()),
       ],
     ),
   ];

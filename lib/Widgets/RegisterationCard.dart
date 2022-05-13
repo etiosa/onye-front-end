@@ -12,16 +12,16 @@ class RegisterationCard extends StatelessWidget {
   final String firstName;
   final String lastName;
   final String dateTime;
-  String middleName;
+  final String middleName;
   final String patientNumber;
   final String imageURl;
   final String type;
   final String role;
   final String appointmentId;
   final Widget? button;
-  Function clinicalNote;
-  Function addRegisteration;
-  RegisterationCard({
+  final Function clinicalNote;
+  final Function addRegisteration;
+  const RegisterationCard({
     Key? key,
     required this.firstName,
     required this.lastName,
@@ -74,9 +74,9 @@ class RegisterationCard extends StatelessWidget {
 class RegisterationButtons extends StatelessWidget {
   final String type;
   final String role;
-  Function addClincialNote;
-  Function addRegisteration;
-  RegisterationButtons({
+  final Function addClincialNote;
+  final Function addRegisteration;
+  const RegisterationButtons({
     Key? key,
     required this.type,
     required this.role,
@@ -86,7 +86,7 @@ class RegisterationButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (role == 'DOCTOR') {
+    if (role == 'DOCTOR' || role == 'NURSE') {
       return Padding(
         padding: const EdgeInsets.only(left: 40.0),
         child: Row(
@@ -133,18 +133,15 @@ class RegisterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      bool isregister = type == 'registration';
+    bool isregister = type == 'registration';
     return BlocListener<RegisterationCubit, RegistrationState>(
-      listener: ((context, state) {
-
-          if(state.type =='registration' ){
-            isregister = true;
-
-          }
-
-      }),
-      child:BlocBuilder<RegisterationCubit, RegistrationState>(builder: (context, state) {
-      return (Button(
+        listener: ((context, state) {
+      if (state.type == 'registration') {
+        isregister = true;
+      }
+    }), child: BlocBuilder<RegisterationCubit, RegistrationState>(
+      builder: (context, state) {
+        return (Button(
             height: 50,
             width: 130,
             setColor: true,
@@ -157,16 +154,15 @@ class RegisterButton extends StatelessWidget {
               var reponse = addRegisteration();
               //print(reponse);
             }));
+      },
+    )
 
-      },)
-      
-      
-     /*   (context, state) {
+        /*   (context, state) {
       
 
        
       }, */
-    );
+        );
 
     // bool isregister = type == 'registration';
 
@@ -198,9 +194,11 @@ class ClinicalNoteButton extends StatelessWidget {
   final String role;
   final Function addClincialNote;
 
+ //only show when is doctor or nuse
   @override
   Widget build(BuildContext context) {
-    if (role == 'DOCTOR' && type == 'registration') {
+    if (role == 'DOCTOR' && type == 'registration' || role == 'NURSE') {
+      print(role);
       return Button(
           height: 50,
           width: 130,
