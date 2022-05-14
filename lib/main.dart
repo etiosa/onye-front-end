@@ -42,7 +42,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   
-    //print(t1.test);
     final AuthRepository _authRepository = AuthRepository();
     final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =

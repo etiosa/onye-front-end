@@ -6,7 +6,6 @@ import 'Patient_appointment_registeration_Card.dart';
 
 import 'Button.dart';
 
-//Wil have the
 
 class RegisterationCard extends StatelessWidget {
   final String firstName;
@@ -156,29 +155,10 @@ class RegisterButton extends StatelessWidget {
             }));
       },
     )
-
-        /*   (context, state) {
-      
-
-       
-      }, */
         );
 
-    // bool isregister = type == 'registration';
 
-    /*  Button(
-        height: 50,
-        width: 130,
-        setColor: true,
-        blackColor: 152,
-        greenColor: 155,
-        redColor: 56,
-        isregsiter: isregister,
-        label: "Register",
-        onPressed: () {
-          var reponse = addRegisteration();
-          //print(reponse);
-        }); */
+  
   }
 }
 
@@ -198,7 +178,6 @@ class ClinicalNoteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (role == 'DOCTOR' && type == 'registration' || role == 'NURSE') {
-      print(role);
       return Button(
           height: 50,
           width: 130,

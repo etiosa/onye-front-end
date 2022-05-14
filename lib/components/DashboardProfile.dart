@@ -66,7 +66,6 @@ class DashboardProfile extends StatelessWidget {
                 ],
                 
               ),
-              Logout()
            
             
             ],
@@ -76,51 +75,4 @@ class DashboardProfile extends StatelessWidget {
     );
   }
 }
-class Logout extends StatelessWidget {
-  const Logout({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    ///return BlocBuilder<LoginBloc, LoginState>(
-    // buildWhen: (previous, current) =>
-    //  current.loginStatus != previous.loginStatus,
-    //  builder: (context, state) {
-    final _authSession = AuthSession();
-    _authSession.getHomeToken()!.then((value) => {
-          if (value == '')
-            {
-              // Navigator.of(context).pop(),
-              print("auth session is emopty"),
-              /*    Messages.showMessage(
-                        const Icon(
-                          IconData(0xf635, fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
-                        ),
-                        Navigator.of(context).pushNamed("/login");
-                /*         'Logout successful from dashboard'), */
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                      Navigator.of(context).pushNamed("/login");
-                    }) */
-            }
-        });
-
-    return Button(
-        height: 50,
-        width: 100,
-        label: "Logout",
-        onPressed: () async {
-          logout(context);
-        });
-    // });
-  }
-}
-
-void logout(BuildContext context) async {
-  print("logot");
-  context.read<LoginBloc>().add(LogOut());
-  WidgetsBinding.instance?.addPostFrameCallback((_) {
-    Navigator.popAndPushNamed(context, '/login');
-  });
-}
