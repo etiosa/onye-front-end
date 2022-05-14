@@ -34,7 +34,6 @@ class Contract extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-
       if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.inprogress) {
         Modal(
             context: context,
@@ -71,12 +70,11 @@ class Contract extends StatelessWidget {
             actionButtons: TextButton(
                 child: const Text('Close'),
                 onPressed: () {
-               
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                       Navigator.of(context, rootNavigator: true).pop(true);
-                       Navigator.of(context, rootNavigator: true).pop(true);
-                       Navigator.of(context).pushNamed("/dashboard");
-                  }); 
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.of(context).pushNamed("/dashboard");
+                  });
                   //navigate to the dashboard
                 }),
             modalBody: Column(
