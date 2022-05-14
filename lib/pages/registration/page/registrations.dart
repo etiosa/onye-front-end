@@ -85,12 +85,7 @@ class _RegistrationState extends State<Registration> {
       });
     }
 
-    if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
-      context.read<RegisterationCubit>().searchRegistrations(
-          nextPage: 0,
-          token: context.read<LoginBloc>().state.homeToken,
-          searchParams: context.read<RegisterationCubit>().state.searchParams);
-    }
+  
   }
 
   int? initPageSelected = 0;

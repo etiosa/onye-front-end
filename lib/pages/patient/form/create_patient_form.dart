@@ -285,12 +285,10 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
   }
 
   void setEthnicity(String? value) {
-    //print(value);
     context.read<PatientCubit>().setEthnicity(value);
   }
 
   void setContactPreference(String? value) {
-    //print(value);
     context.read<PatientCubit>().setContactPreference(value);
   }
 

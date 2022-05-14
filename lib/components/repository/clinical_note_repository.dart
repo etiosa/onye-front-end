@@ -44,9 +44,7 @@ class ClinicalNoteRepository {
 
   Future<http.Response?> getPatientClinicalNote(
       {String? token, String? id, String? typeOfVisit}) async {
-    print("getPatientClinicalNote");
     var uri = Uri.parse(root + 'api/rest/v1/clinicalNote/$id');
-
     try {
       http.Response response = await http.get(
         uri,
