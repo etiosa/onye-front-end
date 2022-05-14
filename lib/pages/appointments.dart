@@ -11,7 +11,10 @@ import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/AppointmentCard.dart';
 import '../Widgets/GenericLoadingContainer.dart';
+import '../components/util/Modal.dart';
+import '../session/authSession.dart';
 import 'appointment/state/appointment_cubit.dart';
+import 'auth/repository/auth_repositories.dart';
 
 class Appointments extends StatefulWidget {
   const Appointments({Key? key}) : super(key: key);
@@ -24,12 +27,56 @@ class _AppointmentsState extends State<Appointments> {
   @override
   void initState() {
     super.initState();
-    /*   if (context.read<LoginBloc>().state.homeToken.isEmpty) {
-      //redirect to home
+
+    final AuthSession authsession = AuthSession();
+
+    var hometoken;
+    if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
+      final AuthRepository _authRepository = AuthRepository();
+      final LoginBloc _loginbloc = LoginBloc(_authRepository);
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Navigator.of(context).pushNamed("/login");
+        //  Navigator.of(context).pop();
+        authsession.getHomeToken()?.then((value) async {
+          hometoken = value;
+          var res = _loginbloc.home(homeToken: value);
+          res.then((res) {
+            if (res.statusCode != 200) {
+              Modal(
+                  inclueAction: true,
+                  actionButtons: TextButton(
+                      child: const Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                        Navigator.of(context).pushNamed("/login");
+                      }),
+                  context: context,
+                  modalType: 'failed',
+                  modalBody: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Text('Token expires, relogin'),
+                      SizedBox(height: 20),
+                      Icon(
+                        Icons.error,
+                        color: Colors.redAccent,
+                        size: 100,
+                      )
+                    ],
+                  ),
+                  progressDetails: 'relogin');
+            } else {
+              context.read<AppointmentCubit>().searchAppointments(
+                  token: context.read<LoginBloc>().state.homeToken);
+            }
+          });
+        });
       });
-    }*/
+    }
+
     if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context
           .read<AppointmentCubit>()

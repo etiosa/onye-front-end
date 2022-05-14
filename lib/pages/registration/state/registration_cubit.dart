@@ -30,7 +30,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     //handle error here
     var body = json.decode(req!.body);
     var type = body['type'];
-    print(type);
 
     if (req.statusCode != 201) {
       emit(state.copyWith(
@@ -52,7 +51,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   }
 
   void setRegistrationTime(String? registrationTime) {
-    print("setRegistrationTime(");
     emit(state.copyWith(registrationStartTime: registrationTime!));
   }
 

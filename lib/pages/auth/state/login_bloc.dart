@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
@@ -133,7 +134,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  void home({String? homeToken}) async {
+  Future<Response> home({String? homeToken}) async {
     final http.Response? response =
         await _authRepository.home(token: homeToken);
     final body = jsonDecode(response!.body);
@@ -155,7 +156,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               statusCode: statusCode,
               loginStatus: LoginStatus.login,
               logoutstatus: LOGOUTSTATUS.init)));
+    } else {
+    
+      emit(state.copywith(statusCode: statusCode));
     }
+    return response;
   }
 
   void setLoginData(String token, body) {
@@ -164,12 +169,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         id: body['userInfo']['id'],
-        isContractAccept:body['userInfo']['acceptedEula'],
+        isContractAccept: body['userInfo']['acceptedEula'],
         userId: body['userInfo']['userId'],
-        specialty:body['userInfo']['specialty'],
+        specialty: body['userInfo']['specialty'],
         role: body['userInfo']['type'],
         currentDate: DateTime.now().hour,
-
         department: body['userInfo']['facilityInfo']['department']));
   }
 

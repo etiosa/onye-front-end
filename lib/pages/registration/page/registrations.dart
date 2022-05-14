@@ -9,6 +9,7 @@ import 'package:onye_front_ened/components/Date.dart';
 import 'package:onye_front_ened/components/Time.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
+import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
@@ -31,13 +32,59 @@ class _RegistrationState extends State<Registration> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    /*    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
-      print("token is empty? redirect");
-      //redirect to home
+
+    final AuthSession authsession = AuthSession();
+
+    var hometoken;
+    if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
+      final AuthRepository _authRepository = AuthRepository();
+      final LoginBloc _loginbloc = LoginBloc(_authRepository);
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         //  Navigator.of(context).pop();
+        authsession.getHomeToken()?.then((value) async {
+          hometoken = value;
+          var res = _loginbloc.home(homeToken: value);
+          res.then((res) {
+            if (res.statusCode != 200) {
+              Modal(
+                  inclueAction: true,
+                  actionButtons: TextButton(
+                      child: const Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                        Navigator.of(context).pushNamed("/login");
+                      }),
+                  context: context,
+                  modalType: 'failed',
+                  modalBody: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Text('Token expires, relogin'),
+                      SizedBox(height: 20),
+                      Icon(
+                        Icons.error,
+                        color: Colors.redAccent,
+                        size: 100,
+                      )
+                    ],
+                  ),
+                  progressDetails: 'relogin');
+            } else {
+              context.read<RegisterationCubit>().searchRegistrations(
+                  nextPage: 0,
+                  token: value,
+                  searchParams:
+                      context.read<RegisterationCubit>().state.searchParams);
+            }
+          });
+        });
       });
-    }*/
+    }
+
     if (context.read<LoginBloc>().state.homeToken.isNotEmpty) {
       context.read<RegisterationCubit>().searchRegistrations(
           nextPage: 0,
@@ -650,7 +697,7 @@ List<Widget> clinicalNoteForm(
                 response!.then((value) => {
                       if (value != null && value.statusCode == 202)
                         {
-                           /* Messages.showMessage(
+                          /* Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
@@ -721,7 +768,10 @@ List<Widget> clinicalNoteForm(
                     });
               }
             },
-            child: context.read<LoginBloc>().state.role== 'DOCTOR'? Text(appointment.containsKey('clinicalNoteId') ? 'save' : 'add'): const SizedBox()),
+            child: context.read<LoginBloc>().state.role == 'DOCTOR'
+                ? Text(
+                    appointment.containsKey('clinicalNoteId') ? 'save' : 'add')
+                : const SizedBox()),
       ],
     ),
   ];
