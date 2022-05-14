@@ -34,14 +34,18 @@ class _LoginPageState extends State<LoginPage> {
               listenWhen: ((previous, current) =>
                   previous.loginStatus != current.loginStatus),
               listener: (context, state) {
-                if(state.loginStatus == LoginStatus.home && state.isContractAccept){
+                print("login");
+                if (state.loginStatus == LoginStatus.home &&
+                    state.isContractAccept) {
+                  print("noe login to contract accept");
                   WidgetsBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/dashboard");
                   });
                 }
                 //if we canLogin..move to the next page.
-                if (state.loginStatus == LoginStatus.home &&!state.isContractAccept) {
+                if (state.loginStatus == LoginStatus.home &&
+                    !state.isContractAccept) {
                   context
                       .read<LoginBloc>()
                       .add(BetContract(token: state.homeToken));
