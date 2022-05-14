@@ -22,7 +22,6 @@ class _DashboardState extends State<Dashboard> {
     // TODO: implement initState
     //call the home again for now
     super.initState();
-
     final AuthSession authsession = AuthSession();
 
     var hometoken;
@@ -30,7 +29,6 @@ class _DashboardState extends State<Dashboard> {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
       WidgetsBinding.instance?.addPostFrameCallback((_) {
-        //  Navigator.of(context).pop();
         authsession.getHomeToken()?.then((value) async {
           hometoken = value;
           var res = _loginbloc.home(homeToken: value);
@@ -63,27 +61,41 @@ class _DashboardState extends State<Dashboard> {
                     ],
                   ),
                   progressDetails: 'relogin');
-            } else {}
+            }
           });
         });
       });
-    }
-
-    
+    } 
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 247, 253, 253),
-        body: BlocBuilder<LoginBloc, LoginState>(
-          builder: (context, state) {
-            if (state.loginStatus == LoginStatus.login) {
-              //LOAD the  login profile
-              return const LoadedProfile();
-            } else {
-              return Center(
+        child: Scaffold(
+            backgroundColor: const Color.fromARGB(255, 247, 253, 253),
+            body: BlocListener<LoginBloc, LoginState>(
+              listener: (context, state) {
+             
+                if (state.loginStatus == LoginStatus.init) {
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.of(context).pushNamed("/login");
+                  });
+                }
+              },
+              child: BlocBuilder<LoginBloc, LoginState>(
+                builder: ((context, state) {
+                  return const LoadedProfile();
+                }),
+              ),
+            )));
+  }
+  // return Container();
+
+}
+
+
+/*
+ return Center(
                 child: SizedBox(
                   height: 50,
                   width: 50,
@@ -94,12 +106,4 @@ class _DashboardState extends State<Dashboard> {
                         Color.fromARGB(255, 56, 155, 152)),
                   ),
                 ),
-              );
-            }
-          },
-          // return Container();
-        ),
-      ),
-    );
-  }
-}
+              ); */
