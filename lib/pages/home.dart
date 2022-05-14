@@ -14,29 +14,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //. Note: hours are specified between 0 and 23, as in a 24-hour
-    print(DateTime.now().toLocal().hour);
-    print(DateTime.now().toLocal().minute);
-    var currentTime = DateTime.now().toLocal().hour;
-    print(currentTime);
-    if (currentTime <= 0 && currentTime <= 11) {
-      print('Morning');
-    }
-
-    if (currentTime >= 12 && currentTime <= 18) {
-      print("aftertNoon");
-    }
-
-    if (currentTime > 18 && currentTime <= 24) {
-      print("evening");
-    }
-    //if the hour is between 00:00 abd 18
-    //if  between 12am and 11:59pm morning
-    //if 1s between 12pm - 6pm ;; Afternoon
-    //if 6pm and more  is evening
-
-    //print(DateTime.now().compareTo());
-  }
+  
+  
+}
 
   @override
   Widget build(BuildContext context) {

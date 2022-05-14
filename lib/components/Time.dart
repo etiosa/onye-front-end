@@ -97,13 +97,10 @@ Future dateTimePicker(
   switch (type) {
     case 'registeration':
       if (timedateRange == 'end') {
-        print("end");
         context.read<RegisterationCubit>().setRegistrationEndTime(formatTime);
       }
       if (timedateRange == 'start') {
         context.read<RegisterationCubit>().setRegistrationTime(formatTime);
-        print("start");
-        print(context.read<RegisterationCubit>().state.registrationStartTime);
       }
       break;
     case 'appointment':
