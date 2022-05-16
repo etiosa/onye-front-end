@@ -84,8 +84,6 @@ class _RegistrationState extends State<Registration> {
         });
       });
     }
-
-  
   }
 
   int? initPageSelected = 0;
@@ -578,7 +576,7 @@ Future<String?> showDialogConfirmation(
                 .getPatientClinicalNote(id: clincialNoteid, token: hometoken)
           }
       });
-
+//to here is the issue
   return clinicalNotePopUp(context, appointment, _patientName, hometoken);
 }
 
@@ -614,6 +612,8 @@ Future<String?> clinicalNotePopUp(
 //TODO: changed this to a wiget of it's own
 List<Widget> clinicalNoteForm(
     appointment, _patientName, BuildContext context, String? note, homeToken) {
+  final AuthSession authsession = AuthSession();
+
   return <Widget>[
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -685,82 +685,91 @@ List<Widget> clinicalNoteForm(
         TextButton(
             onPressed: () {
               if (appointment.containsKey('clinicalNoteId')) {
-                var response = updateClinicalNoteData(
-                    clinicalNoteId: appointment['clinicalNoteId'],
-                    homeToken: homeToken,
-                    context: context);
-                response!.then((value) => {
-                      if (value != null && value.statusCode == 202)
-                        {
-                          /* Messages.showMessage(
+                authsession.getHomeToken()?.then((value) {
+                  if (appointment.containsKey('clinicalNoteId')) {
+                    var response = updateClinicalNoteData(
+                        clinicalNoteId: appointment['clinicalNoteId'],
+                        homeToken: value,
+                        context: context);
+                    response!.then((value) => {
+                          if (value != null && value.statusCode == 202)
+                            {
+                              /* Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
                               ),
                               'Clinical Note updated'), */
-                          //clearState after update
-                          context
-                              .read<ClinicalnoteCubit>()
-                              .clearClinicalNoteState(),
-                          context
-                              .read<ClinicalnoteCubit>()
-                              .getPatientClinicalNote(
-                                  token: homeToken,
-                                  id: appointment['clinicalNoteId']),
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: ((context) => const Registration())),
-                              ModalRoute.withName('/dashboard'))
-                        }
-                      else if (value != null && value.statusCode == 400)
-                        {
-                          /*  Messages.showMessage(
+                              //clearState after update
+                              context
+                                  .read<ClinicalnoteCubit>()
+                                  .clearClinicalNoteState(),
+                              context
+                                  .read<ClinicalnoteCubit>()
+                                  .getPatientClinicalNote(
+                                      token: homeToken,
+                                      id: appointment['clinicalNoteId']),
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const Registration())),
+                                  ModalRoute.withName('/dashboard'))
+                            }
+                          else if (value != null && value.statusCode == 400)
+                            {
+                              /*  Messages.showMessage(
                               const Icon(
                                 IconData(0xe237, fontFamily: 'MaterialIcons'),
                                 color: Colors.red,
                               ),
                               'Could not update Clinical Note'), */
-                        }
-                    });
-              } else {
-                var response = createClinicalNoteData(
-                    homeToken: homeToken,
-                    registerationId: appointment['id'],
-                    medicalPersonnelId: context.read<LoginBloc>().state.id,
-                    note: context.read<ClinicalnoteCubit>().state.text,
-                    noteTitle: context.read<ClinicalnoteCubit>().state.title,
-                    clinicalNoteType:
-                        context.read<ClinicalnoteCubit>().state.type,
-                    context: context,
-                    patientId: appointment['patient']['id']);
+                            }
+                        });
+                  } 
+                });
+              }
+              else {
+                authsession.getHomeToken()?.then((value) {
+                  var response = createClinicalNoteData(
+                      homeToken: value,
+                      registerationId: appointment['id'],
+                      medicalPersonnelId: context.read<LoginBloc>().state.id,
+                      note: context.read<ClinicalnoteCubit>().state.text,
+                      noteTitle: context.read<ClinicalnoteCubit>().state.title,
+                      clinicalNoteType:
+                          context.read<ClinicalnoteCubit>().state.type,
+                      context: context,
+                      patientId: appointment['patient']['id']);
 
-                response!.then((value) => {
-                      if (value != null && value.statusCode == 201)
-                        {
-                          context
-                              .read<ClinicalnoteCubit>()
-                              .clearClinicalNoteState(),
-                          /*      Messages.showMessage(
+                  response!.then((value) => {
+                        if (value != null && value.statusCode == 201)
+                          {
+                            context
+                                .read<ClinicalnoteCubit>()
+                                .clearClinicalNoteState(),
+                            /*      Messages.showMessage(
                               const Icon(
                                 IconData(0xf635, fontFamily: 'MaterialIcons'),
                                 color: Colors.green,
                               ),
                               'Clinical Note created'), */
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: ((context) => const Registration())),
-                              ModalRoute.withName('/dashboard'))
-                        }
-                      else if (value != null && value.statusCode == 400)
-                        {
-                          /*  Messages.showMessage(
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: ((context) =>
+                                        const Registration())),
+                                ModalRoute.withName('/dashboard'))
+                          }
+                        else if (value != null && value.statusCode == 400)
+                          {
+                            /*  Messages.showMessage(
                               const Icon(
                                 IconData(0xe237, fontFamily: 'MaterialIcons'),
                                 color: Colors.red,
                               ),
                               'Could not create Clinical Note'), */
-                        }
-                    });
+                          }
+                      });
+                });
               }
             },
             child: context.read<LoginBloc>().state.role == 'DOCTOR'
@@ -770,6 +779,14 @@ List<Widget> clinicalNoteForm(
       ],
     ),
   ];
+}
+
+String getToken() {
+  final AuthSession authsession = AuthSession();
+  authsession.getHomeToken()?.then((value) {
+    return value;
+  });
+  return '';
 }
 
 Future dateTimePicker(BuildContext context, String? timedateRange) async {
@@ -814,6 +831,7 @@ Future<Response?>? updateClinicalNoteData(
     {required BuildContext context,
     required String homeToken,
     required String clinicalNoteId}) {
+  print("updated clinical note");
   var response = context.read<ClinicalnoteCubit>().updateClinicalNote(
         token: homeToken,
         id: clinicalNoteId,
