@@ -74,6 +74,7 @@ class _RegistrationState extends State<Registration> {
                   ),
                   progressDetails: 'relogin');
             } else {
+              //TODO: call home again; Saved in the session later
               context.read<RegisterationCubit>().searchRegistrations(
                   nextPage: 0,
                   token: value,
@@ -725,10 +726,9 @@ List<Widget> clinicalNoteForm(
                               'Could not update Clinical Note'), */
                             }
                         });
-                  } 
+                  }
                 });
-              }
-              else {
+              } else {
                 authsession.getHomeToken()?.then((value) {
                   var response = createClinicalNoteData(
                       homeToken: value,
