@@ -12,14 +12,14 @@ class DoctorRepository {
     if (searchParams != null && searchParams.isNotEmpty) {
       uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
           .replace(queryParameters: <String, String>{
-        /*  'type': 'DOCTOR', */
+          'type': 'DOCTOR', 
         'query': searchParams,
         "page": "$nextPage"
       });
     } else {
       uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
           .replace(queryParameters: <String, String>{
-        /*      'type': 'DOCTOR', */
+              'type': 'DOCTOR', 
         "page": "$nextPage"
       });
     }
