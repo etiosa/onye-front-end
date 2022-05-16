@@ -6,10 +6,20 @@ import 'package:onye_front_ened/components/util/MobileDashboardMenu.dart';
 
 import '../pages/auth/state/login_bloc.dart';
 
-class LoadedProfile extends StatelessWidget {
+class LoadedProfile extends StatefulWidget {
   const LoadedProfile({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<LoadedProfile> createState() => _LoadedProfileState();
+}
+
+class _LoadedProfileState extends State<LoadedProfile> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +97,8 @@ class LoadedProfile extends StatelessWidget {
   }
 
   String getDay(BuildContext context) {
-    int currentTime = context.read<LoginBloc>().state.currentDate;
-    if (currentTime <= 0 && currentTime <= 11) {
+    int currentTime = DateTime.now().hour;
+    if (currentTime >= 0 && currentTime <= 11) {
       return 'Good Morning';
     }
 
@@ -96,7 +106,7 @@ class LoadedProfile extends StatelessWidget {
       return "Good Afternoon";
     }
 
-    if (currentTime > 18 && currentTime <= 24) {
+    if (currentTime >=18 && currentTime <= 24) {
       return "Good Evening";
     }
     return "Good Evening";

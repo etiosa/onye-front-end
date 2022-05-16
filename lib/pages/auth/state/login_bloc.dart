@@ -157,10 +157,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               loginStatus: LoginStatus.login,
               logoutstatus: LOGOUTSTATUS.init)));
     } else {
-    
       emit(state.copywith(statusCode: statusCode));
     }
     return response;
+  }
+
+  void setCurrentDate() {
+    emit(state.copywith(currentDate:DateTime.now().hour));
+
   }
 
   void setLoginData(String token, body) {
