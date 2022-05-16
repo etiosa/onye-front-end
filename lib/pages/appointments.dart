@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -69,8 +71,18 @@ class _AppointmentsState extends State<Appointments> {
                   ),
                   progressDetails: 'relogin');
             } else {
-              context.read<AppointmentCubit>().searchAppointments(
-                  token: context.read<LoginBloc>().state.homeToken);
+              final AuthSession authsession = AuthSession();
+                 authsession.getHomeToken()?.then((value) async {
+                _loginbloc.home(homeToken: value).then((res) {
+                  context
+                      .read<LoginBloc>()
+                      .setLoginData(value, jsonDecode(res.body));
+                });
+                context.read<AppointmentCubit>().searchAppointments(
+                    token: value);
+              });
+              
+             
             }
           });
         });
