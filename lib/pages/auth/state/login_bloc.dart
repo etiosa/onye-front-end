@@ -163,11 +163,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void setCurrentDate() {
-    emit(state.copywith(currentDate:DateTime.now().hour));
-
+    emit(state.copywith(currentDate: DateTime.now().hour));
   }
 
   void setLoginData(String token, body) {
+    print("setLoginData");
     return emit(state.copywith(
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
@@ -179,6 +179,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         role: body['userInfo']['type'],
         currentDate: DateTime.now().hour,
         department: body['userInfo']['facilityInfo']['department']));
+
   }
 
   void _logout(LogOut event, Emitter<LoginState> emit) async {

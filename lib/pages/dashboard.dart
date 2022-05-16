@@ -64,21 +64,29 @@ class _DashboardState extends State<Dashboard> {
           });
         });
       });
-    } 
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+        final AuthSession authsession = AuthSession();
+
     return SafeArea(
         child: Scaffold(
             backgroundColor: const Color.fromARGB(255, 247, 253, 253),
             body: BlocListener<LoginBloc, LoginState>(
               listener: (context, state) {
-             
+                authsession.getHomeToken()?.then((value) async {
+                      if(value.isEmpty){
+                        WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      Navigator.of(context).pushNamed("/login");
+                    });
+                      }
+
+                });
+
                 if (state.loginStatus == LoginStatus.init) {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context).pushNamed("/login");
-                  });
+                  
                 }
               },
               child: BlocBuilder<LoginBloc, LoginState>(
