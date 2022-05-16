@@ -34,10 +34,8 @@ class _LoginPageState extends State<LoginPage> {
               listenWhen: ((previous, current) =>
                   previous.loginStatus != current.loginStatus),
               listener: (context, state) {
-                print("login");
                 if (state.loginStatus == LoginStatus.home &&
                     state.isContractAccept) {
-                  print("noe login to contract accept");
                   WidgetsBinding.instance?.addPostFrameCallback((_) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/dashboard");

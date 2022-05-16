@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -74,12 +76,22 @@ class _RegistrationState extends State<Registration> {
                   ),
                   progressDetails: 'relogin');
             } else {
-              //TODO: call home again; Saved in the session later
-              context.read<RegisterationCubit>().searchRegistrations(
-                  nextPage: 0,
-                  token: value,
-                  searchParams:
-                      context.read<RegisterationCubit>().state.searchParams);
+              final AuthSession authsession = AuthSession();
+
+              authsession.getHomeToken()?.then((value) async {
+                _loginbloc.home(homeToken: value).then((res) {
+                  context
+                      .read<LoginBloc>()
+                      .setLoginData(value, jsonDecode(res.body));
+                });
+
+                context.read<RegisterationCubit>().searchRegistrations(
+                    nextPage: 0,
+                    token: value,
+                    searchParams:
+                        context.read<RegisterationCubit>().state.searchParams);
+              });
+              print(context.read<LoginBloc>().state);
             }
           });
         });
