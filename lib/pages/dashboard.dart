@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
@@ -23,13 +25,11 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     final AuthSession authsession = AuthSession();
 
-    var hometoken;
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
       WidgetsBinding.instance?.addPostFrameCallback((_) {
         authsession.getHomeToken()?.then((value) async {
-          hometoken = value;
           var res = _loginbloc.home(homeToken: value);
           res.then((res) {
             if (res.statusCode != 200) {
@@ -60,7 +60,7 @@ class _DashboardState extends State<Dashboard> {
                     ],
                   ),
                   progressDetails: 'relogin');
-            }
+            } 
           });
         });
       });
@@ -69,7 +69,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-        final AuthSession authsession = AuthSession();
+    final AuthSession authsession = AuthSession();
 
     return SafeArea(
         child: Scaffold(
@@ -77,17 +77,14 @@ class _DashboardState extends State<Dashboard> {
             body: BlocListener<LoginBloc, LoginState>(
               listener: (context, state) {
                 authsession.getHomeToken()?.then((value) async {
-                      if(value.isEmpty){
-                        WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  if (value.isEmpty) {
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
                       Navigator.of(context).pushNamed("/login");
                     });
-                      }
-
+                  }
                 });
 
-                if (state.loginStatus == LoginStatus.init) {
-                  
-                }
+                if (state.loginStatus == LoginStatus.init) {}
               },
               child: BlocBuilder<LoginBloc, LoginState>(
                 builder: ((context, state) {
