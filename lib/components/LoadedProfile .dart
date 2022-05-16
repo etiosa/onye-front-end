@@ -106,7 +106,7 @@ class _LoadedProfileState extends State<LoadedProfile> {
       return "Good Afternoon";
     }
 
-    if (currentTime > 18 && currentTime <= 24) {
+    if (currentTime >=18 && currentTime <= 24) {
       return "Good Evening";
     }
     return "Good Evening";
