@@ -6,7 +6,6 @@ import 'Patient_appointment_registeration_Card.dart';
 
 import 'Button.dart';
 
-
 class RegisterationCard extends StatelessWidget {
   final String firstName;
   final String lastName;
@@ -121,7 +120,7 @@ class RegisterationButtons extends StatelessWidget {
 }
 
 class RegisterButton extends StatelessWidget {
-  RegisterButton({
+  const RegisterButton({
     Key? key,
     required this.type,
     required this.addRegisteration,
@@ -136,11 +135,13 @@ class RegisterButton extends StatelessWidget {
     return BlocListener<RegisterationCubit, RegistrationState>(
         listener: ((context, state) {
       if (state.type == 'registration') {
+        print("state.type has changed");
         isregister = true;
       }
     }), child: BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
-        return (Button(
+        return (
+          Button(
             height: 50,
             width: 130,
             setColor: true,
@@ -154,11 +155,7 @@ class RegisterButton extends StatelessWidget {
               //print(reponse);
             }));
       },
-    )
-        );
-
-
-  
+    ));
   }
 }
 
@@ -174,7 +171,7 @@ class ClinicalNoteButton extends StatelessWidget {
   final String role;
   final Function addClincialNote;
 
- //only show when is doctor or nuse
+  //only show when is doctor or nuse
   @override
   Widget build(BuildContext context) {
     if (role == 'DOCTOR' && type == 'registration' || role == 'NURSE') {

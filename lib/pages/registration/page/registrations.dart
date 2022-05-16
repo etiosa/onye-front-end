@@ -91,7 +91,6 @@ class _RegistrationState extends State<Registration> {
                     searchParams:
                         context.read<RegisterationCubit>().state.searchParams);
               });
-              print(context.read<LoginBloc>().state);
             }
           });
         });
@@ -383,6 +382,8 @@ class _AppointmentState extends State<Appointment> {
               progressDetails: 'Registering In Progress');
         }
         if (state.registerState == REGISTRATIONSTATE.sucessful) {
+          final AuthRepository _authRepository = AuthRepository();
+          final LoginBloc _loginbloc = LoginBloc(_authRepository);
           Modal(
               context: context,
               modalType: '',
@@ -393,6 +394,24 @@ class _AppointmentState extends State<Appointment> {
                     Navigator.of(context, rootNavigator: true).pop(true);
                     Navigator.of(context, rootNavigator: true).pop(true);
                     context.read<RegisterationCubit>().setRegisterState();
+
+                    final AuthSession authsession = AuthSession();
+
+                    authsession.getHomeToken()?.then((value) async {
+                      _loginbloc.home(homeToken: value).then((res) {
+                        context
+                            .read<LoginBloc>()
+                            .setLoginData(value, jsonDecode(res.body));
+                      });
+
+                      context.read<RegisterationCubit>().searchRegistrations(
+                          nextPage: 0,
+                          token: value,
+                          searchParams: context
+                              .read<RegisterationCubit>()
+                              .state
+                              .searchParams);
+                    });
                   }),
               modalBody: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -553,16 +572,35 @@ class RegisterButton extends StatelessWidget {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => {
-            createRegistration(
-                index: index,
-                token: context.read<LoginBloc>().state.homeToken,
-                patientId: state.registrationList[index]['patient']['id'],
-                appointmentId: state.registrationList[index]['id'],
-                reasons: state.registrationList[index]['reasonForVisit'],
-                typeofVist: state.registrationList[index]['typeOfVisit'],
-                context: context),
-            Navigator.pop(context, false)
+          onPressed: () {
+            final AuthSession authsession = AuthSession();
+            final AuthRepository _authRepository = AuthRepository();
+            final LoginBloc _loginbloc = LoginBloc(_authRepository);
+         
+              authsession.getHomeToken()?.then((value) async {
+                _loginbloc.home(homeToken: value).then((res) {
+                  context
+                      .read<LoginBloc>()
+                      .setLoginData(value, jsonDecode(res.body));
+                });
+
+                  createRegistration(
+                    index: index,
+                    token: value,
+                    patientId: state.registrationList[index]['patient']['id'],
+                    appointmentId: state.registrationList[index]['id'],
+                    reasons: state.registrationList[index]['reasonForVisit'],
+                    typeofVist: state.registrationList[index]['typeOfVisit'],
+                    context: context);
+              });
+            Navigator.pop(context, false);
+          
+             
+          
+      
+
+          
+           
           },
           child: const Text('OK'),
         ),
@@ -843,7 +881,6 @@ Future<Response?>? updateClinicalNoteData(
     {required BuildContext context,
     required String homeToken,
     required String clinicalNoteId}) {
-  print("updated clinical note");
   var response = context.read<ClinicalnoteCubit>().updateClinicalNote(
         token: homeToken,
         id: clinicalNoteId,

@@ -33,7 +33,7 @@ class Button extends StatelessWidget {
     this.greenColor = 155,
     this.blackColor = 152,
     this.setColor = false,
-    this.isregsiter=false,
+    this.isregsiter = false,
     Key? key,
   }) : super(key: key) {
     if (setColor) {
@@ -45,6 +45,7 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
@@ -58,16 +59,15 @@ class Button extends StatelessWidget {
               left: paddingLeft,
               right: paddingLeft),
           child: ElevatedButton(
-            autofocus: true,
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor:  MaterialStateProperty.all(
-                 isregsiter ==true?Colors.grey[700] : Color.fromARGB(255, redColor, greenColor, blackColor)),
-            ),
-            child: Text(label),
-            onPressed:  isregsiter ==true?null: ()=>onPressed()
-              
-          ),
+              autofocus: true,
+              style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(isregsiter == true
+                    ? Colors.grey[700]
+                    : Color.fromARGB(255, redColor, greenColor, blackColor)),
+              ),
+              child: Text(label),
+              onPressed: isregsiter == true ? null : () => onPressed()),
         ),
       ),
     );

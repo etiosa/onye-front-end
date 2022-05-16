@@ -92,49 +92,61 @@ class AppointmentButtons extends StatelessWidget {
             redColor: 222,
             label: "Cancel",
             onPressed: () {
-              //TODO: update here blocListner
               Modal(
                   context: context,
                   modalType: 'Unkown',
                   inclueAction: true,
-                  actionButtons: TextButton(
-                      onPressed: () {
-                        //TODO:  move this it's own method
-                        var response = context
-                            .read<AppointmentCubit>()
-                            .cancelAppointment(
-                              id: appointmentId,
-                              token: context.read<LoginBloc>().state.homeToken,
-                            );
+                  actionButtons: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: const Text("close"),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            //TODO:  move this it's own method
+                            var response = context
+                                .read<AppointmentCubit>()
+                                .cancelAppointment(
+                                  id: appointmentId,
+                                  token:
+                                      context.read<LoginBloc>().state.homeToken,
+                                );
 
-                        response.then((value) => {
-                              if (value != null && value.statusCode == 200)
-                                {
-                                  /*    Messages.showMessage(
-                            const Icon(
-                              IconData(0xf635, fontFamily: 'MaterialIcons'),
-                              color: Colors.green,
-                            ),
-                            'Appointment cancelled'), */
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              const Appointments())),
-                                      ModalRoute.withName('/dashboard'))
-                                }
-                              else if (value != null && value.statusCode == 400)
-                                {
-                                  /*  Messages.showMessage(
-                            const Icon(
-                              IconData(0xe237, fontFamily: 'MaterialIcons'),
-                              color: Colors.red,
-                            ),
-                            'Could not cancel appointment'), */
-                                }
-                            });
-                        Navigator.pop(context, false);
-                      },
-                      child: const Text("Cancel Appointment")),
+                            response.then((value) => {
+                                  if (value != null && value.statusCode == 200)
+                                    {
+                                      /*    Messages.showMessage(
+                                const Icon(
+                                  IconData(0xf635, fontFamily: 'MaterialIcons'),
+                                  color: Colors.green,
+                                ),
+                                'Appointment cancelled'), */
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  const Appointments())),
+                                          ModalRoute.withName('/dashboard'))
+                                    }
+                                  else if (value != null &&
+                                      value.statusCode == 400)
+                                    {
+                                      /*  Messages.showMessage(
+                                const Icon(
+                                  IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                  color: Colors.red,
+                                ),
+                                'Could not cancel appointment'), */
+                                    }
+                                });
+                            Navigator.pop(context, false);
+                          },
+                          child: const Text("Cancel Appointment")),
+                    ],
+                  ),
                   modalBody:
                       const Text('Do you want to cancel the appointment?'),
                   progressDetails: 'Do you want to cancel the appointment?');
