@@ -90,7 +90,6 @@ class _DashboardState extends State<Dashboard> {
               },
               child: BlocBuilder<LoginBloc, LoginState>(
                 builder: ((context, state) {
-                  print("coming from dashboard");
                   return const LoadedProfile();
                 }),
               ),

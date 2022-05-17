@@ -151,7 +151,6 @@ class RegisterButton extends StatelessWidget {
             label: "Register",
             onPressed: () {
               var reponse = addRegisteration();
-              //print(reponse);
             }));
       },
     ));
