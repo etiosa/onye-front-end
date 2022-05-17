@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               listenWhen: ((previous, current) =>
                   previous.loginStatus != current.loginStatus),
               listener: (context, state) {
+                print(state);
                 if (state.loginStatus == LoginStatus.home &&
                     state.isContractAccept) {
                   WidgetsBinding.instance?.addPostFrameCallback((_) {

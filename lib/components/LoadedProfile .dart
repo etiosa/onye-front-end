@@ -34,7 +34,8 @@ class _LoadedProfileState extends State<LoadedProfile> {
       });
     }
   }
-
+//Profile bloc
+//
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(builder: ((context, state) {
