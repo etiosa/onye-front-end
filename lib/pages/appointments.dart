@@ -323,7 +323,7 @@ class _AppointmentState extends State<Appointment> {
           return Column(
             children: [
               for (var index = 0;
-                  index < state.appointmentList.length - 1;
+                  index <=state.appointmentList.length - 1;
                   index++)
                 AppointmentList(index: index, state: state)
             ],

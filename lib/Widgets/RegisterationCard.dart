@@ -140,6 +140,7 @@ class RegisterButton extends StatelessWidget {
       }
     }), child: BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
+        print(" isregister ${isregister}");
         return (
           Button(
             height: 50,

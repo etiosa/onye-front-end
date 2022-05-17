@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../pages/auth/state/login_bloc.dart';
 
-class Button extends StatelessWidget {
+class Button extends StatefulWidget {
   String label;
   Function onPressed;
   double height;
@@ -44,30 +44,46 @@ class Button extends StatelessWidget {
   }
 
   @override
+  State<Button> createState() => _ButtonState();
+
+  bool isregister = false;
+}
+
+class _ButtonState extends State<Button> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("called");
+  }
+
+  @override
   Widget build(BuildContext context) {
-   
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
-        width: width,
-        height: height,
+        width: widget.width,
+        height: widget.height,
         padding: const EdgeInsets.all(2),
         child: Padding(
           padding: EdgeInsets.only(
-              bottom: paddingBottom,
-              top: paddingTop,
-              left: paddingLeft,
-              right: paddingLeft),
+              bottom: widget.paddingBottom,
+              top: widget.paddingTop,
+              left: widget.paddingLeft,
+              right: widget.paddingLeft),
           child: ElevatedButton(
               autofocus: true,
               style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(isregsiter == true
-                    ? Colors.grey[700]
-                    : Color.fromARGB(255, redColor, greenColor, blackColor)),
+                backgroundColor: MaterialStateProperty.all(
+                    widget.isregsiter == true
+                        ? Colors.grey[700]
+                        : Color.fromARGB(255, widget.redColor,
+                            widget.greenColor, widget.blackColor)),
               ),
-              child: Text(label),
-              onPressed: isregsiter == true ? null : () => onPressed()),
+              child: Text(widget.label),
+              onPressed:
+                  widget.isregsiter == true ? null : () => widget.onPressed()),
         ),
       ),
     );
