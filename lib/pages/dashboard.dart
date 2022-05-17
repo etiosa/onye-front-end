@@ -67,7 +67,8 @@ class _DashboardState extends State<Dashboard> {
       });
     }
   }
-
+//TODO: have it's own bloc
+//it will 
   @override
   Widget build(BuildContext context) {
     final AuthSession authsession = AuthSession();
@@ -98,17 +99,3 @@ class _DashboardState extends State<Dashboard> {
 
 }
 
-
-/*
- return Center(
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: Colors.grey[500],
-                    strokeWidth: 4,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                        Color.fromARGB(255, 56, 155, 152)),
-                  ),
-                ),
-              ); */
