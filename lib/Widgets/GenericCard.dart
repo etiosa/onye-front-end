@@ -35,8 +35,8 @@ class GenericCard extends StatelessWidget {
         }),
         child: Container(
             height: 178,
-            width:
-                MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
+            width:600,
+               // MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
             color: const Color.fromARGB(255, 236, 246, 246),
             child: Column(
               children: [
@@ -44,7 +44,7 @@ class GenericCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+                    children:  [
                       Text(
                         '$firstName $middleName $lastName',
                         style: const TextStyle(
@@ -52,7 +52,7 @@ class GenericCard extends StatelessWidget {
                             fontSize: 20,
                             fontFamily: 'poppins'),
                       ),
-                      const CircleAvatar(
+                    const   CircleAvatar(
                           backgroundColor: Colors.amberAccent, maxRadius: 40)
                     ],
                   ),
@@ -88,13 +88,13 @@ class GenericCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 60.0),
                       child: Row(
-                        children: [
-                          const Icon(Icons.calendar_month,
+                        children:  [
+                         const  Icon(Icons.calendar_month,
                               color: Color.fromARGB(255, 74, 73, 73)),
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(dateOfBirth!,
+                          Text( dateOfBirth!= null?dateOfBirth!: '',
                               style: const TextStyle(
                                   fontFamily: 'poppins',
                                   fontSize: 15,
@@ -102,10 +102,10 @@ class GenericCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 50.0),
+                   Padding(
+                      padding: EdgeInsets.only(right: 50.0),
                       child: Text(patientNumber!,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: 'poppins',
                               fontSize: 15,
                               color: Color.fromARGB(255, 74, 73, 73))),

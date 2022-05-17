@@ -60,14 +60,15 @@ class _DashboardState extends State<Dashboard> {
                     ],
                   ),
                   progressDetails: 'relogin');
-            } 
+            }
           });
         });
       });
     }
   }
+
 //TODO: have it's own bloc
-//it will 
+//it will
   @override
   Widget build(BuildContext context) {
     final AuthSession authsession = AuthSession();
@@ -89,6 +90,7 @@ class _DashboardState extends State<Dashboard> {
               },
               child: BlocBuilder<LoginBloc, LoginState>(
                 builder: ((context, state) {
+                  print("coming from dashboard");
                   return const LoadedProfile();
                 }),
               ),
