@@ -135,12 +135,10 @@ class RegisterButton extends StatelessWidget {
     return BlocListener<RegisterationCubit, RegistrationState>(
         listener: ((context, state) {
       if (state.type == 'registration') {
-        print("state.type has changed");
         isregister = true;
       }
     }), child: BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
-        print(" isregister ${isregister}");
         return (
           Button(
             height: 50,

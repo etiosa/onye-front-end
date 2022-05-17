@@ -167,7 +167,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void setLoginData(String token, body) {
-    print("setLoginData");
     return emit(state.copywith(
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
@@ -207,7 +206,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
     } else {
-      print("Unable to logout");
     }
   }
 

@@ -10,7 +10,6 @@ class ScreenNavigator extends StatefulWidget {
 }
 
 void _nextPageNerxt() {
-  print('I was click');
   //Nav
 }
 

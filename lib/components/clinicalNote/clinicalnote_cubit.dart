@@ -73,7 +73,6 @@ class ClinicalnoteCubit extends Cubit<ClinicalnoteState> {
             
 
       if (req?.statusCode == 200) {
-          print("  GET patient cubit ${state.loadclinicalnote}");
         setPatientClinicalNote(req!);
         return req;
       }

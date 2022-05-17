@@ -143,7 +143,6 @@ class RegisterationButtons extends StatelessWidget {
                 label: "Register",
                 onPressed: () {
                   // var reponse = addRegisteration();
-                  //print(reponse);
                 }),
             Button(
                 height: 50,
