@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+import 'package:onye_front_ened/components/clinicalNote/clinical_note_cubit.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
@@ -15,7 +15,7 @@ import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart
 import 'package:onye_front_ened/session/authSession.dart';
 import "package:http/http.dart" as http;
 
-import '../../patient/repository/patientRepository.dart';
+import '../../patient/repository/patient_repository.dart';
 
 part 'login_state.dart';
 part "login_event.dart";
@@ -167,7 +167,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void setLoginData(String token, body) {
-    print("setLoginData");
     return emit(state.copywith(
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
@@ -207,7 +206,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
     } else {
-      print("Unable to logout");
     }
   }
 

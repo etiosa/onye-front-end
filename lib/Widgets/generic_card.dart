@@ -34,16 +34,16 @@ class GenericCard extends StatelessWidget {
           onTap!();
         }),
         child: Container(
-            height: 178,
+            height: 140,
             width:600,
                // MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
             color: const Color.fromARGB(255, 236, 246, 246),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10, left: 50),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children:  [
                       Text(
                         '$firstName $middleName $lastName',
@@ -52,8 +52,8 @@ class GenericCard extends StatelessWidget {
                             fontSize: 20,
                             fontFamily: 'poppins'),
                       ),
-                    const   CircleAvatar(
-                          backgroundColor: Colors.amberAccent, maxRadius: 40)
+                   /*  const   CircleAvatar(
+                          backgroundColor: Colors.amberAccent, maxRadius: 40) */
                     ],
                   ),
                 ),
@@ -103,9 +103,9 @@ class GenericCard extends StatelessWidget {
                       ),
                     ),
                    Padding(
-                      padding: EdgeInsets.only(right: 50.0),
+                      padding: const EdgeInsets.only(right: 50.0),
                       child: Text(patientNumber!,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'poppins',
                               fontSize: 15,
                               color: Color.fromARGB(255, 74, 73, 73))),

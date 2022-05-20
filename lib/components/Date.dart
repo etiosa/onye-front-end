@@ -132,7 +132,6 @@ Future datePicker(BuildContext context, String dateRange, String type) async {
     case 'registeration':
       if (dateRange == 'start') {
         context.read<RegisterationCubit>().setRegistrationDate(formattedDate);
-        print(context.read<RegisterationCubit>().state.registrationStartDate);
       }
       if (dateRange == 'end') {
         context

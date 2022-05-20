@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
@@ -28,6 +28,7 @@ class Eula extends StatelessWidget {
   }
 }
 
+//TODO: change this to it's own block
 class Contract extends StatelessWidget {
   const Contract({Key? key}) : super(key: key);
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 150,
+                height: 80,
               ),
               Image.asset(
                 'assets/images/onye.png',

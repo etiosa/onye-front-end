@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
-import '../../../components/DropDown.dart';
+import '../../../components/drop_down.dart';
 import '../../../components/util/Modal.dart';
 import '../../appointments.dart';
 import 'create_appointment.dart';

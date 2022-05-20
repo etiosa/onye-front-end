@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:onye_front_ened/Widgets/Pagination.dart';
+import 'package:onye_front_ened/Widgets/pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
-import '../../../Widgets/SearchBar.dart';
-import '../../../components/DoctorList.dart';
-import '../../../components/PatientList.dart';
+import '../../../Widgets/search_bar.dart';
+import '../../../components/doctor_list.dart';
+import '../../../components/patient_list.dart';
 import '../../doctor/state/doctor_cubit_cubit.dart';
 import 'register_form_view.dart';
 

@@ -6,8 +6,8 @@ import '../components/util/Modal.dart';
 import '../pages/appointment/state/appointment_cubit.dart';
 import '../pages/appointments.dart';
 import '../pages/auth/state/login_bloc.dart';
-import 'Button.dart';
-import 'Patient_appointment_registeration_Card.dart';
+import 'button.dart';
+import 'patient_appointment_registeration_card.dart';
 
 //Wil have the
 

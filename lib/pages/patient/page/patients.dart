@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/Widgets/Pagination.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
+import 'package:onye_front_ened/Widgets/pagination.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
-import '../../../Widgets/GenericCard.dart';
+import '../../../Widgets/generic_card.dart';
 import '../../auth/state/login_bloc.dart';
 import '../../registration/state/registration_cubit.dart';
 

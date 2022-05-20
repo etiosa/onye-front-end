@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 
-import '../../../session/authSession.dart';
-
 class LoginPage extends StatefulWidget {
-  //TODO: Ccall home
   const LoginPage({
     Key? key,
   }) : super(key: key);
@@ -28,18 +25,27 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             backgroundColor: const Color.fromARGB(255, 247, 253, 253),
             body: BlocListener<LoginBloc, LoginState>(
               listenWhen: ((previous, current) =>
                   previous.loginStatus != current.loginStatus),
               listener: (context, state) {
-                print("from login class");
                 if (state.loginStatus == LoginStatus.home &&
                     state.isContractAccept) {
                   WidgetsBinding.instance?.addPostFrameCallback((_) {
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/dashboard");
+                    //  Navigator.popAndPushNamed(context, '/dashboard');
+                    // Navigator.pushReplacementNamed(context, '/dashboard');
+                    //Navigator.pushUntil(context, ModalRoute.withName('/dashboard'));
+                    //Navigator.popAndPushNamed(context, '/dashboard');
+                  //  Navigator.pushReplacementNamed(context, '/dashboard');
+
+/* Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/dashboard', (Route<dynamic> route) => false); */
+                    /*  Navigator.pushAndRemoveUntil(
+                        context, '/dashboard', (route) => false); */
                   });
                 }
                 //if we canLogin..move to the next page.
@@ -298,9 +304,9 @@ class _Password extends StatelessWidget {
 
 class _SubmitButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final _authSession = AuthSession();
+  //final _authSession = AuthSession();
 
-  _SubmitButton(this.formKey) : super();
+  const _SubmitButton(this.formKey) : super();
 
   @override
   Widget build(BuildContext context) {

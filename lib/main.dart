@@ -7,7 +7,7 @@ import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
 import 'package:onye_front_ened/pages/home.dart';
-import 'package:onye_front_ened/pages/patient/page/PatientProfile.dart';
+import 'package:onye_front_ened/pages/patient/page/patient_profile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
@@ -19,14 +19,14 @@ import 'package:onye_front_ened/pages/appointments.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
-import 'package:onye_front_ened/pages/patient/repository/patientRepository.dart';
+import 'package:onye_front_ened/pages/patient/repository/patient_repository.dart';
 import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
-import 'components/clinicalNote/clinicalnote_cubit.dart';
+import 'components/clinicalNote/clinical_note_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: 'stage.env');
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
                 '/dashboard/appointment': (context) => const Appointments(),
                 '/dashboard/appointment/createAppointment': (context) =>
                     const CreateAppointment(),
-                '/dashboard/appointment/createRegistration': (context) =>
+                '/dashboard/createRegistration': (context) =>
                     const CreateRegistration(),
                 '/dashboard/registrationForm': (context) =>
                     const CreatePatientForm(),

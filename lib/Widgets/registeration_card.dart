@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../pages/registration/state/registration_cubit.dart';
-import 'Patient_appointment_registeration_Card.dart';
+import 'patient_appointment_registeration_card.dart';
 
-import 'Button.dart';
+import 'button.dart';
 
 class RegisterationCard extends StatelessWidget {
   final String firstName;
@@ -135,12 +135,10 @@ class RegisterButton extends StatelessWidget {
     return BlocListener<RegisterationCubit, RegistrationState>(
         listener: ((context, state) {
       if (state.type == 'registration') {
-        print("state.type has changed");
         isregister = true;
       }
     }), child: BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
-        print(" isregister ${isregister}");
         return (
           Button(
             height: 50,
@@ -153,7 +151,6 @@ class RegisterButton extends StatelessWidget {
             label: "Register",
             onPressed: () {
               var reponse = addRegisteration();
-              //print(reponse);
             }));
       },
     ));

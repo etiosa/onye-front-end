@@ -1,4 +1,4 @@
-part of 'clinicalnote_cubit.dart';
+part of 'clinical_note_cubit.dart';
 
 enum CLINCIALNOTESTATE { init, inprogress, saved, created, error }
 

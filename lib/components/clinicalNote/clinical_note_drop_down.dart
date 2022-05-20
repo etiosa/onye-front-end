@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+import 'package:onye_front_ened/components/clinicalNote/clinical_note_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
