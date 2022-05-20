@@ -4,23 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/Widgets/GenericLoadingContainer.dart';
-import 'package:onye_front_ened/Widgets/RegisterationCard.dart';
-import 'package:onye_front_ened/components/Date.dart';
-import 'package:onye_front_ened/components/Time.dart';
-import 'package:onye_front_ened/components/clinicalNote/clinicalnote_cubit.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
+import 'package:onye_front_ened/Widgets/generic_loading_container.dart';
+import 'package:onye_front_ened/Widgets/registeration_card.dart';
+import 'package:onye_front_ened/components/date.dart';
+import 'package:onye_front_ened/components/time.dart';
+import 'package:onye_front_ened/components/clinicalNote/clinical_note_cubit.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 
-import '../../../Widgets/HomepageHeader.dart';
-import '../../../Widgets/Pagination.dart';
-import '../../../components/clinicalNote/ClinicalNoteDropDown.dart';
-import '../../../components/clinicalNote/ClinicalNoteField.dart';
-import '../../../components/clinicalNote/ClinicalNoteTitleField .dart';
+import '../../../Widgets/homepage_header.dart';
+import '../../../Widgets/pagination.dart';
+import '../../../components/clinicalNote/clinical_note_drop_down.dart';
+import '../../../components/clinicalNote/clinical_note_field.dart';
+import '../../../components/clinicalNote/clinical_note_title_field .dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -323,6 +323,8 @@ class _AppointmentState extends State<Appointment> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterationCubit, RegistrationState>(
+      listenWhen: (previous, current) =>
+          previous.registerState != current.registerState,
       listener: (context, state) {
         if (state.registerState == REGISTRATIONSTATE.failed) {
           Modal(
@@ -330,8 +332,11 @@ class _AppointmentState extends State<Appointment> {
               actionButtons: TextButton(
                   child: const Text('Close'),
                   onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop(true);
-                    Navigator.of(context, rootNavigator: true).pop(true);
+                    print(ModalRoute.of(context)!.settings);
+                    print(context);
+
+                    Navigator.popUntil(
+                        context, ModalRoute.withName('/dashboard/checkin'));
                     context.read<RegisterationCubit>().setRegisterState();
                   }),
               context: context,
@@ -391,8 +396,8 @@ class _AppointmentState extends State<Appointment> {
               actionButtons: TextButton(
                   child: const Text('Close'),
                   onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop(true);
-                    Navigator.of(context, rootNavigator: true).pop(true);
+                    Navigator.popUntil(
+                        context, ModalRoute.withName('/dashboard/checkin'));
                     context.read<RegisterationCubit>().setRegisterState();
 
                     final AuthSession authsession = AuthSession();
@@ -576,31 +581,24 @@ class RegisterButton extends StatelessWidget {
             final AuthSession authsession = AuthSession();
             final AuthRepository _authRepository = AuthRepository();
             final LoginBloc _loginbloc = LoginBloc(_authRepository);
-         
-              authsession.getHomeToken()?.then((value) async {
-                _loginbloc.home(homeToken: value).then((res) {
-                  context
-                      .read<LoginBloc>()
-                      .setLoginData(value, jsonDecode(res.body));
-                });
 
-                  createRegistration(
-                    index: index,
-                    token: value,
-                    patientId: state.registrationList[index]['patient']['id'],
-                    appointmentId: state.registrationList[index]['id'],
-                    reasons: state.registrationList[index]['reasonForVisit'],
-                    typeofVist: state.registrationList[index]['typeOfVisit'],
-                    context: context);
+            authsession.getHomeToken()?.then((value) async {
+              _loginbloc.home(homeToken: value).then((res) {
+                context
+                    .read<LoginBloc>()
+                    .setLoginData(value, jsonDecode(res.body));
               });
-            Navigator.pop(context, false);
-          
-             
-          
-      
 
-          
-           
+              createRegistration(
+                  index: index,
+                  token: value,
+                  patientId: state.registrationList[index]['patient']['id'],
+                  appointmentId: state.registrationList[index]['id'],
+                  reasons: state.registrationList[index]['reasonForVisit'],
+                  typeofVist: state.registrationList[index]['typeOfVisit'],
+                  context: context);
+            });
+            Navigator.pop(context, false);
           },
           child: const Text('OK'),
         ),

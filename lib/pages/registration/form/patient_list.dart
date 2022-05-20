@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/GenericCard.dart';
+import 'package:onye_front_ened/Widgets/generic_card.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
@@ -43,7 +43,7 @@ class _PatientListState extends State<PatientList> {
         ));
       }
       return SizedBox(
-        height: MediaQuery.of(context).size.height / 1.9,
+        height: MediaQuery.of(context).size.height / 1.7,
         width: MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
         child: ListView.builder(
             // shrinkWrap: true,

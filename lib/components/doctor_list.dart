@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
-import '../Widgets/GenericCard.dart';
-import '../Widgets/Pagination.dart';
+import '../Widgets/generic_card.dart';
+import '../Widgets/pagination.dart';
 import '../pages/doctor/state/doctor_cubit_cubit.dart';
 
 class DoctorList extends StatefulWidget {

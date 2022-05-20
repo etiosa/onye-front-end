@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
 
-import '../components/util/Modal.dart';
 import '../pages/appointment/state/appointment_cubit.dart';
 import '../pages/appointments.dart';
 import '../pages/auth/state/login_bloc.dart';
-import 'Patient_appointment_registeration_Card.dart';
+import 'patient_appointment_registeration_card.dart';
 
 class Patient_Registration_Appointment_Card extends StatelessWidget {
   final String firstName;
@@ -20,8 +19,8 @@ class Patient_Registration_Appointment_Card extends StatelessWidget {
   final String role;
   final String appointmentId;
   final Widget? button;
-  Function? clinicalNote;
-  Function? addRegisteration;
+  final Function? clinicalNote;
+  final Function? addRegisteration;
 
   Patient_Registration_Appointment_Card({
     required this.firstName,
@@ -72,10 +71,10 @@ class CallToActions extends StatelessWidget {
   final String type;
   final String appointmentId;
   final Widget? button;
-  Function addClincialNote;
+ final Function addClincialNote;
   //Function addRegisteration;
 
-  CallToActions({
+  const CallToActions({
     required this.role,
     required this.type,
     required this.appointmentId,
@@ -114,9 +113,9 @@ class CallToActions extends StatelessWidget {
 class RegisterationButtons extends StatelessWidget {
   final String type;
   final String role;
-  Function addClincialNote;
+  final Function addClincialNote;
   // Function addRegisteration;
-  RegisterationButtons(
+  const RegisterationButtons(
       {Key? key,
       required this.type,
       required this.role,

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/components/util/DesktopMenu.dart';
 import 'package:onye_front_ened/components/util/MobileDashboardMenu.dart';
 import 'package:onye_front_ened/session/authSession.dart';
@@ -34,8 +34,9 @@ class _LoadedProfileState extends State<LoadedProfile> {
       });
     }
   }
+
 //Profile bloc
-//
+//TODO: CHANGE
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(builder: ((context, state) {
@@ -133,6 +134,7 @@ class _LoadedProfileState extends State<LoadedProfile> {
 void logout(BuildContext context) async {
   context.read<LoginBloc>().add(LogOut());
   WidgetsBinding.instance?.addPostFrameCallback((_) {
-    Navigator.popAndPushNamed(context, '/login');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/', (Route<dynamic> route) => false);
   });
 }

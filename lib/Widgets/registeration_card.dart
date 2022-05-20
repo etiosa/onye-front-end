@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../pages/registration/state/registration_cubit.dart';
-import 'Patient_appointment_registeration_Card.dart';
+import 'patient_appointment_registeration_card.dart';
 
-import 'Button.dart';
+import 'button.dart';
 
 class RegisterationCard extends StatelessWidget {
   final String firstName;

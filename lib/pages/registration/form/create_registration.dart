@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
-import 'package:onye_front_ened/Widgets/Pagination.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
+import 'package:onye_front_ened/Widgets/pagination.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
-import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/registration/form/patient_list.dart';
 import 'package:onye_front_ened/pages/registration/page/registrations.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -272,13 +271,13 @@ class RegisterField extends StatelessWidget {
                                                       color: Colors.green,
                                                     ),
                                                     'Registration created'), */
-                                                Navigator.of(context)
+                                            /*     Navigator.of(context)
                                                     .pushAndRemoveUntil(
                                                         MaterialPageRoute(
                                                             builder: ((context) =>
                                                                 const Registration())),
                                                         ModalRoute.withName(
-                                                            '/dashboard'))
+                                                            '/dashboard')) */
                                               }
                                             else if (value != null &&
                                                 value.statusCode == 400)

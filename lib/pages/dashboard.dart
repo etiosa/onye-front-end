@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/session/authSession.dart';
-import '../components/LoadedProfile .dart';
+import '../components/loaded_profile .dart';
 import '../components/util/Modal.dart';
 import 'auth/repository/auth_repositories.dart';
 
@@ -14,6 +14,7 @@ class Dashboard extends StatefulWidget {
   @override
   State<Dashboard> createState() => _DashboardState();
 }
+//TODO: check Navigator
 
 class _DashboardState extends State<Dashboard> {
   final _authSession = AuthSession();
@@ -69,6 +70,7 @@ class _DashboardState extends State<Dashboard> {
 
 //TODO: have it's own bloc
 //it will
+//CHANGE THIS
   @override
   Widget build(BuildContext context) {
     final AuthSession authsession = AuthSession();

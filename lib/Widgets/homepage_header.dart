@@ -19,7 +19,7 @@ class HomepageHeader extends StatelessWidget {
         ),
         Button(height: 50, width: 170, label: 'Create Registration', 
         onPressed: ()=> Navigator.of(context)
-                .pushNamed('/dashboard/appointment/createRegistration'))
+                .pushNamed('/dashboard/createRegistration'))
       ],
     );
   }

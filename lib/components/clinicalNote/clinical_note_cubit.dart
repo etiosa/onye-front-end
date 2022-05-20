@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
 
-part 'clinicalnote_state.dart';
+part 'clinical_note_state.dart';
 
 class ClinicalnoteCubit extends Cubit<ClinicalnoteState> {
   final ClinicalNoteRepository _clinicalNoteRepository;
