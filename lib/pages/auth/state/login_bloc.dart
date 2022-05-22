@@ -115,7 +115,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           username: state.userName, password: state.password);
       final body = jsonDecode(response!.body);
       final sucess = body['success'];
-      final statusCode = response.statusCode;
+      //final statusCode = response.statusCode;
       emit(state.copywith(canLogin: sucess));
       if (sucess) {
         final token = body['token'];

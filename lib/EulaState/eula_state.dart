@@ -1,27 +1,14 @@
 part of 'eula_bloc.dart';
 
-abstract class EulaState extends Equatable {
-  const EulaState();
-  
-  @override
-  List<Object> get props => [];
-}
-
-class EulaInitial extends EulaState {
+class EulaState extends Equatable {
+  const EulaState({
+  this.betaContract='', 
+  this.isContractAccept=false});
+  final String betaContract;
+  final bool isContractAccept;
 
 
-}
-
-class EulaLoading extends EulaState {
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [betaContract, isContractAccept];
 }
-
-class EulaLoaded extends EulaState {
-
-  @override
-  List<Object> get props => [];
-
-}
-

@@ -615,18 +615,16 @@ Future<String?> showDialogConfirmation(
   final clincialNoteid = appointment['clinicalNoteId'];
   final AuthSession authsession = AuthSession();
 
-  var hometoken;
   authsession.getHomeToken()?.then((value) => {
-        hometoken = value,
         if (appointment.containsKey('clinicalNoteId'))
           {
             context
                 .read<ClinicalnoteCubit>()
-                .getPatientClinicalNote(id: clincialNoteid, token: hometoken)
+                .getPatientClinicalNote(id: clincialNoteid, token: value)
           }
       });
 //to here is the issue
-  return clinicalNotePopUp(context, appointment, _patientName, hometoken);
+  return clinicalNotePopUp(context, appointment, _patientName,' hometoken');
 }
 
 Future<String?> clinicalNotePopUp(

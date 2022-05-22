@@ -40,8 +40,7 @@ class _DashboardState extends State<Dashboard> {
                   actionButtons: TextButton(
                       child: const Text('Close'),
                       onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop(true);
-                        Navigator.of(context).pushNamed("/login");
+                          Navigator.popUntil(context, ModalRoute.withName('/login'));
                       }),
                   context: context,
                   modalType: 'failed',
@@ -98,6 +97,5 @@ class _DashboardState extends State<Dashboard> {
               ),
             )));
   }
-  // return Container();
 
 }
