@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
@@ -21,7 +22,6 @@ import 'package:onye_front_ened/pages/appointment/repository/appointment_reposit
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/patient/repository/patient_repository.dart';
 import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -30,6 +30,9 @@ import 'components/clinicalNote/clinical_note_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: 'stage.env');
+  WidgetsFlutterBinding.ensureInitialized();
+FirebaseApp defaultApp = await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -41,7 +44,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-  
     final AuthRepository _authRepository = AuthRepository();
     final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =
@@ -89,9 +91,7 @@ class MyApp extends StatelessWidget {
                     const CreateRegistration(),
                 '/dashboard/registrationForm': (context) =>
                     const CreatePatientForm(),
-                  '/beta-contract': (context) => const Eula(),
-
-              
+                '/beta-contract': (context) => const Eula(),
               },
             ),
           ),
