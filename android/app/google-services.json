@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "599512958839",
+    "project_id": "onye-development",
+    "storage_bucket": "onye-development.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599512958839:android:5bbb7953a89bf1e7760372",
+        "android_client_info": {
+          "package_name": "com.example.onye_front_ened"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599512958839-dcc2ns2olansqb8vqn3mbup84kd5j5r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEHXRoBQQhBWI7w5ihX_FV6GaadXKxiAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "599512958839-dcc2ns2olansqb8vqn3mbup84kd5j5r2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "599512958839-vt1j949n65juq7nio2pim3eihssivcn0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.onyeFrontEned"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

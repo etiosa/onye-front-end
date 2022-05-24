@@ -10,18 +10,18 @@ class DoctorRepository {
       {String? searchParams, String? token, int? nextPage = 0}) async {
     Uri uri;
     if (searchParams != null && searchParams.isNotEmpty) {
-      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-          .replace(queryParameters: <String, String>{
-          'type': 'DOCTOR', 
-        'query': searchParams,
-        "page": "$nextPage"
-      });
+      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search').replace(
+          queryParameters: <String, String>{
+            'type': 'DOCTOR',
+            'query': searchParams,
+            "page": "$nextPage"
+          });
     } else {
-      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search')
-          .replace(queryParameters: <String, String>{
-              'type': 'DOCTOR', 
-        "page": "$nextPage"
-      });
+      uri = Uri.parse(root + 'api/rest/v1/medicalPersonnel/search').replace(
+          queryParameters: <String, String>{
+            'type': 'DOCTOR',
+            "page": "$nextPage"
+          });
     }
 
     http.Response response = await http.get(

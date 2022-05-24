@@ -16,7 +16,6 @@ class Dashboard extends StatefulWidget {
 }
 //TODO: check Navigator
 
-//TODO: need to replace this with Ssimmger
 class _DashboardState extends State<Dashboard> {
   final _authSession = AuthSession();
 
