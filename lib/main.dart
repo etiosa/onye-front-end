@@ -28,27 +28,24 @@ import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart
 
 import 'components/clinicalNote/clinical_note_cubit.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-
 void main() async {
   await dotenv.load(fileName: 'stage.env');
 
-await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
-
- FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-
 }
 
 //TODO: create private Route later
 //TODO: App wrapper i
 class MyApp extends StatelessWidget {
+  static final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -106,5 +103,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Future<void> _sendData() async {
+    // wiget.analytics
+    // print(widget.);
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+   await analytics.setUserId(id: 'test-id');
   }
 }

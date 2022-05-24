@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.1"
-  ansi_styles:
-    dependency: transitive
-    description:
-      name: ansi_styles
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.2+1"
   archive:
     dependency: transitive
     description:
@@ -134,20 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  ci:
-    dependency: transitive
-    description:
-      name: ci
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
-  cli_util:
-    dependency: transitive
-    description:
-      name: cli_util
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.5"
   clock:
     dependency: transitive
     description:
@@ -190,13 +169,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  dart_console:
-    dependency: transitive
-    description:
-      name: dart_console
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -204,13 +176,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.2"
-  deep_pick:
-    dependency: transitive
-    description:
-      name: deep_pick
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.0"
   dropdown_search:
     dependency: transitive
     description:
@@ -413,13 +378,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutterfire_cli:
-    dependency: "direct main"
-    description:
-      name: flutterfire_cli
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2+2"
   form_builder_extra_fields:
     dependency: "direct main"
     description:
@@ -497,13 +455,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
-  interact:
-    dependency: transitive
-    description:
-      name: interact
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   intl:
     dependency: "direct main"
     description:
@@ -686,20 +637,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  pub_updater:
-    dependency: transitive
-    description:
-      name: pub_updater
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
-  pubspec:
-    dependency: transitive
-    description:
-      name: pubspec
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   pubspec_parse:
     dependency: transitive
     description:
@@ -707,13 +644,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -880,13 +810,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  tint:
-    dependency: transitive
-    description:
-      name: tint
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -894,13 +817,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  uri:
-    dependency: transitive
-    description:
-      name: uri
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   vector_math:
     dependency: transitive
     description:
@@ -951,9 +867,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-<<<<<<< HEAD
   dart: ">=2.17.0-0 <3.0.0"
-=======
-  dart: ">=2.16.0 <3.0.0"
->>>>>>> 7ead0264004d9f3b89fe581009ef2ba171faaf0c
   flutter: ">=2.8.0"
