@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
+import 'package:onye_front_ened/pages/eula/state/eula_bloc.dart';
 
 class Eula extends StatelessWidget {
   const Eula({Key? key}) : super(key: key);
@@ -34,8 +35,8 @@ class Contract extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.inprogress) {
+    return BlocConsumer<EulaBloc, EulaState>(listener: (context, state) {
+      if (state.fetchingcontract == FETCHINGCONTRACT.loading) {
         Modal(
             context: context,
             modalType: '',
@@ -63,7 +64,7 @@ class Contract extends StatelessWidget {
             progressDetails: 'progrss');
       }
 
-      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.accept) {
+      if (state is BetaContractAccept) {
         Modal(
             context: context,
             modalType: '',
@@ -71,7 +72,8 @@ class Contract extends StatelessWidget {
             actionButtons: TextButton(
                 child: const Text('Close'),
                 onPressed: () {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    //TODO: once it's accept  remove this  from the stack and push to dashboard
                     Navigator.of(context, rootNavigator: true).pop(true);
                     Navigator.of(context, rootNavigator: true).pop(true);
                     Navigator.of(context).pushNamed("/dashboard");
@@ -97,7 +99,7 @@ class Contract extends StatelessWidget {
             progressDetails: 'prog');
       }
 
-      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.unkown) {
+      if (state.fetchingcontract == FETCHINGCONTRACT.unknown) {
         Modal(
             context: context,
             modalType: 'Unkown',
@@ -127,7 +129,7 @@ class Contract extends StatelessWidget {
             progressDetails: 'Uknow error, please login again');
       }
 
-      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.failed) {
+   /*    if (state.fetchingcontract == FETCHINGCONTRACT.unknown ) {
         Modal(
             context: context,
             modalType: 'Unkown',
@@ -155,9 +157,9 @@ class Contract extends StatelessWidget {
               ],
             ),
             progressDetails: 'please login again');
-      }
+      } */
     }, builder: ((context, state) {
-      if (state.fetchContract == FETCHINGCONTRACT.loading) {
+      if (state.fetchingcontract == FETCHINGCONTRACT.loading) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -180,18 +182,18 @@ class Contract extends StatelessWidget {
         );
       }
 
-      if (state.fetchContract == FETCHINGCONTRACT.failed) {
+      if (state.fetchingcontract == FETCHINGCONTRACT.failed) {
         return const Center(
           child: Text("failed to load contract please check internet"),
         );
       }
 
-      if (state.fetchContract == FETCHINGCONTRACT.unknown) {
+      if (state.fetchingcontract == FETCHINGCONTRACT.unknown) {
         return const Center(
           child: Text("unable to load contract"),
         );
       }
-      if (state.fetchContract == FETCHINGCONTRACT.loaded) {
+      if (state.fetchingcontract == FETCHINGCONTRACT.loaded) {
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -210,6 +212,7 @@ class Contract extends StatelessWidget {
           ),
         );
       }
+
       return const Center(
         child: Text("no contract"),
       );
@@ -220,9 +223,5 @@ class Contract extends StatelessWidget {
 void acceptContract(BuildContext context) {
   var token = context.read<LoginBloc>().state.homeToken;
   var userId = context.read<LoginBloc>().state.userId;
-  context
-      .read<LoginBloc>()
-      .add(AcceptBetaContract(token: token, userId: userId));
-
-  // context.read<LoginBloc>().add(BetContract(token: state.homeToken));
+  context.read<EulaBloc>().add(AcceptContract(token: token, userId: userId));
 }

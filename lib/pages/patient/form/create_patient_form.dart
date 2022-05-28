@@ -21,7 +21,7 @@ class CreatePatientForm extends StatefulWidget {
 
 //TODO: Refactor
 class _CreatePatientFormState extends State<CreatePatientForm> {
-  int _index = 0;
+  //int _index = 0;
   final List<GlobalKey<FormState>> _formKeys = [
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
@@ -38,11 +38,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   @override
   void initState() {
     // TODO: implement initState
-    PageController _pageController = PageController();
+   // PageController _pageController = PageController();
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/dashboard");
       });
     }
@@ -942,7 +942,7 @@ class EmergencyContact extends StatelessWidget {
   }
 }
 
-class _SubmitButton extends StatelessWidget {
+/* class _SubmitButton extends StatelessWidget {
   final List<GlobalKey<FormState>> formKeys;
   final PatientFormValidator validator;
 
@@ -1047,4 +1047,4 @@ class _SubmitButton extends StatelessWidget {
     }
     return isValid;
   }
-}
+} */

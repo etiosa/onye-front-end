@@ -21,7 +21,7 @@ class CreateRegistration extends StatefulWidget {
 
 //TODO: Refactor
 class _CreateRegistrationState extends State<CreateRegistration> {
-  int _index = 0;
+  //int _index = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int currentPageIndex = 0;
 
@@ -31,7 +31,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
     }
@@ -349,7 +349,7 @@ class SearchPatientBody extends StatefulWidget {
 }
 
 class _SearchPatientBodyState extends State<SearchPatientBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+ // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

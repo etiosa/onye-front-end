@@ -1,11 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
-import 'package:onye_front_ened/pages/Eula.dart';
+import 'package:onye_front_ened/pages/eula/Eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
+import 'package:onye_front_ened/pages/eula/Eula.dart';
+import 'package:onye_front_ened/pages/eula/state/eula_bloc.dart';
 import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/patient/page/patient_profile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
@@ -21,40 +24,35 @@ import 'package:onye_front_ened/pages/appointment/repository/appointment_reposit
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/patient/repository/patient_repository.dart';
 import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
 import 'components/clinicalNote/clinical_note_cubit.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-
 void main() async {
   await dotenv.load(fileName: 'stage.env');
 
-await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
-
- FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-
 }
 
 //TODO: create private Route later
 //TODO: App wrapper i
 class MyApp extends StatelessWidget {
+  static final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-  
     final AuthRepository _authRepository = AuthRepository();
     final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =
@@ -71,6 +69,9 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => LoginBloc(_authRepository),
+            ),
+             BlocProvider(
+              create: (_) => EulaBloc(),
             ),
             BlocProvider(
               create: (_) => PatientCubit(_registerRepository),
@@ -102,12 +103,12 @@ class MyApp extends StatelessWidget {
                     const CreateRegistration(),
                 '/dashboard/registrationForm': (context) =>
                     const CreatePatientForm(),
-                  '/beta-contract': (context) => const Eula(),
-
-              
+                '/beta-contract': (context) => const Eula(),
               },
             ),
           ),
         ));
   }
+
+ 
 }

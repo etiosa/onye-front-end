@@ -4,6 +4,10 @@ import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/components/util/Modal.dart';
 
+import '../../eula/state/eula_bloc.dart';
+//import 'package:firebase_analytics/firebase_analytics.dart';
+
+
 class LoginPage extends StatefulWidget {
   const LoginPage({
     Key? key,
@@ -20,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+ //final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,9 @@ class _LoginPageState extends State<LoginPage> {
               listener: (context, state) {
                 if (state.loginStatus == LoginStatus.home &&
                     state.isContractAccept) {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async  {
+                  //  await FirebaseAnalytics.instance.setUserId(id: state.userId);
+
                     // Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/dashboard");
                     //  Navigator.popAndPushNamed(context, '/dashboard');
@@ -52,10 +59,10 @@ class _LoginPageState extends State<LoginPage> {
                 if (state.loginStatus == LoginStatus.home &&
                     !state.isContractAccept) {
                   context
-                      .read<LoginBloc>()
-                      .add(BetContract(token: state.homeToken));
+                      .read<EulaBloc>()
+                      .add(LoadBetaContract(token: state.homeToken));
 
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/beta-contract");
                   });

@@ -39,11 +39,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<Login>(_login);
     on<LogOut>(_logout);
     on<LoginModalReset>(_resetModal);
-    on<BetContract>(_setContract);
-    on<AcceptBetaContract>(_acceptBetaContract);
+    //on<BetContract>(_setContract);
+   // on<AcceptBetaContract>(_acceptBetaContract);
   }
 
-  void _setContract(BetContract event, Emitter<LoginState> emit) async {
+/*   void _setContract(BetContract event, Emitter<LoginState> emit) async {
     emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.loading));
     try {
       var licenseResponse =
@@ -60,8 +60,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } catch (err) {
       emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.unknown));
     }
-  }
-
+  } */
+/* 
   void _acceptBetaContract(
       AcceptBetaContract event, Emitter<LoginState> emit) async {
     emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.inprogress));
@@ -81,7 +81,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } catch (err) {
       emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.unkown));
     }
-  }
+  } */
 
   void _resetModal(
     LoginModalReset event,
@@ -115,7 +115,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           username: state.userName, password: state.password);
       final body = jsonDecode(response!.body);
       final sucess = body['success'];
-      final statusCode = response.statusCode;
+      //final statusCode = response.statusCode;
       emit(state.copywith(canLogin: sucess));
       if (sucess) {
         final token = body['token'];

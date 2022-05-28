@@ -7,6 +7,6 @@ class TextLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('No patient found');
+    return const Text('No patient found');
   }
 }

@@ -37,17 +37,18 @@ class Login extends LoginEvent {
 //TODO:  implement this later
 class LoginModalReset extends LoginEvent {}
 
-class BetContract extends LoginEvent {
+/* class BetContract extends LoginEvent {
   final String token;
   const BetContract({required this.token});
    @override
   List<Object> get props => [token];
 }
-
-class AcceptBetaContract extends LoginEvent {
-  final String token;
-  final String userId;
-  const AcceptBetaContract({required this.token, required this.userId});
-   @override
-  List<Object> get props => [token, userId];
-}
+ */
+/*   class AcceptBetaContract extends LoginEvent {
+    final String token;
+    final String userId;
+    const AcceptBetaContract({required this.token, required this.userId});
+    @override
+    List<Object> get props => [token, userId];
+  }
+ */

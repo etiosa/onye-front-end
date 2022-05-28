@@ -1,9 +1,6 @@
 // stores ExpansionPanel state information
 import 'package:flutter/material.dart';
-import 'package:onye_front_ened/pages/intakeform/forms/current_medication.dart';
-import 'package:onye_front_ened/pages/intakeform/forms/family_history.dart';
 import 'package:onye_front_ened/pages/intakeform/forms/past_medical_contions.dart';
-import 'package:onye_front_ened/pages/intakeform/forms/vitals.dart';
 
 class Item {
   Item({

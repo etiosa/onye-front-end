@@ -5,7 +5,6 @@ import 'package:onye_front_ened/pages/appointment/appointment_datepicker_field.d
 import 'package:onye_front_ened/pages/appointment/appointment_dropdown.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
-import '../../components/util/Modal.dart';
 import '../../session/authSession.dart';
 import '../appointment_datetimepicker_field.dart';
 import '../appointments.dart';
