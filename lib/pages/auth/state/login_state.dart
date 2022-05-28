@@ -2,8 +2,7 @@ part of 'login_bloc.dart';
 
 enum LoginStatus { login, failed, unknown, logout, init, inprogress, home }
 enum LOGOUTSTATUS { sucessful, failed, unknown, init }
-enum FETCHINGCONTRACT { init, loading, failed, unknown, loaded }
-enum ACCEPTCONTRACTSTATUS { init, inprogress, accept, failed, unkown }
+
 
 @immutable
 class LoginState extends Equatable {
@@ -23,8 +22,6 @@ class LoginState extends Equatable {
       this.inProgressModal = false,
       this.betaContract = '',
       this.isContractAccept = false,
-      this.acceptcontractstatus = ACCEPTCONTRACTSTATUS.init,
-      this.fetchContract = FETCHINGCONTRACT.init,
       this.logoutstatus = LOGOUTSTATUS.init,
       this.userId = '',
       this.specialty = '',
@@ -48,10 +45,8 @@ class LoginState extends Equatable {
   final bool canLogin;
   final String betaContract;
   final bool isContractAccept;
-  final FETCHINGCONTRACT fetchContract;
   final String userId;
   final String specialty;
-  final ACCEPTCONTRACTSTATUS acceptcontractstatus;
   final int currentDate;
   @override
   // TODO: implement props
@@ -73,8 +68,6 @@ class LoginState extends Equatable {
         canLogin,
         betaContract,
         isContractAccept,
-        fetchContract,
-        acceptcontractstatus,
         userId,
         specialty,
         currentDate
@@ -91,8 +84,6 @@ class LoginState extends Equatable {
       String? lastName,
       String? department,
       String? hospital,
-      ACCEPTCONTRACTSTATUS? acceptcontractstatus,
-      FETCHINGCONTRACT? fetchingcontract,
       String? betaContract,
       bool? isContractAccept,
       LOGOUTSTATUS? logoutstatus,
@@ -107,8 +98,6 @@ class LoginState extends Equatable {
         currentDate: currentDate ?? this.currentDate,
         specialty: specialty ?? this.specialty,
         userId: userId ?? this.userId,
-        acceptcontractstatus: acceptcontractstatus ?? this.acceptcontractstatus,
-        fetchContract: fetchingcontract ?? fetchContract,
         betaContract: betaContract ?? this.betaContract,
         isContractAccept: isContractAccept ?? this.isContractAccept,
         inProgressModal: inProgressModal ?? this.inProgressModal,

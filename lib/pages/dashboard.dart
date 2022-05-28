@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +16,7 @@ class Dashboard extends StatefulWidget {
 //TODO: check Navigator
 
 class _DashboardState extends State<Dashboard> {
-  final _authSession = AuthSession();
+  //final _authSession = AuthSession();
 
   @override
   void initState() {
@@ -29,7 +28,7 @@ class _DashboardState extends State<Dashboard> {
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         authsession.getHomeToken()?.then((value) async {
           var res = _loginbloc.home(homeToken: value);
           res.then((res) {
@@ -81,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
               listener: (context, state) {
                 authsession.getHomeToken()?.then((value) async {
                   if (value.isEmpty) {
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.of(context).pushNamed("/login");
                     });
                   }

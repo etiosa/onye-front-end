@@ -133,7 +133,7 @@ class _LoadedProfileState extends State<LoadedProfile> {
 
 void logout(BuildContext context) async {
   context.read<LoginBloc>().add(LogOut());
-  WidgetsBinding.instance?.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     Navigator.of(context).pushNamedAndRemoveUntil(
         '/', (Route<dynamic> route) => false);
   });

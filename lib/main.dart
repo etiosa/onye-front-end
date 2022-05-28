@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
-import 'package:onye_front_ened/pages/Eula.dart';
+import 'package:onye_front_ened/pages/eula/Eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
+import 'package:onye_front_ened/pages/eula/Eula.dart';
+import 'package:onye_front_ened/pages/eula/state/eula_bloc.dart';
 import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/patient/page/patient_profile.dart';
 import 'package:onye_front_ened/pages/registration/form/create_registration.dart';
@@ -68,6 +70,9 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (_) => LoginBloc(_authRepository),
             ),
+             BlocProvider(
+              create: (_) => EulaBloc(),
+            ),
             BlocProvider(
               create: (_) => PatientCubit(_registerRepository),
             ),
@@ -105,10 +110,5 @@ class MyApp extends StatelessWidget {
         ));
   }
 
-  Future<void> _sendData() async {
-    // wiget.analytics
-    // print(widget.);
-    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-   await analytics.setUserId(id: 'test-id');
-  }
+ 
 }

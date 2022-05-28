@@ -22,8 +22,8 @@ class CreateAppointment extends StatefulWidget {
 }
 
 class _CreateRegistrationState extends State<CreateAppointment> {
-  int _index = 0;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //int _index = 0;
+  //final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int currentPageIndex = 0;
 
   @override
@@ -31,7 +31,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
     }
@@ -99,7 +99,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
                         ),
                       ],
                     ),
-                    Register(formIndex: 2)
+                    const Register(formIndex: 2)
                   ],
                 ),
               ),
@@ -283,7 +283,7 @@ class SearchPatientBody extends StatefulWidget {
 }
 
 class _SearchPatientBodyState extends State<SearchPatientBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+ // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

@@ -32,14 +32,12 @@ class _AppointmentsState extends State<Appointments> {
 
     final AuthSession authsession = AuthSession();
 
-    var hometoken;
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         //  Navigator.of(context).pop();
         authsession.getHomeToken()?.then((value) async {
-          hometoken = value;
           var res = _loginbloc.home(homeToken: value);
           res.then((res) {
             if (res.statusCode != 200) {

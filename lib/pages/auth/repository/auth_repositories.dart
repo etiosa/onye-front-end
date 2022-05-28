@@ -59,7 +59,7 @@ class AuthRepository {
   Future<http.Response?> home({String? token}) async {
     var uri = Uri.parse(root + "api/rest/v1/home");
 
-    dynamic body;
+  
     try {
       http.Response response = await http.get(uri, headers: {
         "Content-Type": "application/json",
