@@ -43,8 +43,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-//TODO: create private Route later
-//TODO: App wrapper i
+
 class MyApp extends StatelessWidget {
   static final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
