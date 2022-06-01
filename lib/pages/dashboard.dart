@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
@@ -28,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         authsession.getHomeToken()?.then((value) async {
           var res = _loginbloc.home(homeToken: value);
           res.then((res) {
@@ -38,7 +37,8 @@ class _DashboardState extends State<Dashboard> {
                   actionButtons: TextButton(
                       child: const Text('Close'),
                       onPressed: () {
-                          Navigator.popUntil(context, ModalRoute.withName('/login'));
+                        Navigator.popUntil(
+                            context, ModalRoute.withName('/login'));
                       }),
                   context: context,
                   modalType: 'failed',
@@ -80,7 +80,7 @@ class _DashboardState extends State<Dashboard> {
               listener: (context, state) {
                 authsession.getHomeToken()?.then((value) async {
                   if (value.isEmpty) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
                       Navigator.of(context).pushNamed("/login");
                     });
                   }
@@ -95,5 +95,4 @@ class _DashboardState extends State<Dashboard> {
               ),
             )));
   }
-
 }

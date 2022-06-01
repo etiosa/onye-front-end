@@ -31,7 +31,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
     }
@@ -129,8 +129,7 @@ class DateTimePickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentCubit, AppointmentState>(
       builder: (context, state) {
-        return (
-          Column(
+        return (Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -249,18 +248,13 @@ class TextContent extends StatelessWidget {
 }
 
 Future<Response?>? createAppointmentData({required BuildContext context}) {
-  if (context
-          .read<DoctorCubit>()
-          .state
-          .selectedMedicalPersonnelId
-          .isNotEmpty &&
+  if (context.read<DoctorCubit>().state.selectedMedicalPersonnelId.isNotEmpty &&
       context.read<PatientCubit>().state.selectedPatientId.isNotEmpty) {
     var response = context.read<AppointmentCubit>().createAppointment(
         date: context.read<AppointmentCubit>().state.appointmentDate,
         time: context.read<AppointmentCubit>().state.appointmentTime,
         patientID: context.read<PatientCubit>().state.selectedPatientId,
-        medicalId:
-            context.read<DoctorCubit>().state.selectedMedicalPersonnelId,
+        medicalId: context.read<DoctorCubit>().state.selectedMedicalPersonnelId,
         token: context.read<LoginBloc>().state.homeToken,
         reasonForVisit: context.read<AppointmentCubit>().state.reasonForVisit,
         typeOfVisit: context.read<AppointmentCubit>().state.typeOfVisit);
@@ -283,12 +277,11 @@ class SearchPatientBody extends StatefulWidget {
 }
 
 class _SearchPatientBodyState extends State<SearchPatientBody> {
- // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PatientCubit, PatientState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       return
           //const SizedBox(height: 10),
           Column(
@@ -297,10 +290,9 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
             pageController: widget.pageController,
           ),
           Pagination(
-            typeofSearch: 'patient', maxPageCounter: context.read<PatientCubit>().state.maxPageNumber
-            
-           ,
-          ) 
+            typeofSearch: 'patient',
+            maxPageCounter: context.read<PatientCubit>().state.maxPageNumber,
+          )
         ],
       );
     });

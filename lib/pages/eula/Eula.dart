@@ -72,7 +72,7 @@ class Contract extends StatelessWidget {
             actionButtons: TextButton(
                 child: const Text('Close'),
                 onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
                     //TODO: once it's accept  remove this  from the stack and push to dashboard
                     Navigator.of(context, rootNavigator: true).pop(true);
                     Navigator.of(context, rootNavigator: true).pop(true);
@@ -129,7 +129,7 @@ class Contract extends StatelessWidget {
             progressDetails: 'Uknow error, please login again');
       }
 
-   /*    if (state.fetchingcontract == FETCHINGCONTRACT.unknown ) {
+      /*    if (state.fetchingcontract == FETCHINGCONTRACT.unknown ) {
         Modal(
             context: context,
             modalType: 'Unkown',

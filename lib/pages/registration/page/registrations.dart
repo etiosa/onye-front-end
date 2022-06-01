@@ -40,7 +40,7 @@ class _RegistrationState extends State<Registration> {
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         //  Navigator.of(context).pop();
         authsession.getHomeToken()?.then((value) async {
           var res = _loginbloc.home(homeToken: value);
@@ -330,7 +330,6 @@ class _AppointmentState extends State<Appointment> {
               actionButtons: TextButton(
                   child: const Text('Close'),
                   onPressed: () {
-
                     Navigator.popUntil(
                         context, ModalRoute.withName('/dashboard/checkin'));
                     context.read<RegisterationCubit>().setRegisterState();
@@ -620,7 +619,7 @@ Future<String?> showDialogConfirmation(
           }
       });
 //to here is the issue
-  return clinicalNotePopUp(context, appointment, _patientName,' hometoken');
+  return clinicalNotePopUp(context, appointment, _patientName, ' hometoken');
 }
 
 Future<String?> clinicalNotePopUp(
