@@ -35,7 +35,7 @@ class _AppointmentsState extends State<Appointments> {
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         //  Navigator.of(context).pop();
         authsession.getHomeToken()?.then((value) async {
           var res = _loginbloc.home(homeToken: value);
@@ -70,17 +70,16 @@ class _AppointmentsState extends State<Appointments> {
                   progressDetails: 'relogin');
             } else {
               final AuthSession authsession = AuthSession();
-                 authsession.getHomeToken()?.then((value) async {
+              authsession.getHomeToken()?.then((value) async {
                 _loginbloc.home(homeToken: value).then((res) {
                   context
                       .read<LoginBloc>()
                       .setLoginData(value, jsonDecode(res.body));
                 });
-                context.read<AppointmentCubit>().searchAppointments(
-                    token: value);
+                context
+                    .read<AppointmentCubit>()
+                    .searchAppointments(token: value);
               });
-              
-             
             }
           });
         });
@@ -321,7 +320,7 @@ class _AppointmentState extends State<Appointment> {
           return Column(
             children: [
               for (var index = 0;
-                  index <=state.appointmentList.length - 1;
+                  index <= state.appointmentList.length - 1;
                   index++)
                 AppointmentList(index: index, state: state)
             ],

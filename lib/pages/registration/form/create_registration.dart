@@ -31,7 +31,7 @@ class _CreateRegistrationState extends State<CreateRegistration> {
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
     }
@@ -263,7 +263,7 @@ class RegisterField extends StatelessWidget {
                                                 context
                                                     .read<RegisterationCubit>()
                                                     .clearState(),
-                                            /*     Messages.showMessage(
+                                                /*     Messages.showMessage(
                                                     const Icon(
                                                       IconData(0xf635,
                                                           fontFamily:
@@ -271,7 +271,7 @@ class RegisterField extends StatelessWidget {
                                                       color: Colors.green,
                                                     ),
                                                     'Registration created'), */
-                                            /*     Navigator.of(context)
+                                                /*     Navigator.of(context)
                                                     .pushAndRemoveUntil(
                                                         MaterialPageRoute(
                                                             builder: ((context) =>
@@ -282,7 +282,7 @@ class RegisterField extends StatelessWidget {
                                             else if (value != null &&
                                                 value.statusCode == 400)
                                               {
-                                             /*    Messages.showMessage(
+                                                /*    Messages.showMessage(
                                                     const Icon(
                                                       IconData(0xe237,
                                                           fontFamily:
@@ -349,7 +349,7 @@ class SearchPatientBody extends StatefulWidget {
 }
 
 class _SearchPatientBodyState extends State<SearchPatientBody> {
- // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -426,7 +426,7 @@ class SearchBar extends StatelessWidget {
             label: 'Search',
             onPressed: () {
               context.read<PatientCubit>().searchPatients(
-                nextPage: 0,
+                  nextPage: 0,
                   query: context.read<PatientCubit>().state.searchParams,
                   token: context.read<LoginBloc>().state.homeToken);
               fieldText.clear();

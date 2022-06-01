@@ -38,11 +38,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   @override
   void initState() {
     // TODO: implement initState
-   // PageController _pageController = PageController();
+    // PageController _pageController = PageController();
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/dashboard");
       });
     }
@@ -116,12 +116,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                       ),
                       onPressed: () {
                         if (_pageController.page! > 0) {
-
                           _pageController.previousPage(
                               curve: Curves.easeIn,
                               duration: Duration(milliseconds: 300));
                         } else {
-                         context.read<PatientCubit>().clearState();
+                          context.read<PatientCubit>().clearState();
                           Navigator.of(context).pop();
                         }
                       },
@@ -178,7 +177,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                             switch (response.statusCode) {
                               case 201:
                                 context.read<PatientCubit>().clearState();
-                             /*    Messages.showMessage(
+                                /*    Messages.showMessage(
                                     const Icon(
                                       IconData(0xf635,
                                           fontFamily: 'MaterialIcons'),
@@ -192,7 +191,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                                     ModalRoute.withName('/dashboard'));
                                 break;
                               case 400:
-                             /*    Messages.showMessage(
+                                /*    Messages.showMessage(
                                     const Icon(
                                       IconData(0xe237,
                                           fontFamily: 'MaterialIcons'),
@@ -210,7 +209,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                                     'Could not create patient'); */
                             }
                           } else {
-                           /*  Messages.showMessage(
+                            /*  Messages.showMessage(
                                 const Icon(
                                   IconData(0xe237, fontFamily: 'MaterialIcons'),
                                   color: Colors.red,
@@ -905,7 +904,7 @@ class EmergencyContact extends StatelessWidget {
       ],
     );
   }
-  
+
   bool allEmergencyContactFieldsAreValid(BuildContext context) {
     if (context.read<PatientCubit>().state.emergencyContactName == null &&
         context.read<PatientCubit>().state.emergencyContactPhoneNumber ==
