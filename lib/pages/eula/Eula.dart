@@ -129,36 +129,6 @@ class Contract extends StatelessWidget {
             ),
             progressDetails: 'Uknow error, please login again');
       }
-
-      /*    if (state.fetchingcontract == FETCHINGCONTRACT.unknown ) {
-        Modal(
-            context: context,
-            modalType: 'Unkown',
-            inclueAction: true,
-            actionButtons: TextButton(
-                child: const Text('Close'),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop(true);
-                  Navigator.of(context, rootNavigator: true).pop(true);
-                }),
-            modalBody: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                SizedBox(
-                  height: 40,
-                ),
-                Text('please login again'),
-                SizedBox(height: 20),
-                Icon(
-                  Icons.dangerous,
-                  color: Colors.redAccent,
-                  size: 100,
-                )
-              ],
-            ),
-            progressDetails: 'please login again');
-      } */
     }, builder: ((context, state) {
       if (state.fetchingcontract == FETCHINGCONTRACT.loading) {
         return Column(
