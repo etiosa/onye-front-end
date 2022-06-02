@@ -8,7 +8,7 @@ class ClinicalNoteTitleField extends StatefulWidget {
     required this.appointment,
     Key? key,
   }) : super(key: key);
- final  dynamic appointment;
+  final dynamic appointment;
 
   @override
   State<ClinicalNoteTitleField> createState() => _ClinicalNoteTitleFieldState();
@@ -50,11 +50,13 @@ class _ClinicalNoteTitleFieldState extends State<ClinicalNoteTitleField> {
           readOnly: context.read<LoginBloc>().state.role != 'DOCTOR',
           onChanged: (title) =>
               context.read<ClinicalnoteCubit>().setClinicalNoteTitle(title),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
-            fillColor: Color.fromARGB(255, 205, 226, 226),
-            labelStyle: TextStyle(
+            fillColor: context.read<LoginBloc>().state.role == 'DOCTOR'
+                ? const Color.fromARGB(255, 205, 226, 226)
+                : const Color.fromARGB(255, 159, 161, 161),
+            labelStyle: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600),

@@ -691,11 +691,13 @@ List<Widget> clinicalNoteForm(
           onChanged: (username) {
             context.read<LoginBloc>().add(LoginUserNameChanged(username));
           },
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(borderSide: BorderSide.none),
             filled: true,
-            fillColor: Color.fromARGB(255, 205, 226, 226),
-            labelStyle: TextStyle(
+            fillColor: context.read<LoginBloc>().state.role == 'DOCTOR'
+                ? const Color.fromARGB(255, 205, 226, 226)
+                : const Color.fromARGB(255, 159, 161, 161),
+            labelStyle: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600),
