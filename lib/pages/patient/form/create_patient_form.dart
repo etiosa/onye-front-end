@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:onye_front_ened/Widgets/drop_down.dart';
 import 'package:onye_front_ened/Widgets/input_field.dart';
+import 'package:onye_front_ened/components/util/Modal.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
@@ -39,12 +40,13 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
   void initState() {
     // PageController _pageController = PageController();
     super.initState();
-    if (context.read<LoginBloc>().state.homeToken.isEmpty) {
+    // get the token from session
+    /*  if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/dashboard");
       });
-    }
+    } */
   }
 
   @override
@@ -71,157 +73,271 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20.0, left: 20),
-                child: Text(
-                  "Create patient record",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 1.2,
-                  width: MediaQuery.of(context).size.width / 1.05,
-                  child: PageView(
-                    controller: _pageController,
-                    children: [
-                      SingleChildScrollView(
-                        child: BasicInfoFormBody(
-                            formKey: _formKeys[0], validator: validator),
-                      ),
-                      SingleChildScrollView(
-                        child: ContactInfoFormBody(
-                            formKey: _formKeys[1], validator: validator),
-                      ),
-                      SingleChildScrollView(
-                        child: AdditionalInfoFormBody(
-                            formKey: _formKeys[2], validator: validator),
-                      ),
-                    ],
+          child: BlocListener<PatientCubit, PatientState>(
+            listener: (context, state) {
+              // TODO: implement listener
+
+              if (state.patientcreation == PATIENTCREATION.inprogress) {
+                Modal(
+                    context: context,
+                    modalType: '',
+                    inclueAction: false,
+                    modalBody: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text('patient creation In Progress'),
+                        const SizedBox(height: 30),
+                        SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator.adaptive(
+                              backgroundColor: Colors.grey[500],
+                              strokeWidth: 4,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Color.fromARGB(255, 56, 155, 152)),
+                            )),
+                      ],
+                    ),
+                    progressDetails: 'progrss');
+              }
+
+              if (state.patientcreation == PATIENTCREATION.created) {
+                Modal(
+                    context: context,
+                    modalType: '',
+                    inclueAction: true,
+                    actionButtons: TextButton(
+                        child: const Text('Close'),
+                        onPressed: () {
+                          Navigator.popUntil(context,
+                              ModalRoute.withName('/dashboard/patient'));
+                          context
+                              .read<PatientCubit>()
+                              .resetPatientCreationState();
+
+                          /*        authsession.getHomeToken()?.then((value) async {
+                      _loginbloc.home(homeToken: value).then((res) {
+                        context
+                            .read<LoginBloc>()
+                            .setLoginData(value, jsonDecode(res.body));
+                      });
+/* 
+                      context.read<RegisterationCubit>().searchRegistrations(
+                          nextPage: 0,
+                          token: value,
+                          searchParams: context
+                              .read<RegisterationCubit>()
+                              .state
+                              .searchParams); */
+                    }); */
+                        }),
+                    modalBody: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text('Sucessful register a patient'),
+                        SizedBox(height: 30),
+                        Icon(
+                          Icons.check,
+                          size: 100,
+                          color: Color.fromARGB(255, 56, 155, 152),
+                        )
+                      ],
+                    ),
+                    progressDetails: 'Sucessful register a patient');
+              }
+
+              if (state.patientcreation == PATIENTCREATION.error ||
+                  state.patientcreation == PATIENTCREATION.unknown) {
+                Modal(
+                    inclueAction: true,
+                    actionButtons: TextButton(
+                        child: const Text('Close'),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop(true);
+                          Navigator.of(context, rootNavigator: true).pop(true);
+                        }),
+                    context: context,
+                    modalType: 'failed',
+                    modalBody: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text("failed to create patient, please try again"),
+                        SizedBox(height: 20),
+                        Icon(
+                          Icons.error,
+                          color: Colors.redAccent,
+                          size: 100,
+                        )
+                      ],
+                    ),
+                    progressDetails:
+                        "failed to create patient, please try again");
+              }
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 20.0, left: 20),
+                  child: Text(
+                    "Create patient record",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.2,
+                    width: MediaQuery.of(context).size.width / 1.05,
+                    child: PageView(
+                      controller: _pageController,
+                      children: [
+                        SingleChildScrollView(
+                          child: BasicInfoFormBody(
+                              formKey: _formKeys[0], validator: validator),
+                        ),
+                        SingleChildScrollView(
+                          child: ContactInfoFormBody(
+                              formKey: _formKeys[1], validator: validator),
+                        ),
+                        SingleChildScrollView(
+                          child: AdditionalInfoFormBody(
+                              formKey: _formKeys[2], validator: validator),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.grey[200],
+                        ),
+                        onPressed: () {
+                          if (_pageController.page! > 0) {
+                            _pageController.previousPage(
+                                curve: Curves.easeIn,
+                                duration: const Duration(milliseconds: 300));
+                          } else {
+                            context.read<PatientCubit>().clearState();
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: const Text(
+                          'Back',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        )),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * .1,
+                    ),
+                    ElevatedButton(
+                      child: const Text('Save'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.grey[200],
+                        primary: const Color.fromARGB(255, 56, 155, 152),
                       ),
-                      onPressed: () {
-                        if (_pageController.page! > 0) {
-                          _pageController.previousPage(
-                              curve: Curves.easeIn,
-                              duration: const Duration(milliseconds: 300));
-                        } else {
-                          context.read<PatientCubit>().clearState();
-                          Navigator.of(context).pop();
+                      onPressed: () async {
+                        if (_pageController.page == 0) {
+                          if (refToBasicInfo.formsAreValid()) {
+                            nextPage();
+                          }
+                        } else if (_pageController.page == 1) {
+                          if (refToContactInfo.formsAreValid()) {
+                            nextPage();
+                          }
+                        } else if (_pageController.page == 2) {
+                          if (refToAdditionalInfo.formsAreValid()) {
+                            var response = await context
+                                .read<PatientCubit>()
+                                .createNewPatient(
+                                    token: context
+                                        .read<LoginBloc>()
+                                        .state
+                                        .homeToken);
+
+                            if (response != null &&
+                                response.body.contains('errors')) {
+                              dynamic errors =
+                                  json.decode(response.body)['errors'];
+                              String errorsJson = jsonEncode(errors);
+
+                              if (errorsJson.contains('phoneNumber')) {
+                                validator.phoneNumberError =
+                                    jsonDecode(errorsJson)['phoneNumber'];
+                              }
+                              if (errorsJson.contains('email')) {
+                                validator.emailError =
+                                    jsonDecode(errorsJson)['email'];
+                              }
+                            }
+
+                            if (response != null) {
+                              switch (response.statusCode) {
+                                case 201:
+                                  context.read<PatientCubit>().clearState();
+                                  /*    Messages.showMessage(
+                                              const Icon(
+                                                IconData(0xf635,
+                                                    fontFamily: 'MaterialIcons'),
+                                                color: Colors.green,
+                                              ),
+                                              'Patient created'); */
+                                  /*    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              const Dashboard())),
+                                      ModalRoute.withName('/dashboard')); */
+                                  break;
+                                case 400:
+                                  /*    Messages.showMessage(
+                                              const Icon(
+                                                IconData(0xe237,
+                                                    fontFamily: 'MaterialIcons'),
+                                                color: Colors.red,
+                                              ),
+                                              'Could not create patient, invalid input'); */
+                                  break;
+                                default:
+                                /*   Messages.showMessage(
+                                              const Icon(
+                                                IconData(0xe237,
+                                                    fontFamily: 'MaterialIcons'),
+                                                color: Colors.red,
+                                              ),
+                                              'Could not create patient'); */
+                              }
+                            } else {
+                              /*  Messages.showMessage(
+                                          const Icon(
+                                            IconData(0xe237, fontFamily: 'MaterialIcons'),
+                                            color: Colors.red,
+                                          ),
+                                          'Could not create patient, invalid input'); */
+                            }
+                          }
                         }
                       },
-                      child: const Text(
-                        'Back',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .1,
-                  ),
-                  ElevatedButton(
-                    child: const Text('Save'),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 56, 155, 152),
                     ),
-                    onPressed: () async {
-                      if (_pageController.page == 0) {
-                        if (refToBasicInfo.formsAreValid()) {
-                          nextPage();
-                        }
-                      } else if (_pageController.page == 1) {
-                        if (refToContactInfo.formsAreValid()) {
-                          nextPage();
-                        }
-                      } else if (_pageController.page == 2) {
-                        if (refToAdditionalInfo.formsAreValid()) {
-                          var response = await context
-                              .read<PatientCubit>()
-                              .createNewPatient(
-                                  token: context
-                                      .read<LoginBloc>()
-                                      .state
-                                      .homeToken);
-
-                          if (response != null &&
-                              response.body.contains('errors')) {
-                            dynamic errors =
-                                json.decode(response.body)['errors'];
-                            String errorsJson = jsonEncode(errors);
-
-                            if (errorsJson.contains('phoneNumber')) {
-                              validator.phoneNumberError =
-                                  jsonDecode(errorsJson)['phoneNumber'];
-                            }
-                            if (errorsJson.contains('email')) {
-                              validator.emailError =
-                                  jsonDecode(errorsJson)['email'];
-                            }
-                          }
-
-                          if (response != null) {
-                            switch (response.statusCode) {
-                              case 201:
-                                context.read<PatientCubit>().clearState();
-                                /*    Messages.showMessage(
-                                    const Icon(
-                                      IconData(0xf635,
-                                          fontFamily: 'MaterialIcons'),
-                                      color: Colors.green,
-                                    ),
-                                    'Patient created'); */
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const Dashboard())),
-                                    ModalRoute.withName('/dashboard'));
-                                break;
-                              case 400:
-                                /*    Messages.showMessage(
-                                    const Icon(
-                                      IconData(0xe237,
-                                          fontFamily: 'MaterialIcons'),
-                                      color: Colors.red,
-                                    ),
-                                    'Could not create patient, invalid input'); */
-                                break;
-                              default:
-                              /*   Messages.showMessage(
-                                    const Icon(
-                                      IconData(0xe237,
-                                          fontFamily: 'MaterialIcons'),
-                                      color: Colors.red,
-                                    ),
-                                    'Could not create patient'); */
-                            }
-                          } else {
-                            /*  Messages.showMessage(
-                                const Icon(
-                                  IconData(0xe237, fontFamily: 'MaterialIcons'),
-                                  color: Colors.red,
-                                ),
-                                'Could not create patient, invalid input'); */
-                          }
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
