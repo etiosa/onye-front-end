@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'event.dart';
 
+//TODO:  I
 class AppointmentAnalytics {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
@@ -17,13 +18,6 @@ class AppointmentAnalytics {
         lastName: lastName,
         userId: userId,
         userType: userType);
-
-/*     await analytics.logEvent(name: EVENTTYPE.CREATE.toString(), parameters: {
-      "userId": userId,
-      "userType": userType,
-      "timeCreation": timeCreation,
-      "appointmentId": appointmentId
-    }); */
     logEevent(
         appointmentId: appointmentId,
         userId: userId,
@@ -43,13 +37,6 @@ class AppointmentAnalytics {
         lastName: lastName,
         userId: userId,
         userType: userType);
-    /*    await analytics.logEvent(name: EVENTTYPE.CANCEL.toString(), parameters: {
-      "userId": userId,
-      "userType": userType,
-      "timeDeletion": timeDeletion,
-      "appointmentId": appointmentId
-    });
- */
     logEevent(
         appointmentId: appointmentId,
         userId: userId,
@@ -71,12 +58,6 @@ class AppointmentAnalytics {
         lastName: lastName,
         userId: userId,
         userType: userType);
-    /* await analytics.logEvent(name: EVENTTYPE.EDIT.toString(), parameters: {
-      "userId": userId,
-      "userType": userType,
-      "timeEdit": timeEdit,
-      "appointmentId": appointmentId
-    }); */
     logEevent(
         appointmentId: appointmentId,
         userId: userId,
