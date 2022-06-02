@@ -56,13 +56,14 @@ class _ClinicalNoteDropDownState extends State<ClinicalNoteDropDown> {
                   // width: 200,
                   height: 50,
                   padding: const EdgeInsets.all(10.0),
-                  color: const Color.fromARGB(255, 205, 226, 226),
+                  color: context.read<LoginBloc>().state.role == 'DOCTOR'
+                      ? const Color.fromARGB(255, 205, 226, 226)
+                      : const Color.fromARGB(255, 152, 165, 165),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       hint: const Text("Select Note Type"),
                       dropdownColor: const Color.fromARGB(255, 205, 226, 226),
                       value: dropdownValue,
-                      // icon: const Icon(Icons.arrow_downward),
                       iconSize: 20,
                       elevation: 16,
                       style: const TextStyle(color: Colors.black),
