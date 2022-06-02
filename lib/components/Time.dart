@@ -5,9 +5,9 @@ import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import '../pages/registration/state/registration_cubit.dart';
 
 class Time extends StatelessWidget {
-  String rangeLabel;
-  String type;
-  Time({Key? key, required this.rangeLabel, required this.type})
+  final String rangeLabel;
+  final String type;
+  const Time({Key? key, required this.rangeLabel, required this.type})
       : super(key: key);
 
   @override
@@ -64,9 +64,7 @@ class Time extends StatelessWidget {
                 child: SizedBox(
                   child: Center(
                     child: Text(
-                        rangeLabel == 'start'
-                            ? state.fromTime
-                            : state.toTime,
+                        rangeLabel == 'start' ? state.fromTime : state.toTime,
                         style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontFamily: 'poppins',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../components/util/Modal.dart';
+import '../components/util/modal.dart';
 import '../pages/appointment/state/appointment_cubit.dart';
 import '../pages/appointments.dart';
 import '../pages/auth/state/login_bloc.dart';
@@ -107,7 +107,6 @@ class AppointmentButtons extends StatelessWidget {
                       ),
                       TextButton(
                           onPressed: () {
-                            //TODO:  move this it's own method
                             var response = context
                                 .read<AppointmentCubit>()
                                 .cancelAppointment(

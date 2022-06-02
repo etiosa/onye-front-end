@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'PatientModel.dart';
+part of 'patient_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

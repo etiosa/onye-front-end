@@ -8,7 +8,8 @@ import '../pages/appointments.dart';
 import '../pages/auth/state/login_bloc.dart';
 import 'patient_appointment_registeration_card.dart';
 
-class Patient_Registration_Appointment_Card extends StatelessWidget {
+// ignore: must_be_immutable
+class PatientRegistrationAppointmentCard extends StatelessWidget {
   final String firstName;
   final String lastName;
   final String dateTime;
@@ -22,7 +23,7 @@ class Patient_Registration_Appointment_Card extends StatelessWidget {
   final Function? clinicalNote;
   final Function? addRegisteration;
 
-  Patient_Registration_Appointment_Card({
+  PatientRegistrationAppointmentCard({
     required this.firstName,
     required this.lastName,
     required this.dateTime,
@@ -58,20 +59,24 @@ class Patient_Registration_Appointment_Card extends StatelessWidget {
               MediaQuery.of(context).size.width < 600 ? double.infinity : 600,
           color: const Color.fromARGB(255, 236, 246, 246),
           child: Stack(children: [
-           PatientAppointmentRegistrationCard(firstName: firstName, middleName: middleName, lastName: lastName, patientNumber: patientNumber, date: date, time: time),
+            PatientAppointmentRegistrationCard(
+                firstName: firstName,
+                middleName: middleName,
+                lastName: lastName,
+                patientNumber: patientNumber,
+                date: date,
+                time: time),
           ])),
     );
   }
 }
-
-
 
 class CallToActions extends StatelessWidget {
   final String role;
   final String type;
   final String appointmentId;
   final Widget? button;
- final Function addClincialNote;
+  final Function addClincialNote;
   //Function addRegisteration;
 
   const CallToActions({
@@ -119,9 +124,7 @@ class RegisterationButtons extends StatelessWidget {
       {Key? key,
       required this.type,
       required this.role,
-      required this.addClincialNote
-      // required this.addRegisteration,
-      })
+      required this.addClincialNote})
       : super(key: key);
 
   @override
@@ -211,7 +214,7 @@ class AppointmentButtons extends StatelessWidget {
               response.then((value) => {
                     if (value != null && value.statusCode == 200)
                       {
-                     /*    Messages.showMessage(
+                        /*    Messages.showMessage(
                             const Icon(
                               IconData(0xf635, fontFamily: 'MaterialIcons'),
                               color: Colors.green,
@@ -224,7 +227,7 @@ class AppointmentButtons extends StatelessWidget {
                       }
                     else if (value != null && value.statusCode == 400)
                       {
-                     /*    Messages.showMessage(
+                        /*    Messages.showMessage(
                             const Icon(
                               IconData(0xe237, fontFamily: 'MaterialIcons'),
                               color: Colors.red,
@@ -235,7 +238,6 @@ class AppointmentButtons extends StatelessWidget {
             },
           ),
           button
-        
         ],
       ),
     );

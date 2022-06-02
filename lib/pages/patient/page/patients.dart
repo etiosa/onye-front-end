@@ -98,7 +98,6 @@ class _PatientsPageState extends State<PatientsPage> {
                     onPressed: () async {
                       authsession.getHomeToken()!.then((homeToken) {
                         if (homeToken != '') {
-                          //TODO: REMOVE SearchPatientds into cubit
                           context.read<PatientCubit>().searchPatients(
                               query: context.read<PatientCubit>().state.query,
                               nextPage: 0,

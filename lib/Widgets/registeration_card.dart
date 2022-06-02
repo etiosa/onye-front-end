@@ -139,8 +139,7 @@ class RegisterButton extends StatelessWidget {
       }
     }), child: BlocBuilder<RegisterationCubit, RegistrationState>(
       builder: (context, state) {
-        return (
-          Button(
+        return (Button(
             height: 50,
             width: 130,
             setColor: true,
@@ -150,7 +149,7 @@ class RegisterButton extends StatelessWidget {
             isregsiter: isregister,
             label: "Register",
             onPressed: () {
-              var reponse = addRegisteration();
+              addRegisteration();
             }));
       },
     ));

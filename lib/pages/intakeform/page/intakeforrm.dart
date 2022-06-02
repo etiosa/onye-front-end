@@ -43,10 +43,10 @@ List<String> test = [
   'familyHistory'
 ];
 List<Widget> widgets = [
-  Vitals(),
+  const Vitals(),
   CurrentMedications(),
-  PastMedicalConditions(),
-  FamilyHistory()
+  const PastMedicalConditions(),
+  const FamilyHistory()
 ];
 
 class _IntakeFormState extends State<IntakeForm> {
@@ -67,10 +67,7 @@ class _IntakeFormState extends State<IntakeForm> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-               Vitals()
-             
-              ],
+              children: const [Vitals()],
             ),
           ),
         ),
@@ -97,12 +94,11 @@ class _IntakeFormState extends State<IntakeForm> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: const [
                   SizedBox(
                     height: 10,
                   ),
                   // const SizedBox(height: 10,),
-               
                 ],
               ),
             );
@@ -132,7 +128,7 @@ class Vitals extends StatelessWidget {
           width: 320,
           height: 50,
           child: TextFormField(
-         /*    onChanged: (addressLine1) =>
+            /*    onChanged: (addressLine1) =>
                 context.read<PatientCubit>().setAddressLine1(addressLine1), */
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
@@ -174,9 +170,8 @@ class Vitals extends StatelessWidget {
             ),
           ),
         ),
-                const SizedBox(height: 10),
-
-           SizedBox(
+        const SizedBox(height: 10),
+        SizedBox(
           width: 320,
           height: 50,
           child: TextFormField(
@@ -194,7 +189,7 @@ class Vitals extends StatelessWidget {
             ),
           ),
         ),
-          const SizedBox(height: 10),
+        const SizedBox(height: 10),
         Column(
           children: [
             SizedBox(
@@ -215,8 +210,8 @@ class Vitals extends StatelessWidget {
                 ),
               ),
             ),
-              const SizedBox(height: 10),
-                SizedBox(
+            const SizedBox(height: 10),
+            SizedBox(
               width: 320,
               height: 50,
               child: TextFormField(
@@ -236,13 +231,12 @@ class Vitals extends StatelessWidget {
             )
           ],
         ),
-      
       ],
     );
   }
 
   bool allAddressFieldsValid(BuildContext context) {
-   /*  if (context.read<PatientCubit>().state.addressLine1 == null &&
+    /*  if (context.read<PatientCubit>().state.addressLine1 == null &&
         context.read<PatientCubit>().state.zipCode == null &&
         context.read<PatientCubit>().state.city == null) {
       return true;
@@ -265,11 +259,9 @@ class Vitals extends StatelessWidget {
   }
 }
 
-
-
-//an array of inPut 
+//an array of inPut
 class CurrentMedications extends StatefulWidget {
-  CurrentMedications({Key? key}) : super(key: key);
+  const CurrentMedications({Key? key}) : super(key: key);
 
   @override
   State<CurrentMedications> createState() => _CurrentMedicationsState();
@@ -282,8 +274,6 @@ class _CurrentMedicationsState extends State<CurrentMedications> {
   }
 }
 
-
-
 //array of input
 class PastMedicationCondtions extends StatelessWidget {
   const PastMedicationCondtions({Key? key}) : super(key: key);
@@ -295,7 +285,7 @@ class PastMedicationCondtions extends StatelessWidget {
 }
 
 class FamilyHistory extends StatefulWidget {
-  const FamilyHistory({ Key? key }) : super(key: key);
+  const FamilyHistory({Key? key}) : super(key: key);
 
   @override
   State<FamilyHistory> createState() => _FamilyHistoryState();
@@ -304,8 +294,6 @@ class FamilyHistory extends StatefulWidget {
 class _FamilyHistoryState extends State<FamilyHistory> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Container();
   }
 }

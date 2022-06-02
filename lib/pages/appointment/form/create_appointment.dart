@@ -31,7 +31,7 @@ class _CreateRegistrationState extends State<CreateAppointment> {
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
     }
@@ -265,12 +265,12 @@ Future<Response?>? createAppointmentData({required BuildContext context}) {
 
 // ignore: must_be_immutable
 class SearchPatientBody extends StatefulWidget {
-  SearchPatientBody(
+  const SearchPatientBody(
       {Key? key, required this.formIndex, required this.pageController})
       : super();
 
-  int formIndex;
-  PageController pageController;
+  final int formIndex;
+  final PageController pageController;
 
   @override
   State<SearchPatientBody> createState() => _SearchPatientBodyState();

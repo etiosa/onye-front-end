@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_const
 
-
 import 'package:flutter/material.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 
@@ -9,20 +8,12 @@ class ScreenNavigator extends StatefulWidget {
   _ScreenNavigatorState createState() => _ScreenNavigatorState();
 }
 
-void _nextPageNerxt() {
-  //Nav
-}
-
 //route latter on
 
 class _ScreenNavigatorState extends State<ScreenNavigator> {
   int _selectedIndex = 0;
 
-  final _screens = [
-  
-   
-    const Dashboard()
-  ];
+  final _screens = [const Dashboard()];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +39,7 @@ class _ScreenNavigatorState extends State<ScreenNavigator> {
           showUnselectedLabels: true,
           selectedFontSize: 12.0,
           unselectedFontSize: 12.0,
-          selectedItemColor: Color.fromARGB(255, 121, 113, 234),
+          selectedItemColor: const Color.fromARGB(255, 121, 113, 234),
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
           onTap: (i) => setState(() => _selectedIndex = i),

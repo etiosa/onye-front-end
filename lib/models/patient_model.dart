@@ -1,7 +1,5 @@
-
 import 'package:json_annotation/json_annotation.dart';
-part 'PatientModel.g.dart';
-
+part 'patient_model.g.dart';
 
 @JsonSerializable()
 class PatientModel {
@@ -17,7 +15,7 @@ class PatientModel {
   String contactPreference;
   String countryCode;
   String aliveStatus;
- 
+
   PatientModel({
     required this.firstName,
     required this.lastName,

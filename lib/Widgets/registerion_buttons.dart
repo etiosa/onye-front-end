@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 
-import 'Button.dart';
+import 'button.dart';
+
 class RegisterationButtons extends StatelessWidget {
   final String type;
   final String role;

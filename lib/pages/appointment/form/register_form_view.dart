@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
 import '../../../components/drop_down.dart';
-import '../../../components/util/Modal.dart';
+import '../../../components/util/modal.dart';
 import '../../appointments.dart';
 import 'create_appointment.dart';
 
 class Register extends StatefulWidget {
- const  Register({Key? key, required this.formIndex}) : super(key: key);
+  const Register({Key? key, required this.formIndex}) : super(key: key);
   final int formIndex;
 
   @override
@@ -146,13 +146,13 @@ class RegisterField extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  DropDown(label: 'Language Preference', options: const ['EN']),
+                  const DropDown(label: 'Language Preference', options: ['EN']),
                   const SizedBox(height: 25),
-                  DropDown(
+                  const DropDown(
                       label: 'Type of Visit',
-                      options: const ['Follow-up', 'Consultation']),
+                      options: ['Follow-up', 'Consultation']),
                   const SizedBox(height: 25),
-                  DropDown(label: 'Reason for Visit', options: const [
+                  const DropDown(label: 'Reason for Visit', options: [
                     'Headache',
                     'Follow-up',
                     'Malaria',
@@ -201,7 +201,7 @@ class RegisterField extends StatelessWidget {
                                     const Color.fromARGB(255, 56, 155, 152)),
                               ),
                               onPressed: () {
-                              createAppointmentData(context: context);
+                                createAppointmentData(context: context);
                               },
                               child: const Text('Submit')),
                         ),

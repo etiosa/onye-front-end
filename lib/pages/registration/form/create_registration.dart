@@ -22,16 +22,14 @@ class CreateRegistration extends StatefulWidget {
 //TODO: Refactor
 class _CreateRegistrationState extends State<CreateRegistration> {
   //int _index = 0;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int currentPageIndex = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
-      //redirect to home
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/");
       });
     }
@@ -149,8 +147,8 @@ class _CreateRegistrationState extends State<CreateRegistration> {
 }
 
 class Register extends StatefulWidget {
-  Register({Key? key, required this.formIndex}) : super(key: key);
-  int formIndex;
+  const Register({Key? key, required this.formIndex}) : super(key: key);
+  final int formIndex;
 
   @override
   State<Register> createState() => _RegisterState();
@@ -196,14 +194,14 @@ class RegisterField extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 10),
-                      DropDown(
-                          label: 'Language Preference', options: const ['EN']),
+                      const DropDown(
+                          label: 'Language Preference', options: ['EN']),
                       const SizedBox(height: 25),
-                      DropDown(
+                      const DropDown(
                           label: 'Type of Visit',
-                          options: const ['Follow-up', 'Consultation']),
+                          options: ['Follow-up', 'Consultation']),
                       const SizedBox(height: 25),
-                      DropDown(label: 'Reason for Visit', options: const [
+                      const DropDown(label: 'Reason for Visit', options: [
                         'Headache',
                         'Follow-up',
                         'Malaria',
@@ -337,12 +335,12 @@ class RegisterField extends StatelessWidget {
 
 //TODO: REPLACE REGISTERATION WITH PATIENTCUBIT
 class SearchPatientBody extends StatefulWidget {
-  SearchPatientBody(
+  const SearchPatientBody(
       {Key? key, required this.formIndex, required this.pageController})
       : super();
 
-  int formIndex;
-  PageController pageController;
+  final int formIndex;
+  final PageController pageController;
 
   @override
   State<SearchPatientBody> createState() => _SearchPatientBodyState();
@@ -370,10 +368,10 @@ class _SearchPatientBodyState extends State<SearchPatientBody> {
 }
 
 class SearchBar extends StatelessWidget {
-  SearchBar({Key? key, required this.formIndex, required this.field})
+  const SearchBar({Key? key, required this.formIndex, required this.field})
       : super(key: key);
-  int formIndex;
-  String field;
+  final int formIndex;
+  final String field;
 
   @override
   Widget build(BuildContext context) {
@@ -437,12 +435,12 @@ class SearchBar extends StatelessWidget {
 }
 
 class DropDown extends StatefulWidget {
-  DropDown({Key? key, required this.label, required this.options})
+  const DropDown({Key? key, required this.label, required this.options})
       : super(
           key: key,
         );
-  String label;
-  List<String> options;
+  final String label;
+  final List<String> options;
 
   @override
   _DropDownState createState() => _DropDownState();

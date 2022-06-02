@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:onye_front_ened/Widgets/button.dart';
-import 'package:onye_front_ened/components/util/Modal.dart';
+import 'package:onye_front_ened/components/util/modal.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/eula/state/eula_bloc.dart';
 
@@ -72,7 +72,7 @@ class Contract extends StatelessWidget {
             actionButtons: TextButton(
                 child: const Text('Close'),
                 onPressed: () {
-                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
                     //TODO: once it's accept  remove this  from the stack and push to dashboard
                     Navigator.of(context, rootNavigator: true).pop(true);
                     Navigator.of(context, rootNavigator: true).pop(true);
