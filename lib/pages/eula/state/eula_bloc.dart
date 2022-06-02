@@ -32,26 +32,27 @@ class EulaBloc extends Bloc<EulaEvent, EulaState> {
             betaContract: license, fetchingcontract: FETCHINGCONTRACT.loaded));
       }
     } catch (err) {
-             emit(state.copywith(error: err.toString()));
+      emit(state.copywith(error: err.toString()));
     }
   }
 
   void _acceptBetaContract(
       AcceptContract event, Emitter<EulaState> emit) async {
-    add(AccpetingBetaContract());
+    emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.inprogress));
 
     try {
       var acceptContractReponse = await _eulaRepository.acceptContract(
           token: event.token, userId: event.userId);
       final statusCode = acceptContractReponse?.statusCode;
       if (statusCode == 204) {
-        add(BetaContractAccept());
-        emit(state.copywith(isContractAccept: true));
+        emit(state.copywith(
+            isContractAccept: true,
+            acceptcontractstatus: ACCEPTCONTRACTSTATUS.accept));
       } else {
-        add(AcceptBetaFailed(acceptContractReponse!.body.toString()));
+        emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.failed));
       }
     } catch (err) {
-      add(AccepBetaContractUnknownError(err.toString()));
+      emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.unkown));
     }
   }
 }

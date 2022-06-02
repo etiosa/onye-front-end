@@ -7,7 +7,6 @@ import 'package:onye_front_ened/pages/eula/Eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
-import 'package:onye_front_ened/pages/eula/Eula.dart';
 import 'package:onye_front_ened/pages/eula/state/eula_bloc.dart';
 import 'package:onye_front_ened/pages/home.dart';
 import 'package:onye_front_ened/pages/patient/page/patient_profile.dart';
@@ -43,7 +42,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   static final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
@@ -69,7 +67,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (_) => LoginBloc(_authRepository),
             ),
-             BlocProvider(
+            BlocProvider(
               create: (_) => EulaBloc(),
             ),
             BlocProvider(
@@ -108,6 +106,4 @@ class MyApp extends StatelessWidget {
           ),
         ));
   }
-
- 
 }
