@@ -27,9 +27,8 @@ class RegisterationCubit extends Cubit<RegistrationState> {
         reasons: reasons,
         typeOfVisit: typeOfVisit);
 
-    //handle error here
     var body = json.decode(req!.body);
-    var type = body['type'];
+    //var type = body['type'];
 
     if (req.statusCode != 201) {
       emit(state.copyWith(
@@ -39,9 +38,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
       emit(state.copyWith(
           registerState: REGISTRATIONSTATE.sucessful, type: body['type']));
     }
-
-    //Update the state after the register..we get back a payload from the API
-    //searchRegistrations(token: token);
 
     return req;
   }
@@ -76,8 +72,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
       int? nextPage,
       String? startDateTime,
       String? endDateTime}) async {
-
-        
     emit(state.copyWith(searchState: SEARCHSTATE.inital));
     emit(state.copyWith(
         regLoad: REGISTERSTATELOAD.loading,
@@ -96,7 +90,9 @@ class RegisterationCubit extends Cubit<RegistrationState> {
     var registrationsList = body['elements'];
     var totalPages = body['totalPages'];
     emit(state.copyWith(
-        registrationList: registrationsList, maxPageNumber: totalPages, ));
+      registrationList: registrationsList,
+      maxPageNumber: totalPages,
+    ));
 
     if (state.registrationList.isEmpty) {
       emit(state.copyWith(searchState: SEARCHSTATE.notFound));

@@ -33,7 +33,6 @@ class SearchBar extends StatelessWidget {
           width: 320,
           child: TextFormField(
             controller: fieldText,
-            //TODO: change this later
             onChanged: (query) => {
               if (field == 'Search patient')
                 {
@@ -106,10 +105,10 @@ class SearchBar extends StatelessWidget {
                   fieldText.clear();
                 }
                 if (field == 'Search doctor') {
-                   context.read<DoctorCubit>().searchDoctors(
+                  context.read<DoctorCubit>().searchDoctors(
                       query: context.read<DoctorCubit>().state.searchParams,
                       nextPage: 0,
-                      token: context.read<LoginBloc>().state.homeToken); 
+                      token: context.read<LoginBloc>().state.homeToken);
                   fieldText.clear();
                 }
               },

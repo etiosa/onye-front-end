@@ -4,15 +4,15 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 // ignore: must_be_immutable
 class InputField extends StatelessWidget {
-  InputField(
+  const InputField(
       {Key? key,
       required this.label,
       required this.setValue,
       required this.isRequired})
       : super(key: key);
   final String label;
-  Function setValue;
-  bool isRequired;
+  final Function setValue;
+  final bool isRequired;
 
   @override
   Widget build(BuildContext context) {

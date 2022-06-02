@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../pages/appointment/state/appointment_cubit.dart';
 
-
 class DropDown extends StatefulWidget {
-  DropDown({Key? key, required this.label, required this.options})
+  const DropDown({Key? key, required this.label, required this.options})
       : super(
           key: key,
         );
-  String label;
-  List<String> options;
+  final String label;
+  final List<String> options;
 
   @override
   _DropDownState createState() => _DropDownState();

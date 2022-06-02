@@ -1,47 +1,41 @@
 part of 'patient_cubit.dart';
 
-enum PATIENTSEARCHSTATE {
-  inital,
-  sucessful,
-  error,
-  notFound,
-  startsearch
-}
+enum PATIENTSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 
 //TODO: Refactor
 class PatientState extends Equatable {
-  const PatientState(
-      {this.firstName,
-      this.middleName,
-      this.lastName,
-      required this.dateOfBirth,
-      required this.gender,
-      required this.religion,
-      required this.educationLevel,
-      this.phoneNumber,
-      this.email,
-      this.contactPreferences,
-      this.addressLine1,
-      this.addressLine2,
-      this.city,
-      this.zipCode,
-      required this.ethnicity,
-      this.allOptions = const {},
-      this.appointmentList = const [],
-      this.emergencyContactName,
-      this.emergencyContactPhoneNumber,
-      this.emergencyContactRelationship,
-      this.contactPreference,
-      this.token = '',
-      this.query = '',
-      this.searchState = PATIENTSEARCHSTATE.inital,
-      this.createdPatientData = const {},
-      this.patientsList = const [],
-      this.selectedPatientId = '',
-      this.maxPageNumber = 0,
-      this.nextPage = 0,
-      this.searchParams='',
-      /* this.registrationFormState = RegistrationFormState.init */});
+  const PatientState({
+    this.firstName,
+    this.middleName,
+    this.lastName,
+    required this.dateOfBirth,
+    required this.gender,
+    required this.religion,
+    required this.educationLevel,
+    this.phoneNumber,
+    this.email,
+    this.contactPreferences,
+    this.addressLine1,
+    this.addressLine2,
+    this.city,
+    this.zipCode,
+    required this.ethnicity,
+    this.allOptions = const {},
+    this.appointmentList = const [],
+    this.emergencyContactName,
+    this.emergencyContactPhoneNumber,
+    this.emergencyContactRelationship,
+    this.contactPreference,
+    this.token = '',
+    this.query = '',
+    this.searchState = PATIENTSEARCHSTATE.inital,
+    this.createdPatientData = const {},
+    this.patientsList = const [],
+    this.selectedPatientId = '',
+    this.maxPageNumber = 0,
+    this.nextPage = 0,
+    this.searchParams = '',
+  });
 
   final String? firstName;
   final String? middleName;
@@ -67,8 +61,7 @@ class PatientState extends Equatable {
   final List<dynamic> appointmentList;
   final Map<String, dynamic> allOptions;
   final dynamic createdPatientData;
-/*   final RegistrationFormState registrationFormState;
- */  final String? emergencyContactPhoneNumber;
+  final String? emergencyContactPhoneNumber;
   final List<dynamic> patientsList;
   final String selectedPatientId;
   final int maxPageNumber;
@@ -135,15 +128,14 @@ class PatientState extends Equatable {
       String? emergencyContactRelationship,
       String? city,
       Map<String, dynamic>? allOptions,
-/*       RegistrationFormState? registrationFormState,
- */      String? contactPreferences,
+      String? contactPreferences,
       List<dynamic>? patientsList,
       String? selectedPatientId,
       String? searchParams,
       int? maxPageNumber}) {
     return PatientState(
         token: toke ?? token,
-        searchParams:searchParams??this.searchParams,
+        searchParams: searchParams ?? this.searchParams,
         nextPage: nextPage ?? this.nextPage,
         maxPageNumber: maxPageNumber ?? this.maxPageNumber,
         selectedPatientId: selectedPatientId ?? this.selectedPatientId,
@@ -173,8 +165,6 @@ class PatientState extends Equatable {
         emergencyContactPhoneNumber:
             emergencyContactPhoneNumber ?? this.emergencyContactPhoneNumber,
         appointmentList: appointmentList ?? this.appointmentList,
-      /*   registrationFormState:
-            registrationFormState ?? this.registrationFormState, */
         city: city ?? this.city);
   }
 }

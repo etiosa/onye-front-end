@@ -10,7 +10,7 @@ import 'package:onye_front_ened/Widgets/registeration_card.dart';
 import 'package:onye_front_ened/components/date.dart';
 import 'package:onye_front_ened/components/time.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinical_note_cubit.dart';
-import 'package:onye_front_ened/components/util/Modal.dart';
+import 'package:onye_front_ened/components/util/modal.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
@@ -40,7 +40,7 @@ class _RegistrationState extends State<Registration> {
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         //  Navigator.of(context).pop();
         authsession.getHomeToken()?.then((value) async {
           var res = _loginbloc.home(homeToken: value);
@@ -161,8 +161,8 @@ class _RegistrationState extends State<Registration> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
+                      children: const [
+                        Padding(
                           padding: EdgeInsets.only(left: 20.0),
                           child: Text("Time"),
                         ),
@@ -193,8 +193,8 @@ class _RegistrationState extends State<Registration> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
+                      children: const [
+                        Padding(
                           padding: EdgeInsets.only(left: 20.0),
                           child: Text("Time"),
                         ),
@@ -651,7 +651,6 @@ Future<String?> clinicalNotePopUp(
       });
 }
 
-//TODO: changed this to a wiget of it's own
 List<Widget> clinicalNoteForm(
     appointment, _patientName, BuildContext context, String? note, homeToken) {
   final AuthSession authsession = AuthSession();

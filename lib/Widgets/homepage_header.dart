@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onye_front_ened/Widgets/Button.dart';
+import 'package:onye_front_ened/Widgets/button.dart';
+
 class HomepageHeader extends StatelessWidget {
   const HomepageHeader({
     Key? key,
@@ -17,8 +18,11 @@ class HomepageHeader extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-        Button(height: 50, width: 170, label: 'Create Registration', 
-        onPressed: ()=> Navigator.of(context)
+        Button(
+            height: 50,
+            width: 170,
+            label: 'Create Registration',
+            onPressed: () => Navigator.of(context)
                 .pushNamed('/dashboard/createRegistration'))
       ],
     );

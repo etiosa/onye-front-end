@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:onye_front_ened/Widgets/dropdown.dart';
-import 'package:onye_front_ened/Widgets/Input_field.dart';
+import 'package:onye_front_ened/Widgets/input_field.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/dashboard.dart';
 import 'package:onye_front_ened/pages/patient/form/validator/patient_form_validator.dart';
@@ -37,12 +37,11 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
     // PageController _pageController = PageController();
     super.initState();
     if (context.read<LoginBloc>().state.homeToken.isEmpty) {
       //redirect to home
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushNamed("/dashboard");
       });
     }

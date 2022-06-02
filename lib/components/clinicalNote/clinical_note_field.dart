@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinical_note_cubit.dart';
 
 import '../../pages/auth/state/login_bloc.dart';
+
+// ignore: must_be_immutable
 class ClinicalNoteField extends StatefulWidget {
   ClinicalNoteField({
     required this.appointment,
@@ -10,6 +12,7 @@ class ClinicalNoteField extends StatefulWidget {
     Key? key,
   }) : super(key: key);
   dynamic appointment;
+  // ignore: prefer_typing_uninitialized_variables
   var title;
 
   @override

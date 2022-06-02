@@ -1,9 +1,7 @@
-
 // ignore: file_names
 import 'package:json_annotation/json_annotation.dart';
 
-part 'ClinicalNoteModel.g.dart';
-
+part 'clinical_note_model.g.dart';
 
 ///[response]
 ///** ssss */
@@ -20,7 +18,7 @@ class ClinicalNoteModel {
       required this.patientId,
       required this.text,
       required this.title,
-       this.type});
+      this.type});
 
   factory ClinicalNoteModel.fromJson(Map<String, dynamic> json) =>
       _$ClinicalNoteModelFromJson(json);

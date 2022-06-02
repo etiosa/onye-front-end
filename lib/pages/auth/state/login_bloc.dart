@@ -14,6 +14,7 @@ import 'package:onye_front_ened/pages/registration/repository/registration_repos
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/authSession.dart';
 import "package:http/http.dart" as http;
+import 'package:onye_front_ened/system/analytics/auth_analytics.dart';
 
 import '../../patient/repository/patient_repository.dart';
 
@@ -23,13 +24,13 @@ part "login_event.dart";
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   // ignore: unused_field
   final AuthRepository _authRepository;
-  final PatientRepositories _registerRepository = PatientRepositories();
   final AppointmentRepository _appointmentRepository = AppointmentRepository();
   final RegistrationRepository _registrationRepository =
       RegistrationRepository();
   final ClinicalNoteRepository _clinicalNoteRepository =
       ClinicalNoteRepository();
   final PatientRepositories _registrationRepositories = PatientRepositories();
+  final AuthAnalytics _authAnalytics = AuthAnalytics();
 
   final _authSession = AuthSession();
 
@@ -39,49 +40,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<Login>(_login);
     on<LogOut>(_logout);
     on<LoginModalReset>(_resetModal);
-    //on<BetContract>(_setContract);
-   // on<AcceptBetaContract>(_acceptBetaContract);
+    on<GetHome>(_getHome);
   }
-
-/*   void _setContract(BetContract event, Emitter<LoginState> emit) async {
-    emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.loading));
-    try {
-      var licenseResponse =
-          await _authRepository.getLicenseAgreement(token: event.token);
-      final body = jsonDecode(licenseResponse!.body);
-      final license = body['licenseAgreement'];
-      final statusCode = licenseResponse.statusCode;
-      if (statusCode != 200) {
-        emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.failed));
-      } else {
-        emit(state.copywith(
-            fetchingcontract: FETCHINGCONTRACT.loaded, betaContract: license));
-      }
-    } catch (err) {
-      emit(state.copywith(fetchingcontract: FETCHINGCONTRACT.unknown));
-    }
-  } */
-/* 
-  void _acceptBetaContract(
-      AcceptBetaContract event, Emitter<LoginState> emit) async {
-    emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.inprogress));
-
-    try {
-      var acceptContractResponse = await _authRepository.acceptContract(
-          token: event.token, userId: event.userId);
-
-      final statsCode = acceptContractResponse?.statusCode;
-      if (statsCode == 204) {
-        emit(state.copywith(
-            acceptcontractstatus: ACCEPTCONTRACTSTATUS.accept,
-            isContractAccept: true));
-      } else {
-        emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.failed));
-      }
-    } catch (err) {
-      emit(state.copywith(acceptcontractstatus: ACCEPTCONTRACTSTATUS.unkown));
-    }
-  } */
 
   void _resetModal(
     LoginModalReset event,
@@ -143,9 +103,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     if (statusCode == 200) {
       setLoginData(token, body);
-      //authsession is done in background
-      //so I can emit the state here  if its 200
-      //we have login
       emit(state.copywith(
         loginStatus: LoginStatus.home,
         homeToken: token,
@@ -162,11 +119,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     return response;
   }
 
+//TODO: implementation latger
+  void _getHome(GetHome event, Emitter<LoginState> emit) {
+    emit(state.copywith(
+      loginStatus: LoginStatus.home,
+      homeToken: event.token,
+    ));
+  }
+
   void setCurrentDate() {
     emit(state.copywith(currentDate: DateTime.now().hour));
   }
 
   void setLoginData(String token, body) {
+    _authAnalytics.login(
+        authMethod: 'email/password',
+        authState: state.loginStatus.toString() + "_" + "200",
+        userId: body['userInfo']['id']);
+
+    _authAnalytics.setUserLog(
+        firstName: body['userInfo']['firstName'],
+        lastName: body['userInfo']['lastName'],
+        hospital: body['userInfo']['facilityInfo']['name'],
+        hospitalId: body['userInfo']['facilityInfo']['facilityId'],
+        userType: body['userInfo']['type']);
+
     return emit(state.copywith(
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
@@ -178,7 +155,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         role: body['userInfo']['type'],
         currentDate: DateTime.now().hour,
         department: body['userInfo']['facilityInfo']['department']));
-
   }
 
   void _logout(LogOut event, Emitter<LoginState> emit) async {
@@ -192,10 +168,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // ignore: non_constant_identifier_names
     final PatientCubit _aptCubit = PatientCubit(_registrationRepositories);
 
-    final response = await _authRepository.signout(token: homeToken);
+    //final response = await _authRepository.signout(token: homeToken);
 
     final logout = await _authSession.removeHomeToken();
     if (logout) {
+      _authAnalytics.logout(
+          authState: state.logoutstatus.toString() + "_" + "12",
+          userId: state.userId,
+          authMethod: 'email/password');
+
       //clear all the state
       _appCubit.clearState();
       _regubit.clearState();
@@ -205,7 +186,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(state.copywith(
           loginStatus: LoginStatus.logout,
           logoutstatus: LOGOUTSTATUS.sucessful));
-    } else {
     }
   }
 

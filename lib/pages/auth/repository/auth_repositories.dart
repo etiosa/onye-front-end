@@ -1,17 +1,14 @@
 import 'dart:convert';
 import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:http/http.dart" as http;
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AuthRepository {
   static final String root = "${dotenv.get('API_URI')}/";
   static const String contentType = "application/x-www-form-urlencoded";
   static const String accept = "application/json";
-  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   // ignore: prefer_typing_uninitialized_variables
   Future<http.Response?> signIn({String? username, String? password}) async {
-    // ignore: prefer_typing_uninitialized_variables
     try {
       var uri = Uri.parse(root + "auth/login");
       http.Response response = await http.post(uri,
@@ -21,9 +18,6 @@ class AuthRepository {
           },
           encoding: Encoding.getByName("utf-8"),
           body: {"username": username, "password": password});
-
-      await FirebaseAnalytics.instance.logLogin(loginMethod: 'Testing');
-      await FirebaseAnalytics.instance.setUserId(id: 'Testing');
 
       return response;
     } catch (e) {

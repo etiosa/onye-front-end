@@ -13,7 +13,7 @@ import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 
 import '../Widgets/appointment_card.dart';
 import '../Widgets/generic_loading_container.dart';
-import '../components/util/Modal.dart';
+import '../components/util/modal.dart';
 import '../session/authSession.dart';
 import 'appointment/state/appointment_cubit.dart';
 import 'auth/repository/auth_repositories.dart';
@@ -35,8 +35,7 @@ class _AppointmentsState extends State<Appointments> {
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        //  Navigator.of(context).pop();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         authsession.getHomeToken()?.then((value) async {
           var res = _loginbloc.home(homeToken: value);
           res.then((res) {
@@ -172,8 +171,8 @@ class _AppointmentsState extends State<Appointments> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
+                  children: const [
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: Text("Time"),
                     ),
@@ -203,8 +202,8 @@ class _AppointmentsState extends State<Appointments> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
+                  children: const [
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: Text("Time"),
                     ),

@@ -189,7 +189,6 @@ class AppointmentRepository {
 
   Future<http.Response?> searchRegistrations(
       {String? token, String? searchParams, int? nextPage = 0}) async {
-    int pageNumber = 3;
     var uri =
         Uri.parse(root + 'api/rest/v1/registration/withAppointment/search')
             .replace(queryParameters: <String, String>{

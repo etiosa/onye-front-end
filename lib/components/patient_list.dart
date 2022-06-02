@@ -3,17 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/generic_card.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
-import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 
-import '../pages/appointment/state/appointment_cubit.dart';
 import '../pages/patient/state/patient_cubit.dart';
 
 class PatientList extends StatefulWidget {
-  PatientList({
+  const PatientList({
     required this.pageController,
     Key? key,
   }) : super();
-  PageController pageController;
+  final PageController pageController;
 
   @override
   State<PatientList> createState() => _PatientListState();
@@ -25,8 +23,7 @@ class _PatientListState extends State<PatientList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PatientCubit, PatientState>(
-        builder: (context, state) {
+    return BlocBuilder<PatientCubit, PatientState>(builder: (context, state) {
       if (state.patientsList.isEmpty) {
         return (const Center(
           child: SizedBox(
@@ -56,13 +53,11 @@ class _PatientListState extends State<PatientList> {
                     context
                         .read<PatientCubit>()
                         .setPatientId(state.patientsList[index]['id']);
-                          widget.pageController.nextPage(
+                    widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn);
-                    context
-                        .read<DoctorCubit>()
-                        .setSelectedMedicalPersonnelId(
-                            context.read<LoginBloc>().state.id);
+                    context.read<DoctorCubit>().setSelectedMedicalPersonnelId(
+                        context.read<LoginBloc>().state.id);
                   },
                   firstName: state.patientsList[index]['firstName'],
                   lastName: state.patientsList[index]['lastName'],
@@ -73,6 +68,3 @@ class _PatientListState extends State<PatientList> {
     });
   }
 }
- 
-
-

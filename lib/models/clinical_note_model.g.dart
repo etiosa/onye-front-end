@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'ClinicalNoteModel.dart';
+part of 'clinical_note_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

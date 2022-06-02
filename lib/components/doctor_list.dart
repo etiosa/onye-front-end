@@ -8,11 +8,11 @@ import '../pages/doctor/state/doctor_cubit_cubit.dart';
 
 class DoctorList extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
-  DoctorList({
+  const DoctorList({
     required this.pageController,
     Key? key,
   }) : super();
-  PageController pageController;
+  final PageController pageController;
 
   @override
   State<DoctorList> createState() => _DoctorListState();
@@ -42,26 +42,28 @@ class _DoctorListState extends State<DoctorList> {
       }
       return Column(
         children: [
-        
-           DoctorLists(
+          DoctorLists(
             widget: widget,
             state: state,
           ),
           Pagination(
-            maxPageCounter: context.read<DoctorCubit>().state.maxDoctorPageNumber,
+            maxPageCounter:
+                context.read<DoctorCubit>().state.maxDoctorPageNumber,
             typeofSearch: 'doctor',
-          ) 
+          )
         ],
       );
     });
   }
 }
 
+// ignore: must_be_immutable
 class DoctorLists extends StatelessWidget {
   DoctorLists({Key? key, required this.widget, required this.state})
       : super(key: key);
 
-  var state;
+  // ignore: prefer_typing_uninitialized_variables
+  late var state;
   final DoctorList widget;
 
   @override
@@ -80,10 +82,8 @@ class DoctorLists extends StatelessWidget {
                   widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn);
-                     context
-                      .read<DoctorCubit>()
-                      .setSelectedMedicalPersonnelId(
-                          context.read<LoginBloc>().state.id);
+                  context.read<DoctorCubit>().setSelectedMedicalPersonnelId(
+                      context.read<LoginBloc>().state.id);
                 },
                 firstName: state.doctorsList[index]['firstName'],
                 lastName: state.doctorsList[index]['lastName'],
