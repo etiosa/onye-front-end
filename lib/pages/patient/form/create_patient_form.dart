@@ -117,7 +117,7 @@ class _CreatePatientFormState extends State<CreatePatientForm> {
                         if (_pageController.page! > 0) {
                           _pageController.previousPage(
                               curve: Curves.easeIn,
-                              duration: Duration(milliseconds: 300));
+                              duration: const Duration(milliseconds: 300));
                         } else {
                           context.read<PatientCubit>().clearState();
                           Navigator.of(context).pop();
