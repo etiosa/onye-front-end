@@ -36,7 +36,7 @@ class Contract extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<EulaBloc, EulaState>(listener: (context, state) {
-      if (state.fetchingcontract == FETCHINGCONTRACT.loading) {
+      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.inprogress) {
         Modal(
             context: context,
             modalType: '',
@@ -64,7 +64,7 @@ class Contract extends StatelessWidget {
             progressDetails: 'progrss');
       }
 
-      if (state is BetaContractAccept) {
+      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.accept) {
         Modal(
             context: context,
             modalType: '',
@@ -99,7 +99,8 @@ class Contract extends StatelessWidget {
             progressDetails: 'prog');
       }
 
-      if (state.fetchingcontract == FETCHINGCONTRACT.unknown) {
+      if (state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.unkown ||
+          state.acceptcontractstatus == ACCEPTCONTRACTSTATUS.failed) {
         Modal(
             context: context,
             modalType: 'Unkown',
