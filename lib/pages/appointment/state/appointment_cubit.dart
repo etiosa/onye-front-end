@@ -4,10 +4,16 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:onye_front_ened/pages/appointment/repository/appointment_repository.dart';
+import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
+import 'package:onye_front_ened/system/analytics/appointment_analytics.dart';
 part 'appointment_state.dart';
 
 class AppointmentCubit extends Cubit<AppointmentState> {
   final AppointmentRepository _appointmentRepository;
+  final AppointmentAnalytics _appointmentAnalytics = AppointmentAnalytics();
+  final AuthRepository _authRepository = AuthRepository();
+  late final LoginBloc _loginbloc = LoginBloc(_authRepository);
 
   AppointmentCubit(
     this._appointmentRepository,
@@ -158,6 +164,12 @@ class AppointmentCubit extends Cubit<AppointmentState> {
           appointmentstate: APPOINTMENTSTATE.failed,
           appointmenterror: body['message']));
     } else {
+      /* _appointmentAnalytics.createLog(appointmentId: body['id'], firstName: _loginbloc.state.firstName,
+          lastName:  _loginbloc.state.lastName,userId:  _loginbloc.state.userId,userType:  _loginbloc.state.
+        
+        
+        )  ; */
+
       emit(state.copyWith(appointmentstate: APPOINTMENTSTATE.sucessful));
     }
 
