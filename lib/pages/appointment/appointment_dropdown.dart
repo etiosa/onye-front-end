@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
 class AppointmentDropDown extends StatefulWidget {
-  const AppointmentDropDown(
+  AppointmentDropDown(
       {Key? key, required this.label, required this.options, this.initialValue})
       : super(
           key: key,

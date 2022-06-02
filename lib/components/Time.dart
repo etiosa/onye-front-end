@@ -7,7 +7,7 @@ import '../pages/registration/state/registration_cubit.dart';
 class Time extends StatelessWidget {
   final String rangeLabel;
   final String type;
-  const Time({Key? key, required this.rangeLabel, required this.type})
+  Time({Key? key, required this.rangeLabel, required this.type})
       : super(key: key);
 
   @override

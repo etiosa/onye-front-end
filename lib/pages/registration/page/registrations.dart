@@ -161,8 +161,8 @@ class _RegistrationState extends State<Registration> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Padding(
+                      children: [
+                        const Padding(
                           padding: EdgeInsets.only(left: 20.0),
                           child: Text("Time"),
                         ),
@@ -193,8 +193,8 @@ class _RegistrationState extends State<Registration> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Padding(
+                      children: [
+                        const Padding(
                           padding: EdgeInsets.only(left: 20.0),
                           child: Text("Time"),
                         ),

@@ -261,7 +261,7 @@ class Vitals extends StatelessWidget {
 
 //an array of inPut
 class CurrentMedications extends StatefulWidget {
-  const CurrentMedications({Key? key}) : super(key: key);
+  CurrentMedications({Key? key}) : super(key: key);
 
   @override
   State<CurrentMedications> createState() => _CurrentMedicationsState();

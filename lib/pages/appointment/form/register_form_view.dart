@@ -146,13 +146,13 @@ class RegisterField extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const DropDown(label: 'Language Preference', options: ['EN']),
+                  DropDown(label: 'Language Preference', options: const ['EN']),
                   const SizedBox(height: 25),
-                  const DropDown(
+                  DropDown(
                       label: 'Type of Visit',
-                      options: ['Follow-up', 'Consultation']),
+                      options: const ['Follow-up', 'Consultation']),
                   const SizedBox(height: 25),
-                  const DropDown(label: 'Reason for Visit', options: [
+                  DropDown(label: 'Reason for Visit', options: const [
                     'Headache',
                     'Follow-up',
                     'Malaria',

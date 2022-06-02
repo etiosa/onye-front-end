@@ -171,8 +171,8 @@ class _AppointmentsState extends State<Appointments> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: Text("Time"),
                     ),
@@ -202,8 +202,8 @@ class _AppointmentsState extends State<Appointments> {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Padding(
+                  children: [
+                    const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: Text("Time"),
                     ),

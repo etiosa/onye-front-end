@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Confirmation extends StatelessWidget {
-  const Confirmation(
+  Confirmation(
       {Key? key, required this.appointmentList, required this.selectedIndex})
       : super(key: key);
   final List<dynamic> appointmentList;
