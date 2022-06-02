@@ -2,6 +2,8 @@ part of 'patient_cubit.dart';
 
 enum PATIENTSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 
+enum PATIENTCREATION { init, inprogress, error, created, unknown }
+
 //TODO: Refactor
 class PatientState extends Equatable {
   const PatientState({
@@ -34,10 +36,12 @@ class PatientState extends Equatable {
     this.selectedPatientId = '',
     this.maxPageNumber = 0,
     this.nextPage = 0,
+    this.patientcreation = PATIENTCREATION.init,
     this.searchParams = '',
   });
 
   final String? firstName;
+  final PATIENTCREATION patientcreation;
   final String? middleName;
   final String? lastName;
   final String? dateOfBirth;
@@ -98,11 +102,13 @@ class PatientState extends Equatable {
         selectedPatientId,
         maxPageNumber,
         nextPage,
-        searchParams
+        searchParams,
+        patientcreation
       ];
 
   PatientState copyWith(
       {String? firstName,
+      PATIENTCREATION? patientcreation,
       String? middleName,
       String? lastName,
       String? dateOfBirth,
@@ -134,6 +140,7 @@ class PatientState extends Equatable {
       String? searchParams,
       int? maxPageNumber}) {
     return PatientState(
+        patientcreation: patientcreation ?? this.patientcreation,
         token: toke ?? token,
         searchParams: searchParams ?? this.searchParams,
         nextPage: nextPage ?? this.nextPage,

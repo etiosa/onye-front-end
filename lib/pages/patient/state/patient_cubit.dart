@@ -127,31 +127,48 @@ class PatientCubit extends Cubit<PatientState> {
     } else {
       dateOfBirth = state.dateOfBirth;
     }
+    emit(state.copyWith(patientcreation: PATIENTCREATION.inprogress));
 
-    Response? response = await _patientRepositories.createNewPatient(
-        token: token,
-        firstName: state.firstName?.trim(),
-        middleName: state.middleName?.trim(),
-        lastName: state.lastName?.trim(),
-        dateOfBirth: dateOfBirth,
-        phoneNumber: state.phoneNumber?.trim(),
-        gender: state.gender,
-        religion: state.religion,
-        educationLevel: state.educationLevel,
-        contactPreference: state.contactPreferences,
-        addressLine1: state.addressLine1?.trim(),
-        addressLine2: state.addressLine2?.trim(),
-        zipCode: state.zipCode?.trim(),
-        city: state.city?.trim(),
-        email: state.email?.trim(),
-        ethnicity: state.ethnicity,
-        emergencyContactName: state.emergencyContactName?.trim(),
-        emergencyContactPhoneNumber: state.emergencyContactPhoneNumber?.trim(),
-        emergencyContactRelationship:
-            state.emergencyContactRelationship?.trim(),
-        countryCode: 'NG');
+    try {
+      Response? response = await _patientRepositories.createNewPatient(
+          token: token,
+          firstName: state.firstName?.trim(),
+          middleName: state.middleName?.trim(),
+          lastName: state.lastName?.trim(),
+          dateOfBirth: dateOfBirth,
+          phoneNumber: state.phoneNumber?.trim(),
+          gender: state.gender,
+          religion: state.religion,
+          educationLevel: state.educationLevel,
+          contactPreference: state.contactPreferences,
+          addressLine1: state.addressLine1?.trim(),
+          addressLine2: state.addressLine2?.trim(),
+          zipCode: state.zipCode?.trim(),
+          city: state.city?.trim(),
+          email: state.email?.trim(),
+          ethnicity: state.ethnicity,
+          emergencyContactName: state.emergencyContactName?.trim(),
+          emergencyContactPhoneNumber:
+              state.emergencyContactPhoneNumber?.trim(),
+          emergencyContactRelationship:
+              state.emergencyContactRelationship?.trim(),
+          countryCode: 'NG');
 
-    return response;
+      int statusCode = response!.statusCode;
+      if (statusCode == 201) {
+        emit(state.copyWith(patientcreation: PATIENTCREATION.created));
+      } else {
+        emit(state.copyWith(patientcreation: PATIENTCREATION.error));
+      }
+      return response;
+    } catch (er) {
+      emit(state.copyWith(patientcreation: PATIENTCREATION.unknown));
+    }
+    return null;
+  }
+
+  void resetPatientCreationState() {
+    emit(state.copyWith(patientcreation: PATIENTCREATION.init));
   }
 
   void clearState() {
