@@ -14,7 +14,7 @@ import 'package:onye_front_ened/components/util/modal.dart';
 import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
-import 'package:onye_front_ened/session/authSession.dart';
+import 'package:onye_front_ened/session/auth_session.dart';
 
 import '../../../Widgets/homepage_header.dart';
 import '../../../Widgets/pagination.dart';

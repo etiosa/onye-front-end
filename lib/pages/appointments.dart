@@ -14,7 +14,7 @@ import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import '../Widgets/appointment_card.dart';
 import '../Widgets/generic_loading_container.dart';
 import '../components/util/modal.dart';
-import '../session/authSession.dart';
+import '../session/auth_session.dart';
 import 'appointment/state/appointment_cubit.dart';
 import 'auth/repository/auth_repositories.dart';
 

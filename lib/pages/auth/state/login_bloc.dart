@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:onye_front_ened/components/clinicalNote/clinical_note_cubit.dart';
@@ -12,7 +13,7 @@ import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
-import 'package:onye_front_ened/session/authSession.dart';
+import 'package:onye_front_ened/session/auth_session.dart';
 import "package:http/http.dart" as http;
 import 'package:onye_front_ened/system/analytics/auth_analytics.dart';
 
@@ -31,6 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ClinicalNoteRepository();
   final PatientRepositories _registrationRepositories = PatientRepositories();
   final AuthAnalytics _authAnalytics = AuthAnalytics();
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   final _authSession = AuthSession();
 
@@ -127,17 +129,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     ));
   }
 
-  void setCurrentDate() {
-    emit(state.copywith(currentDate: DateTime.now().hour));
-  }
-
-  void setLoginData(String token, body) {
-    _authAnalytics.login(
+  void setLoginData(String token, body) async {
+    await _authAnalytics.login(
         authMethod: 'email/password',
         authState: state.loginStatus.toString() + "_" + "200",
         userId: body['userInfo']['id']);
 
-    _authAnalytics.setUserLog(
+    await _authAnalytics.setUserLog(
         firstName: body['userInfo']['firstName'],
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
@@ -158,7 +156,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _logout(LogOut event, Emitter<LoginState> emit) async {
-    final homeToken = await _authSession.getHomeToken();
+    //  final homeToken = await _authSession.getHomeToken();
 
     final RegisterationCubit _regubit =
         RegisterationCubit(_registrationRepository);

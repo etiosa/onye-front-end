@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/components/util/desktop_menu.dart';
 import 'package:onye_front_ened/components/util/mobile_dashboard_menu.dart';
-import 'package:onye_front_ened/session/authSession.dart';
+import 'package:onye_front_ened/session/auth_session.dart';
 
 import '../pages/auth/repository/auth_repositories.dart';
 import '../pages/auth/state/login_bloc.dart';
