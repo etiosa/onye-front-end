@@ -814,10 +814,10 @@ List<Widget> clinicalNoteForm(
                 });
               }
             },
-            child: context.read<LoginBloc>().state.role == 'DOCTOR'
-                ? Text(
+            child: 
+                 Text(
                     appointment.containsKey('clinicalNoteId') ? 'save' : 'add')
-                : const SizedBox()),
+               ),
       ],
     ),
   ];
