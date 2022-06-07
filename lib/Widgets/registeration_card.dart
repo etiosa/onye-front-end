@@ -84,7 +84,7 @@ class RegisterationButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (role == 'DOCTOR' || role == 'NURSE') {
+/*     if (role == 'DOCTOR' || role == 'NURSE') { */
       return Padding(
         padding: const EdgeInsets.only(left: 40.0),
         child: Row(
@@ -102,8 +102,8 @@ class RegisterationButtons extends StatelessWidget {
           ],
         ),
       );
-    } else {
-      return Padding(
+    } 
+     /*  return Padding(
         padding: const EdgeInsets.only(left: 40.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -114,10 +114,10 @@ class RegisterationButtons extends StatelessWidget {
             ),
           ],
         ),
-      );
-    }
+      ); */
+    
   }
-}
+
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({
@@ -171,7 +171,7 @@ class ClinicalNoteButton extends StatelessWidget {
   //only show when is doctor or nuse
   @override
   Widget build(BuildContext context) {
-    if (role == 'DOCTOR' && type == 'registration' || role == 'NURSE') {
+    if (  type == 'registration' ) {
       return Button(
           height: 50,
           width: 130,
