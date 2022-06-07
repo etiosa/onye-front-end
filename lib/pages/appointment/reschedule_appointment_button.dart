@@ -5,7 +5,7 @@ import 'package:onye_front_ened/pages/appointment/appointment_datepicker_field.d
 import 'package:onye_front_ened/pages/appointment/appointment_dropdown.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 
-import '../../session/authSession.dart';
+import '../../session/auth_session.dart';
 import '../appointment_datetimepicker_field.dart';
 import '../appointments.dart';
 
@@ -163,7 +163,7 @@ class RescheduleAppointmentButton extends StatelessWidget {
                             }
                           else if (value != null && value.statusCode == 400)
                             {
-                             /*  Messages.showMessage(
+                              /*  Messages.showMessage(
                                   const Icon(
                                     IconData(0xe237,
                                         fontFamily: 'MaterialIcons'),

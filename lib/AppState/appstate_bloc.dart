@@ -11,3 +11,9 @@ class AppstateBloc extends Bloc<AppstateEvent, AppstateState> {
     });
   }
 }
+
+
+
+
+// call home and get if the token is expire
+//if not

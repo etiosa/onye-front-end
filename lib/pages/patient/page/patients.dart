@@ -4,7 +4,7 @@ import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/Widgets/pagination.dart';
 
 import 'package:onye_front_ened/pages/patient/state/patient_cubit.dart';
-import 'package:onye_front_ened/session/authSession.dart';
+import 'package:onye_front_ened/session/auth_session.dart';
 
 import '../../../Widgets/generic_card.dart';
 import '../../auth/state/login_bloc.dart';

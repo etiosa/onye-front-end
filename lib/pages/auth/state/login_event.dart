@@ -35,8 +35,8 @@ class Login extends LoginEvent {
 }
 
 class GetHome extends LoginEvent {
-  String token;
-  GetHome({required this.token});
+  final String token;
+  const GetHome({required this.token});
 }
 
 //TODO:  implement this later

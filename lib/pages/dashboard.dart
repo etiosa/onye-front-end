@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
-import 'package:onye_front_ened/session/authSession.dart';
+import 'package:onye_front_ened/session/auth_session.dart';
 import '../components/loaded_profile .dart';
 import '../components/util/modal.dart';
 import 'auth/repository/auth_repositories.dart';

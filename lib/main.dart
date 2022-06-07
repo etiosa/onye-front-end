@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
-import 'package:onye_front_ened/pages/eula/Eula.dart';
+import 'package:onye_front_ened/pages/eula/eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
 import 'package:onye_front_ened/pages/doctor/repository/doctor_repository.dart';
 import 'package:onye_front_ened/pages/doctor/state/doctor_cubit_cubit.dart';
