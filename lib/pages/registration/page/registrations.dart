@@ -15,6 +15,7 @@ import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
 import 'package:onye_front_ened/session/auth_session.dart';
+import 'package:onye_front_ened/util/util.dart';
 
 import '../../../Widgets/homepage_header.dart';
 import '../../../Widgets/pagination.dart';
@@ -36,6 +37,11 @@ class _RegistrationState extends State<Registration> {
     super.initState();
 
     final AuthSession authsession = AuthSession();
+    bool ispexire = Util.hasTokenExpired();
+
+    if (Util.hasTokenExpired()) {
+      print("token has expired");
+    }
 
     if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
       final AuthRepository _authRepository = AuthRepository();

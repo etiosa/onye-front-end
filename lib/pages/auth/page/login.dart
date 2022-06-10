@@ -4,6 +4,7 @@ import 'package:onye_front_ened/Widgets/button.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/components/util/modal.dart';
 
+import '../../../util/util.dart';
 import '../../eula/state/eula_bloc.dart';
 //import 'package:firebase_analytics/firebase_analytics.dart';
 
@@ -14,12 +15,18 @@ class LoginPage extends StatefulWidget {
 
   @override
   _LoginPageState createState() => _LoginPageState();
+
+//TODO: in the app state --> get the
+
 }
 
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    if (Util.hasTokenExpired()) {
+      print("token has expired");
+    }
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -39,19 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                     state.isContractAccept) {
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
                     //  await FirebaseAnalytics.instance.setUserId(id: state.userId);
-
-                    // Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/dashboard");
-                    //  Navigator.popAndPushNamed(context, '/dashboard');
-                    // Navigator.pushReplacementNamed(context, '/dashboard');
-                    //Navigator.pushUntil(context, ModalRoute.withName('/dashboard'));
-                    //Navigator.popAndPushNamed(context, '/dashboard');
-                    //  Navigator.pushReplacementNamed(context, '/dashboard');
-
-/* Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/dashboard', (Route<dynamic> route) => false); */
-                    /*  Navigator.pushAndRemoveUntil(
-                        context, '/dashboard', (route) => false); */
                   });
                 }
                 //if we canLogin..move to the next page.
