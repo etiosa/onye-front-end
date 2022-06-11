@@ -30,7 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -38,140 +37,155 @@ class _LoginPageState extends State<LoginPage> {
         child: Scaffold(
             resizeToAvoidBottomInset: true,
             backgroundColor: const Color.fromARGB(255, 247, 253, 253),
-            body: BlocListener<LoginBloc, LoginState>(
-              listenWhen: ((previous, current) =>
-                  previous.loginStatus != current.loginStatus),
+            body: BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
-                if (state.loginStatus == LoginStatus.home &&
-                    state.isContractAccept) {
+                if (state.isContractAccept) {
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    //  await FirebaseAnalytics.instance.setUserId(id: state.userId);
+                    /* Navigator.popUntil(
+                        context, ModalRoute.withName('/dashboard')); */
+                    //TODO: change the push to remove previous route
                     Navigator.of(context).pushNamed("/dashboard");
                   });
                 }
-                //if we canLogin..move to the next page.
-                if (state.loginStatus == LoginStatus.home &&
-                    !state.isContractAccept) {
-                  context
-                      .read<EulaBloc>()
-                      .add(LoadBetaContract(token: state.homeToken));
-
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed("/beta-contract");
-                  });
-                }
-
-                if (state.loginStatus == LoginStatus.inprogress) {
-                  Modal(
-                      context: context,
-                      modalType: '',
-                      inclueAction: false,
-                      modalBody: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text('Login In Progress'),
-                          const SizedBox(height: 30),
-                          SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: CircularProgressIndicator.adaptive(
-                                backgroundColor: Colors.grey[500],
-                                strokeWidth: 4,
-                                valueColor: const AlwaysStoppedAnimation<Color>(
-                                    Color.fromARGB(255, 56, 155, 152)),
-                              )),
-                        ],
-                      ),
-                      progressDetails: 'progrss');
-                }
-                if (state.loginStatus == LoginStatus.failed) {
-                  Modal(
-                      inclueAction: true,
-                      actionButtons: TextButton(
-                          child: const Text('Close'),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(true);
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(true);
-                          }),
-                      context: context,
-                      modalType: 'failed',
-                      modalBody: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Text("username/password is incorrect"),
-                          SizedBox(height: 20),
-                          Icon(
-                            Icons.error,
-                            color: Colors.redAccent,
-                            size: 100,
-                          )
-                        ],
-                      ),
-                      progressDetails: "username/password is incorrect");
-                }
-                if (state.loginStatus == LoginStatus.unknown) {
-                  Modal(
-                      context: context,
-                      modalType: 'Unkown',
-                      inclueAction: true,
-                      actionButtons: TextButton(
-                          child: const Text('Close'),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(true);
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(true);
-                          }),
-                      modalBody: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Text('Please enter a valid username/password'),
-                          SizedBox(height: 20),
-                          Icon(
-                            Icons.dangerous,
-                            color: Colors.redAccent,
-                            size: 100,
-                          )
-                        ],
-                      ),
-                      progressDetails:
-                          'Please enter a valid username/password');
-                }
               },
-              child: Container(
-                margin: const EdgeInsets.only(top: 70),
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _LoginText(),
-                        const SizedBox(
-                          height: 20,
+              builder: (context, state) {
+                return BlocListener<LoginBloc, LoginState>(
+                  listenWhen: ((previous, current) =>
+                      previous.loginStatus != current.loginStatus),
+                  listener: (context, state) {
+                    if (state.loginStatus == LoginStatus.home &&
+                        state.isContractAccept) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) async {
+                        /*  Navigator.popUntil(
+                            context, ModalRoute.withName('/dashboard')); */
+                        Navigator.of(context).pushNamed("/beta-contract");
+                      });
+                    }
+                    if (state.loginStatus == LoginStatus.home &&
+                        !state.isContractAccept) {
+                      context
+                          .read<EulaBloc>()
+                          .add(LoadBetaContract(token: state.homeToken));
+
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamed("/beta-contract");
+                      });
+                    }
+
+                    if (state.loginStatus == LoginStatus.inprogress) {
+                      Modal(
+                          context: context,
+                          modalType: '',
+                          inclueAction: false,
+                          modalBody: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text('Login In Progress'),
+                              const SizedBox(height: 30),
+                              SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator.adaptive(
+                                    backgroundColor: Colors.grey[500],
+                                    strokeWidth: 4,
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                            Color.fromARGB(255, 56, 155, 152)),
+                                  )),
+                            ],
+                          ),
+                          progressDetails: 'progrss');
+                    }
+                    if (state.loginStatus == LoginStatus.failed) {
+                      Modal(
+                          inclueAction: true,
+                          actionButtons: TextButton(
+                              child: const Text('Close'),
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(true);
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(true);
+                              }),
+                          context: context,
+                          modalType: 'failed',
+                          modalBody: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Text("username/password is incorrect"),
+                              SizedBox(height: 20),
+                              Icon(
+                                Icons.error,
+                                color: Colors.redAccent,
+                                size: 100,
+                              )
+                            ],
+                          ),
+                          progressDetails: "username/password is incorrect");
+                    }
+                    if (state.loginStatus == LoginStatus.unknown) {
+                      Modal(
+                          context: context,
+                          modalType: 'Unkown',
+                          inclueAction: true,
+                          actionButtons: TextButton(
+                              child: const Text('Close'),
+                              onPressed: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(true);
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(true);
+                              }),
+                          modalBody: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Text('Please enter a valid username/password'),
+                              SizedBox(height: 20),
+                              Icon(
+                                Icons.dangerous,
+                                color: Colors.redAccent,
+                                size: 100,
+                              )
+                            ],
+                          ),
+                          progressDetails:
+                              'Please enter a valid username/password');
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 70),
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _LoginText(),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Stack(children: [
+                              _formSection(),
+                            ]),
+                          ],
                         ),
-                        Stack(children: [
-                          _formSection(),
-                        ]),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             )));
   }
 

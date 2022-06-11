@@ -7,12 +7,10 @@ class Util {
   static bool hasTokenExpired() {
     bool isExpired = false;
     _authSession.getHomeToken()!.then((String value) {
-      print(value);
-      if(value.isNotEmpty || value != ''){
+      if (value.isNotEmpty || value != '') {
         isExpired = Jwt.isExpired(value);
         return isExpired;
       }
-    
     });
     return isExpired;
   }

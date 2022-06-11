@@ -40,64 +40,52 @@ class _RegistrationState extends State<Registration> {
     bool ispexire = Util.hasTokenExpired();
 
     if (Util.hasTokenExpired()) {
-      print("token has expired");
-    }
+      //relogin
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Modal(
+            inclueAction: true,
+            actionButtons: TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  //Navigator.of(context, rootNavigator: true).pop(true);
 
-    if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
+                  Navigator.popUntil(context, ModalRoute.withName('/login'));
+                  //Navigator.of(context).pushNamed("/login");
+                }),
+            context: context,
+            modalType: 'failed',
+            modalBody: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                SizedBox(
+                  height: 40,
+                ),
+                Text('Token expires, please relogin'),
+                SizedBox(height: 20),
+                Icon(
+                  Icons.error,
+                  color: Colors.redAccent,
+                  size: 100,
+                )
+              ],
+            ),
+            progressDetails: 'relogin');
+      });
+    } else {
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        //  Navigator.of(context).pop();
-        authsession.getHomeToken()?.then((value) async {
-          var res = _loginbloc.home(homeToken: value);
-          res.then((res) {
-            if (res.statusCode != 200) {
-              Modal(
-                  inclueAction: true,
-                  actionButtons: TextButton(
-                      child: const Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop(true);
-                        Navigator.of(context).pushNamed("/login");
-                      }),
-                  context: context,
-                  modalType: 'failed',
-                  modalBody: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Text('Token expires, relogin'),
-                      SizedBox(height: 20),
-                      Icon(
-                        Icons.error,
-                        color: Colors.redAccent,
-                        size: 100,
-                      )
-                    ],
-                  ),
-                  progressDetails: 'relogin');
-            } else {
-              final AuthSession authsession = AuthSession();
-
-              authsession.getHomeToken()?.then((value) async {
-                _loginbloc.home(homeToken: value).then((res) {
-                  context
-                      .read<LoginBloc>()
-                      .setLoginData(value, jsonDecode(res.body));
-                });
-
-                context.read<RegisterationCubit>().searchRegistrations(
-                    nextPage: 0,
-                    token: value,
-                    searchParams:
-                        context.read<RegisterationCubit>().state.searchParams);
-              });
-            }
-          });
+      final AuthSession authsession = AuthSession();
+      authsession.getHomeToken()?.then((value) async {
+        _loginbloc.home(homeToken: value).then((res) {
+          context.read<LoginBloc>().setLoginData(value, jsonDecode(res.body));
         });
+
+        context.read<RegisterationCubit>().searchRegistrations(
+            nextPage: 0,
+            token: value,
+            searchParams:
+                context.read<RegisterationCubit>().state.searchParams);
       });
     }
   }

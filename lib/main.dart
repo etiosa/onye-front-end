@@ -52,20 +52,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var currentTime = DateTime.now().millisecondsSinceEpoch;
-    String token=
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpZCI6IjJmZWY5ODFmLWUyMGUtNDU5Zi1hNWQ3LTQxZTQ3MDBkNDU0ZCIsInR5cGUiOiJOVVJTRSIsInVzZXJuYW1lIjoibnVyc2UiLCJhY2NlcHRlZEV1bGEiOnRydWUsInJvbGVzIjpbIk5VUlNFIl0sImZhY2lsaXR5IjoiNTc1ZWNjYTEtOTNkOS00YmVhLTljY2ItNGQ3YjY5Yjk4MzczIiwiZXhwIjoxNjU0ODgxNjMyfQ.2ae50_vr6sZt4dmmZDUd6nbWltYfxQH05qiOtL7i88UOizVFqzZMmOuq_hba05xeGpfa-AqlNLdCs7gTwT1tMg';
-    Map<String, dynamic> payload = Jwt.parseJwt(token);
-        print(payload);
-
-
-      DateTime? expiryDate = Jwt.getExpiryDate(token);
-    print(expiryDate);
-    bool isExpired = Jwt.isExpired(token);
-    print(isExpired);
-
-
-
     final AuthRepository _authRepository = AuthRepository();
     final PatientRepositories _registerRepository = PatientRepositories();
     final AppointmentRepository _appointmentRepository =
