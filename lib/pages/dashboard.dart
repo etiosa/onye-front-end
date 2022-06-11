@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/session/auth_session.dart';
+import 'package:onye_front_ened/util/util.dart';
 import '../components/loaded_profile .dart';
 import '../components/util/modal.dart';
 import 'auth/repository/auth_repositories.dart';
@@ -24,44 +25,37 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     final AuthSession authsession = AuthSession();
 
-    if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
-      final AuthRepository _authRepository = AuthRepository();
-      final LoginBloc _loginbloc = LoginBloc(_authRepository);
+    if (Util.hasTokenExpired()) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        authsession.getHomeToken()?.then((value) async {
-          var res = _loginbloc.home(homeToken: value);
-          res.then((res) {
-            if (res.statusCode != 200) {
-              Modal(
-                  inclueAction: true,
-                  actionButtons: TextButton(
-                      child: const Text('Close'),
-                      onPressed: () {
-                        Navigator.popUntil(
-                            context, ModalRoute.withName('/login'));
-                      }),
-                  context: context,
-                  modalType: 'failed',
-                  modalBody: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Text('Token expires, relogin'),
-                      SizedBox(height: 20),
-                      Icon(
-                        Icons.error,
-                        color: Colors.redAccent,
-                        size: 100,
-                      )
-                    ],
-                  ),
-                  progressDetails: 'relogin');
-            }
-          });
-        });
+        Modal(
+            inclueAction: true,
+            actionButtons: TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  //Navigator.of(context, rootNavigator: true).pop(true);
+
+                  Navigator.popUntil(context, ModalRoute.withName('/login'));
+                  //Navigator.of(context).pushNamed("/login");
+                }),
+            context: context,
+            modalType: 'failed',
+            modalBody: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                SizedBox(
+                  height: 40,
+                ),
+                Text('Token expires, please relogin'),
+                SizedBox(height: 20),
+                Icon(
+                  Icons.error,
+                  color: Colors.redAccent,
+                  size: 100,
+                )
+              ],
+            ),
+            progressDetails: 'relogin');
       });
     }
   }
@@ -85,8 +79,6 @@ class _DashboardState extends State<Dashboard> {
                     });
                   }
                 });
-
-                if (state.loginStatus == LoginStatus.init) {}
               },
               child: BlocBuilder<LoginBloc, LoginState>(
                 builder: ((context, state) {

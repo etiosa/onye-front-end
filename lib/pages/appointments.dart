@@ -10,6 +10,7 @@ import 'package:onye_front_ened/components/time.dart';
 import 'package:onye_front_ened/pages/appointment/reschedule_appointment_button.dart';
 import 'package:onye_front_ened/pages/appointment/state/appointment_cubit.dart';
 import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
+import 'package:onye_front_ened/util/util.dart';
 
 import '../Widgets/appointment_card.dart';
 import '../Widgets/generic_loading_container.dart';
@@ -30,58 +31,48 @@ class _AppointmentsState extends State<Appointments> {
   void initState() {
     super.initState();
 
-    final AuthSession authsession = AuthSession();
+    if (Util.hasTokenExpired()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Modal(
+            inclueAction: true,
+            actionButtons: TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  //Navigator.of(context, rootNavigator: true).pop(true);
 
-    if (context.read<LoginBloc>().state.loginStatus != LoginStatus.home) {
+                  Navigator.popUntil(context, ModalRoute.withName('/login'));
+                  //Navigator.of(context).pushNamed("/login");
+                }),
+            context: context,
+            modalType: 'failed',
+            modalBody: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                SizedBox(
+                  height: 40,
+                ),
+                Text('Token expires, please relogin'),
+                SizedBox(height: 20),
+                Icon(
+                  Icons.error,
+                  color: Colors.redAccent,
+                  size: 100,
+                )
+              ],
+            ),
+            progressDetails: 'relogin');
+      });
+    } else {
+      final AuthSession authsession = AuthSession();
       final AuthRepository _authRepository = AuthRepository();
       final LoginBloc _loginbloc = LoginBloc(_authRepository);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        authsession.getHomeToken()?.then((value) async {
-          var res = _loginbloc.home(homeToken: value);
-          res.then((res) {
-            if (res.statusCode != 200) {
-              Modal(
-                  inclueAction: true,
-                  actionButtons: TextButton(
-                      child: const Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop(true);
-                        Navigator.of(context).pushNamed("/login");
-                      }),
-                  context: context,
-                  modalType: 'failed',
-                  modalBody: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Text('Token expires, relogin'),
-                      SizedBox(height: 20),
-                      Icon(
-                        Icons.error,
-                        color: Colors.redAccent,
-                        size: 100,
-                      )
-                    ],
-                  ),
-                  progressDetails: 'relogin');
-            } else {
-              final AuthSession authsession = AuthSession();
-              authsession.getHomeToken()?.then((value) async {
-                _loginbloc.home(homeToken: value).then((res) {
-                  context
-                      .read<LoginBloc>()
-                      .setLoginData(value, jsonDecode(res.body));
-                });
-                context
-                    .read<AppointmentCubit>()
-                    .searchAppointments(token: value);
-              });
-            }
-          });
+
+      authsession.getHomeToken()?.then((value) async {
+        _loginbloc.home(homeToken: value).then((res) {
+          context.read<LoginBloc>().setLoginData(value, jsonDecode(res.body));
         });
+        context.read<AppointmentCubit>().searchAppointments(token: value);
       });
     }
 
@@ -126,115 +117,129 @@ class _AppointmentsState extends State<Appointments> {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20.0, top: 10),
-              child: Text("Search",
-                  style: TextStyle(color: Color.fromARGB(255, 56, 155, 152))),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 10, bottom: 20),
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 350, maxHeight: 40),
-                child: TextFormField(
-                  controller: fieldText,
-                  onChanged: (searchParams) => context
-                      .read<AppointmentCubit>()
-                      .setSearchParams(searchParams),
-                  obscureText: false,
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    filled: true,
-                    fillColor: Color.fromARGB(255, 205, 226, 226),
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0, top: 10),
+                    child: Text("Search",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 56, 155, 152))),
                   ),
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a valid password';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
-              child: Text(
-                " Start Date",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: Text("Time"),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 10, bottom: 20),
+                    child: Container(
+                      constraints:
+                          const BoxConstraints(maxWidth: 350, maxHeight: 40),
+                      child: TextFormField(
+                        controller: fieldText,
+                        onChanged: (searchParams) => context
+                            .read<AppointmentCubit>()
+                            .setSearchParams(searchParams),
+                        obscureText: false,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 205, 226, 226),
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                        ),
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a valid password';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                     ),
-                    Time(
-                      rangeLabel: 'start',
-                      type: 'appointment',
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+                    child: Text(
+                      " Start Date",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ],
-                ),
-                Date(
-                  rangeDate: 'start',
-                  type: 'appointment',
-                ),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
-              child: Text(
-                "End Date",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: Text("Time"),
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Text("Time"),
+                          ),
+                          Time(
+                            rangeLabel: 'start',
+                            type: 'appointment',
+                          ),
+                        ],
+                      ),
+                      Date(
+                        rangeDate: 'start',
+                        type: 'appointment',
+                      ),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
+                    child: Text(
+                      "End Date",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    Time(
-                      rangeLabel: 'end',
-                      type: 'appointment',
-                    ),
-                  ],
-                ),
-                Date(
-                  rangeDate: 'end',
-                  type: 'appointment',
-                ),
-              ],
-            ),
-            Button(
-                height: 50,
-                width: 100,
-                label: 'Search',
-                onPressed: () {
-                  searchAppointments(
-                      context: context,
-                      startDate:
-                          context.read<AppointmentCubit>().state.fromDate,
-                      startTime:
-                          context.read<AppointmentCubit>().state.fromTime,
-                      endDate: context.read<AppointmentCubit>().state.toDate,
-                      endTime: context.read<AppointmentCubit>().state.toTime);
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Text("Time"),
+                          ),
+                          Time(
+                            rangeLabel: 'end',
+                            type: 'appointment',
+                          ),
+                        ],
+                      ),
+                      Date(
+                        rangeDate: 'end',
+                        type: 'appointment',
+                      ),
+                    ],
+                  ),
+                  Button(
+                      height: 50,
+                      width: 100,
+                      label: 'Search',
+                      onPressed: () {
+                        searchAppointments(
+                            context: context,
+                            startDate:
+                                context.read<AppointmentCubit>().state.fromDate,
+                            startTime:
+                                context.read<AppointmentCubit>().state.fromTime,
+                            endDate:
+                                context.read<AppointmentCubit>().state.toDate,
+                            endTime:
+                                context.read<AppointmentCubit>().state.toTime);
 
-                  fieldText.clear();
-                }),
+                        fieldText.clear();
+                      }),
+                ],
+              ),
+            ),
             registrationBody(nextPageCounter: initPageSelected),
           ],
         ),

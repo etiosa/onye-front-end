@@ -1,6 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-import 'event.dart';
+import 'events.dart';
 
 //TODO:  I
 class AppointmentAnalytics {

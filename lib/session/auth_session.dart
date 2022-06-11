@@ -32,11 +32,9 @@ class AuthSession {
     return bool;
   }
 
-  //dashboardprofile session here
+  //TODO:Set the dashboard session Later
 
   Future<bool>? savedProfile() async {
-
-    
     return false;
   }
 }
