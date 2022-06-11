@@ -1,8 +1,8 @@
 part of 'login_bloc.dart';
 
 enum LoginStatus { login, failed, unknown, logout, init, inprogress, home }
-enum LOGOUTSTATUS { sucessful, failed, unknown, init }
 
+enum LOGOUTSTATUS { sucessful, failed, unknown, init }
 
 @immutable
 class LoginState extends Equatable {
@@ -26,6 +26,7 @@ class LoginState extends Equatable {
       this.userId = '',
       this.specialty = '',
       this.currentDate = 0,
+      this.userType = '',
       this.loginStatus = LoginStatus.init});
 
   final String userName;
@@ -48,6 +49,7 @@ class LoginState extends Equatable {
   final String userId;
   final String specialty;
   final int currentDate;
+  final String userType;
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -70,7 +72,8 @@ class LoginState extends Equatable {
         isContractAccept,
         userId,
         specialty,
-        currentDate
+        currentDate,
+        userType
       ];
 
   LoginState copywith(
@@ -93,10 +96,12 @@ class LoginState extends Equatable {
       String? specialty,
       bool? canLogin,
       int? currentDate,
+      String? userType,
       LoginStatus? loginStatus}) {
     return LoginState(
         currentDate: currentDate ?? this.currentDate,
         specialty: specialty ?? this.specialty,
+        userType: userType ?? this.userType,
         userId: userId ?? this.userId,
         betaContract: betaContract ?? this.betaContract,
         isContractAccept: isContractAccept ?? this.isContractAccept,

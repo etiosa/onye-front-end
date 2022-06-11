@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
+import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/patient/repository/patient_repository.dart';
+import 'package:onye_front_ened/system/analytics/patient_analytics.dart';
 
 part 'patient_state.dart';
 
@@ -18,7 +21,9 @@ class PatientCubit extends Cubit<PatientState> {
           educationLevel: '',
           ethnicity: '',
         ));
-
+  final PatientAnalytics _patientAnalytics = PatientAnalytics();
+  final AuthRepository _authRepository = AuthRepository();
+  late final LoginBloc _loginbloc = LoginBloc(_authRepository);
   void setSearchQuery(String? query) {
     final String searchQuery = query!;
     emit(state.copyWith(query: searchQuery));
@@ -155,7 +160,15 @@ class PatientCubit extends Cubit<PatientState> {
           countryCode: 'NG');
 
       int statusCode = response!.statusCode;
+      var body = json.decode(response.body);
+
       if (statusCode == 201) {
+        _patientAnalytics.createPatient(
+            patientId: body['id'],
+            time: DateTime.now().toIso8601String(),
+            userId: _loginbloc.state.userId,
+            userType: _loginbloc.state.userType);
+
         emit(state.copyWith(patientcreation: PATIENTCREATION.created));
       } else {
         emit(state.copyWith(patientcreation: PATIENTCREATION.error));
