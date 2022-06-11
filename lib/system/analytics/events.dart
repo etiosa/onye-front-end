@@ -2,8 +2,11 @@ enum EVENTTYPE { CREATE, EDIT, CANCEL }
 
 // ignore: constant_identifier_names
 enum AppointEventType {
+  // ignore: constant_identifier_names
   add_new_appointment,
+  // ignore: constant_identifier_names
   cancel_appointment,
+  // ignore: constant_identifier_names
   edit_appointment
 }
 
