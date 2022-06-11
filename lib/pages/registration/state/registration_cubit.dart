@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:onye_front_ened/pages/auth/repository/auth_repositories.dart';
+import 'package:onye_front_ened/pages/auth/state/login_bloc.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
+import 'package:onye_front_ened/system/analytics/registration_analytics.dart';
 
 part 'registration_state.dart';
 
@@ -11,6 +14,9 @@ class RegisterationCubit extends Cubit<RegistrationState> {
   RegisterationCubit(this._registrationRepository)
       : super(const RegistrationState());
   final RegistrationRepository _registrationRepository;
+  final RegistrationAnalytics _registrationAnalytics = RegistrationAnalytics();
+  final AuthRepository _authRepository = AuthRepository();
+  late final LoginBloc _loginbloc = LoginBloc(_authRepository);
 
   Future<Response?> createRegistration(
       {String? token,
@@ -35,6 +41,11 @@ class RegisterationCubit extends Cubit<RegistrationState> {
           registrationError: body['message'],
           registerState: REGISTRATIONSTATE.failed));
     } else {
+      _registrationAnalytics.createRegistration(
+          registrationId: body['id'],
+          time: DateTime.now().toIso8601String(),
+          userId: _loginbloc.state.userId,
+          userType: _loginbloc.state.userType);
       emit(state.copyWith(
           registerState: REGISTRATIONSTATE.sucessful, type: body['type']));
     }

@@ -147,6 +147,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         lastName: body['userInfo']['lastName'],
         hospital: body['userInfo']['facilityInfo']['name'],
         id: body['userInfo']['id'],
+        userType: body['userInfo']['type'],
         isContractAccept: body['userInfo']['acceptedEula'],
         userId: body['userInfo']['userId'],
         specialty: body['userInfo']['specialty'],

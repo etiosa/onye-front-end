@@ -164,11 +164,13 @@ class AppointmentCubit extends Cubit<AppointmentState> {
           appointmentstate: APPOINTMENTSTATE.failed,
           appointmenterror: body['message']));
     } else {
-      /* _appointmentAnalytics.createLog(appointmentId: body['id'], firstName: _loginbloc.state.firstName,
-          lastName:  _loginbloc.state.lastName,userId:  _loginbloc.state.userId,userType:  _loginbloc.state.
-        
-        
-        )  ; */
+      _appointmentAnalytics.createLog(
+          appointmentId: body['id'],
+          firstName: _loginbloc.state.firstName,
+          lastName: _loginbloc.state.lastName,
+          userId: _loginbloc.state.userId,
+          userType: _loginbloc.state.userType,
+          timeCreation: DateTime.now().toIso8601String());
 
       emit(state.copyWith(appointmentstate: APPOINTMENTSTATE.sucessful));
     }
@@ -195,6 +197,18 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       dateTime: dateTime.toIso8601String(),
       token: token,
     );
+    var body = json.decode(response!.body);
+
+    if (response.statusCode == 202) {
+      _appointmentAnalytics.editLog(
+        userId: _loginbloc.state.userId,
+        appointmentId: body['id'],
+        timeEdit: DateTime.now().toIso8601String(),
+        firstName: _loginbloc.state.firstName,
+        lastName: _loginbloc.state.lastName,
+        userType: _loginbloc.state.userType,
+      );
+    }
 
     return response;
   }
@@ -207,6 +221,16 @@ class AppointmentCubit extends Cubit<AppointmentState> {
       id: id,
       token: token,
     );
+
+    if (response!.statusCode == 200) {
+      _appointmentAnalytics.cancelLog(
+          userId: _loginbloc.state.userId,
+          appointmentId: "",
+          timeDeletion: DateTime.now().toIso8601String(),
+          firstName: _loginbloc.state.firstName,
+          lastName: _loginbloc.state.lastName,
+          userType: _loginbloc.state.userType);
+    }
 
     return response;
   }
