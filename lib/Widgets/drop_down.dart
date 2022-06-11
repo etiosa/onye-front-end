@@ -8,10 +8,12 @@ class DropDown extends StatefulWidget {
       {Key? key,
       required this.label,
       required this.options,
+      this.initValue,
       required this.setValue})
       : super(key: key);
   final String label;
   final List<String> options;
+  final String? initValue;
 
   Function setValue;
 
@@ -22,6 +24,7 @@ class DropDown extends StatefulWidget {
 class _DropDownState extends State<DropDown> {
   @override
   Widget build(BuildContext context) {
+    // print(widget.initValue!.isEmpty);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -43,9 +46,7 @@ class _DropDownState extends State<DropDown> {
             items: widget.options.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(
-                  value,
-                ),
+                child: Text(value),
               );
             }).toList(),
             hint: Text("Select ${widget.label}"),

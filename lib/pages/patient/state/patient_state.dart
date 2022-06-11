@@ -16,7 +16,7 @@ class PatientState extends Equatable {
     required this.educationLevel,
     this.phoneNumber,
     this.email,
-    this.contactPreferences,
+    this.contactPreferences = '',
     this.addressLine1,
     this.addressLine2,
     this.city,

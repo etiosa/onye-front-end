@@ -8,11 +8,13 @@ class InputField extends StatelessWidget {
       {Key? key,
       required this.label,
       required this.setValue,
+      this.initValue,
       required this.isRequired})
       : super(key: key);
   final String label;
   final Function setValue;
   final bool isRequired;
+  final String? initValue;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class InputField extends StatelessWidget {
             onChanged: (firstName) {
               setValue(firstName);
             },
+            initialValue: initValue,
             decoration: const InputDecoration(
               border: OutlineInputBorder(borderSide: BorderSide.none),
               filled: true,
