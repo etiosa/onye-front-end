@@ -12,7 +12,7 @@ class RegistrationAnalytics {
       required String time,
       required String registrationId}) async {
     await analytics.logEvent(
-        name: RegistrationEventType.create_registration.toString(),
+        name: 'create_registration',
         parameters: {
           "userId": userId,
           "userType": userType,

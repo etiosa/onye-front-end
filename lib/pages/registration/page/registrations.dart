@@ -37,7 +37,6 @@ class _RegistrationState extends State<Registration> {
     super.initState();
 
     final AuthSession authsession = AuthSession();
-    bool ispexire = Util.hasTokenExpired();
 
     if (Util.hasTokenExpired()) {
       //relogin
@@ -47,7 +46,6 @@ class _RegistrationState extends State<Registration> {
             actionButtons: TextButton(
                 child: const Text('Close'),
                 onPressed: () {
-                  //Navigator.of(context, rootNavigator: true).pop(true);
 
                   Navigator.popUntil(context, ModalRoute.withName('/login'));
                   //Navigator.of(context).pushNamed("/login");

@@ -4,6 +4,10 @@ enum PATIENTSEARCHSTATE { inital, sucessful, error, notFound, startsearch }
 
 enum PATIENTCREATION { init, inprogress, error, created, unknown }
 
+enum PATIENTEDITSTATE { init, inprogress, save, error, unknown }
+
+enum FETCHPATIENTSTATE { init, inprogress, fetch, error, unknownm }
+
 //TODO: Refactor
 class PatientState extends Equatable {
   const PatientState({
@@ -38,8 +42,12 @@ class PatientState extends Equatable {
     this.nextPage = 0,
     this.patientcreation = PATIENTCREATION.init,
     this.searchParams = '',
+    this.fetchpatientstate=FETCHPATIENTSTATE.init,
+    this.patienteditstate= PATIENTEDITSTATE.init
   });
 
+  final FETCHPATIENTSTATE? fetchpatientstate;
+  final PATIENTEDITSTATE? patienteditstate;
   final String? firstName;
   final PATIENTCREATION patientcreation;
   final String? middleName;
@@ -103,11 +111,15 @@ class PatientState extends Equatable {
         maxPageNumber,
         nextPage,
         searchParams,
-        patientcreation
+        patientcreation,
+        patienteditstate,
+        fetchpatientstate
       ];
 
   PatientState copyWith(
       {String? firstName,
+      FETCHPATIENTSTATE? fetchpatientstate,
+      PATIENTEDITSTATE? patienteditstate,
       PATIENTCREATION? patientcreation,
       String? middleName,
       String? lastName,
@@ -140,6 +152,8 @@ class PatientState extends Equatable {
       String? searchParams,
       int? maxPageNumber}) {
     return PatientState(
+      fetchpatientstate: fetchpatientstate?? this.fetchpatientstate,
+      patienteditstate: patienteditstate?? this.patienteditstate,
         patientcreation: patientcreation ?? this.patientcreation,
         token: toke ?? token,
         searchParams: searchParams ?? this.searchParams,

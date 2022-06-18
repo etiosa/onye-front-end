@@ -36,8 +36,11 @@ class _PatientsPageState extends State<PatientsPage> {
                   height: 50,
                   width: 200,
                   label: 'Create Patient',
-                  onPressed: () => Navigator.of(context)
-                      .pushNamed('/dashboard/registrationForm'))
+                  onPressed: () => {
+                    context.read<PatientCubit>().clearState(),
+                        Navigator.of(context)
+                            .pushNamed('/dashboard/registrationForm')
+                      })
             ],
           ),
           SizedBox(
@@ -180,6 +183,8 @@ class _PatientListState extends State<PatientList> {
                   context
                       .read<PatientCubit>()
                       .setPatientId(state.patientsList[index]['id']);
+                  Navigator.pushNamed(
+                      context, '/dashboard/patient/patientprofile');
                   context
                       .read<RegisterationCubit>()
                       .setSelectedMedicalPersonnelId(

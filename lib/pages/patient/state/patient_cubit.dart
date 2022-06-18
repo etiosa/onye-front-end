@@ -29,6 +29,120 @@ class PatientCubit extends Cubit<PatientState> {
     emit(state.copyWith(query: searchQuery));
   }
 
+  void fetchPatient({required String token, required String patientId}) async {
+
+    emit(state.copyWith(fetchpatientstate: FETCHPATIENTSTATE.inprogress));
+    try {
+      Response? response = await _patientRepositories.fetchPatient(
+          patientId: patientId, token: token);
+      int statusCode = response!.statusCode;
+      var body = json.decode(response.body);
+
+      if (statusCode == 200) {
+        //TODO:USE MODEL FOR THIS
+        emit(state.copyWith(
+            fetchpatientstate: FETCHPATIENTSTATE.fetch,
+            firstName: body['firstName'] ,
+            lastName: body['lastName'] ,
+            middleName: body['middleName'] ,
+            dateOfBirth: body['dateOfBirth'],
+            gender: body['gender'],
+            religion: body['religion'],
+            ethnicity: body['ethnicity'],
+            educationLevel: body['educationLevel'],
+            phoneNumber: body['phoneNumber'],
+            addressLine1: body['address']['line1'],
+            zipCode: body['address']['zipCode'],
+            city: body['address']['city'],
+            email: body['email'],
+            contactPreferences: body['contactPreference'],
+            emergencyContactName: body['emergencyContact']['name'] ,
+            emergencyContactPhoneNumber: body['emergencyContact']
+                ['phoneNumber'],
+            emergencyContactRelationship: body['emergencyContact']
+                ['relationship']));
+      }
+    } catch (err) {
+      emit(state.copyWith(fetchpatientstate: FETCHPATIENTSTATE.error));
+    }
+  }
+
+  void editPatient({required String token, required String patientId}) async {
+    String? dateOfBirth;
+    if (state.dateOfBirth != null && state.dateOfBirth!.isEmpty) {
+      dateOfBirth = null;
+    } else {
+      dateOfBirth = state.dateOfBirth;
+    }
+    emit(state.copyWith(patienteditstate: PATIENTEDITSTATE.inprogress));
+
+    try {
+      Response? response = await _patientRepositories.editPatientData(
+          patientId: patientId,
+          token: token,
+          firstName: state.firstName?.trim(),
+          middleName: state.middleName?.trim(),
+          lastName: state.lastName?.trim(),
+          dateOfBirth: dateOfBirth,
+          phoneNumber: state.phoneNumber?.trim(),
+          gender: state.gender,
+          religion: state.religion,
+          educationLevel: state.educationLevel,
+          contactPreference: state.contactPreferences,
+          addressLine1: state.addressLine1?.trim(),
+          addressLine2: state.addressLine2?.trim(),
+          zipCode: state.zipCode?.trim(),
+          city: state.city?.trim(),
+          email: state.email?.trim(),
+          ethnicity: state.ethnicity,
+          emergencyContactName: state.emergencyContactName?.trim(),
+          emergencyContactPhoneNumber:
+              state.emergencyContactPhoneNumber?.trim(),
+          emergencyContactRelationship:
+              state.emergencyContactRelationship?.trim(),
+          countryCode: 'NG');
+
+      int statusCode = response!.statusCode;
+      var body = json.decode(response.body);
+
+      if (statusCode == 202) {
+        _patientAnalytics.editPatient(patiendId: body['id'], time: DateTime.now().toIso8601String(),    userId: _loginbloc.state.userId,
+            userType: _loginbloc.state.userType  );
+        emit(state.copyWith(
+            patienteditstate: PATIENTEDITSTATE.save,
+            firstName: body['firstName'],
+            lastName: body['lastName'],
+            middleName: body['middleName'],
+            dateOfBirth: body['dateOfBirth'],
+            gender: body['gender'],
+            religion: body['religion'],
+            ethnicity: body['ethnicity'],
+            educationLevel: body['educationLevel'],
+            phoneNumber: body['phoneNumber'],
+            addressLine1: body['address']['line1'],
+            zipCode: body['address']['zipCode'],
+            city: body['address']['city'],
+            email: body['email'],
+            contactPreferences: body['contactPreference'],
+            emergencyContactName: body['emergencyContact']['name'],
+            emergencyContactPhoneNumber: body['emergencyContact']
+                ['phoneNumber'],
+            emergencyContactRelationship: body['emergencyContact']
+                ['relationship']));
+      } else {
+        emit(state.copyWith(patienteditstate: PATIENTEDITSTATE.error));
+      }
+    } catch (err) {
+      emit(state.copyWith(patienteditstate: PATIENTEDITSTATE.unknown));
+    }
+  }
+
+  void resetFecthAndSaveState() {
+    emit(state.copyWith(
+        fetchpatientstate: FETCHPATIENTSTATE.init,
+        patienteditstate: PATIENTEDITSTATE.init));
+  }
+
   void setFirstName(String? argFirstName) {
     final String firstName = argFirstName!;
     emit(state.copyWith(firstName: firstName));
