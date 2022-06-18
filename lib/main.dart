@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:onye_front_ened/components/repository/clinical_note_repository.dart';
 import 'package:onye_front_ened/pages/eula/eula.dart';
 import 'package:onye_front_ened/pages/appointment/form/create_appointment.dart';
@@ -81,28 +80,26 @@ class MyApp extends StatelessWidget {
             BlocProvider(
                 create: (_) => ClinicalnoteCubit(_clinicalNoteRepository)),
           ],
-          child: OKToast(
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Onye',
-              routes: {
-                '/': (context) => const HomePage(),
-                '/dashboard/patient': (context) => const PatientsPage(),
-                '/login': (context) => const LoginPage(),
-                '/dashboard': (context) => const Dashboard(),
-                '/dashboard/patient/patientprofile': (context) =>
-                    const PatientProfile(),
-                '/dashboard/checkin': (context) => const Registration(),
-                '/dashboard/appointment': (context) => const Appointments(),
-                '/dashboard/appointment/createAppointment': (context) =>
-                    const CreateAppointment(),
-                '/dashboard/createRegistration': (context) =>
-                    const CreateRegistration(),
-                '/dashboard/registrationForm': (context) =>
-                    const CreatePatientForm(),
-                '/beta-contract': (context) => const Eula(),
-              },
-            ),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Onye',
+            routes: {
+              '/': (context) => const HomePage(),
+              '/dashboard/patient': (context) => const PatientsPage(),
+              '/login': (context) => const LoginPage(),
+              '/dashboard': (context) => const Dashboard(),
+              '/dashboard/patient/patientprofile': (context) =>
+                  PatientProfile(),
+              '/dashboard/checkin': (context) => const Registration(),
+              '/dashboard/appointment': (context) => const Appointments(),
+              '/dashboard/appointment/createAppointment': (context) =>
+                  const CreateAppointment(),
+              '/dashboard/createRegistration': (context) =>
+                  const CreateRegistration(),
+              '/dashboard/registrationForm': (context) =>
+                  const CreatePatientForm(),
+              '/beta-contract': (context) => const Eula(),
+            },
           ),
         ));
   }

@@ -13,7 +13,7 @@ class FacilityAnalytics {
       required String time,
       required String facilityId}) async {
     await analytics.logEvent(
-        name: FacilityEventType.create.toString(),
+        name: 'create_facility',
         parameters: {
           "userId": userId,
           "userType": userType,

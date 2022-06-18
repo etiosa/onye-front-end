@@ -33,6 +33,7 @@ class AuthSession {
   }
 
   //TODO:Set the dashboard session Later
+  //userType and current userId
 
   Future<bool>? savedProfile() async {
     return false;

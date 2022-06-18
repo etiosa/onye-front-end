@@ -14,9 +14,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  
-  
-}
+
+  }
 
   @override
   Widget build(BuildContext context) {

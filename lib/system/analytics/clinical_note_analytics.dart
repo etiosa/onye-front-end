@@ -12,7 +12,7 @@ class ClinicalNoteAnalytics {
       required String time,
       required String clinicalNoteId}) async {
     await analytics.logEvent(
-        name: ClinicalNoteEventType.add_clinical_note.toString(),
+        name: 'add_clinical_note',
         parameters: {
           "userId": userId,
           "userType": userType,
@@ -27,7 +27,7 @@ class ClinicalNoteAnalytics {
       required String time,
       required String clinicalNoteId}) async {
     await analytics.logEvent(
-        name: ClinicalNoteEventType.edit_clinical_note.toString(),
+        name: 'edit_clinical_note',
         parameters: {
           "userId": userId,
           "userType": userType,

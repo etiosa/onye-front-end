@@ -19,6 +19,7 @@ class AppointmentAnalytics {
         userId: userId,
         userType: userType);
     logEevent(
+       eventType: 'create_appointment',
         appointmentId: appointmentId,
         userId: userId,
         time: timeCreation,
@@ -38,6 +39,7 @@ class AppointmentAnalytics {
         userId: userId,
         userType: userType);
     logEevent(
+      eventType: 'cancel_appointment',
         appointmentId: appointmentId,
         userId: userId,
         time: timeDeletion,
@@ -59,6 +61,7 @@ class AppointmentAnalytics {
         userId: userId,
         userType: userType);
     logEevent(
+      eventType: 'edit_appointment',
         appointmentId: appointmentId,
         userId: userId,
         time: timeEdit,
@@ -76,12 +79,14 @@ class AppointmentAnalytics {
     await analytics.setUserProperty(name: "userType", value: userType);
   }
 
+//TODO: move the logEvent to a separate file OR  to uility class
   void logEevent(
       {required String userId,
+        required String eventType,
       required String userType,
       required String time,
       required String appointmentId}) async {
-    await analytics.logEvent(name: EVENTTYPE.EDIT.toString(), parameters: {
+    await analytics.logEvent(name: eventType, parameters: {
       "userId": userId,
       "userType": userType,
       "time": time,

@@ -23,3 +23,4 @@ enum MedicalEventType { add_medical_personnel }
 enum PatientEventType { add_patient }
 
 enum FacilityEventType { create }
+
