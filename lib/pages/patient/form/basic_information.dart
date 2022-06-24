@@ -137,7 +137,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                               context.read<PatientCubit>().state.religion,
                         ), 
                         adjustableSpacer,
-                          DropDown(
+                     /*      DropDown(
                             label: 'Education Level',
                             options: const [
                               'NONE',
@@ -155,7 +155,7 @@ class _BasicInfoFormBodyState extends State<BasicInfoFormBody> {
                             initValue: context
                                 .read<PatientCubit>()
                                 .state
-                                .educationLevel),  
+                                .educationLevel), */  
                         adjustableSpacer,
                         DropDown(
                             label: 'Ethnicity',

@@ -169,8 +169,7 @@ class PatientRepositories {
       String? emergencyContactRelationship,
       String? emergencyContactName,
       String? token}) async {
-
-              dynamic address;
+    dynamic address;
     if (addressLine1 != null &&
         zipCode != null &&
         city != null &&
@@ -185,9 +184,15 @@ class PatientRepositories {
     }
 
     dynamic emergencyContact;
+    print(emergencyContactName);
+    print(emergencyContactPhoneNumber);
+    print(emergencyContactRelationship);
+
+    ;
     if (emergencyContactName != null &&
         emergencyContactPhoneNumber != null &&
         emergencyContactRelationship != null) {
+      print("emergencyContact not null");
       emergencyContact = {
         "name": emergencyContactName,
         "phoneNumber": emergencyContactPhoneNumber,
@@ -222,15 +227,13 @@ class PatientRepositories {
             "emergencyContact": emergencyContact,
             "aliveStatus": {"deceased": false}
           }));
+                print(response.body);
+
       return response;
     } catch (e) {
       return null;
     }
-      
-      }
-
-
-
+  }
 
   Future<http.Response?> searchPatients(
       {String? searchParams, String? token, int? nextPage = 0}) async {

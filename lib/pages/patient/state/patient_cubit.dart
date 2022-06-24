@@ -30,7 +30,6 @@ class PatientCubit extends Cubit<PatientState> {
   }
 
   void fetchPatient({required String token, required String patientId}) async {
-
     emit(state.copyWith(fetchpatientstate: FETCHPATIENTSTATE.inprogress));
     try {
       Response? response = await _patientRepositories.fetchPatient(
@@ -38,31 +37,55 @@ class PatientCubit extends Cubit<PatientState> {
       int statusCode = response!.statusCode;
       var body = json.decode(response.body);
 
+//1. religion is not required when creating a patient
+
+//2. Email of the patient is not required
+//3> Education level  is not required
+//4 Language preference is not required
       if (statusCode == 200) {
+        print(body['emergencyContact']);
+        if (body['emergencyContact'] == null) {
+          print("empty");
+        }
+        //print(body['emergencyContact']['name']==null);
+
+        String emergencyContactName = body['emergencyContact'] != null
+            ? body['emergencyContact']['name']
+            : '';
+        String emergencyContactPhoneNumber = body['emergencyContact'] != null
+            ? body['emergencyContact']['phoneNumber']
+            : '';
+        String emergencyContactRelationship = body['emergencyContact'] != null
+            ? body['emergencyContact']['relationship']
+            : '';
+        String educationLevel = body['educationLevel'] ?? '';
+
+        // String
+
         //TODO:USE MODEL FOR THIS
         emit(state.copyWith(
             fetchpatientstate: FETCHPATIENTSTATE.fetch,
-            firstName: body['firstName'] ,
-            lastName: body['lastName'] ,
-            middleName: body['middleName'] ,
+            firstName: body['firstName'],
+            lastName: body['lastName'],
+            middleName: body['middleName'],
             dateOfBirth: body['dateOfBirth'],
             gender: body['gender'],
             religion: body['religion'],
             ethnicity: body['ethnicity'],
-            educationLevel: body['educationLevel'],
+            educationLevel: educationLevel,
             phoneNumber: body['phoneNumber'],
-            addressLine1: body['address']['line1'],
-            zipCode: body['address']['zipCode'],
-            city: body['address']['city'],
-            email: body['email'],
+            addressLine1:
+                body['address'] != null ? body['address']['line1'] : '',
+            zipCode: body['address'] != null ? body['address']['zipCode'] : '',
+            city: body['address'] != null ? body['address']['city'] : '',
+            email: body['email'] ?? '',
             contactPreferences: body['contactPreference'],
-            emergencyContactName: body['emergencyContact']['name'] ,
-            emergencyContactPhoneNumber: body['emergencyContact']
-                ['phoneNumber'],
-            emergencyContactRelationship: body['emergencyContact']
-                ['relationship']));
+            emergencyContactName: emergencyContactName,
+            emergencyContactRelationship: emergencyContactRelationship,
+            emergencyContactPhoneNumber: emergencyContactPhoneNumber));
       }
     } catch (err) {
+      print(err);
       emit(state.copyWith(fetchpatientstate: FETCHPATIENTSTATE.error));
     }
   }
@@ -104,10 +127,14 @@ class PatientCubit extends Cubit<PatientState> {
 
       int statusCode = response!.statusCode;
       var body = json.decode(response.body);
+      print(body);
 
       if (statusCode == 202) {
-        _patientAnalytics.editPatient(patiendId: body['id'], time: DateTime.now().toIso8601String(),    userId: _loginbloc.state.userId,
-            userType: _loginbloc.state.userType  );
+        _patientAnalytics.editPatient(
+            patiendId: body['id'],
+            time: DateTime.now().toIso8601String(),
+            userId: _loginbloc.state.userId,
+            userType: _loginbloc.state.userType);
         emit(state.copyWith(
             patienteditstate: PATIENTEDITSTATE.save,
             firstName: body['firstName'],
@@ -119,20 +146,22 @@ class PatientCubit extends Cubit<PatientState> {
             ethnicity: body['ethnicity'],
             educationLevel: body['educationLevel'],
             phoneNumber: body['phoneNumber'],
-            addressLine1: body['address']['line1'],
-            zipCode: body['address']['zipCode'],
-            city: body['address']['city'],
+          //  addressLine1: body['address']['line1'],
+           // zipCode: body['address']['zipCode'],
+           // city: body['address']['city'],
             email: body['email'],
-            contactPreferences: body['contactPreference'],
-            emergencyContactName: body['emergencyContact']['name'],
-            emergencyContactPhoneNumber: body['emergencyContact']
-                ['phoneNumber'],
-            emergencyContactRelationship: body['emergencyContact']
-                ['relationship']));
+           // contactPreferences: body['contactPreference'],
+           // emergencyContactName: body['emergencyContact']['name'],
+           // emergencyContactPhoneNumber: body['emergencyContact']
+              //  ['phoneNumber'],
+           // emergencyContactRelationship: body['emergencyContact']
+             //   ['relationship']));
+        ));
       } else {
         emit(state.copyWith(patienteditstate: PATIENTEDITSTATE.error));
       }
     } catch (err) {
+      print(err);
       emit(state.copyWith(patienteditstate: PATIENTEDITSTATE.unknown));
     }
   }
