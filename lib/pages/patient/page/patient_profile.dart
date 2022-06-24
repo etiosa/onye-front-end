@@ -105,7 +105,7 @@ class _PatientProfileState extends State<PatientProfile> {
           body: BlocConsumer<PatientCubit, PatientState>(
               listener: ((context, state) {
         //fecthing the patient detail
-        print(state.fetchpatientstate);
+        print(state.patienteditstate);
 
         if (state.fetchpatientstate == FETCHPATIENTSTATE.inprogress) {
           Modal(
