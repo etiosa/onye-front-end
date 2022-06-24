@@ -48,68 +48,42 @@ class _PaginationState extends State<Pagination> {
             onTap: currentPage <= 0
                 ? null
                 : () {
-                    currentPage - 1;
+                    currentPage = currentPage - 1;
                     var setPage = setPageFunctionType(
                         type: widget.typeofSearch,
                         context: context,
                         index: currentPage);
                     setPage();
                   },
-            child: const Text("Prev",
-                style: TextStyle(color: Colors.white, fontSize: 20)),
+            child: Text("Prev",
+                style: TextStyle(
+                    color: currentPage <= 0 ? Colors.grey : Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
           ),
           InkWell(
-            onTap: currentPage >= widget.maxPageCounter
-                ? null
-                : () {
+            onTap: widget.maxPageCounter - 1 > currentPage
+                ? () {
                     setState(() {
-                      currentPage + 1;
+                      currentPage = currentPage + 1;
                     });
                     var setPage = setPageFunctionType(
                         type: widget.typeofSearch,
                         context: context,
                         index: currentPage);
                     setPage();
-                  },
-            child: const Text(
+                  }
+                : null,
+            child: Text(
               "Next",
-              style: TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(
+                  color: currentPage >= widget.maxPageCounter - 1
+                      ? Colors.grey
+                      : Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
           )
-          /* for (var index = 0; index < widget.maxPageCounter; index++)
-            Container(
-              margin: const EdgeInsets.only(top: 1.0),
-              child: InkWell(
-                onTap: () {
-                  initPageSelected = index;
-
-                  var setPage = setPageFunctionType(
-                      type: widget.typeofSearch,
-                      context: context,
-                      index: initPageSelected);
-
-                  setPage();
-                },
-                child: Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                        color: initPageSelected == index
-                            ? const Color.fromARGB(255, 98, 0, 238)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Center(
-                        child: Text(
-                      "${index + 1}",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: initPageSelected == index
-                              ? Colors.white
-                              : Colors.white),
-                    ))),
-              ),
-            ), */
         ],
       ),
     );
@@ -169,7 +143,6 @@ Function setPageFunctionType(
                   searchParams:
                       context.read<RegisterationCubit>().state.searchParams);
             }),
-      
           };
 
     case 'patient':
@@ -180,7 +153,6 @@ Function setPageFunctionType(
                   token: value,
                   searchParams: context.read<DoctorCubit>().state.searchParams);
             }),
-      
           };
     case 'doctor':
       return () => {
@@ -191,7 +163,6 @@ Function setPageFunctionType(
                   searchParams:
                       context.read<RegisterationCubit>().state.searchParams);
             }),
-    
           };
   }
   return () {};
