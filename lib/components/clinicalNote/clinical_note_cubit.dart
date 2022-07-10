@@ -65,12 +65,16 @@ class ClinicalnoteCubit extends Cubit<ClinicalnoteState> {
     String? token,
     String? id,
   }) async {
+    //print("getPatientClinical Note");
+    //print(token);
+    print("get patient clinical note");
+    print(token);
+
     emit(state.copyWith(loadclinicalnote: LOADCLINICALNOTE.loading));
 
     try {
       Response? req = await _clinicalNoteRepository.getPatientClinicalNote(
           token: token, id: id);
-            
 
       if (req?.statusCode == 200) {
         setPatientClinicalNote(req!);
