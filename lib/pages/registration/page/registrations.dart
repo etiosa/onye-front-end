@@ -46,7 +46,6 @@ class _RegistrationState extends State<Registration> {
             actionButtons: TextButton(
                 child: const Text('Close'),
                 onPressed: () {
-
                   Navigator.popUntil(context, ModalRoute.withName('/login'));
                   //Navigator.of(context).pushNamed("/login");
                 }),
@@ -739,11 +738,14 @@ List<Widget> clinicalNoteForm(
                               context
                                   .read<ClinicalnoteCubit>()
                                   .clearClinicalNoteState(),
-                              context
-                                  .read<ClinicalnoteCubit>()
-                                  .getPatientClinicalNote(
-                                      token: homeToken,
-                                      id: appointment['clinicalNoteId']),
+
+                              authsession.getHomeToken()?.then((value) {
+                                context
+                                    .read<ClinicalnoteCubit>()
+                                    .getPatientClinicalNote(
+                                        token: value,
+                                        id: appointment['clinicalNoteId']);
+                              }),
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: ((context) =>
@@ -818,6 +820,7 @@ List<Widget> clinicalNoteForm(
 String getToken() {
   final AuthSession authsession = AuthSession();
   authsession.getHomeToken()?.then((value) {
+    // print(value);
     return value;
   });
   return '';
@@ -865,6 +868,9 @@ Future<Response?>? updateClinicalNoteData(
     {required BuildContext context,
     required String homeToken,
     required String clinicalNoteId}) {
+  // print("update clinical note token");
+  //print(homeToken);
+
   var response = context.read<ClinicalnoteCubit>().updateClinicalNote(
         token: homeToken,
         id: clinicalNoteId,
