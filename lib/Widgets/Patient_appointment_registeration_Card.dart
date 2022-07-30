@@ -23,9 +23,9 @@ class PatientAppointmentRegistrationCard extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 10.0, bottom: 10),
+          padding: const EdgeInsets.only(top: 20.0, bottom: 10, left: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,8 +53,6 @@ class PatientAppointmentRegistrationCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const CircleAvatar(
-                  backgroundColor: Colors.amberAccent, maxRadius: 40)
             ],
           ),
         ),
@@ -66,6 +64,7 @@ class PatientAppointmentRegistrationCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 20.0, bottom: 10, left: 50),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(

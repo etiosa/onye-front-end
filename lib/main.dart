@@ -25,11 +25,8 @@ import 'package:onye_front_ened/pages/patient/form/create_patient_form.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:onye_front_ened/pages/registration/repository/registration_repository.dart';
 import 'package:onye_front_ened/pages/registration/state/registration_cubit.dart';
-
 import 'components/clinicalNote/clinical_note_cubit.dart';
-
 import 'firebase_options.dart';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 void main() async {
