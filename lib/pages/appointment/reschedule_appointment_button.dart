@@ -9,6 +9,7 @@ import '../../session/auth_session.dart';
 import '../appointment_datetimepicker_field.dart';
 import '../appointments.dart';
 
+// ignore: must_be_immutable
 class RescheduleAppointmentButton extends StatelessWidget {
   RescheduleAppointmentButton({Key? key, required this.appointment})
       : super(key: key);

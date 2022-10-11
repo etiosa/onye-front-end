@@ -67,7 +67,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copywith(userName: username));
   }
 
-/* TODO: CHANGED to userModal*/
   void _login(Login event, Emitter<LoginState> emit) async {
     emit(state.copywith(
         loginStatus: LoginStatus.inprogress, inProgressModal: true));
@@ -121,7 +120,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     return response;
   }
 
-//TODO: implementation latger
   void _getHome(GetHome event, Emitter<LoginState> emit) {
     emit(state.copywith(
       loginStatus: LoginStatus.home,

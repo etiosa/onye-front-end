@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:onye_front_ened/session/auth_session.dart';
 
 import '../components/util/modal.dart';
 import '../pages/appointment/state/appointment_cubit.dart';
@@ -107,40 +108,46 @@ class AppointmentButtons extends StatelessWidget {
                       ),
                       TextButton(
                           onPressed: () {
-                            var response = context
-                                .read<AppointmentCubit>()
-                                .cancelAppointment(
-                                  id: appointmentId,
-                                  token:
-                                      context.read<LoginBloc>().state.homeToken,
-                                );
+                            final AuthSession authsession = AuthSession();
+                            authsession.getHomeToken()?.then((value) async {
+                              var response = context
+                                  .read<AppointmentCubit>()
+                                  .cancelAppointment(
+                                    id: appointmentId,
+                                    token: value,
+                                  );
 
-                            response.then((value) => {
-                                  if (value != null && value.statusCode == 200)
-                                    {
-                                      /*    Messages.showMessage(
+                              response.then((value) => {
+                                    if (value != null &&
+                                        value.statusCode == 200)
+                                      {
+                                        /*    Messages.showMessage(
                                 const Icon(
                                   IconData(0xf635, fontFamily: 'MaterialIcons'),
                                   color: Colors.green,
                                 ),
                                 'Appointment cancelled'), */
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: ((context) =>
-                                                  const Appointments())),
-                                          ModalRoute.withName('/dashboard'))
-                                    }
-                                  else if (value != null &&
-                                      value.statusCode == 400)
-                                    {
-                                      /*  Messages.showMessage(
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        const Appointments())),
+                                                ModalRoute.withName(
+                                                    '/dashboard'))
+                                      }
+                                    else if (value != null &&
+                                        value.statusCode == 400)
+                                      {
+                                        /*  Messages.showMessage(
                                 const Icon(
                                   IconData(0xe237, fontFamily: 'MaterialIcons'),
                                   color: Colors.red,
                                 ),
                                 'Could not cancel appointment'), */
-                                    }
-                                });
+                                      }
+                                  });
+                            });
+
                             Navigator.pop(context, false);
                           },
                           child: const Text("Cancel Appointment")),

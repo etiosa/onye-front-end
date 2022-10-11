@@ -157,7 +157,7 @@ class _AppointmentsState extends State<Appointments> {
                       ),
                     ),
                   ),
-                  const Padding(
+                  /*   const Padding(
                     padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
                     child: Text(
                       " Start Date",
@@ -218,7 +218,7 @@ class _AppointmentsState extends State<Appointments> {
                         type: 'appointment',
                       ),
                     ],
-                  ),
+                  ), */
                   Button(
                       height: 50,
                       width: 100,
@@ -273,6 +273,8 @@ class _AppointmentsState extends State<Appointments> {
     DateTime? startdateTime;
     DateTime? enddateTime;
 
+    final AuthSession authsession = AuthSession();
+
     if (startDate!.trim() != '' && startTime!.trim() != '') {
       startdateTime = DateFormat('yyyy-MM-dd h:mm aa')
           .parse(startDate + " " + startTime, true);
@@ -281,12 +283,13 @@ class _AppointmentsState extends State<Appointments> {
       enddateTime =
           DateFormat('yyyy-MM-dd h:mm aa').parse(endDate + " " + endTime);
     }
-
-    context.read<AppointmentCubit>().searchAppointments(
-        token: context.read<LoginBloc>().state.homeToken,
-        startDateTime: startdateTime?.toIso8601String(),
-        endDateTime: enddateTime?.toIso8601String(),
-        searchParams: context.read<AppointmentCubit>().state.searchParams);
+    authsession.getHomeToken()?.then((value) async {
+      context.read<AppointmentCubit>().searchAppointments(
+          token: value,
+          startDateTime: startdateTime?.toIso8601String(),
+          endDateTime: enddateTime?.toIso8601String(),
+          searchParams: context.read<AppointmentCubit>().state.searchParams);
+    });
   }
 }
 

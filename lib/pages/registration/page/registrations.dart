@@ -137,7 +137,7 @@ class _RegistrationState extends State<Registration> {
                     ),
                   ),
                 ),
-                const Padding(
+                /* const Padding(
                   padding: EdgeInsets.only(left: 15.0, bottom: 15, top: 15),
                   child: Text(
                     " Start Date",
@@ -200,7 +200,7 @@ class _RegistrationState extends State<Registration> {
                       type: 'registeration',
                     ),
                   ],
-                ),
+                ),*/
                 Center(
                   child: Button(
                       height: 50,
@@ -282,6 +282,8 @@ void searchDateTimeFilter({
 }) {
   DateTime? startdateTime;
   DateTime? enddateTime;
+  final AuthSession authsession = AuthSession();
+
   if (startDate!.trim() != '' && startTime!.trim() != '') {
     startdateTime = DateFormat('yyyy-MM-dd h:mm aa')
         .parse(startDate + " " + startTime, true);
@@ -291,11 +293,13 @@ void searchDateTimeFilter({
         DateFormat('yyyy-MM-dd h:mm aa').parse(endDate + " " + endTime);
   }
 
-  context.read<RegisterationCubit>().searchRegistrations(
-      token: context.read<LoginBloc>().state.homeToken,
-      startDateTime: startdateTime?.toIso8601String(),
-      endDateTime: enddateTime?.toIso8601String(),
-      searchParams: context.read<RegisterationCubit>().state.searchParams);
+  authsession.getHomeToken()?.then((value) async {
+    context.read<RegisterationCubit>().searchRegistrations(
+        token: value,
+        startDateTime: startdateTime?.toIso8601String(),
+        endDateTime: enddateTime?.toIso8601String(),
+        searchParams: context.read<RegisterationCubit>().state.searchParams);
+  });
 }
 
 class Appointment extends StatefulWidget {
@@ -820,7 +824,6 @@ List<Widget> clinicalNoteForm(
 String getToken() {
   final AuthSession authsession = AuthSession();
   authsession.getHomeToken()?.then((value) {
-    // print(value);
     return value;
   });
   return '';
@@ -868,9 +871,6 @@ Future<Response?>? updateClinicalNoteData(
     {required BuildContext context,
     required String homeToken,
     required String clinicalNoteId}) {
-  // print("update clinical note token");
-  //print(homeToken);
-
   var response = context.read<ClinicalnoteCubit>().updateClinicalNote(
         token: homeToken,
         id: clinicalNoteId,

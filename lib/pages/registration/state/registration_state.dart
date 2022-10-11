@@ -1,7 +1,9 @@
 part of 'registration_cubit.dart';
 
 enum REGISTRATIONSTATE { init, sucessful, inprogress, failed }
+
 enum SEARCHSTATE { inital, sucessful, error, notFound, startsearch }
+
 enum REGISTERSTATELOAD { init, loading, loaded, failed }
 
 class RegistrationState extends Equatable {
@@ -24,7 +26,7 @@ class RegistrationState extends Equatable {
       this.registrationStartTime = '',
       this.registrationEndDate = '',
       this.registrationEndTime = '',
-      this.type='',
+      this.type = '',
       this.selectedPatientIndex = 0});
 
   final List<dynamic> registrationList;
@@ -94,11 +96,14 @@ class RegistrationState extends Equatable {
       String? selectedMedicalPersonnelId,
       int? maxPageNumber}) {
     return RegistrationState(
-      type: type??this.type,
+        searchParams: searchParams ?? this.searchParams,
+        type: type ?? this.type,
         registrationEndDate: registrationEndDate ?? this.registrationEndDate,
         registrationEndTime: registrationEndTime ?? this.registrationEndTime,
-        registrationStartDate: registrationStartDate ?? this.registrationStartDate,
-        registrationStartTime: registrationStartTime ?? this.registrationStartTime,
+        registrationStartDate:
+            registrationStartDate ?? this.registrationStartDate,
+        registrationStartTime:
+            registrationStartTime ?? this.registrationStartTime,
         registerstateload: regLoad ?? registerstateload,
         registerState: registerState ?? this.registerState,
         registrationError: registrationError ?? this.registrationError,

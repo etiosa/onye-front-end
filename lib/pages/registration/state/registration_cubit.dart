@@ -116,7 +116,6 @@ class RegisterationCubit extends Cubit<RegistrationState> {
 
   void setSearchParams(String? argSearchParams) {
     final String searchParams = argSearchParams!;
-
     emit(state.copyWith(searchParams: searchParams));
   }
 
